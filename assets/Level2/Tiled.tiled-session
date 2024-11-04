@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Level3.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Level3.tmx": {
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 4195.5,
+                "y": 731.5
+            }
+        },
+        "Tiled.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/mateu/OneDrive/Desktop",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 40,
+    "map.tileWidth": 40,
+    "map.width": 150,
+    "openFiles": [
+        "Level3.tmx",
+        "Tiled.tsx"
+    ],
+    "project": "Tiled.tiled-project",
+    "recentFiles": [
+        "Tiled.tsx",
+        "Level3.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 40,
+        "width": 40
+    }
+}

@@ -1,0 +1,45 @@
+package com.mygdx.game.entities;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.images.Images;
+
+import java.util.Random;
+
+public class Leaf extends Objeto{
+
+    public static final float DIVIDED_BY = 25f;
+    public static final float WIDTH = 850/DIVIDED_BY, HEIGHT = 850/DIVIDED_BY;
+    private Body body;
+
+    public Leaf(World world, Vector2 position){
+        super(world, WIDTH, HEIGHT);
+        body = createBoxBody(new Vector2(WIDTH, HEIGHT), BodyDef.BodyType.DynamicBody, true);
+        body.setGravityScale(0.005f);
+        body.setTransform(position, new Random().nextInt(91));
+        float velocity_x = -100;
+        body.setLinearVelocity(velocity_x, 0);
+    }
+
+    public void render(SpriteBatch s){
+        Sprite sprite = new Sprite(Images.leaf);
+        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+        sprite.rotate(1f);
+        sprite.setSize(WIDTH, HEIGHT);
+        sprite.draw(s);
+        if (body.getPosition().y < - 100f){
+            sprite.flip(new Random().nextBoolean(), new Random().nextBoolean());
+            body.setTransform(body.getPosition().x - 7_000, 7000, 0);
+        }
+    }
+
+    @Override
+    public void render(ShapeRenderer s) {
+
+    }
+}
