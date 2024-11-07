@@ -25,6 +25,7 @@ public class Crystal extends Objeto{
     public static final float[] X_POSITIONS = {360, 600, 1000, 1600, 2000, 2200, 2800, 3100, 3700, 3950, 4200, 4500, 4750, 5100, 5250, 5400};
     public static final float[] Y_POSITIONS = {520, 450,  450,  650,  750,  850,  550,  450,  450,  450,  550,  650,  650,  450,  350,  350};
     public static int index;
+    public static int numCrystalsCollected;
 
     public Crystal(World world) {
         super(world, WIDTH, HEIGHT);
@@ -91,6 +92,7 @@ public class Crystal extends Objeto{
             visible = false;
             clink.play();
             PowerBar.sp += 20;
+            numCrystalsCollected++;
         }
         if ((Intersector.overlaps(box2, playerRect[0])) && visible2){
             visible2 = false;

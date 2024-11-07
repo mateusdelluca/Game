@@ -17,7 +17,7 @@ public enum Animations {
     //monster
     MONSTER1_WALKING(new Animator(4,4,2,94,128, "monster/Walking.png")),
     MONSTER1_FLICKERING(new Animator(4,4,6,94,128, "monster/Flickering.png")),
-    MONSTER1_SPLIT(new Animator(3,3,3,128,128, "monster/Split.png")),
+    MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png")),
     //player
     FIRST(new Animator(10,10, 20, 400, 300,"stickman/First.png")),
     WALKING(new Animator(30, 10, 20, 400, 300, "stickman/Stickman_walking.png")),

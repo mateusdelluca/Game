@@ -18,6 +18,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.screens.levels.Level.bullets;
 import static com.mygdx.game.sfx.Sounds.*;
 
 public class Boy extends Objeto{
@@ -34,8 +35,6 @@ public class Boy extends Objeto{
     private boolean stricken;
     private boolean shooting;
     private float imgX, imgY, degrees, radians, dx, dy;
-    @Getter
-    private ArrayList<Bullet> bullets = new ArrayList<>();
     private Vector2 test;
     private Vector2 position;
     private int secondJump;
@@ -86,8 +85,8 @@ public class Boy extends Objeto{
 //            sprite3.setPosition(dx, dy);
 //            sprite3.draw(s);
 
-        }for (Bullet b : bullets)
-            b.render(s);
+        }
+
     }
 
     public void update(){
@@ -156,7 +155,7 @@ public class Boy extends Objeto{
         if (name.equals("BOY_STRICKEN")){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);
-            if (flickering_time >= 3.2f) {
+            if (flickering_time >= 1.2f) {
                 animations = Animations.BOY_IDLE;
                 flickering_time = 0f;
                 stricken = false;

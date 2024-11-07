@@ -10,8 +10,10 @@ public class Portal extends Objeto{
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
     public static final float X = 5650f, Y = 80f;
 
+    public static boolean open_portal;
+
     public void render(SpriteBatch s){
-        s.draw(Images.portal.currentSpriteFrame(false, true, false), X, Y, WIDTH, HEIGHT);
+        s.draw(Images.portal.currentSpriteFrame(!open_portal, true, false), X, Y, WIDTH, HEIGHT);
     }
 
     @Override

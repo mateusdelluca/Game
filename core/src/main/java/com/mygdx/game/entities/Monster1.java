@@ -19,7 +19,7 @@ public class Monster1 extends Objeto{
     private boolean usingOnlyLastFrame, looping = true, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_time;
-    private float HP = 10;
+    private float HP = 1;
     private boolean split;
 
     public Monster1(World world, Vector2 position){
@@ -40,6 +40,10 @@ public class Monster1 extends Objeto{
 
     private void update(){
         String name = animations.name();
+        if (HP <= 0){
+            animations = Animations.MONSTER1_SPLIT;
+            split = true;
+        }
         if (name.equals("MONSTER1_SPLIT")){
             looping = false;
             for (Fixture f : getBody().getFixtureList()){
@@ -56,9 +60,11 @@ public class Monster1 extends Objeto{
         } else {
             if (name.equals("MONSTER1_FLICKERING")) {
                 flickering_time += Gdx.graphics.getDeltaTime();
-                if (flickering_time >= 3f) {
+                if (flickering_time >= 1.5f) {
                     flickering_time = 0f;
                     animations = Animations.MONSTER1_WALKING;
+                    HP--;
+                    body.setLinearVelocity(0,0);
                 }
             }
         }

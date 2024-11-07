@@ -11,13 +11,15 @@ import com.mygdx.game.images.Images;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.screens.levels.Level.bullets;
+
 public class Jack extends Objeto{
 
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.jack.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;
     private boolean flip = true;
 
-    private ArrayList<Bullet> bullets = new ArrayList<>();
+
     private float timer;
     public Jack(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
@@ -27,7 +29,7 @@ public class Jack extends Objeto{
 
     private void update(){
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 1f){
+        if (timer > 3f){
             bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                 WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
                 getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
@@ -42,9 +44,6 @@ public class Jack extends Objeto{
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         sprite.draw(s);
-
-        for (Bullet bullet : bullets)
-            bullet.render(s);
     }
 
     @Override

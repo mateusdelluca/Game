@@ -1,4 +1,8 @@
 package com.mygdx.game.screens.levels;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.github.tommyettinger.textra.Font;
 import com.mygdx.game.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -30,6 +34,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.mygdx.game.entities.Crystal.numCrystalsCollected;
+
 public abstract class Level implements Screen, InputProcessor {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
@@ -58,6 +64,10 @@ public abstract class Level implements Screen, InputProcessor {
     String tilePath;
     private Leaf[] leafs = new Leaf[50];
 
+    private BitmapFont font;
+    private String mensage = "Collect all blue crystals!";
+    public static ArrayList<Bullet> bullets = new ArrayList<>();
+
     public Level(String tilePath, Application app){
         this.app = app;
         this.tilePath = tilePath;
@@ -84,6 +94,11 @@ public abstract class Level implements Screen, InputProcessor {
         camera.update();
         thorns_rects = new ArrayList<>();
 
+        Texture t = new Texture(Gdx.files.internal("Font2.png"));
+        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        font.getData().scale(0.2f);
+
         tile = new Tile(tilePath);
         staticObjects = tile.loadMapObjects("Rects");
         tile.createBodies(staticObjects, world, false);
@@ -96,29 +111,29 @@ public abstract class Level implements Screen, InputProcessor {
         verticalRectsThorns = new ArrayList<>();
 
         for (MapObject m : thorns){
-            RectangleMapObject t = (RectangleMapObject) m;
-            thornsRectangleMapObjects.add(t);
-//            if (t.getName().equals("Thorns1")){
-//                t.getRectangle().width += 7f;
-//                t.getRectangle().height -= 10f;
-//                horizontalRectsThorns.add(t.getRectangle());
+            RectangleMapObject t1 = (RectangleMapObject) m;
+            thornsRectangleMapObjects.add(t1);
+//            if (t1.getName().equals("Thorns1")){
+//                t1.getRectangle().width += 7f;
+//                t1.getRectangle().height -= 10f;
+//                horizontalRectsThorns.add(t1.getRectangle());
 //
 //            } else {
-//                if (t.getName().equals("Thorns5")) {
-//                    t.getRectangle().x -= 7f;
-//                    t.getRectangle().width += 7f;
-//                    t.getRectangle().height -= 10f;
-//                    horizontalRectsThorns.add(t.getRectangle());
+//                if (t1.getName().equals("Thorns5")) {
+//                    t1.getRectangle().x -= 7f;
+//                    t1.getRectangle().width += 7f;
+//                    t1.getRectangle().height -= 10f;
+//                    horizontalRectsThorns.add(t1.getRectangle());
 //                } else {
-//                    if (t.getName().equals("Thorns6")) {
-//                        t.getRectangle().x -= 7f;
-//                        t.getRectangle().width += 7f;
-//                        t.getRectangle().height -= 10f;
-//                        horizontalRectsThorns.add(t.getRectangle());
+//                    if (t1.getName().equals("Thorns6")) {
+//                        t1.getRectangle().x -= 7f;
+//                        t1.getRectangle().width += 7f;
+//                        t1.getRectangle().height -= 10f;
+//                        horizontalRectsThorns.add(t1.getRectangle());
 //                    } else {
-            t.getRectangle().height += 7f;
-            t.getRectangle().y -= 7f;
-            verticalRectsThorns.add(t.getRectangle());
+            t1.getRectangle().height += 7f;
+            t1.getRectangle().y -= 7f;
+            verticalRectsThorns.add(t1.getRectangle());
 
         }
 //                }
@@ -144,7 +159,7 @@ public abstract class Level implements Screen, InputProcessor {
 
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
-         jack = new Jack(world, new Vector2(700, 650));
+         jack = new Jack(world, new Vector2(2150, 650));
     }
 
     @Override
@@ -214,6 +229,9 @@ public abstract class Level implements Screen, InputProcessor {
         for (Leaf l : leafs)
             l.render(spriteBatch);
         jack.render(spriteBatch);
+        for (Bullet bullet : bullets)
+            bullet.render(spriteBatch);
+        font.draw(spriteBatch,mensage, 850,400);
         spriteBatch.end();
     }
 
@@ -312,12 +330,17 @@ public abstract class Level implements Screen, InputProcessor {
 //            player.getBody().setTransform(350, 400, 0);
 //        }
         for (Monster1 monster1 : monsters1){
-            for (int index = 0; index < boy.getBullets().size(); index++) {
-                if (boy.getBullets().get(index).intersectsRectangle(monster1.getRect())) {
+            for (int index = 0; index < bullets.size(); index++) {
+                if (bullets.get(index).intersectsRectangle(monster1.getRect())) {
                     monster1.setSplit(true);
                     monster1.animations = Animations.MONSTER1_SPLIT;
                 }
             }
+        }
+
+        if (numCrystalsCollected >= 16) {
+            Portal.open_portal = true;
+            mensage = "The portal is opened!";
         }
 
         if (portal.getRectangle().contains(boy.getBodyBounds())){
