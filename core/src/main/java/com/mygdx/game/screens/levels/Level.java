@@ -54,7 +54,7 @@ public abstract class Level implements Screen, InputProcessor {
     private PowerBar powerBar;
     protected Boy boy;
     protected Monster1[] monsters1 = new Monster1[2];
-
+    protected Jack jack;
     String tilePath;
     private Leaf[] leafs = new Leaf[50];
 
@@ -144,6 +144,7 @@ public abstract class Level implements Screen, InputProcessor {
 
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
+         jack = new Jack(world, new Vector2(700, 650));
     }
 
     @Override
@@ -192,6 +193,7 @@ public abstract class Level implements Screen, InputProcessor {
         boy.render(shapeRenderer);
         for (Monster1 m : monsters1)
             m.render(shapeRenderer);
+
         shapeRenderer.end();
     }
 
@@ -206,10 +208,12 @@ public abstract class Level implements Screen, InputProcessor {
 //            enemy.render(spriteBatch);
 //        player.render(spriteBatch);
         boy.render(spriteBatch);
+        jack.render(spriteBatch);
         for (Monster1 m : monsters1)
             m.render(spriteBatch);
         for (Leaf l : leafs)
             l.render(spriteBatch);
+        jack.render(spriteBatch);
         spriteBatch.end();
     }
 
@@ -307,6 +311,15 @@ public abstract class Level implements Screen, InputProcessor {
 //            teletransport.play();
 //            player.getBody().setTransform(350, 400, 0);
 //        }
+        for (Monster1 monster1 : monsters1){
+            for (int index = 0; index < boy.getBullets().size(); index++) {
+                if (boy.getBullets().get(index).intersectsRectangle(monster1.getRect())) {
+                    monster1.setSplit(true);
+                    monster1.animations = Animations.MONSTER1_SPLIT;
+                }
+            }
+        }
+
         if (portal.getRectangle().contains(boy.getBodyBounds())){
             Sounds.TELETRANSPORT.play();
             Levels.changeLevel("Level2", app);

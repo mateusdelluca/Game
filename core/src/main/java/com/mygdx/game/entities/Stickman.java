@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Stickman extends Objeto{
 
@@ -12,11 +14,17 @@ public abstract class Stickman extends Objeto{
     protected World world;
 //    protected PolygonShape shape;
 //    private Body body;
+    @Setter
+    @Getter
     protected boolean flip;
     public static final int WIDTH = 400, HEIGHT = 300;
     public StickmanBoxBounds box;
     public float rotation;
+    @Setter
+    @Getter
     protected boolean visible = true;
+    @Setter
+    @Getter
     protected boolean split;
     protected boolean stand, hited;
 
@@ -58,35 +66,4 @@ public abstract class Stickman extends Objeto{
         spriteBatch.getProjectionMatrix().setToOrtho2D(getBody().getPosition().x, getBody().getPosition().y, width, height);
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isFlip() {
-        return flip;
-    }
-
-    public void setFlip(boolean flip) {
-        this.flip = flip;
-    }
-
-    public boolean isSplit() {
-        return split;
-    }
-
-    public void setSplit(boolean split) {
-        this.split = split;
-    }
-
-    public void setHited(boolean b) {
-        hited = b;
-    }
-
-    public boolean isHited() {
-        return hited;
-    }
 }

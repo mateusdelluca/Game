@@ -5,22 +5,31 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class Objeto {
 
+    @Getter
+    @Setter
     protected Body body;
     protected PolygonShape polygonShape;
     protected FixtureDef fixtureDef;
     protected World world;
     protected float width, height;
     protected Vector2 dimensions;
+    @Getter
+    @Setter
     protected boolean visible;
+    protected Rectangle rect;
 
     public Objeto(World world, float width, float height){
         this.width = width;
         this.height = height;
         this.world = world;
         visible = true;
+        if (body != null)
+            rect = new Rectangle(body.getPosition().x - width/2f,body.getPosition().y - height/2f, width, height);
     }
 
     public Objeto(){
@@ -69,19 +78,11 @@ public abstract class Objeto {
     public abstract void render(ShapeRenderer s);
 
 
-    public boolean intersectsRectangle(Rectangle first, Rectangle another){
-        return Intersector.overlaps(first, another);
+    public boolean intersectsRectangle(Rectangle another){
+        return Intersector.overlaps(getRect(), another);
     }
 
-    public Body getBody() {
-        return body;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public Rectangle getRect(){
+       return new Rectangle(body.getPosition().x - width/2f,body.getPosition().y - height/2f, width, height);
     }
 }

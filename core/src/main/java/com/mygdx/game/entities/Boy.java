@@ -11,7 +11,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.sfx.Sounds;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -27,9 +30,11 @@ public class Boy extends Objeto{
     private Vector2 dimensions = new Vector2(65f, 95f);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
+    @Setter
     private boolean stricken;
     private boolean shooting;
     private float imgX, imgY, degrees, radians, dx, dy;
+    @Getter
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private Vector2 test;
     private Vector2 position;
@@ -168,13 +173,13 @@ public class Boy extends Objeto{
             }
             if (!stricken) {
                 if (name.equals("BOY_SABER")) {
-                    if (saber_taken && !hit){
+                    if (saber_taken && !hit) {
                         setFrameCounter(0);
                     }
-                    if (frameCounter() >= 2f){
+                    if (frameCounter() >= 2f) {
                         setFrameCounter(2);
                         saberTime += Gdx.graphics.getDeltaTime();
-                        if (saberTime >= 0.5f){
+                        if (saberTime >= 0.5f) {
                             hit = false;
                             saberTime = 0f;
                             animations = Animations.BOY_IDLE;
@@ -298,8 +303,9 @@ public class Boy extends Objeto{
                 looping = false;
                 animations.animator.resetStateTime();
             }
-            if (saber_taken) {  //hits
+            if (saber_taken && PowerBar.sp >= 50f) {  //hits
                 hit = true;
+                PowerBar.sp -= 50f;
                 SABER.play();
                 animations = Animations.BOY_SABER;
                 setFrameCounter(0);
@@ -352,11 +358,4 @@ public class Boy extends Objeto{
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, dimensions.x, dimensions.y);
     }
 
-    public boolean isStricken() {
-        return stricken;
-    }
-
-    public void setStricken(boolean stricken) {
-        this.stricken = stricken;
-    }
 }

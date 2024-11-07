@@ -3,22 +3,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Application;
+import com.mygdx.game.entities.Jack;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.screens.Jogo;
 import com.mygdx.game.screens.Tile;
 
 public class Level2 extends Level{
 
-//    public Level2(Application app) {
-//        super("Level2/Level2.tmx", app);
-//        world = new World(new Vector2(0, -10f), false);
-//        setTile(new Tile("Level2/Level2.tmx"));
-//    }
+
 
     public Level2(){
         super("Level2/Level2.tmx", Jogo.app);
         spriteBatch = new SpriteBatch();
-
+        monsters1[1].getBody().setTransform(1800, 200, 0);
     }
 
     @Override
@@ -35,6 +32,7 @@ public class Level2 extends Level{
         boy.render(spriteBatch);
         for (Monster1 monster1 : monsters1)
             monster1.render(spriteBatch);
+        jack.render(spriteBatch);
         spriteBatch.end();
     }
 
