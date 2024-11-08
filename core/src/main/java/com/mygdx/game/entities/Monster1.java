@@ -6,11 +6,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.sfx.Sounds;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Monster1 extends Objeto{
 
@@ -19,13 +20,17 @@ public class Monster1 extends Objeto{
     private boolean usingOnlyLastFrame, looping = true, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_time;
-    private float HP = 1;
+    @Setter @Getter
+    private float HP = 5;
+    @Setter
+    @Getter
     private boolean split;
 
     public Monster1(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
+        body.setUserData(getClass().getName());
     }
 
 
@@ -65,6 +70,7 @@ public class Monster1 extends Objeto{
                     animations = Animations.MONSTER1_WALKING;
                     HP--;
                     body.setLinearVelocity(0,0);
+                    Sounds.MONSTER_HURT.play();
                 }
             }
         }
@@ -73,6 +79,11 @@ public class Monster1 extends Objeto{
     @Override
     public void render(ShapeRenderer s) {
         s.rect(getBodyBounds().x, getBodyBounds().y, getBodyBounds().width, getBodyBounds().height);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
 
     public Rectangle getBodyBounds() {
@@ -89,11 +100,4 @@ public class Monster1 extends Objeto{
         setStateTime(animations.animator.timeToFrame(frame));
     }
 
-    public boolean isSplit() {
-        return split;
-    }
-
-    public void setSplit(boolean split) {
-        this.split = split;
-    }
 }

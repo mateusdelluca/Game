@@ -23,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.handler.MyContactListener;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.screens.PauseScreen;
@@ -67,7 +68,7 @@ public abstract class Level implements Screen, InputProcessor {
     private BitmapFont font;
     private String mensage = "Collect all blue crystals!";
     public static ArrayList<Bullet> bullets = new ArrayList<>();
-
+    private MyContactListener myContactListener;
     public Level(String tilePath, Application app){
         this.app = app;
         this.tilePath = tilePath;
@@ -134,7 +135,7 @@ public abstract class Level implements Screen, InputProcessor {
             t1.getRectangle().height += 7f;
             t1.getRectangle().y -= 7f;
             verticalRectsThorns.add(t1.getRectangle());
-
+            myContactListener = new MyContactListener(world);
         }
 //                }
 //            }
@@ -329,12 +330,17 @@ public abstract class Level implements Screen, InputProcessor {
 //            teletransport.play();
 //            player.getBody().setTransform(350, 400, 0);
 //        }
-        for (Monster1 monster1 : monsters1){
-            for (int index = 0; index < bullets.size(); index++) {
+        for (int index = 0; index < bullets.size(); index++) {
+            for (Monster1 monster1 : monsters1){
                 if (bullets.get(index).intersectsRectangle(monster1.getRect())) {
-                    monster1.setSplit(true);
-                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.setHP(monster1.getHP() - 1);
                 }
+            }
+            if (bullets.get(index).intersectsRectangle(boy.getBodyBounds())
+                || boy.getBodyBounds().overlaps(bullets.get(index).getRect())) {
+//                if (!boy.isStricken()) {
+                    hited(bullets.get(index));
+//                }
             }
         }
 
@@ -364,30 +370,23 @@ public abstract class Level implements Screen, InputProcessor {
                     if (!monster1.isSplit())
                         monster1.animations = Animations.MONSTER1_FLICKERING;
                 }
-//                monster1.getBody().setFixedRotation(true);
+                monster1.getBody().setFixedRotation(true);
             } else
             if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x + (monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? -15 : 15), boy.getBody().getLinearVelocity().y + 15f);
-                boy.animations = Animations.BOY_STRICKEN;
-                boy.setStricken(true);
-                PowerBar.hp -= 20;
-                Sounds.HURT.play();
+                hited(monster1);
             }
-//            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-//                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 2f);
-//                monster1.animations = Animations.MONSTER1_FLICKERING;
-//            }
+            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
+                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 2f);
+                monster1.animations = Animations.MONSTER1_FLICKERING;
+            }
             if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
                 boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
                 monster1.animations = Animations.MONSTER1_FLICKERING;
+                hited();
             }
             for (Rectangle rect : verticalRectsThorns) {
                 if (boy.getBodyBounds().overlaps(rect)) {
-                    boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 100f);
-                    boy.animations = Animations.BOY_STRICKEN;
-                    PowerBar.hp -= 20;
-                    boy.setStricken(true);
-                    Sounds.HURT.play();
+                    hited();
                 }
             }
         }
@@ -511,4 +510,21 @@ public abstract class Level implements Screen, InputProcessor {
 //        java.util.Timer timer = new java.util.Timer();
 //        timer.schedule(timerTask(r), timer1);
 //    }
+
+
+    private void hited(Objeto object){
+        boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x + (object.getBody().getPosition().x > boy.getBody().getPosition().x ? -15 : 15), boy.getBody().getLinearVelocity().y + 15f);
+        boy.animations = Animations.BOY_STRICKEN;
+        boy.setStricken(true);
+        PowerBar.hp -= 20;
+        Sounds.HURT.play();
+    }
+
+    private void hited(){
+        boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 100f);
+        boy.animations = Animations.BOY_STRICKEN;
+        PowerBar.hp -= 20;
+        boy.setStricken(true);
+        Sounds.HURT.play();
+    }
 }

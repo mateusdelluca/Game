@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
@@ -40,6 +43,7 @@ public class Crystal extends Objeto{
 
         clink = Gdx.audio.newSound(Gdx.files.internal("sounds/clink.mp3"));
         clink2 = Gdx.audio.newSound(Gdx.files.internal("sounds/clink2.mp3"));
+//        body.setUserData(this.toString());
     }
 
 //    protected Body createBoxBody(){
@@ -107,5 +111,9 @@ public class Crystal extends Objeto{
 //        s.rect(box2.x, box2.y, box2.width, box2.height);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 
 }

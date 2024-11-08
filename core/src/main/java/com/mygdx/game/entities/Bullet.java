@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.images.Images;
 
@@ -25,6 +28,7 @@ public class Bullet extends Objeto{
 //        getBody().setBullet(true);
         visible = true;
         fixtureDef.density = 1f;
+        body.setUserData(this.toString());
     }
 
     public Bullet(World world, Vector2 position, boolean flip, float angle){
@@ -40,7 +44,8 @@ public class Bullet extends Objeto{
         getBody().setBullet(true);
         visible = true;
         fixtureDef.density = 1f;
-        body.setFixedRotation(false);
+        body.setFixedRotation(true);
+        body.setUserData(this.toString());
     }
 
     public void update(){
@@ -67,4 +72,10 @@ public class Bullet extends Objeto{
     public void render(ShapeRenderer s) {
         s.rect(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
 }

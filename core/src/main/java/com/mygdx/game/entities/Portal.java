@@ -3,6 +3,9 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.game.images.Images;
 
 public class Portal extends Objeto{
@@ -21,7 +24,13 @@ public class Portal extends Objeto{
         s.rect(X, Y, WIDTH, HEIGHT);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
     public Rectangle getRectangle(){
         return new Rectangle(X, Y, WIDTH, HEIGHT);
     }
+
 }

@@ -5,16 +5,18 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.handler.MyContactListener;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class Objeto {
+public abstract class Objeto{
 
     @Getter
     @Setter
     protected Body body;
     protected PolygonShape polygonShape;
     protected FixtureDef fixtureDef;
+    @Getter
     protected World world;
     protected float width, height;
     protected Vector2 dimensions;
@@ -22,14 +24,14 @@ public abstract class Objeto {
     @Setter
     protected boolean visible;
     protected Rectangle rect;
-
     public Objeto(World world, float width, float height){
         this.width = width;
         this.height = height;
         this.world = world;
         visible = true;
-        if (body != null)
-            rect = new Rectangle(body.getPosition().x - width/2f,body.getPosition().y - height/2f, width, height);
+        if (body != null) {
+            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
+        }
     }
 
     public Objeto(){
@@ -79,10 +81,13 @@ public abstract class Objeto {
 
 
     public boolean intersectsRectangle(Rectangle another){
-        return Intersector.overlaps(getRect(), another);
+        return getRect().overlaps(another);
     }
 
     public Rectangle getRect(){
        return new Rectangle(body.getPosition().x - width/2f,body.getPosition().y - height/2f, width, height);
     }
+
+
+    public abstract String toString();
 }

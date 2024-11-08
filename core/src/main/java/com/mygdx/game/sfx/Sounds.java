@@ -32,12 +32,15 @@ public class Sounds implements Serializable{
     public static final Sound WHOOSH = Gdx.audio.newSound(Gdx.files.internal("sounds/Whoosh.wav"));
     public static final Sound PUNCHED = Gdx.audio.newSound(Gdx.files.internal("sounds/punch.wav"));
     public static final Sound HURT = Gdx.audio.newSound(Gdx.files.internal(("sounds/Hurt.mp3")));
+    public static final Sound MONSTER_HURT = Gdx.audio.newSound(Gdx.files.internal(("sounds/monster_hurt.mp3")));
 
     public static final Music PAUSE_SCREEN = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses2.mp3"));
 
     public static final Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise.mp3"));
 
     public static final Sound TELETRANSPORT = Gdx.audio.newSound(Gdx.files.internal("sounds/Eletric Whoosh.wav"));
+
+    public static final Sound SHOTGUN = Gdx.audio.newSound(Gdx.files.internal("sounds/Shotgun.mp3"));
 
     public Sounds() {
     }

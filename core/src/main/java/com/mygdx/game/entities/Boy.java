@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
@@ -31,7 +30,7 @@ public class Boy extends Objeto{
     private Vector2 dimensions = new Vector2(65f, 95f);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
-    @Setter
+    @Setter @Getter
     private boolean stricken;
     private boolean shooting;
     private float imgX, imgY, degrees, radians, dx, dy;
@@ -44,8 +43,9 @@ public class Boy extends Objeto{
 
     public Boy(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
+        body = createBoxBody(new Vector2((dimensions.x/2f) - 5, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
+        body.setUserData(this.toString());
         this.position = position;
     }
 
@@ -125,7 +125,7 @@ public class Boy extends Objeto{
             float dx = Gdx.input.getX() - imgX;
             float dy = (Gdx.graphics.getHeight() - Gdx.input.getY()) - imgY;
                     degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-            System.out.println(degrees);
+//            System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
         }
     }
@@ -235,6 +235,11 @@ public class Boy extends Objeto{
         s.rect(actionRect.x, actionRect.y, actionRect.width, actionRect.height);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
     public void keyDown(int keycode){
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
@@ -289,7 +294,7 @@ public class Boy extends Objeto{
             if (shooting){
 //                System.out.println(true);
                 bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-                        WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
+                        WIDTH : getBody().getPosition().x - WIDTH,
                         getBody().getPosition().y + HEIGHT / 2f), flip, radians));
                 GUNSHOT.play();
             }
@@ -356,5 +361,4 @@ public class Boy extends Objeto{
     public Rectangle getBodyBounds() {
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, dimensions.x, dimensions.y);
     }
-
 }
