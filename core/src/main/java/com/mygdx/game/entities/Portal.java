@@ -11,7 +11,7 @@ import com.mygdx.game.images.Images;
 public class Portal extends Objeto{
 
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
-    public static final float X = 5650f, Y = 80f;
+    public static float X = 5650f, Y = 80f;
 
     public static boolean open_portal;
 

@@ -1,7 +1,6 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,7 +11,6 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static com.mygdx.game.screens.levels.Level.bullets;
@@ -25,7 +23,7 @@ public class Jack extends Objeto{
     private boolean flip = true;
     private float alpha = 1.0f;
     @Getter @Setter
-    private boolean hited;
+    private boolean beenHit;
 
     private float timer, deltaTime;
     public Jack(World world, Vector2 position){
@@ -37,7 +35,7 @@ public class Jack extends Objeto{
 
     private void update(){
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 3f){
+        if (timer > 5f){
             bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                 WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
                 getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
@@ -50,10 +48,15 @@ public class Jack extends Objeto{
         if (body.getPosition().y > 0) {
             update();
             Sprite sprite = new Sprite(Images.jack);
-            if (hited) {
+            if (beenHit) {
+                timer += Gdx.graphics.getDeltaTime();
+                if (timer > 3f) {
+                    beenHit = false;
+                    timer = 0f;
+                }
                 deltaTime += Gdx.graphics.getDeltaTime();
                 if (deltaTime > 0.3f) {
-                    alpha = new Random().nextFloat(1f);
+                    alpha = new Random().nextFloat(0.8f);
                     deltaTime = 0f;
                     Sounds.HURT.play();
                     sprite.setAlpha(alpha);

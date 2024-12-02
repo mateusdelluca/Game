@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
@@ -25,7 +27,8 @@ public class Boy extends Objeto{
     public static final float WIDTH = 128f, HEIGHT = 128f;
     public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 100f;
     public Animations animations = Animations.BOY_IDLE;
-    private boolean flip0, flip, usingOnlyLastFrame, looping = true, init;
+    private boolean flip0, usingOnlyLastFrame, looping = true, init;
+    private boolean flip;
     private float punchingAnimationTimer;
     private Vector2 dimensions = new Vector2(65f, 95f);
     private Rectangle actionRect = new Rectangle();
@@ -40,13 +43,16 @@ public class Boy extends Objeto{
     private float saberTime;
     private boolean saber_taken, hit;
     private int counterWeaponTaken;
-
-    public Boy(World world, Vector2 position){
+    private float worldX;
+    private float worldY;
+    private Viewport viewport;
+    public Boy(World world, Vector2 position, Viewport viewport){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2((dimensions.x/2f) - 5, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
         this.position = position;
+        this.viewport = viewport;
     }
 
     public void render(SpriteBatch s){
@@ -67,7 +73,7 @@ public class Boy extends Objeto{
                 sprite2 = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
             sprite2.setPosition(body.getPosition().x, body.getPosition().y);
 
-           Sprite sprite = new Sprite(Images.shooting1);
+            Sprite sprite = new Sprite(Images.shooting1);
             sprite.setPosition(body.getPosition().x , body.getPosition().y);
             sprite.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
@@ -81,9 +87,9 @@ public class Boy extends Objeto{
             }
             sprite.draw(s);
             sprite2.draw(s);
-//            Sprite sprite3 = new Sprite(Images.shoot);
-//            sprite3.setPosition(dx, dy);
-//            sprite3.draw(s);
+            Sprite sprite3 = new Sprite(Images.shoot);
+            sprite3.setPosition(worldX - 3, worldY - 9);
+            sprite3.draw(s);
 
         }
 
@@ -99,11 +105,11 @@ public class Boy extends Objeto{
         }
         actionRect = actionRect();
 
-        if (flickering_time >= 3.2f) {
-//            animations = Animations.BOY_IDLE;
+        if (flickering_time >= 2.0f) {
+            animations = Animations.BOY_IDLE;
             flickering_time = 0f;
             stricken = false;
-            Sounds.HURT.stop();
+//          Sounds.HURT.stop();
         }
 
         aim();
@@ -120,12 +126,12 @@ public class Boy extends Objeto{
 
     private void aim(){
         if (shooting) {
-            imgX = Gdx.graphics.getWidth() / 2f;
-            imgY = Gdx.graphics.getHeight() / 2f;
-            float dx = Gdx.input.getX() - imgX;
-            float dy = (Gdx.graphics.getHeight() - Gdx.input.getY()) - imgY;
-                    degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-//            System.out.println(degrees);
+//            imgX = Gdx.graphics.getWidth() / 2f;
+//            imgY = Gdx.graphics.getHeight() / 2f;
+            float dx = worldX - Math.abs(body.getPosition().x + 64) - 3;
+            float dy = worldY - Math.abs(body.getPosition().y + 64) - 9;
+            degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
+//          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
         }
     }
@@ -163,7 +169,6 @@ public class Boy extends Objeto{
             }
         } else {
             if (name.equals("BOY_PUNCHING")) {
-
                 punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                 if (punchingAnimationTimer >= 2f) {
                     animations = Animations.BOY_IDLE;
@@ -225,7 +230,7 @@ public class Boy extends Objeto{
     }
 
     public void resize(SpriteBatch spriteBatch, int width, int height){
-//        spriteBatch.getProjectionMatrix().setToOrtho2D(body.getPosition().x, body.getPosition().y, width, height);
+        spriteBatch.getProjectionMatrix().setToOrtho2D(body.getPosition().x, body.getPosition().y, width, height);
     }
 
     @Override
@@ -244,8 +249,10 @@ public class Boy extends Objeto{
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
             if (!shooting) {
-//                degrees = 0f;
-//                radians = 0f;
+                if (!flip) {
+                    degrees = 0f;
+                    radians = 0f;
+                }
                 flip0 = keycode == Input.Keys.A;
             }
             if (!stricken && !shooting) {
@@ -280,22 +287,30 @@ public class Boy extends Objeto{
     }
 
     public void mouseMoved(int screenX, int screenY){
-//        if (shooting) {
+        if (shooting) {
 //            dx = screenX - body.getPosition().x;
 //            dy = (Gdx.graphics.getHeight() - screenY) - body.getPosition().y; // Invert Y-axis
 //            angle = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
 //            System.out.println(angle);
 //            angle2 = (float) Math.atan2(dy, dx);
-//        }
-    }
 
+            Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
+
+            viewport.unproject(worldCoordinates);
+
+            worldX = worldCoordinates.x;
+            worldY = worldCoordinates.y;
+        }
+    }
+//!flip ? getBody().getPosition().x +
+//    WIDTH : getBody().getPosition().x
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
             if (shooting){
 //                System.out.println(true);
-                bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-                        WIDTH : getBody().getPosition().x - WIDTH,
-                        getBody().getPosition().y + HEIGHT / 2f), flip, radians));
+                Bullet bullet = new Bullet(world, new Vector2(getBody().getPosition().x + WIDTH/2f,
+                    getBody().getPosition().y + HEIGHT/2f), flip, radians, true);
+                bullets.add(bullet);
                 GUNSHOT.play();
             }
             if (!shooting && !stricken && !saber_taken){ //punches
