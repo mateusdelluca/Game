@@ -27,6 +27,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static com.mygdx.game.entities.Crystal.numCrystalsCollected;
@@ -54,7 +56,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public ArrayList<Rectangle> verticalRectsThorns;
     private PowerBar powerBar;
     protected Boy boy;
-    protected Monster1[] monsters1 = new Monster1[2];
+    protected HashMap<String, Monster1> monsters1 = new HashMap<>();
     protected Jack jack;
     String tilePath;
     private Leaf[] leafs = new Leaf[50];
@@ -62,6 +64,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     private BitmapFont font;
     private String mensage = "Collect all blue crystals!";
     public static ArrayList<Bullet> bullets = new ArrayList<>();
+
     public Level(String tilePath, Application app){
         this.app = app;
         this.tilePath = tilePath;
@@ -148,8 +151,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
 
         boy = new Boy(world, new Vector2(100, 800), viewport);
-        monsters1[0] = new Monster1(world, new Vector2(300, 450));
-        monsters1[1] = new Monster1(world, new Vector2(1600, 650));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450)));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650)));
 
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
@@ -203,7 +206,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             c.render(shapeRenderer);
         portal.render(shapeRenderer);
         boy.render(shapeRenderer);
-        for (Monster1 m : monsters1)
+        for (Monster1 m : monsters1.values())
             m.render(shapeRenderer);
 
         shapeRenderer.end();
@@ -221,7 +224,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        player.render(spriteBatch);
         boy.render(spriteBatch);
         jack.render(spriteBatch);
-        for (Monster1 m : monsters1)
+        for (Monster1 m : monsters1.values())
             m.render(spriteBatch);
         for (Leaf l : leafs)
             l.render(spriteBatch);
@@ -550,6 +553,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
             fixtureA.getBody().getUserData().toString().equals("Jack"))) {
                 jack.setBeenHit(true);
+        }
+        for (Monster1 m1 : monsters1.values()){
+            if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
+                fixtureB.getBody().getUserData().toString().equals(m1.toString())
+            ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&
+                fixtureA.getBody().getUserData().toString().equals(m1.toString())){
+                System.out.println(m1);
+            }
         }
     }
 

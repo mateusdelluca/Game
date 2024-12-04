@@ -53,14 +53,14 @@ public class Jack extends Objeto{
                 if (timer > 3f) {
                     beenHit = false;
                     timer = 0f;
-                }
-                deltaTime += Gdx.graphics.getDeltaTime();
-                if (deltaTime > 0.3f) {
-                    alpha = new Random().nextFloat(0.8f);
                     deltaTime = 0f;
+                }
+                if (deltaTime <= 0.1f) {
                     Sounds.HURT.play();
+                    alpha = new Random().nextFloat(0.8f);
                     sprite.setAlpha(alpha);
                 }
+                deltaTime += Gdx.graphics.getDeltaTime();
             }
             sprite.flip(flip, false);
             sprite.setSize(WIDTH, HEIGHT);

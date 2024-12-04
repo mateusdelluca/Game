@@ -25,21 +25,40 @@ public class Monster1 extends Objeto{
     @Setter
     @Getter
     private boolean split;
-
+    public static int id;
     public Monster1(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        body.setUserData(getClass().getName());
     }
-
+    @Override
+    protected Body createBoxBody(Vector2 dimensions, BodyDef.BodyType bodyType, boolean isSensor){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.active = true;
+        bodyDef.position.set(0,0);
+        bodyDef.fixedRotation = true;
+        polygonShape = new PolygonShape();
+//         Adicione formas (fixtures) ao corpo para representar sua geometria
+        polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        fixtureDef.density = 100f;
+        fixtureDef.isSensor = isSensor;
+        Body body = world.createBody(bodyDef);
+        body.setUserData(getClass().getSimpleName() + id++);
+        body.setActive(true);
+        body.createFixture(fixtureDef);
+        System.out.println(body.getUserData());
+        return body;
+    }
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-        update();
-        Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
-        sprite.draw(spriteBatch);
+            update();
+            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.draw(spriteBatch);
         }
     }
 
@@ -83,7 +102,7 @@ public class Monster1 extends Objeto{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + id;
     }
 
     public Rectangle getBodyBounds() {

@@ -15,7 +15,8 @@ public class Level2 extends Level{
     public Level2(){
         super("Level2/Level2.tmx", Jogo.app);
         spriteBatch = new SpriteBatch();
-        monsters1[1].getBody().setTransform(1800, 200, 0);
+//        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);
+        Monster1.id = 0;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class Level2 extends Level{
         getTile().render(camera);
         spriteBatch.begin();
         boy.render(spriteBatch);
-        for (Monster1 monster1 : monsters1)
+        for (Monster1 monster1 : monsters1.values())
             monster1.render(spriteBatch);
         jack.render(spriteBatch);
         spriteBatch.end();
