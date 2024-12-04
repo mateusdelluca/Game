@@ -30,10 +30,10 @@ public class Monster1 extends Objeto{
     private int id;
     public Monster1(World world, Vector2 position, String userData){
         super(world, WIDTH, HEIGHT);
+        id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        id = Integer.parseInt(String.valueOf(userData.charAt(8)));
-        System.out.println(id);
+//        System.out.println(id);
 
     }
     @Override

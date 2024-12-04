@@ -18,6 +18,8 @@ public class Level2 extends Level{
 //        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);
 //        Monster1.id = 0;
         monsters1 = new HashMap<>();
+        monsters1.put(Monster1.class.getSimpleName() + "0", new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
     }
 
     @Override

@@ -145,10 +145,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         background = new Background();
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
 
-
         shapeRenderer = new ShapeRenderer();
         powerBar = new PowerBar();
-
 
         boy = new Boy(world, new Vector2(100, 800), viewport);
         if (this instanceof Level1) {
@@ -558,9 +556,9 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         }
         for (Monster1 m1 : monsters1.values()){
             if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
-                fixtureB.getBody().getUserData().toString().equals("Monster10")
+                    fixtureB.getBody().getUserData().toString().equals(m1.toString())
             ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&
-                fixtureA.getBody().getUserData().toString().equals("Monster10")){
+                fixtureA.getBody().getUserData().toString().equals(m1.toString())){
                 m1.setBeenHit(true);
             }
         }
