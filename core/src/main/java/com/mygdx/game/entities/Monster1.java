@@ -13,6 +13,8 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+
 public class Monster1 extends Objeto{
 
     public static final float WIDTH = 94, HEIGHT = 128;
@@ -25,11 +27,14 @@ public class Monster1 extends Objeto{
     @Setter
     @Getter
     private boolean split;
-    public static int id;
-    public Monster1(World world, Vector2 position){
+    private int id;
+    public Monster1(World world, Vector2 position, String userData){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
+        id = Integer.parseInt(String.valueOf(userData.charAt(8)));
+        System.out.println(id);
+
     }
     @Override
     protected Body createBoxBody(Vector2 dimensions, BodyDef.BodyType bodyType, boolean isSensor){
@@ -46,10 +51,10 @@ public class Monster1 extends Objeto{
         fixtureDef.density = 100f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
-        body.setUserData(getClass().getSimpleName() + id++);
+        body.setUserData(getClass().getSimpleName() + id);
         body.setActive(true);
         body.createFixture(fixtureDef);
-        System.out.println(body.getUserData());
+//        System.out.println(body.getUserData());
         return body;
     }
 
@@ -64,6 +69,9 @@ public class Monster1 extends Objeto{
 
     private void update(){
         String name = animations.name();
+        if (isBeenHit()){
+            name = "MONSTER1_FLICKERING";
+        }
         if (HP <= 0){
             animations = Animations.MONSTER1_SPLIT;
             split = true;
@@ -83,14 +91,16 @@ public class Monster1 extends Objeto{
             }, 3);
         } else {
             if (name.equals("MONSTER1_FLICKERING")) {
-                flickering_time += Gdx.graphics.getDeltaTime();
+                if (flickering_time <= 0.01f)
+                    Sounds.MONSTER_HURT.play();
                 if (flickering_time >= 1.5f) {
                     flickering_time = 0f;
-                    animations = Animations.MONSTER1_WALKING;
                     HP--;
                     body.setLinearVelocity(0,0);
-                    Sounds.MONSTER_HURT.play();
+                    setBeenHit(false);
+                    animations = Animations.MONSTER1_WALKING;
                 }
+                flickering_time += Gdx.graphics.getDeltaTime();
             }
         }
     }

@@ -15,7 +15,7 @@ public class Level1 extends Level{
 
     public Level1(){
         super("Level1/Level1.tmx", Jogo.app);
-        Monster1.id = 0;
+//        Monster1.id = 0;
     }
 
 //    @Override

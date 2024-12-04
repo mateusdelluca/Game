@@ -8,15 +8,16 @@ import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.screens.Jogo;
 import com.mygdx.game.screens.Tile;
 
+import java.util.HashMap;
+
 public class Level2 extends Level{
-
-
 
     public Level2(){
         super("Level2/Level2.tmx", Jogo.app);
         spriteBatch = new SpriteBatch();
 //        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);
-        Monster1.id = 0;
+//        Monster1.id = 0;
+        monsters1 = new HashMap<>();
     }
 
     @Override

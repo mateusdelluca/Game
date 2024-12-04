@@ -151,15 +151,17 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
 
         boy = new Boy(world, new Vector2(100, 800), viewport);
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450)));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650)));
-
+        if (this instanceof Level1) {
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        }
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
          jack = new Jack(world, new Vector2(2150, 650));
 
          world.setContactListener(this);
-
+        for (Monster1 m : monsters1.values())
+            System.out.println(m.toString());
     }
 
     @Override
@@ -556,10 +558,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         }
         for (Monster1 m1 : monsters1.values()){
             if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
-                fixtureB.getBody().getUserData().toString().equals(m1.toString())
+                fixtureB.getBody().getUserData().toString().equals("Monster10")
             ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&
-                fixtureA.getBody().getUserData().toString().equals(m1.toString())){
-                System.out.println(m1);
+                fixtureA.getBody().getUserData().toString().equals("Monster10")){
+                m1.setBeenHit(true);
             }
         }
     }
