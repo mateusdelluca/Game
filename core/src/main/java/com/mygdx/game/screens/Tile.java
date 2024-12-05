@@ -11,12 +11,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Tile {
 
     TmxMapLoader tmxMapLoader;
     public TiledMap tiledMap;
     OrthogonalTiledMapRenderer renderer;
+
+    public ArrayList<Body> bodies_of_thorns = new ArrayList<>();
+    public ArrayList<Body> bodies_of_rects = new ArrayList<>();
+
+    private int thorns_position = 1;
 
     public Tile(String level) {
         tmxMapLoader = new TmxMapLoader();
@@ -38,7 +44,7 @@ public class Tile {
         return tiledMap.getLayers().get(index).getObjects();
     }
 
-    public void createBodies(MapObjects mapObjects, World world, boolean isSensor) {
+    public void createBodies(MapObjects mapObjects, World world, boolean isSensor, String userData) {
         for (MapObject mapObject : mapObjects) {
             if (mapObject instanceof RectangleMapObject) {
                 BodyDef bodyDef = new BodyDef();
@@ -49,6 +55,11 @@ public class Tile {
                 Fixture f = body.createFixture(shape, 1f);
                 f.setFriction(0f);
                 f.setSensor(isSensor);
+                body.setUserData(userData);
+                if (userData.equals("Thorns"))
+                    bodies_of_thorns.add(body);
+                if (userData.equals("Rects"))
+                    bodies_of_rects.add(body);
             }
 
         }
@@ -91,4 +102,5 @@ public class Tile {
             a.add((RectangleMapObject) m);
         return a;
     }
+
 }

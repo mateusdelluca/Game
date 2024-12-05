@@ -21,7 +21,7 @@ public class Levels implements Screen, InputProcessor {
         currentLevel = returnLevel(level);
         currentLevel.setTile(new Tile("Level2/Level2.tmx"));
         currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
-        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false);
+        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
         Gdx.input.setInputProcessor(Levels.currentLevel);
         app.setScreen(currentLevel);
     }

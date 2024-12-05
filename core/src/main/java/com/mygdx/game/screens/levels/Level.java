@@ -28,7 +28,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import static com.mygdx.game.entities.Crystal.numCrystalsCollected;
@@ -98,13 +97,13 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
         tile = new Tile(tilePath);
         staticObjects = tile.loadMapObjects("Rects");
-        tile.createBodies(staticObjects, world, false);
+        tile.createBodies(staticObjects, world, false, "Rects");
 
         thorns = tile.loadMapObjects("Thorns");
-        tile.createBodies(thorns, world, false);
+        tile.createBodies(thorns, world, false, "Thorns");
 
         thornsRectangleMapObjects = new ArrayList<>();
-//        horizontalRectsThorns = new ArrayList<>();
+        horizontalRectsThorns = new ArrayList<>();
         verticalRectsThorns = new ArrayList<>();
 
         for (MapObject m : thorns){
@@ -374,14 +373,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 }
                 monster1.getBody().setFixedRotation(true);
             }
-//            else
-//            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-////                boyBeenHit(monster1);
-//            }
-//            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-//                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 2f);
-//                monster1.animations = Animations.MONSTER1_FLICKERING;
-//            }
+            else
+            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+//                boyBeenHit(monster1);
+            }
+            if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
+                monster1.animations = Animations.MONSTER1_FLICKERING;
+            }
 //            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
 //                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
 //                monster1.animations = Animations.MONSTER1_FLICKERING;
@@ -580,6 +579,16 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 }
             }
         }
+        for (Body bodyOfThorns : tile.bodies_of_thorns) {
+            if (body1.equals(bodyOfThorns) && body2.getUserData().toString().equals("Boy")){
+                boyBeenHit();
+            } else{
+                if (body2.equals(bodyOfThorns) && body1.getUserData().toString().equals("Boy")){
+                    boyBeenHit();
+                }
+            }
+        }
+
     }
 
     @Override
