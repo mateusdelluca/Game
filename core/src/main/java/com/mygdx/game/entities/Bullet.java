@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,6 +14,7 @@ public class Bullet extends Objeto{
     private boolean flip;
     public static  float VELOCITY = 300f;
     private float degrees, radians;
+    private float timer;
 
     public Bullet(World world, Vector2 position, boolean flip){
         super(world, WIDTH, HEIGHT);
@@ -31,7 +33,7 @@ public class Bullet extends Objeto{
     public Bullet(World world, Vector2 position, boolean flip, float radians){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH, HEIGHT));
-        body.setGravityScale(0f);
+        body.setGravityScale(0.1f);
         this.flip = flip;
         body.setTransform(position, 0);
         this.degrees = (float) Math.toDegrees(radians);
@@ -42,44 +44,36 @@ public class Bullet extends Objeto{
         visible = true;
         fixtureDef.density = 1f;
         body.setFixedRotation(true);
-        body.setUserData(this.toString());
-
+        body.setUserData(this.toString() + "1");
     }
 
     public Bullet(World world, Vector2 position, boolean flip, float radians, boolean isSensor){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH, HEIGHT), isSensor);
+        body = createBoxBody(new Vector2(WIDTH, HEIGHT), true);
         body.setGravityScale(0f);
         this.flip = flip;
-//        position.add(Boy.WIDTH/2f, Boy.HEIGHT/2f);
+//      position.add(Boy.WIDTH/2f, Boy.HEIGHT/2f);
         body.setTransform(position, 0);
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
-//        getBody().setAwake(true);
-//        getBody().setBullet(false);
+//      getBody().setAwake(true);
+//      getBody().setBullet(false);
         body.setLinearVelocity((!flip ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
         fixtureDef.density = 1f;
         body.setFixedRotation(true);
         body.setUserData(this.toString());
-//        if (VELOCITY > 0)
 
 
     }
 
-    public void update(Objeto objeto){
-//        if (Math.abs(getBody().getLinearVelocity().x) <= 30) {
-//            visible = false;
-//            for (Fixture f : getBody().getFixtureList())
-//                getBody().destroyFixture(f);
-//        }
-
-//        if (Math.abs(){
-//            fixtureDef.isSensor = false;
-//        }
+    public void update(){
+        timer += Gdx.graphics.getDeltaTime();
+        if (timer > 0.01f)
+            body.getFixtureList().get(0).setSensor(false);
     }
 
-    public void render(SpriteBatch spriteBatch, Objeto objeto){
+    public void render(SpriteBatch spriteBatch){
         Sprite sprite = new Sprite(Images.bullet);
         sprite.flip(flip, false);
 //        sprite.setOrigin(0,0);
@@ -88,7 +82,7 @@ public class Bullet extends Objeto{
         sprite.setSize(WIDTH, HEIGHT);
         if (visible)
             sprite.draw(spriteBatch);
-        update(objeto);
+        update();
     }
 
     @Override

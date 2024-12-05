@@ -28,6 +28,8 @@ public class Monster1 extends Objeto{
     @Getter
     private boolean split;
     private int id;
+    private boolean soundRunning;
+
     public Monster1(World world, Vector2 position, String userData){
         super(world, WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
@@ -71,6 +73,7 @@ public class Monster1 extends Objeto{
         String name = animations.name();
         if (isBeenHit()){
             name = "MONSTER1_FLICKERING";
+            animations = Animations.valueOf(name);
         }
         if (HP <= 0){
             animations = Animations.MONSTER1_SPLIT;
@@ -88,17 +91,21 @@ public class Monster1 extends Objeto{
                 public void run() {
                     setVisible(false);
                 }
-            }, 3);
+            }, 2);
         } else {
             if (name.equals("MONSTER1_FLICKERING")) {
-                if (flickering_time <= 0.01f)
+                if (!soundRunning) {
                     Sounds.MONSTER_HURT.play();
-                if (flickering_time >= 1.5f) {
+                    soundRunning = true;
+                }
+                if (flickering_time >= 1.0f) {
                     flickering_time = 0f;
                     HP--;
                     body.setLinearVelocity(0,0);
                     setBeenHit(false);
                     animations = Animations.MONSTER1_WALKING;
+                    soundRunning = false;
+                    Sounds.MONSTER_HURT.stop();
                 }
                 flickering_time += Gdx.graphics.getDeltaTime();
             }

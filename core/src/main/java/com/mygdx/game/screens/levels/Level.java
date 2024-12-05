@@ -230,7 +230,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             l.render(spriteBatch);
         jack.render(spriteBatch);
         for (Bullet bullet : bullets)
-            bullet.render(spriteBatch, boy);
+            bullet.render(spriteBatch);
         font.draw(spriteBatch,mensage, 850,400);
         spriteBatch.end();
     }
@@ -536,17 +536,27 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+
         if (fixtureA == null || fixtureB == null)
             return;
         if (fixtureA.getBody() == null || fixtureB.getBody() == null)
             return;
         if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null)
             return;
-        if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
+        Body body1 = fixtureA.getBody();
+        Body body2 = fixtureB.getBody();
+        if ((fixtureA.getBody().getUserData().toString().equals("Bullet1") &&
             fixtureB.getBody().getUserData().toString().equals("Boy"))
-        || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
+        || (fixtureB.getBody().getUserData().toString().equals("Bullet1") &&
             fixtureA.getBody().getUserData().toString().equals("Boy"))) {
-//                boyBeenHit();
+            boyBeenHit();
+            if (body1.getUserData().toString().equals("Bullet1")){
+                body1.setUserData("null");
+            } else{
+                if (body2.getUserData().toString().equals("Bullet1")){
+                    body2.setUserData("null");
+                }
+            }
         }
         if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
             fixtureB.getBody().getUserData().toString().equals("Jack"))
@@ -560,6 +570,13 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&
                 fixtureA.getBody().getUserData().toString().equals(m1.toString())){
                 m1.setBeenHit(true);
+                if (body1.getUserData().toString().equals("Bullet")){
+                    body1.setGravityScale(0.1f);
+                } else{
+                    if (body2.getUserData().toString().equals("Bullet")){
+                        body2.setGravityScale(0.1f);
+                    }
+                }
             }
         }
     }
