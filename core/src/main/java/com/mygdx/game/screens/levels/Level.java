@@ -356,24 +356,25 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             numCrystalsCollected = 0;
             Portal.Y = 450;
         }
-//        for (Monster1 monster1 : monsters1) {
-//            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-//                monster1.getBody().setLinearVelocity(0,0);
-//                if (boy.animations.name().equals("BOY_SABER")) {
-//                    monster1.animations = Animations.MONSTER1_SPLIT;
-//                    monster1.setSplit(true);
-//                    for (Fixture f : monster1.getBody().getFixtureList()){
-//                        f.setSensor(true);
-//                    }
-//                    monster1.getBody().setGravityScale(0f);
-//                    monster1.getBody().setLinearVelocity(0f,0f);
-//                }
-//                else {
-//                    if (!monster1.isSplit())
-//                        monster1.animations = Animations.MONSTER1_FLICKERING;
-//                }
-//                monster1.getBody().setFixedRotation(true);
-//            } else
+        for (Monster1 monster1 : monsters1.values()) {
+            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
+                monster1.getBody().setLinearVelocity(0,0);
+                if (boy.animations.name().equals("BOY_SABER")) {
+                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.setSplit(true);
+                    for (Fixture f : monster1.getBody().getFixtureList()){
+                        f.setSensor(true);
+                    }
+                    monster1.getBody().setGravityScale(0f);
+                    monster1.getBody().setLinearVelocity(0f,0f);
+                }
+                else {
+                    if (!monster1.isSplit())
+                        monster1.animations = Animations.MONSTER1_FLICKERING;
+                }
+                monster1.getBody().setFixedRotation(true);
+            }
+//            else
 //            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
 ////                boyBeenHit(monster1);
 //            }
@@ -391,7 +392,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //                    boyBeenHit();
 //                }
 //            }
-//        }
+        }
     }
 
     @Override
