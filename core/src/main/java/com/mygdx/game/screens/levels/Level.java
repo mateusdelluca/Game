@@ -532,6 +532,20 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         }
     }
 
+    private void monster1BeenHit(Monster1 m1, Body body) {
+        String name = "MONSTER1_FLICKERING";
+        m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
+        m1.animations = Animations.valueOf(name);
+        Sounds.MONSTER_HURT.play();
+    }
+
+    private void monster1BeenHit2(Monster1 m1, Body body) {
+        String name = "MONSTER1_FLICKERING";
+        m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 50);
+        m1.animations = Animations.valueOf(name);
+        Sounds.MONSTER_HURT.play();
+    }
+
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
@@ -569,11 +583,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                     fixtureB.getBody().getUserData().toString().equals(m1.toString())
             ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&
                 fixtureA.getBody().getUserData().toString().equals(m1.toString())){
-                m1.setBeenHit(true);
                 if (body1.getUserData().toString().equals("Bullet")){
+                    monster1BeenHit(m1, body1);
+                    body1.setUserData("null");
                     body1.setGravityScale(0.1f);
                 } else{
                     if (body2.getUserData().toString().equals("Bullet")){
+                        monster1BeenHit(m1, body2);
+                        body2.setUserData("null");
                         body2.setGravityScale(0.1f);
                     }
                 }
@@ -585,6 +602,16 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             } else{
                 if (body2.equals(bodyOfThorns) && body1.getUserData().toString().equals("Boy")){
                     boyBeenHit();
+                } else{
+                    for (Monster1 m1 : monsters1.values()){
+                        if (body1.equals(bodyOfThorns) && body2.getUserData().toString().equals(m1.toString())){
+                            monster1BeenHit2(m1, body1);
+                        } else {
+                            if (body2.equals(bodyOfThorns) && body1.getUserData().toString().equals(m1.toString())) {
+                                monster1BeenHit2(m1, body2);
+                            }
+                        }
+                    }
                 }
             }
         }

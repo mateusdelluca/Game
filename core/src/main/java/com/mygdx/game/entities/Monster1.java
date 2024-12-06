@@ -71,10 +71,7 @@ public class Monster1 extends Objeto{
 
     private void update(){
         String name = animations.name();
-        if (isBeenHit()){
-            name = "MONSTER1_FLICKERING";
-            animations = Animations.valueOf(name);
-        }
+
         if (HP <= 0){
             animations = Animations.MONSTER1_SPLIT;
             split = true;
@@ -106,6 +103,10 @@ public class Monster1 extends Objeto{
                     animations = Animations.MONSTER1_WALKING;
                     soundRunning = false;
                     Sounds.MONSTER_HURT.stop();
+                }
+                if (HP <= 0){
+                    animations = Animations.MONSTER1_SPLIT;
+                    split = true;
                 }
                 flickering_time += Gdx.graphics.getDeltaTime();
             }
