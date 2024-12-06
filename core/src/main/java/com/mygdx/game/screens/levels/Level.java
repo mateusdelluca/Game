@@ -57,6 +57,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     protected Boy boy;
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
     protected Jack jack;
+    protected Girl girl;
     String tilePath;
     private Leaf[] leafs = new Leaf[50];
     public static int numLevel = 1;
@@ -155,7 +156,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
          jack = new Jack(world, new Vector2(2150, 650));
-
+        girl = new Girl(world, new Vector2(2550, 650));
          world.setContactListener(this);
         for (Monster1 m : monsters1.values())
             System.out.println(m.toString());
@@ -228,6 +229,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         for (Leaf l : leafs)
             l.render(spriteBatch);
         jack.render(spriteBatch);
+        girl.render(spriteBatch);
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         font.draw(spriteBatch,mensage, 850,400);
@@ -577,6 +579,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
             fixtureA.getBody().getUserData().toString().equals("Jack"))) {
                 jack.setBeenHit(true);
+        }
+        if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
+            fixtureB.getBody().getUserData().toString().equals("Girl"))
+            || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
+            fixtureA.getBody().getUserData().toString().equals("Girl"))) {
+            girl.setBeenHit(true);
         }
         for (Monster1 m1 : monsters1.values()){
             if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
