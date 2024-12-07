@@ -26,7 +26,6 @@ public class Bullet extends Objeto{
         getBody().setAwake(true);
 //        getBody().setBullet(true);
         visible = true;
-        fixtureDef.density = 1f;
         body.setUserData(this.toString());
     }
 
@@ -41,9 +40,7 @@ public class Bullet extends Objeto{
         body.setLinearVelocity((!flip ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
 //        getBody().setAwake(true);
 //        getBody().setBullet(true);
-        visible = true;
-        fixtureDef.density = 1f;
-        body.setFixedRotation(true);
+        visible = true;body.setFixedRotation(true);
         body.setUserData(this.toString() + "1");
     }
 
@@ -60,7 +57,6 @@ public class Bullet extends Objeto{
 //      getBody().setBullet(false);
         body.setLinearVelocity((!flip ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
-        fixtureDef.density = 1f;
         body.setFixedRotation(true);
         body.setUserData(this.toString());
 

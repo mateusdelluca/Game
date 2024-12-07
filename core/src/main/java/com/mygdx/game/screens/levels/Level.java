@@ -358,6 +358,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             numCrystalsCollected = 0;
             Portal.Y = 450;
             Portal.open_portal = false;
+            jack.HP = 5;
+            girl.HP = 5;
         }
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
@@ -587,6 +589,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             || (body2.getUserData().toString().equals("Bullet") &&
             body1.getUserData().toString().equals("Jack"))) {
             jack.setBeenHit(true);
+            jack.HP--;
             if (body1.getUserData().toString().equals("Bullet")){
                 body1.setUserData("null");
                 body1.setGravityScale(0.1f);
@@ -602,6 +605,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             || (body2.getUserData().toString().equals("Bullet") &&
             body1.getUserData().toString().equals("Girl"))) {
             girl.setBeenHit(true);
+            girl.HP--;
             if (body1.getUserData().toString().equals("Bullet")){
                 body1.setUserData("null");
                 body1.setGravityScale(0.1f);

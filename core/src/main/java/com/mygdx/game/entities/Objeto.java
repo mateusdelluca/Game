@@ -99,7 +99,7 @@ public abstract class Objeto{
         polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 100f;
+        fixtureDef.density = 10f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);

@@ -24,48 +24,53 @@ public class Jack extends Objeto{
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
-
+    public int HP = 5;
+    Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
     public Jack(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
+        sprite.flip(flip, false);
     }
 
     private void update(){
-        timer += Gdx.graphics.getDeltaTime();
-        if (timer > 5f){
+        deltaTime += Gdx.graphics.getDeltaTime();
+        if (deltaTime > 3f){
             bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                 WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
                 getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
-            timer = 0f;
+            deltaTime = 0f;
             SHOTGUN.play();
         }
     }
 
     public void render(SpriteBatch s){
-        if (body.getPosition().y > 0) {
+        if (body.getPosition().y > 0 && HP > 0) {
             update();
-            Sprite sprite = new Sprite(Images.jack);
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
+                if (timer < 3f) {
+                    alpha = new Random().nextFloat(1f);
+                    s.setColor(1f, 1f, 1f, alpha);
+//                    sprite.setColor(1f,1f,1f,alpha);
+                }
                 if (timer > 3f) {
                     beenHit = false;
                     timer = 0f;
-                    deltaTime = 0f;
+                    alpha = 1f;
                 }
                 if (deltaTime <= 0.1f) {
                     Sounds.HURT.play();
-                    alpha = new Random().nextFloat(0.8f);
-                    sprite.setAlpha(alpha);
                 }
-                deltaTime += Gdx.graphics.getDeltaTime();
+                sprite.setAlpha(alpha);
             }
-            sprite.flip(flip, false);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
+        } else{
+            body.setTransform(0,0,0);
         }
     }
 

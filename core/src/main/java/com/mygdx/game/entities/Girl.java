@@ -24,11 +24,11 @@ public class Girl extends Objeto{
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
-    private Sprite hp = new Sprite(Images.hp);
-    private Sprite hpBar = new Sprite(Images.hp2);
     Sprite sprite = new Sprite(Images.girl);
-
+    public int HP = 5;
     private float timer, deltaTime;
+    private boolean isRunning;
+
     public Girl(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
@@ -37,44 +37,47 @@ public class Girl extends Objeto{
         sprite.flip(flip, false);
     }
 
-    private void update(){ //TODO fazer interface de hp e morte quando zerá-lo
-        timer += Gdx.graphics.getDeltaTime();
-        if (timer > 5f){
+    private void update(){
+        deltaTime += Gdx.graphics.getDeltaTime();
+        if (deltaTime > 2f){
             bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                 WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
                 getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
-            timer = 0f;
+            deltaTime = 0f;
             SHOTGUN.play();
+        }
+        if (!isRunning && beenHit) {
+            Sounds.GIRL_HURT.play();
+            isRunning = true;
         }
     }
 
     public void render(SpriteBatch s){
-        if (body.getPosition().y > 0) {
-            update();
-
-            if (beenHit) {
-                timer += Gdx.graphics.getDeltaTime();
-                if (timer < 3f) {
-                    alpha = new Random().nextFloat(1f);
-                    s.setColor(1f,1f,1f,alpha);
+    if (body.getPosition().y > 0 && HP > 0) {
+        update();
+        if (beenHit) {
+            timer += Gdx.graphics.getDeltaTime();
+            if (timer < 1.5f) {
+                alpha = new Random().nextFloat(1f);
+                s.setColor(1f,1f,1f,alpha);
 //                    sprite.setColor(1f,1f,1f,alpha);
-                }
-                if (timer > 3f) {
-                    beenHit = false;
-                    timer = 0f;
-                    deltaTime = 0f;
-                    alpha = 1f;
-                }
-                if (deltaTime <= 0.1f) {
-                    Sounds.GIRL_HURT.play();
-                }
-                sprite.setAlpha(alpha);
-                deltaTime += Gdx.graphics.getDeltaTime();
             }
-            s.draw(hpBar, body.getWorldCenter().x, body.getWorldCenter().y, WIDTH, HEIGHT);
+            if (timer > 1.5f) {
+                beenHit = false;
+                timer = 0f;
+//                    deltaTime = 0f;
+                alpha = 1f;
+                isRunning = false;
+            }
+
+            sprite.setAlpha(alpha);
+//                deltaTime += Gdx.graphics.getDeltaTime();
+        }
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
+        } else{
+            body.setTransform(0,0,0);
         }
     }
 
