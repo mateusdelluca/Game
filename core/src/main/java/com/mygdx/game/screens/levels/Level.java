@@ -64,6 +64,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     private BitmapFont font;
     private String mensage = "Collect all blue crystals!";
     public static ArrayList<Bullet> bullets = new ArrayList<>();
+    private ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
     public Level(String tilePath, Application app){
         this.app = app;
@@ -349,13 +350,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             mensage = "The portal is opened!";
         }
 
-        if (portal.getRectangle().contains(boy.getBodyBounds())){
+        if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
             Sounds.TELETRANSPORT.play();
             Levels.changeLevel("Level" + ++numLevel, app);
             boy.getBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
             numCrystalsCollected = 0;
             Portal.Y = 450;
+            Portal.open_portal = false;
         }
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
@@ -394,6 +396,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //                }
 //            }
         }
+        for (Body body : bodiesToDestroy) {
+            if (body.getTransform().getPosition().x != 0) {
+                body.setTransform(0, 0, 0);
+
+            }
+        } bodiesToDestroy.clear();
     }
 
     @Override
@@ -574,17 +582,35 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 }
             }
         }
-        if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
-            fixtureB.getBody().getUserData().toString().equals("Jack"))
-            || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
-            fixtureA.getBody().getUserData().toString().equals("Jack"))) {
-                jack.setBeenHit(true);
+        if ((body1.getUserData().toString().equals("Bullet") &&
+            body2.getUserData().toString().equals("Jack"))
+            || (body2.getUserData().toString().equals("Bullet") &&
+            body1.getUserData().toString().equals("Jack"))) {
+            jack.setBeenHit(true);
+            if (body1.getUserData().toString().equals("Bullet")){
+                body1.setUserData("null");
+                body1.setGravityScale(0.1f);
+            } else{
+                if (body2.getUserData().toString().equals("Bullet")){
+                    body2.setUserData("null");
+                    body2.setGravityScale(0.1f);
+                }
+            }
         }
-        if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
-            fixtureB.getBody().getUserData().toString().equals("Girl"))
-            || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
-            fixtureA.getBody().getUserData().toString().equals("Girl"))) {
+        if ((body1.getUserData().toString().equals("Bullet") &&
+            body2.getUserData().toString().equals("Girl"))
+            || (body2.getUserData().toString().equals("Bullet") &&
+            body1.getUserData().toString().equals("Girl"))) {
             girl.setBeenHit(true);
+            if (body1.getUserData().toString().equals("Bullet")){
+                body1.setUserData("null");
+                body1.setGravityScale(0.1f);
+            } else{
+                if (body2.getUserData().toString().equals("Bullet")){
+                    body2.setUserData("null");
+                    body2.setGravityScale(0.1f);
+                }
+            }
         }
         for (Monster1 m1 : monsters1.values()){
             if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
@@ -623,7 +649,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 }
             }
         }
-
+        if (body1.getUserData().toString().equals("null")){
+            bodiesToDestroy.add(body1);
+        }
+        if (body2.getUserData().toString().equals("null")){
+            bodiesToDestroy.add(body2);
+        }
     }
 
     @Override

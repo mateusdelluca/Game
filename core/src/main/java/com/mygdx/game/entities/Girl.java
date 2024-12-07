@@ -19,11 +19,14 @@ import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 public class Girl extends Objeto{
 
     public static final float DIVISOR = 1.4f;
-    public static final float WIDTH = Images.girl.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;
+    public static final float WIDTH = Images.girl.getWidth()/DIVISOR, HEIGHT = Images.girl.getHeight()/DIVISOR;
     private boolean flip = true;
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
+    private Sprite hp = new Sprite(Images.hp);
+    private Sprite hpBar = new Sprite(Images.hp2);
+    Sprite sprite = new Sprite(Images.girl);
 
     private float timer, deltaTime;
     public Girl(World world, Vector2 position){
@@ -31,6 +34,7 @@ public class Girl extends Objeto{
         body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
+        sprite.flip(flip, false);
     }
 
     private void update(){ //TODO fazer interface de hp e morte quando zerá-lo
@@ -47,22 +51,24 @@ public class Girl extends Objeto{
     public void render(SpriteBatch s){
         if (body.getPosition().y > 0) {
             update();
-            Sprite sprite = new Sprite(Images.girl);
+
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
+                if (alpha > 0.1f)
+                    alpha -= 0.1f;
                 if (timer > 3f) {
                     beenHit = false;
                     timer = 0f;
                     deltaTime = 0f;
+                    alpha = 1f;
                 }
                 if (deltaTime <= 0.1f) {
                     Sounds.GIRL_HURT.play();
-                    alpha = new Random().nextFloat(0.8f);
-                    sprite.setAlpha(alpha);
                 }
+                sprite.setAlpha(alpha);
                 deltaTime += Gdx.graphics.getDeltaTime();
             }
-            sprite.flip(flip, false);
+            s.draw(hpBar, body.getWorldCenter().x, body.getWorldCenter().y, WIDTH, HEIGHT);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);

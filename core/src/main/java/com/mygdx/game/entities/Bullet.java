@@ -68,6 +68,8 @@ public class Bullet extends Objeto{
     }
 
     public void update(){
+        if (body == null || body.getFixtureList().size == 0)
+            return;
         timer += Gdx.graphics.getDeltaTime();
         if (timer > 0.01f)
             body.getFixtureList().get(0).setSensor(false);
