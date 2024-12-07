@@ -54,8 +54,11 @@ public class Girl extends Objeto{
 
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
-                if (alpha > 0.1f)
-                    alpha -= 0.1f;
+                if (timer < 3f) {
+                    alpha = new Random().nextFloat(1f);
+                    s.setColor(1f,1f,1f,alpha);
+//                    sprite.setColor(1f,1f,1f,alpha);
+                }
                 if (timer > 3f) {
                     beenHit = false;
                     timer = 0f;
