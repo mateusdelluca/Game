@@ -25,8 +25,8 @@ public class Crystal extends Objeto{
     private Rectangle box1, box2;
     private Vector2 position;
     private Sound clink, clink2;
-    public static final float[] X_POSITIONS = {360, 600, 1000, 1600, 2000, 2200, 2800, 3100, 3500, 3850, 4000, 4370, 4950, 5000, 5450, 5500};
-    public static final float[] Y_POSITIONS = {520, 450,  450,  650,  750,  850,  550,  450,  450,  450,  550,  650,  650,  450,  350,  350};
+    public static final float[] X_POSITIONS = {360, 600, 1000, 1600, 2000, 2200, 2800, 3100, 3500, 3850, 3900, 4370, 4950, 5000, 5450, 5500};
+    public static final float[] Y_POSITIONS = {520, 450,  450,  650,  750,  850,  550,  450,  450,  450,  400,  450,  450,  450,  350,  350};
     public static int index;
     public static int numCrystalsCollected;
 

@@ -37,7 +37,7 @@ public class Jack extends Objeto{
 
     private void update(){
         deltaTime += Gdx.graphics.getDeltaTime();
-        if (deltaTime > 10f){
+        if (deltaTime > 4f){
             bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                 WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
                 getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
@@ -61,7 +61,7 @@ public class Jack extends Objeto{
                     timer = 0f;
                     alpha = 1f;
                 }
-                if (deltaTime <= 0.1f) {
+                if (timer <= 0.05f) {
                     Sounds.HURT.play();
                 }
                 sprite.setAlpha(alpha);

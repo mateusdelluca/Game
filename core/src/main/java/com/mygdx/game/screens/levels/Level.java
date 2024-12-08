@@ -153,6 +153,11 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         if (this instanceof Level1) {
             monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
             monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2300, 650), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2700, 650), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3500, 650), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3800, 650), Monster1.class.getSimpleName() + monsters1.size()));
+            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4200, 650), Monster1.class.getSimpleName() + monsters1.size()));
         }
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
@@ -618,6 +623,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             }
         }
         for (Monster1 m1 : monsters1.values()){
+            if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
+                || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")){
+                boyBeenHit();
+            }
             if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
                     fixtureB.getBody().getUserData().toString().equals(m1.toString())
             ) || fixtureB.getBody().getUserData().toString().equals("Bullet") &&

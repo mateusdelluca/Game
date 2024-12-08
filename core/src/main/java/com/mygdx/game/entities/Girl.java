@@ -20,6 +20,7 @@ public class Girl extends Objeto{
 
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.girl.getWidth()/DIVISOR, HEIGHT = Images.girl.getHeight()/DIVISOR;
+    @Getter @Setter
     private boolean flip = true;
     private float alpha = 1.0f;
     @Getter @Setter
@@ -46,28 +47,31 @@ public class Girl extends Objeto{
             deltaTime = 0f;
             SHOTGUN.play();
         }
-        if (!isRunning && beenHit) {
+        if (isRunning) {
             Sounds.GIRL_HURT.play();
-            isRunning = true;
+            isRunning = false;
+
         }
     }
 
     public void render(SpriteBatch s){
-    if (body.getPosition().y > 0 && HP > 0) {
+        if (body.getPosition().y > 0 && HP > 0) {
         update();
         if (beenHit) {
             timer += Gdx.graphics.getDeltaTime();
+            if (timer < 0.05f)
+                isRunning = true;
             if (timer < 1.5f) {
                 alpha = new Random().nextFloat(1f);
                 s.setColor(1f,1f,1f,alpha);
 //                    sprite.setColor(1f,1f,1f,alpha);
             }
             if (timer > 1.5f) {
-                beenHit = false;
                 timer = 0f;
 //                    deltaTime = 0f;
                 alpha = 1f;
                 isRunning = false;
+                beenHit = false;
             }
 
             sprite.setAlpha(alpha);
