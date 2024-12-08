@@ -172,7 +172,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public void render(float delta) {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
             update(delta);
 //        player.update(delta);
 //        for (Enemy enemy : enemies)

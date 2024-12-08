@@ -44,6 +44,8 @@ public class Sounds implements Serializable{
 
     public static final Sound GIRL_HURT = Gdx.audio.newSound(Gdx.files.internal("sounds/girl_saying_oh.mp3"));
 
+    public static final Sound JETPACK = Gdx.audio.newSound(Gdx.files.internal("sounds/jetpack_burning.mp3"));
+
     public Sounds() {
     }
 

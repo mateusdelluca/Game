@@ -58,6 +58,7 @@ public class Boy extends Objeto{
         this.viewport = viewport;
         jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
+
     }
 
     public void render(SpriteBatch s){
@@ -117,7 +118,9 @@ public class Boy extends Objeto{
             Sounds.LEVEL1.play();
         }
         actionRect = actionRect();
-
+        if (body.getPosition().y > 1000){
+            body.setTransform(body.getPosition().x, 1000, 0);
+        }
         if (flickering_time >= 2.0f) {
             animations = Animations.BOY_IDLE;
             flickering_time = 0f;
@@ -126,7 +129,9 @@ public class Boy extends Objeto{
         }
 
         aim();
-
+        if (body.getPosition().y < 200 && jetPack){
+            body.setTransform(body.getPosition().x, 200, 0);
+        }
         if (body.getPosition().y < -200){
             body.setTransform(position,0f);
             animations = Animations.BOY_STRICKEN;
@@ -264,10 +269,12 @@ public class Boy extends Objeto{
             if (jetPack) {
                 jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
                 body.setGravityScale(0.5f);
+                JETPACK.loop(0.3f);
             }
             else {
 //                jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y - 10);
                 body.setGravityScale(1f);
+                JETPACK.stop();
             }
         }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
@@ -298,7 +305,6 @@ public class Boy extends Objeto{
                 }
                 JUMP.play();
             }
-
         }
     }
 

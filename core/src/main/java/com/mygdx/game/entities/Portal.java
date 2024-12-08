@@ -16,6 +16,7 @@ public class Portal extends Objeto{
     public static boolean open_portal;
 
     public void render(SpriteBatch s){
+        s.setColor(1f,1f,1f,1f);
         s.draw(Images.portal.currentSpriteFrame(!open_portal, true, false), X, Y, WIDTH, HEIGHT);
     }
 
