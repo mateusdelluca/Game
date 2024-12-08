@@ -1,6 +1,7 @@
 package com.mygdx.game.images;
 
 import com.badlogic.gdx.graphics.Color;
+import lombok.Getter;
 
 public enum Animations {
 
@@ -20,14 +21,11 @@ public enum Animations {
     MONSTER1_FLICKERING(new Animator(4,4,6,94,128, "monster/Flickering.png")),
     MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png"));
 
+    @Getter
     public Animator animator;
 
     Animations(Animator animator){
         this.animator = animator;
-    }
-
-    public Animator getAnimator() {
-        return animator;
     }
 
     public Animations getAnimation(String name){

@@ -64,7 +64,7 @@ public class Boy extends Objeto{
         update();
         if (jetPack){
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
-            jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y + 10f);
+            jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
             jetPackSprite.draw(s);
         }
         if (stricken) {
@@ -79,7 +79,7 @@ public class Boy extends Objeto{
         }
         if (shooting && !stricken) {
             Sprite sprite2 = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-            if (isMoving())
+            if (isMoving() && !jetPack)
                 sprite2 = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
             sprite2.setPosition(body.getPosition().x, body.getPosition().y);
 
@@ -90,10 +90,12 @@ public class Boy extends Objeto{
                 sprite.setRotation(-Math.abs(180f - degrees));
                 sprite.flip(true, false);
                 sprite2.flip(true, false);
+                jetPackSprite.flip(true, false);
             }
             else{
                 sprite.flip(false, false);
                 sprite2.flip(false, false);
+                jetPackSprite.flip(false, false);
             }
 
             sprite.draw(s);
@@ -280,7 +282,7 @@ public class Boy extends Objeto{
             if (!stricken && !shooting && !jetPack) {
                 animations = Animations.BOY_WALKING;
             }
-            usingOnlyLastFrame = jetPack;
+            usingOnlyLastFrame = false;
             looping = true;
         }
         if (!stricken) {

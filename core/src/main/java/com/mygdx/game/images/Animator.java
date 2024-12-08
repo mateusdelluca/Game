@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import lombok.Getter;
 
 public class Animator {
 
     private int numColumns, numRows, numFrames, fps, width, height;    //rows and columns of the sprite sheet
     private String path;
+    @Getter
     private Animation<TextureRegion> animation; // Must declare frame type (TextureRegion)
     public Texture spriteSheet;
     public Sprite sprite[];
@@ -183,10 +185,6 @@ public class Animator {
         return sprite[framePosition];
     }
 
-    public Animation<TextureRegion> getAnimation(){
-        return animation;
-    }
-
     public TextureRegion getFrame(int index){
         if (index < numFrames) {
             return frames[index];
@@ -242,6 +240,29 @@ public class Animator {
         } if (useOnlyLastFrame){
             s = new Sprite(lastFrame());
         }
+        if (looping && ani_finished())
+            stateTime = 0f;
+//        s.setColor(color);
+//        SpriteBatch s1 = new SpriteBatch();
+//        s1.begin();
+//        s.draw(s1);
+//        s1.end();
+//        s1.dispose();
+//        s.setRotation((float) Math.toDegrees(rotation));
+//        System.out.println(s.getRotation());
+        if (flip) {
+            s.flip(true, false);
+            return s;
+        }
+        return s;
+    }
+
+    public TextureRegion currentSpriteFrame(int frameUnique, boolean looping, boolean flip){
+        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+        // Get current frame of animation for the current stateTime
+        Sprite s = null;
+        s = new Sprite(frames[frameUnique]);
+
         if (looping && ani_finished())
             stateTime = 0f;
 //        s.setColor(color);
