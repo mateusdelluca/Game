@@ -549,6 +549,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
         m1.animations = Animations.valueOf(name);
         Sounds.MONSTER_HURT.play();
+        m1.setHP(m1.getHP() -1);
     }
 
     private void monster1BeenHit2(Monster1 m1, Body body) {

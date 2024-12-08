@@ -25,7 +25,7 @@ import static com.mygdx.game.sfx.Sounds.*;
 public class Boy extends Objeto{
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
-    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 100f;
+    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     private boolean flip;
@@ -46,6 +46,9 @@ public class Boy extends Objeto{
     private float worldX;
     private float worldY;
     private Viewport viewport;
+    private boolean jetPack;
+    private Sprite jetPackSprite;
+    private Vector2 jetPackPosition;
     public Boy(World world, Vector2 position, Viewport viewport){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2((dimensions.x/2f) - 5, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
@@ -53,10 +56,17 @@ public class Boy extends Objeto{
         body.setUserData(this.toString());
         this.position = position;
         this.viewport = viewport;
+        jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
+        jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
     }
 
     public void render(SpriteBatch s){
         update();
+        if (jetPack){
+            jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
+            jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y + 10f);
+            jetPackSprite.draw(s);
+        }
         if (stricken) {
             Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
@@ -85,6 +95,7 @@ public class Boy extends Objeto{
                 sprite.flip(false, false);
                 sprite2.flip(false, false);
             }
+
             sprite.draw(s);
             sprite2.draw(s);
             Sprite sprite3 = new Sprite(Images.shoot);
@@ -198,17 +209,17 @@ public class Boy extends Objeto{
                             punchingAnimationTimer = 0f;
                         }
                     } else {
-                        if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING")) {
+                        if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_JETPACK")) {
 
                         } else {
-                            if (onGround()) {
+                            if (onGround() && !jetPack) {
                                 if (isMoving())
                                     animations = Animations.BOY_WALKING;
                                 else
                                     animations = Animations.BOY_IDLE;
                                 //                   usingOnlyLastFrame = true;
                             } else {
-                                if (isMoving())
+                                if (isMoving() || jetPack)
                                     animations = Animations.BOY_JUMPING;
                                 else
                                     animations = Animations.BOY_JUMPING_FRONT;
@@ -246,6 +257,17 @@ public class Boy extends Objeto{
     }
 
     public void keyDown(int keycode){
+        if (keycode == Input.Keys.T) {
+            jetPack = !jetPack;
+            if (jetPack) {
+                jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
+                body.setGravityScale(0.5f);
+            }
+            else {
+//                jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y - 10);
+                body.setGravityScale(1f);
+            }
+        }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
             if (!shooting) {
@@ -255,22 +277,22 @@ public class Boy extends Objeto{
                 }
                 flip0 = keycode == Input.Keys.A;
             }
-            if (!stricken && !shooting) {
+            if (!stricken && !shooting && !jetPack) {
                 animations = Animations.BOY_WALKING;
             }
-            usingOnlyLastFrame = false;
+            usingOnlyLastFrame = jetPack;
             looping = true;
         }
         if (!stricken) {
             if (keycode == Input.Keys.SPACE) {
-                if (Math.abs(getBody().getLinearVelocity().x) < 15f)
+                if (Math.abs(getBody().getLinearVelocity().x) < 15f && !jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
-                else
+                if (Math.abs(getBody().getLinearVelocity().x) >= 15f || jetPack)
                     animations = Animations.BOY_JUMPING;
                 if (secondJump < 2) {
                     getBody().setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-
-                    secondJump++;
+                    if (!jetPack)
+                        secondJump++;
                 }
                 JUMP.play();
             }

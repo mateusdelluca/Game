@@ -81,7 +81,7 @@ public class Monster1 extends Objeto{
             for (Fixture f : getBody().getFixtureList()){
                 f.setSensor(true);
             }
-            getBody().setGravityScale(0f);
+//            getBody().setGravityScale(0f);
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task(){
                 @Override
@@ -97,7 +97,6 @@ public class Monster1 extends Objeto{
                 }
                 if (flickering_time >= 1.0f) {
                     flickering_time = 0f;
-                    HP--;
                     body.setLinearVelocity(0,0);
                     setBeenHit(false);
                     animations = Animations.MONSTER1_WALKING;
