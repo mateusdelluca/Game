@@ -1,25 +1,35 @@
 package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
 import com.mygdx.game.entities.Jack;
 import com.mygdx.game.entities.Monster1;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.screens.Jogo;
 import com.mygdx.game.screens.Tile;
 
 import java.util.HashMap;
 
-public class Level2 extends Level{
+public class Level2 extends Level implements ContactListener {
 
     public Level2(){
         super("Level2/Level2.tmx", Jogo.app);
+
         spriteBatch = new SpriteBatch();
 //        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);
 //        Monster1.id = 0;
         monsters1 = new HashMap<>();
         monsters1.put(Monster1.class.getSimpleName() + "0", new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
+
+        //        thorns = getTile().loadMapObjects("Thorns");
+        getTile().createBodies(thorns, world, false, "Thorns");
+        for (int index = 0; index < getTile().bodies_of_thorns.size(); index++) {
+            float y = getTile().bodies_of_thorns.get(index).getPosition().y;
+            float x = getTile().bodies_of_thorns.get(index).getPosition().x;
+            System.out.println(x + " " + y);
+        }
     }
 
     @Override
@@ -38,6 +48,34 @@ public class Level2 extends Level{
             monster1.render(spriteBatch);
         jack.render(spriteBatch);
         spriteBatch.end();
+
+    }
+    @Override
+    public void beginContact(Contact contact){
+        super.beginContact(contact);
+
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+
+        if (fixtureA == null || fixtureB == null)
+            return;
+        if (fixtureA.getBody() == null || fixtureB.getBody() == null)
+            return;
+        if (fixtureA.getBody().getUserData() == null || fixtureB.getBody().getUserData() == null)
+            return;
+
+        Body body1 = fixtureA.getBody();
+        Body body2 = fixtureB.getBody();
+        if (body1.getUserData().toString().equals("Thorns") && body2.getUserData().toString().equals("Boy") ||
+            (body2.getUserData().toString().equals("Thorns") && body1.getUserData().toString().equals("Boy"))){
+            float y = boy.getBody().getPosition().y;
+            float x = boy.getBody().getPosition().x;
+            if ((y > 260f && y < 270f && x < 3320)
+                || (y > 380f && y < 390f && x < 3520) ||
+            (y > 500f && y < 510f && x < 3720))
+                return;
+            boyBeenHit();
+        }
     }
 
 //    @Override

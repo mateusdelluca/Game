@@ -166,6 +166,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
          world.setContactListener(this);
         for (Monster1 m : monsters1.values())
             System.out.println(m.toString());
+
     }
 
     @Override
@@ -357,6 +358,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
         if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
             Sounds.TELETRANSPORT.play();
+            getTile().bodies_of_thorns.clear();
             Levels.changeLevel("Level" + ++numLevel, app);
             boy.getBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
@@ -365,6 +367,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             Portal.open_portal = false;
             jack.HP = 5;
             girl.HP = 5;
+            PowerBar.hp = PowerBar.WIDTH2;
+            PowerBar.sp = PowerBar.WIDTH2;
         }
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
@@ -539,7 +543,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        Sounds.HURT.play();
 //    }
 
-    private void boyBeenHit(){
+    protected void boyBeenHit(){
         if (!boy.isStricken()) {
             boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 100f);
             boy.animations = Animations.BOY_STRICKEN;

@@ -14,7 +14,6 @@ public class Levels implements Screen, InputProcessor {
     public Levels(){
 //        level1 = new Level1(app);
 //        level2 = new Level2(app);
-        currentLevel = level1;
     }
 
     public static void changeLevel(String level, Application app){
