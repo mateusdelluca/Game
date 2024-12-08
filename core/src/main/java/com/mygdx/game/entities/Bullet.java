@@ -64,6 +64,10 @@ public class Bullet extends Objeto{
     }
 
     public void update(){
+        if (Math.abs(body.getLinearVelocity().x) < 10f && visible) {
+            body.setTransform(0, 0, 0);
+            visible = false;
+        }
         if (body == null || body.getFixtureList().size == 0)
             return;
         timer += Gdx.graphics.getDeltaTime();

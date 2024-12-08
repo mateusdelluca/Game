@@ -71,7 +71,8 @@ public class Monster1 extends Objeto{
 
     private void update(){
         String name = animations.name();
-
+        if (!visible)
+            body.setTransform(0,0,0);
         if (HP <= 0){
             animations = Animations.MONSTER1_SPLIT;
             split = true;
