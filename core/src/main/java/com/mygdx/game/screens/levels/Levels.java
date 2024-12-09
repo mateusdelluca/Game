@@ -9,7 +9,7 @@ import com.mygdx.game.screens.Tile;
 public class Levels implements Screen, InputProcessor {
 
     public static final Level level1 = new Level1(), level2 = new Level2();
-    public static Level currentLevel;
+    public static Level currentLevel = level1;
 
     public Levels(){
 //        level1 = new Level1(app);

@@ -110,6 +110,7 @@ public class Boy extends Objeto{
     }
 
     public void update(){
+        method();
         animations();
         if (body.getPosition().x < 32){
             body.setTransform(32, body.getPosition().y, 0);
@@ -139,6 +140,12 @@ public class Boy extends Objeto{
         }
         if (Math.abs(getBody().getLinearVelocity().y) < 0.05f && !animations.name().equals("BOY_JUMPING")){
             secondJump = 0;
+        }
+    }
+
+    private void method() {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && jetPack){
+            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
     }
 
@@ -264,11 +271,15 @@ public class Boy extends Objeto{
     }
 
     public void keyDown(int keycode){
+        if (keycode == Input.Keys.SPACE && jetPack) {
+            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
+            body.setGravityScale(0f);
+        }
         if (keycode == Input.Keys.T) {
             jetPack = !jetPack;
             if (jetPack) {
                 jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
-                body.setGravityScale(0.5f);
+//                body.setGravityScale(0.5f);
                 JETPACK.loop(0.3f);
             }
             else {
@@ -293,7 +304,7 @@ public class Boy extends Objeto{
             looping = true;
         }
         if (!stricken) {
-            if (keycode == Input.Keys.SPACE) {
+            if (keycode == Input.Keys.SPACE && !jetPack) {
                 if (Math.abs(getBody().getLinearVelocity().x) < 15f && !jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f || jetPack)
@@ -313,6 +324,10 @@ public class Boy extends Objeto{
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
             if (!stricken && !shooting)
                 animations = Animations.BOY_IDLE;
+        }
+        if (keycode == Input.Keys.SPACE && jetPack) {
+            body.setGravityScale(0.2f);
+
         }
     }
 

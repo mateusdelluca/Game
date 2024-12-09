@@ -545,7 +545,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     protected void boyBeenHit(){
         if (!boy.isStricken()) {
-            boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 100f);
+            boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 20f);
             boy.animations = Animations.BOY_STRICKEN;
             PowerBar.hp -= 20;
             boy.setStricken(true);

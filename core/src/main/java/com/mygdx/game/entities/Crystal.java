@@ -19,14 +19,14 @@ import java.util.Random;
 
 public class Crystal extends Objeto{
 
-    public static final float WIDTH = 282/8f, HEIGHT = 421/8f;
+    public static final float WIDTH = 40f, HEIGHT = 40f;
     private Random r = new Random();
     private boolean visible2;
     private Rectangle box1, box2;
     private Vector2 position;
     private Sound clink, clink2;
-    public static final float[] X_POSITIONS = {360, 600, 1000, 1600, 2000, 2200, 2800, 3100, 3500, 3850, 3900, 4370, 4950, 5000, 5450, 5500};
-    public static final float[] Y_POSITIONS = {520, 450,  450,  650,  750,  850,  550,  450,  450,  450,  400,  450,  450,  450,  350,  350};
+    public static final float[] X_POSITIONS = {320, 520, 720, 920, 960, 1240, 1600, 1640, 1840, 1880, 2120, 2160, 2760, 2960, 3720, 4200};
+    public static final float[] Y_POSITIONS = {450, 450, 450, 450, 450, 450,  550,  550,  650,  650,  750,  750,  450,  450,  450,  450};
     public static int index;
     public static int numCrystalsCollected;
 
