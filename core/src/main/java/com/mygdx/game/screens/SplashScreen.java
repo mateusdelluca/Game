@@ -180,13 +180,13 @@ public class SplashScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case NEWGAME: {
-                Jogo.levels = new Levels();
-                app.setScreen(Levels.level1);
+                Jogo.levels = new Levels(app);
                 Sounds.PAUSE_SCREEN.stop();
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
-                Gdx.input.setInputProcessor(Levels.level1);
+                Gdx.input.setInputProcessor(app.jogo.levels);
+                app.setScreen(app.jogo.levels.level1);
                 break;
             }
             case LOADGAME:{

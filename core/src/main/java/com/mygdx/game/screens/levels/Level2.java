@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 public class Level2 extends Level implements ContactListener {
 
-    public Level2(){
-        super("Level2/Level2.tmx", Jogo.app);
+    public Level2(Application app){
+        super("Level2/Level2.tmx", app);
 
         spriteBatch = new SpriteBatch();
 //        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);

@@ -107,8 +107,8 @@ public class PauseScreen implements Screen, InputProcessor {
         update();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        Levels.currentLevel.background.render();
-        Levels.currentLevel.renderObjects();
+        app.jogo.levels.currentLevel.background.render();
+        app.jogo.levels.currentLevel.renderObjects();
         spriteBatch.begin();
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
@@ -154,13 +154,13 @@ public class PauseScreen implements Screen, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-            app.setScreen(Levels.currentLevel);
+            app.setScreen(app.jogo.levels.currentLevel);
             Sounds.PAUSE_SCREEN.pause();
             if (!Sounds.LEVEL1.isPlaying()) {
 //                pause_musicPosition = Sounds.LEVEL1.getPosition();
                 Sounds.LEVEL1.play();
             }
-            Gdx.input.setInputProcessor(Levels.currentLevel);
+            Gdx.input.setInputProcessor(app.jogo.levels.currentLevel);
         }
         return false;
     }
@@ -179,13 +179,13 @@ public class PauseScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
-                app.setScreen(Levels.currentLevel);
+                app.setScreen(app.jogo.levels.currentLevel);
                 Sounds.PAUSE_SCREEN.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
 //                    pause_musicPosition = Sounds.LEVEL1.getPosition();
                     Sounds.LEVEL1.play();
                 }
-                Gdx.input.setInputProcessor(Levels.currentLevel);
+                Gdx.input.setInputProcessor(app.jogo.levels.currentLevel);
                 break;
             }
             case SAVEGAME:{

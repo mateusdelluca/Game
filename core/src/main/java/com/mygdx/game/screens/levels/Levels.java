@@ -8,32 +8,29 @@ import com.mygdx.game.screens.Tile;
 
 public class Levels implements Screen, InputProcessor {
 
-    public static final Level level1 = new Level1(), level2 = new Level2();
-    public static Level currentLevel = level1;
+    public Level level1, level2;
+    public Level currentLevel;
 
-    public Levels(){
-//        level1 = new Level1(app);
-//        level2 = new Level2(app);
+    public Levels(Application app){
+        level1 = new Level1(app);
+        level2 = new Level2(app);
+        currentLevel = level1;
     }
 
-    public static void changeLevel(String level, Application app){
+    public void changeLevel(String level, Application app){
         currentLevel = returnLevel(level);
         currentLevel.setTile(new Tile("Level2/Level2.tmx"));
         currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
         currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
-        Gdx.input.setInputProcessor(Levels.currentLevel);
+        Gdx.input.setInputProcessor(this);
         app.setScreen(currentLevel);
     }
 
-    public static Level returnLevel(String level){
-        switch(level){
-            case "Level2":{
-                return level2;
-            }
-            default:{
-                return level1;
-            }
+    public Level returnLevel(String level){
+        if (level.equals("Level2")) {
+            return level2;
         }
+        return level1;
     }
 
     @Override

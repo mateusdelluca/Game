@@ -20,7 +20,7 @@ public class Jogo {
     public Jogo(Application app){
         this.app = app;
         images = new Images();
-        levels = new Levels();
+        levels = new Levels(app);
         pauseScreen = new PauseScreen(app);
         splashScreen = new SplashScreen(app);
         app.setScreen(splashScreen);
@@ -34,7 +34,7 @@ public class Jogo {
         loadScreen.dispose();
         saveScreen.dispose();
         splashScreen.dispose();
-        Levels.currentLevel.dispose();
+        levels.currentLevel.dispose();
     }
 
 }

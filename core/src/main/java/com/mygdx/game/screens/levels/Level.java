@@ -359,7 +359,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
             Sounds.TELETRANSPORT.play();
             getTile().bodies_of_thorns.clear();
-            Levels.changeLevel("Level" + ++numLevel, app);
+            app.jogo.levels.changeLevel("Level" + ++numLevel, app);
             boy.getBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
             numCrystalsCollected = 0;
