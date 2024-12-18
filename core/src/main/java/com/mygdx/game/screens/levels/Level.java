@@ -1,6 +1,7 @@
 package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
@@ -20,7 +21,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
+import com.mygdx.game.objetos.Fan;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -54,6 +57,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public ArrayList<Rectangle> horizontalRectsThorns;
     public ArrayList<Rectangle> verticalRectsThorns;
     private PowerBar powerBar;
+    protected Fan fan;
     protected Boy boy;
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
     protected Jack jack;
@@ -161,12 +165,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         }
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
-         jack = new Jack(world, new Vector2(2150, 650));
+        jack = new Jack(world, new Vector2(2150, 650));
         girl = new Girl(world, new Vector2(2550, 650));
-         world.setContactListener(this);
+        fan = new Fan(world, new Vector2(1440f, 150f));
+        world.setContactListener(this);
         for (Monster1 m : monsters1.values())
             System.out.println(m.toString());
-
     }
 
     @Override
@@ -204,7 +208,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         if (boy.getBody().getPosition().x < WIDTH/2f)
             camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
         renderObjects();
-
+        update2();
         shapeRenderer.begin();
 //        for (Enemy enemy : enemies)
 //            enemy.render(shapeRenderer);
@@ -219,11 +223,19 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         shapeRenderer.end();
     }
 
+    private void update2(){
+        for (Monster1 m : monsters1.values()){
+            fan.bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
+        }
+        fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
+    }
+
     public void renderObjects(){
         spriteBatch.begin();
 //        level1.render(camera);
         tile.render(camera);
         portal.render(spriteBatch);
+
         for (Crystal crystal : crystals)
             crystal.render(spriteBatch);
 //        for (Enemy enemy : enemies)
@@ -240,6 +252,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         font.draw(spriteBatch,mensage, 850,400);
+        spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 300, 300, 32 * 2, 55 * 2);
+        fan.render(spriteBatch);
         spriteBatch.end();
     }
 
@@ -558,7 +572,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
         m1.animations = Animations.valueOf(name);
         Sounds.MONSTER_HURT.play();
-        m1.setHP(m1.getHP() -1);
     }
 
     private void monster1BeenHit2(Monster1 m1, Body body) {

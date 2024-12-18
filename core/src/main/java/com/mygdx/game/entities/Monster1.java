@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class Monster1 extends Objeto{
 
     public static final float WIDTH = 94, HEIGHT = 128;
+    public static float BOX_WIDTH = 78f, BOX_HEIGHT = 118f;
     public Animations animations = Animations.MONSTER1_WALKING;
     private boolean usingOnlyLastFrame, looping = true, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
@@ -89,12 +90,13 @@ public class Monster1 extends Objeto{
                 public void run() {
                     setVisible(false);
                 }
-            }, 2);
+            }, 1);
         } else {
             if (name.equals("MONSTER1_FLICKERING")) {
                 if (!soundRunning) {
                     Sounds.MONSTER_HURT.play();
                     soundRunning = true;
+                    HP--;
                 }
                 if (flickering_time >= 1.0f) {
                     flickering_time = 0f;

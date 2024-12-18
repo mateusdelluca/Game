@@ -44,6 +44,16 @@ public abstract class Objeto{
         }
     }
 
+    public Objeto(World world, Vector2 position){
+        this.width = width;
+        this.height = height;
+        this.world = world;
+        visible = true;
+        if (body != null) {
+            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
+        }
+    }
+
     public Objeto(){
 
     }

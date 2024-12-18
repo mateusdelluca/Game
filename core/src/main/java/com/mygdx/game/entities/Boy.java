@@ -30,7 +30,8 @@ public class Boy extends Objeto{
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     private boolean flip;
     private float punchingAnimationTimer;
-    private Vector2 dimensions = new Vector2(65f, 95f);
+    public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
+    private final Vector2 dimensions = new Vector2(BOX_WIDTH, BOX_HEIGHT);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
     @Setter @Getter
