@@ -17,8 +17,6 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
 import static com.mygdx.game.screens.levels.Level.bullets;
 import static com.mygdx.game.sfx.Sounds.*;
 
@@ -74,7 +72,7 @@ public class Boy extends Objeto{
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
         }
-        if (!shooting && !stricken) {
+        if ((!shooting && !stricken) || saber_taken) {
             Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
@@ -111,7 +109,7 @@ public class Boy extends Objeto{
     }
 
     public void update(){
-        method();
+        fly();
         animations();
         if (body.getPosition().x < 32){
             body.setTransform(32, body.getPosition().y, 0);
@@ -123,11 +121,10 @@ public class Boy extends Objeto{
         if (body.getPosition().y > 1000){
             body.setTransform(body.getPosition().x, 1000, 0);
         }
-        if (flickering_time >= 2.0f) {
+        if (flickering_time >= 1.0f) {
             animations = Animations.BOY_IDLE;
             flickering_time = 0f;
             stricken = false;
-//          Sounds.HURT.stop();
         }
 
         aim();
@@ -144,7 +141,7 @@ public class Boy extends Objeto{
         }
     }
 
-    private void method() {
+    private void fly() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
@@ -187,7 +184,7 @@ public class Boy extends Objeto{
         if (name.equals("BOY_STRICKEN")){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);
-            if (flickering_time >= 1.2f) {
+            if (flickering_time >= 1f) {
                 animations = Animations.BOY_IDLE;
                 flickering_time = 0f;
                 stricken = false;

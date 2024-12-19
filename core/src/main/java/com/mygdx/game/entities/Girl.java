@@ -50,7 +50,6 @@ public class Girl extends Objeto{
         if (isRunning) {
             Sounds.GIRL_HURT.play();
             isRunning = false;
-
         }
     }
 
@@ -72,6 +71,7 @@ public class Girl extends Objeto{
                 alpha = 1f;
                 isRunning = false;
                 beenHit = false;
+                HP--;
             }
 
             sprite.setAlpha(alpha);

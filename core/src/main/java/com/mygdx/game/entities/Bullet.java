@@ -41,12 +41,12 @@ public class Bullet extends Objeto{
 //        getBody().setAwake(true);
 //        getBody().setBullet(true);
         visible = true;body.setFixedRotation(true);
-        body.setUserData(this.toString() + "1");
+        body.setUserData(this.toString());
     }
 
     public Bullet(World world, Vector2 position, boolean flip, float radians, boolean isSensor){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH, HEIGHT), true);
+        body = createBoxBody(new Vector2(WIDTH, HEIGHT), isSensor); //boy -> sensor = true
         body.setGravityScale(0f);
         this.flip = flip;
 //      position.add(Boy.WIDTH/2f, Boy.HEIGHT/2f);

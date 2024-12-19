@@ -17,7 +17,7 @@ public enum Animations {
     BOY_PUNCHING(new Animator(3,3, 30, 128, 128, "boy/Punching2.png")),
     BOY_SHOOTING_AND_WALKING(new Animator(6,6, 5, 128, 128, "boy/Shooting3.png")),
     //monster
-    MONSTER1_WALKING(new Animator(4,4,2,94,128, "monster/Walking.png")),
+    MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),
     MONSTER1_FLICKERING(new Animator(4,4,6,94,128, "monster/Flickering.png")),
     MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png"));
 

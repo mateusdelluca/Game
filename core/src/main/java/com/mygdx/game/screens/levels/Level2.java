@@ -25,11 +25,11 @@ public class Level2 extends Level implements ContactListener {
 
         //        thorns = getTile().loadMapObjects("Thorns");
         getTile().createBodies(thorns, world, false, "Thorns");
-        for (int index = 0; index < getTile().bodies_of_thorns.size(); index++) {
-            float y = getTile().bodies_of_thorns.get(index).getPosition().y;
-            float x = getTile().bodies_of_thorns.get(index).getPosition().x;
-            System.out.println(x + " " + y);
-        }
+//        for (int index = 0; index < getTile().bodies_of_thorns.size(); index++) {
+//            float y = getTile().bodies_of_thorns.get(index).getPosition().y;
+//            float x = getTile().bodies_of_thorns.get(index).getPosition().x;
+//            System.out.println(x + " " + y);
+//        }
     }
 
     @Override

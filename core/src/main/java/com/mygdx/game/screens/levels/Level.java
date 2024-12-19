@@ -1,7 +1,6 @@
 package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
@@ -49,7 +48,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     Box2DDebugRenderer box2DDebugRenderer;
     ShapeRenderer shapeRenderer;
     @Getter @Setter
-    private Tile tile;
+    protected Tile tile;
     private Portal portal;
     private ArrayList<Rectangle> thorns_rects;
     protected MapObjects thorns, staticObjects;
@@ -182,19 +181,19 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public void render(float delta) {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             update(delta);
 //        player.update(delta);
 //        for (Enemy enemy : enemies)
 //            enemy.update(delta);
-        update(delta);
+//        update(delta);
 
         background.render();
         powerBar.render();
-        box2DDebugRenderer.render(world, camera.combined);
+//        box2DDebugRenderer.render(world, camera.combined);
 
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.setAutoShapeType(true);
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.setAutoShapeType(true);
 
 
 
@@ -209,21 +208,120 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
         renderObjects();
         update2();
+//        shapeRenderer();
+//        shapeRenderer.begin();
+////        for (Enemy enemy : enemies)
+////            enemy.render(shapeRenderer);
+////        player.render(shapeRenderer);
+//        for (Crystal c : crystals)
+//            c.render(shapeRenderer);
+//        portal.render(shapeRenderer);
+//        boy.render(shapeRenderer);
+//        for (Monster1 m : monsters1.values())
+//            m.render(shapeRenderer);
+//
+//        shapeRenderer.end();
+    }
+
+    private void shapeRenderer(){
         shapeRenderer.begin();
-//        for (Enemy enemy : enemies)
-//            enemy.render(shapeRenderer);
-//        player.render(shapeRenderer);
         for (Crystal c : crystals)
             c.render(shapeRenderer);
         portal.render(shapeRenderer);
         boy.render(shapeRenderer);
-        for (Monster1 m : monsters1.values())
-            m.render(shapeRenderer);
-
+//        for (Monster1 m : monsters1.values())
+//            m.render(shapeRenderer);
         shapeRenderer.end();
     }
 
     private void update2(){
+        for (int index = 0; index < Crystal.X_POSITIONS.length; index++){
+            crystals.get(index).taked(boy.getBodyBounds());
+        }
+//        if (portal.getRectangle().contains(player.getBodyBounds())){
+//            teletransport.play();
+//            player.getBody().setTransform(350, 400, 0);
+//        }
+//        for (int index = 0; index < bullets.size(); index++) {
+//            for (Monster1 monster1 : monsters1){
+//                if (bullets.get(index).intersectsRectangle(monster1.getRect())) {
+//                    monster1.setHP(monster1.getHP() - 1);
+//                }
+//            }
+//            if (bullets.get(index).intersectsRectangle(boy.getBodyBounds())
+//                || boy.getBodyBounds().overlaps(bullets.get(index).getRect())) {
+////                if (!boy.isStricken()) {
+////                    boyBeenHit(bullets.get(index));
+////                }
+//            }
+//        }
+
+        if (numCrystalsCollected >= 16) {
+            Portal.open_portal = true;
+            mensage = "The portal is opened!";
+        }
+
+        if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
+            Sounds.TELETRANSPORT.play();
+            getTile().bodies_of_thorns.clear();
+            app.jogo.levels.changeLevel("Level" + ++numLevel, app);
+            boy.getBody().setTransform(100, 800, 0);
+            mensage = "Collect all blue crystals!";
+            numCrystalsCollected = 0;
+            Portal.Y = 450;
+            Portal.open_portal = false;
+            jack.HP = 5;
+            girl.HP = 5;
+            PowerBar.hp = PowerBar.WIDTH2;
+            PowerBar.sp = PowerBar.WIDTH2;
+        }
+        for (Monster1 monster1 : monsters1.values()) {
+            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
+                monster1.getBody().setLinearVelocity(0,0);
+                if (boy.animations.name().equals("BOY_SABER")) {
+                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.setSplit(true);
+                    for (Fixture f : monster1.getBody().getFixtureList()){
+                        f.setSensor(true);
+                    }
+                    monster1.getBody().setGravityScale(0f);
+                    monster1.getBody().setLinearVelocity(0f,0f);
+                }
+                else {
+                    if (!monster1.isSplit())
+                        monster1.animations = Animations.MONSTER1_FLICKERING;
+                }
+                monster1.getBody().setFixedRotation(true);
+            }
+            else
+            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+//                boyBeenHit(monster1);
+            }
+            if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
+                monster1.animations = Animations.MONSTER1_FLICKERING;
+            }
+
+//            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
+//                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
+//                monster1.animations = Animations.MONSTER1_FLICKERING;
+//                boyBeenHit();
+//            }
+//            for (Rectangle rect : verticalRectsThorns) {
+//                if (boy.getBodyBounds().overlaps(rect)) {
+//                    boyBeenHit();
+//                }
+//            }
+        }
+        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+            jack.setBeenHit(true);
+        }
+        for (Body body : bodiesToDestroy) {
+            if (body.getTransform().getPosition().x != 0) {
+                body.setTransform(0, 0, 0);
+
+            }
+        } bodiesToDestroy.clear();
         for (Monster1 m : monsters1.values()){
             fan.bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
         }
@@ -252,7 +350,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         font.draw(spriteBatch,mensage, 850,400);
-        spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 300, 300, 32 * 2, 55 * 2);
+        spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 1600, 150, 32 * 2, 55 * 2);
         fan.render(spriteBatch);
         spriteBatch.end();
     }
@@ -344,89 +442,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //                enemy.getBody().setFixedRotation(true);
 //            }
 //        }
-        for (int index = 0; index < Crystal.X_POSITIONS.length; index++){
-            crystals.get(index).taked(boy.getBodyBounds());
-        }
-//        if (portal.getRectangle().contains(player.getBodyBounds())){
-//            teletransport.play();
-//            player.getBody().setTransform(350, 400, 0);
-//        }
-//        for (int index = 0; index < bullets.size(); index++) {
-//            for (Monster1 monster1 : monsters1){
-//                if (bullets.get(index).intersectsRectangle(monster1.getRect())) {
-//                    monster1.setHP(monster1.getHP() - 1);
-//                }
-//            }
-//            if (bullets.get(index).intersectsRectangle(boy.getBodyBounds())
-//                || boy.getBodyBounds().overlaps(bullets.get(index).getRect())) {
-////                if (!boy.isStricken()) {
-////                    boyBeenHit(bullets.get(index));
-////                }
-//            }
-//        }
 
-        if (numCrystalsCollected >= 16) {
-            Portal.open_portal = true;
-            mensage = "The portal is opened!";
-        }
-
-        if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
-            Sounds.TELETRANSPORT.play();
-            getTile().bodies_of_thorns.clear();
-            app.jogo.levels.changeLevel("Level" + ++numLevel, app);
-            boy.getBody().setTransform(100, 800, 0);
-            mensage = "Collect all blue crystals!";
-            numCrystalsCollected = 0;
-            Portal.Y = 450;
-            Portal.open_portal = false;
-            jack.HP = 5;
-            girl.HP = 5;
-            PowerBar.hp = PowerBar.WIDTH2;
-            PowerBar.sp = PowerBar.WIDTH2;
-        }
-        for (Monster1 monster1 : monsters1.values()) {
-            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-                monster1.getBody().setLinearVelocity(0,0);
-                if (boy.animations.name().equals("BOY_SABER")) {
-                    monster1.animations = Animations.MONSTER1_SPLIT;
-                    monster1.setSplit(true);
-                    for (Fixture f : monster1.getBody().getFixtureList()){
-                        f.setSensor(true);
-                    }
-                    monster1.getBody().setGravityScale(0f);
-                    monster1.getBody().setLinearVelocity(0f,0f);
-                }
-                else {
-                    if (!monster1.isSplit())
-                        monster1.animations = Animations.MONSTER1_FLICKERING;
-                }
-                monster1.getBody().setFixedRotation(true);
-            }
-            else
-            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-//                boyBeenHit(monster1);
-            }
-            if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
-                monster1.animations = Animations.MONSTER1_FLICKERING;
-            }
-//            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
-//                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
-//                monster1.animations = Animations.MONSTER1_FLICKERING;
-//                boyBeenHit();
-//            }
-//            for (Rectangle rect : verticalRectsThorns) {
-//                if (boy.getBodyBounds().overlaps(rect)) {
-//                    boyBeenHit();
-//                }
-//            }
-        }
-        for (Body body : bodiesToDestroy) {
-            if (body.getTransform().getPosition().x != 0) {
-                body.setTransform(0, 0, 0);
-
-            }
-        } bodiesToDestroy.clear();
     }
 
     @Override
@@ -574,13 +590,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         Sounds.MONSTER_HURT.play();
     }
 
-    private void monster1BeenHit2(Monster1 m1, Body body) {
-        String name = "MONSTER1_FLICKERING";
-        m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 50);
-        m1.animations = Animations.valueOf(name);
-        Sounds.MONSTER_HURT.play();
-    }
-
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
@@ -594,25 +603,27 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             return;
         Body body1 = fixtureA.getBody();
         Body body2 = fixtureB.getBody();
-        if ((fixtureA.getBody().getUserData().toString().equals("Bullet1") &&
+        if ((fixtureA.getBody().getUserData().toString().equals("Bullet") &&
             fixtureB.getBody().getUserData().toString().equals("Boy"))
-        || (fixtureB.getBody().getUserData().toString().equals("Bullet1") &&
+        || (fixtureB.getBody().getUserData().toString().equals("Bullet") &&
             fixtureA.getBody().getUserData().toString().equals("Boy"))) {
-            boyBeenHit();
-            if (body1.getUserData().toString().equals("Bullet1")){
+            if (body1.getFixtureList().get(0).isSensor() ||
+                body2.getFixtureList().get(0).isSensor())
+                return;
+            if (body1.getUserData().toString().equals("Bullet")){
                 body1.setUserData("null");
             } else{
-                if (body2.getUserData().toString().equals("Bullet1")){
+                if (body2.getUserData().toString().equals("Bullet")){
                     body2.setUserData("null");
                 }
             }
+            boyBeenHit();
         }
         if ((body1.getUserData().toString().equals("Bullet") &&
             body2.getUserData().toString().equals("Jack"))
             || (body2.getUserData().toString().equals("Bullet") &&
             body1.getUserData().toString().equals("Jack"))) {
             jack.setBeenHit(true);
-            jack.HP--;
             if (body1.getUserData().toString().equals("Bullet")){
                 body1.setUserData("null");
                 body1.setGravityScale(0.1f);
@@ -628,7 +639,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             || (body2.getUserData().toString().equals("Bullet") &&
             body1.getUserData().toString().equals("Girl"))) {
             girl.setBeenHit(true);
-            girl.HP--;
             if (body1.getUserData().toString().equals("Bullet")){
                 body1.setUserData("null");
                 body1.setGravityScale(0.1f);
@@ -670,10 +680,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 } else{
                     for (Monster1 m1 : monsters1.values()){
                         if (body1.equals(bodyOfThorns) && body2.getUserData().toString().equals(m1.toString())){
-                            monster1BeenHit2(m1, body1);
+                            monster1BeenHit(m1, body1);
                         } else {
                             if (body2.equals(bodyOfThorns) && body1.getUserData().toString().equals(m1.toString())) {
-                                monster1BeenHit2(m1, body2);
+                                monster1BeenHit(m1, body2);
                             }
                         }
                     }

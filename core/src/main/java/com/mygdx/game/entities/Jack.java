@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.images.Images;
@@ -60,6 +61,7 @@ public class Jack extends Objeto{
                     beenHit = false;
                     timer = 0f;
                     alpha = 1f;
+                    HP--;
                 }
                 if (timer <= 0.05f) {
                     Sounds.HURT.play();
@@ -82,6 +84,12 @@ public class Jack extends Objeto{
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public Rectangle getBodyBounds() {
+        if (HP <= 0)
+            return new Rectangle();
+        return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
     }
 
 }
