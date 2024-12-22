@@ -21,7 +21,7 @@ public class Portal extends Objeto{
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
         s.rect(X, Y, WIDTH, HEIGHT);
     }
 

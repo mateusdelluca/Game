@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -118,7 +117,9 @@ public abstract class Objeto{
         return body;
     }
 
-    public abstract void render(ShapeRenderer s);
+    public abstract void render(SpriteBatch s);
+
+    public abstract void renderShape(ShapeRenderer s);
 
 
     public boolean intersectsRectangle(Rectangle another){

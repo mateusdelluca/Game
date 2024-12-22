@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,9 +13,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.screens.levels.Level;
 import com.mygdx.game.Application;
-import com.mygdx.game.screens.levels.Levels;
+import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
 public class PauseScreen implements Screen, InputProcessor {
@@ -107,8 +105,8 @@ public class PauseScreen implements Screen, InputProcessor {
         update();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        app.jogo.levels.currentLevel.background.render();
-        app.jogo.levels.currentLevel.renderObjects();
+        app.jogo.levelManager.currentLevel.background.render(Level_Manager.currentLevelName);
+        app.jogo.levelManager.currentLevel.renderObjects();
         spriteBatch.begin();
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
@@ -154,13 +152,13 @@ public class PauseScreen implements Screen, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-            app.setScreen(app.jogo.levels.currentLevel);
+            app.setScreen(app.jogo.levelManager.currentLevel);
             Sounds.PAUSE_SCREEN.pause();
             if (!Sounds.LEVEL1.isPlaying()) {
 //                pause_musicPosition = Sounds.LEVEL1.getPosition();
                 Sounds.LEVEL1.play();
             }
-            Gdx.input.setInputProcessor(app.jogo.levels.currentLevel);
+            Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
         }
         return false;
     }
@@ -179,13 +177,13 @@ public class PauseScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
-                app.setScreen(app.jogo.levels.currentLevel);
+                app.setScreen(app.jogo.levelManager.currentLevel);
                 Sounds.PAUSE_SCREEN.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
 //                    pause_musicPosition = Sounds.LEVEL1.getPosition();
                     Sounds.LEVEL1.play();
                 }
-                Gdx.input.setInputProcessor(app.jogo.levels.currentLevel);
+                Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
                 break;
             }
             case SAVEGAME:{

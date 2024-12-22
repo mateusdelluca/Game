@@ -9,7 +9,6 @@ import com.mygdx.game.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -24,8 +23,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.screens.levels.Level1;
-import com.mygdx.game.screens.levels.Levels;
+import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
 public class SplashScreen implements Screen, InputProcessor {
@@ -180,13 +178,13 @@ public class SplashScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case NEWGAME: {
-                Jogo.levels = new Levels(app);
+                app.jogo.levelManager = new Level_Manager(app);
                 Sounds.PAUSE_SCREEN.stop();
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
-                Gdx.input.setInputProcessor(app.jogo.levels);
-                app.setScreen(app.jogo.levels.level1);
+                Gdx.input.setInputProcessor(app.jogo.levelManager);
+                app.jogo.levelManager.changeLevel("Level3", app);
                 break;
             }
             case LOADGAME:{

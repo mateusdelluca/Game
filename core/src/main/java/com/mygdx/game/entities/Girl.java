@@ -86,7 +86,7 @@ public class Girl extends Objeto{
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
 
     }
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.images.Animator;
 
 public class Images {
     public static Texture[] saves = new Texture[6];
@@ -30,7 +29,9 @@ public class Images {
     public static Texture headset, headset_equip;
     public static Texture tiger_face;
     public static Sprite s1;
-    public static Texture backGround;
+    public static Sprite mountains4;
+
+    public static Sprite backGround2;
     public static Texture crystal, crystal3;
     public static Texture bullet;
     public static Texture splashScreen;
@@ -59,7 +60,8 @@ public class Images {
 //        sabre_equip = new Texture(Gdx.files.internal("src/main/res/objects/Sabre_equip.png"));
 //        grass = new Texture(Gdx.files.internal("objects/Grass.png"));
 //        grass2 = new Texture(Gdx.files.internal("objects/Grass2.png"));
-        backGround = new Texture(Gdx.files.internal("background/Mountains4.png"));
+        mountains4 = new Sprite(new Texture(Gdx.files.internal("background/Mountains4.png")));
+        backGround2 = new Sprite(new Texture(Gdx.files.internal("background/Background.png")));
 //        ny = new Texture(Gdx.files.internal("src/main/res/background/ny2.png"));
 //        cap = new Texture(Gdx.files.internal("src/main/res/objects/Cap.png"));
 //        cap2 = new Texture(Gdx.files.internal("src/main/res/objects/Cap2.png"));
@@ -97,7 +99,7 @@ public class Images {
         shooting2 = new Texture(Gdx.files.internal("boy/Shooting2.png"));
         leaf = new Texture(Gdx.files.internal("boy/Leaf.png"));
         fire = new Animator(4, 4, 5, 32, 55, "fire/fire.png");
-        fan = new Animator(4, 4, 15, 76, 93, "fan/fan.png");
+        fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
         spriteBatch = new SpriteBatch();}
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -39,14 +38,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public static final int WIDTH = 1920, HEIGHT = 1080;
     protected Application app;
 
-    public SpriteBatch spriteBatch;
+    public SpriteBatch spriteBatch = new SpriteBatch();
     public Viewport viewport;
     public OrthographicCamera camera;
     public World world;
     public Background background;
     public ArrayList<Crystal> crystals;
-    Box2DDebugRenderer box2DDebugRenderer;
-    ShapeRenderer shapeRenderer;
+//    Box2DDebugRenderer box2DDebugRenderer;
+//    ShapeRenderer shapeRenderer;
     @Getter @Setter
     protected Tile tile;
     private Portal portal;
@@ -55,8 +54,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public ArrayList<RectangleMapObject> thornsRectangleMapObjects;
     public ArrayList<Rectangle> horizontalRectsThorns;
     public ArrayList<Rectangle> verticalRectsThorns;
-    private PowerBar powerBar;
-    protected Fan fan;
+    protected PowerBar powerBar;        //TODO corrigir na Classe PowerBar as variáveis estáticas sp e hp para atributos da Classe
+    protected ArrayList<Fan> fans = new ArrayList<>();
     protected Boy boy;
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
     protected Jack jack;
@@ -73,7 +72,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         this.app = app;
         this.tilePath = tilePath;
         world = new World(new Vector2(0,-10f), false);
-        spriteBatch = new SpriteBatch();
+
 //        player = new Player(world, this);
 //        enemies = new ArrayList<Enemy>();
 //        for (int i = 1; i < 5; i++){
@@ -100,46 +99,26 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.2f);
 
-        tile = new Tile(tilePath);
-        staticObjects = tile.loadMapObjects("Rects");
-        tile.createBodies(staticObjects, world, false, "Rects");
+        if (!(this instanceof Level3)){
+            boy = new Boy(world, new Vector2(100, 800), viewport);
+            tile = new Tile(tilePath);
+            staticObjects = tile.loadMapObjects("Rects");
+            tile.createBodies(staticObjects, world, false, "Rects");
+            thorns = tile.loadMapObjects("Thorns");
+            tile.createBodies(thorns, world, false, "Thorns");
 
-        thorns = tile.loadMapObjects("Thorns");
-        tile.createBodies(thorns, world, false, "Thorns");
+            thornsRectangleMapObjects = new ArrayList<>();
+            horizontalRectsThorns = new ArrayList<>();
+            verticalRectsThorns = new ArrayList<>();
 
-        thornsRectangleMapObjects = new ArrayList<>();
-        horizontalRectsThorns = new ArrayList<>();
-        verticalRectsThorns = new ArrayList<>();
-
-        for (MapObject m : thorns){
-            RectangleMapObject t1 = (RectangleMapObject) m;
-            thornsRectangleMapObjects.add(t1);
-//            if (t1.getName().equals("Thorns1")){
-//                t1.getRectangle().width += 7f;
-//                t1.getRectangle().height -= 10f;
-//                horizontalRectsThorns.add(t1.getRectangle());
-//
-//            } else {
-//                if (t1.getName().equals("Thorns5")) {
-//                    t1.getRectangle().x -= 7f;
-//                    t1.getRectangle().width += 7f;
-//                    t1.getRectangle().height -= 10f;
-//                    horizontalRectsThorns.add(t1.getRectangle());
-//                } else {
-//                    if (t1.getName().equals("Thorns6")) {
-//                        t1.getRectangle().x -= 7f;
-//                        t1.getRectangle().width += 7f;
-//                        t1.getRectangle().height -= 10f;
-//                        horizontalRectsThorns.add(t1.getRectangle());
-//                    } else {
-            t1.getRectangle().height += 7f;
-            t1.getRectangle().y -= 7f;
-            verticalRectsThorns.add(t1.getRectangle());
-
+            for (MapObject m : thorns) {
+                RectangleMapObject t1 = (RectangleMapObject) m;
+                thornsRectangleMapObjects.add(t1);
+                t1.getRectangle().height += 7f;
+                t1.getRectangle().y -= 7f;
+                verticalRectsThorns.add(t1.getRectangle());
+            }
         }
-//                }
-//            }
-//        }
 
         crystals = new ArrayList<>();
         portal = new Portal();
@@ -147,12 +126,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             crystals.add(new Crystal(world));
         }
         background = new Background();
-        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
-
-        shapeRenderer = new ShapeRenderer();
+//        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+//
+//        shapeRenderer = new ShapeRenderer();
         powerBar = new PowerBar();
 
-        boy = new Boy(world, new Vector2(100, 800), viewport);
+
         if (this instanceof Level1) {
             monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
             monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
@@ -166,10 +145,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
         jack = new Jack(world, new Vector2(2150, 650));
         girl = new Girl(world, new Vector2(2550, 650));
-        fan = new Fan(world, new Vector2(1440f, 150f));
+        fans.add(new Fan(world, new Vector2(1440f, 150f)));
         world.setContactListener(this);
         for (Monster1 m : monsters1.values())
             System.out.println(m.toString());
+
+
     }
 
     @Override
@@ -223,18 +204,18 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        shapeRenderer.end();
     }
 
-    private void shapeRenderer(){
-        shapeRenderer.begin();
-        for (Crystal c : crystals)
-            c.render(shapeRenderer);
-        portal.render(shapeRenderer);
-        boy.render(shapeRenderer);
-//        for (Monster1 m : monsters1.values())
-//            m.render(shapeRenderer);
-        shapeRenderer.end();
-    }
+//    private void shapeRenderer(){
+//        shapeRenderer.begin();
+//        for (Crystal c : crystals)
+//            c.renderShape(shapeRenderer);
+//        portal.renderShape(shapeRenderer);
+//        boy.renderShape(shapeRenderer);
+////        for (Monster1 m : monsters1.values())
+////            m.render(shapeRenderer);
+//        shapeRenderer.end();
+//    }
 
-    private void update2(){
+    protected void update2(){
         for (int index = 0; index < Crystal.X_POSITIONS.length; index++){
             crystals.get(index).taked(boy.getBodyBounds());
         }
@@ -256,15 +237,17 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //            }
 //        }
 
-        if (numCrystalsCollected >= 16) {
+        if (numCrystalsCollected >= 1) {
             Portal.open_portal = true;
             mensage = "The portal is opened!";
+            app.jogo.levelManager.changeLevel("Level3", app);
         }
 
         if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
             Sounds.TELETRANSPORT.play();
             getTile().bodies_of_thorns.clear();
-            app.jogo.levels.changeLevel("Level" + ++numLevel, app);
+            app.jogo.levelManager.changeLevel("Level" + ++numLevel, app);
+//            app.jogo.levels.changeLevel("Level3", app);
             boy.getBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
             numCrystalsCollected = 0;
@@ -323,9 +306,9 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             }
         } bodiesToDestroy.clear();
         for (Monster1 m : monsters1.values()){
-            fan.bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
+            fans.getFirst().bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
         }
-        fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
+        fans.getFirst().bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
     }
 
     public void renderObjects(){
@@ -351,7 +334,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             bullet.render(spriteBatch);
         font.draw(spriteBatch,mensage, 850,400);
         spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 1600, 150, 32 * 2, 55 * 2);
-        fan.render(spriteBatch);
+        fans.getFirst().render(spriteBatch);
         spriteBatch.end();
     }
 
@@ -491,10 +474,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             app.setScreen(app.jogo.pauseScreen);
 //          level_musicPosition = songLevel1.getPosition();
             Sounds.LEVEL1.stop();
-            if (!Sounds.PAUSE_SCREEN.isPlaying()) {
-                Sounds.PAUSE_SCREEN.play();
-//                Sounds.PAUSE_SCREEN.setPosition(PauseScreen.pause_musicPosition);
-            }
+//            if (!Sounds.PAUSE_SCREEN.isPlaying()) {
+//                Sounds.PAUSE_SCREEN.play();
+////                Sounds.PAUSE_SCREEN.setPosition(PauseScreen.pause_musicPosition);
+//            }
         }
 
 

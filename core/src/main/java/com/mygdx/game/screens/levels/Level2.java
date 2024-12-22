@@ -3,15 +3,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
-import com.mygdx.game.entities.Jack;
+import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
-import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.screens.Jogo;
-import com.mygdx.game.screens.Tile;
 
 import java.util.HashMap;
 
 public class Level2 extends Level implements ContactListener {
+
+    private Boy boy;
 
     public Level2(Application app){
         super("Level2/Level2.tmx", app);
@@ -30,6 +29,8 @@ public class Level2 extends Level implements ContactListener {
 //            float x = getTile().bodies_of_thorns.get(index).getPosition().x;
 //            System.out.println(x + " " + y);
 //        }
+
+        boy = new Boy(world, new Vector2(100, 200), viewport);
     }
 
     @Override

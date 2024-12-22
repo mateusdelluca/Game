@@ -106,7 +106,7 @@ public class Crystal extends Objeto{
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
 //        s.rect(box1.x, box1.y, box1.width, box1.height);
 //        s.rect(box2.x, box2.y, box2.width, box2.height);
     }

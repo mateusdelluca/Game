@@ -82,7 +82,6 @@ public class Bullet extends Objeto{
 //        sprite.setOrigin(0,0);
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
-
         sprite.setSize(WIDTH, HEIGHT);
         if (visible)
             sprite.draw(spriteBatch);
@@ -90,7 +89,7 @@ public class Bullet extends Objeto{
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
         s.rect(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 

@@ -36,7 +36,7 @@ public class Sounds implements Serializable{
 
     public static final Music PAUSE_SCREEN = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses2.mp3"));
 
-    public static final Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise.mp3"));
+    public static final Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise2.mp3"));
 
     public static final Sound TELETRANSPORT = Gdx.audio.newSound(Gdx.files.internal("sounds/Eletric Whoosh.wav"));
 

@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.screens.Jogo;
-import com.mygdx.game.screens.levels.Levels;
 
 public class Application extends Game implements InputProcessor {
 

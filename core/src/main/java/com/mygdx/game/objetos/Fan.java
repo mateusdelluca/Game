@@ -17,7 +17,7 @@ public class Fan extends Objeto {
 
     public Fan(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,false);
+        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,true);
         body.setTransform(position, 0);
     }
 
@@ -39,7 +39,7 @@ public class Fan extends Objeto {
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
     }
 
     @Override

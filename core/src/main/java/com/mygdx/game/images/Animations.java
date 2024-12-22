@@ -3,6 +3,7 @@ package com.mygdx.game.images;
 import com.badlogic.gdx.graphics.Color;
 import lombok.Getter;
 
+@Getter
 public enum Animations {
 
 
@@ -28,7 +29,7 @@ public enum Animations {
         this.animator = animator;
     }
 
-    public Animations getAnimation(String name){
+    public static Animations getAnimation(String name){
         return valueOf(name);
     }
 }

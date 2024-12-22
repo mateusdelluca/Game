@@ -1,6 +1,7 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.images.Images;
 
@@ -15,10 +16,23 @@ public class Background {
         camera.position.set(camera.viewportWidth/2f, camera.viewportHeight/2f, 0);
     }
 
+    public void render(String level){
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        spriteBatch.draw(getBackgroundLevel(level),-WIDTH/2f,-HEIGHT/2f);
+        spriteBatch.end();
+    }
+
+    public Sprite getBackgroundLevel(String level){
+        if (level.equals("Level3"))
+            return Images.backGround2;
+        return Images.mountains4;
+    }
+
     public void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(Images.backGround,-WIDTH/2f,-HEIGHT/2f);
+        spriteBatch.draw(Images.mountains4,-WIDTH/2f,-HEIGHT/2f);
         spriteBatch.end();
     }
 

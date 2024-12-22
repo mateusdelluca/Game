@@ -29,15 +29,13 @@ public class Boy extends Objeto{
     private boolean flip;
     private float punchingAnimationTimer;
     public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
-    private final Vector2 dimensions = new Vector2(BOX_WIDTH, BOX_HEIGHT);
+    private final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
     @Setter @Getter
     private boolean stricken;
     private boolean shooting;
     private float imgX, imgY, degrees, radians, dx, dy;
-    private Vector2 test;
-    private Vector2 position;
     private int secondJump;
     private float saberTime;
     private boolean saber_taken, hit;
@@ -48,102 +46,133 @@ public class Boy extends Objeto{
     private boolean jetPack;
     private Sprite jetPackSprite;
     private Vector2 jetPackPosition;
+    private float chargingSPTimer;
+    private float chargingSPTimer2;
+    private float chargingSPTimer3;
+    private boolean chargingSP;
+
     public Boy(World world, Vector2 position, Viewport viewport){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2((dimensions.x/2f) - 5, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
+        body = createBoxBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
-        this.position = position;
         this.viewport = viewport;
         jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
 
     }
 
+    @Override
     public void render(SpriteBatch s){
         update();
-        if (jetPack){
+        if (jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
             jetPackSprite.draw(s);
         }
-        if (stricken) {
-            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
-            sprite.draw(s);
+        if (stricken) { //when take a damage and stay flickering
+            Sprite flickering = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
+            flickering.setPosition(body.getPosition().x, body.getPosition().y);
+            flickering.draw(s);
         }
-        if ((!shooting && !stricken) || saber_taken) {
-            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
-            sprite.draw(s);
+        if ((!shooting && !stricken) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
+            Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
+            anim.setPosition(body.getPosition().x, body.getPosition().y);
+            anim.draw(s);
         }
-        if (shooting && !stricken) {
-            Sprite sprite2 = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-            if (isMoving() && !jetPack)
-                sprite2 = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
-            sprite2.setPosition(body.getPosition().x, body.getPosition().y);
-
-            Sprite sprite = new Sprite(Images.shooting1);
-            sprite.setPosition(body.getPosition().x , body.getPosition().y);
-            sprite.setRotation(degrees);
+        if (shooting && !stricken) {    //when actives the gun and shooting and he is not moving
+            Sprite legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
+            if (isMoving() && !jetPack) //when he is moving and didn't active the jetpack
+                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
+            legs.setPosition(body.getPosition().x, body.getPosition().y);
+            Sprite top = new Sprite(Images.shooting1);   //BOY SPRITE TOP
+            top.setPosition(body.getPosition().x , body.getPosition().y);
+            top.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
-                sprite.setRotation(-Math.abs(180f - degrees));
-                sprite.flip(true, false);
-                sprite2.flip(true, false);
+                top.setRotation(-Math.abs(180f - degrees));
+                top.flip(true, false);
+                legs.flip(true, false);
                 jetPackSprite.flip(true, false);
             }
             else{
-                sprite.flip(false, false);
-                sprite2.flip(false, false);
+                top.flip(false, false);
+                legs.flip(false, false);
                 jetPackSprite.flip(false, false);
             }
 
-            sprite.draw(s);
-            sprite2.draw(s);
-            Sprite sprite3 = new Sprite(Images.shoot);
-            sprite3.setPosition(worldX - 3, worldY - 9);
-            sprite3.draw(s);
+            top.draw(s);
+            legs.draw(s);
+
+            Sprite aim = new Sprite(Images.shoot);
+            aim.setPosition(worldX - 3, worldY - 9);    //these negatives numbers are there to aim the center of mouse
+            aim.draw(s);
 
         }
 
     }
 
     public void update(){
-        fly();
-        animations();
-        if (body.getPosition().x < 32){
-            body.setTransform(32, body.getPosition().y, 0);
-        }
-        if (body.getPosition().y <= 400 && !Sounds.LEVEL1.isPlaying()) {
-            Sounds.LEVEL1.play();
-        }
+
+        fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
+        animations();   //gives orders of physics of body in animations
+//        if (body.getPosition().x < 32){
+//            body.setTransform(32, body.getPosition().y, 0);
+//        }
+//        if (body.getPosition().y <= 400 && !Sounds.LEVEL1.isPlaying()) {
+//            Sounds.LEVEL1.play();
+//        }
         actionRect = actionRect();
-        if (body.getPosition().y > 1000){
-            body.setTransform(body.getPosition().x, 1000, 0);
-        }
-        if (flickering_time >= 1.0f) {
+//        if (body.getPosition().y > 1000){
+//            body.setTransform(body.getPosition().x, 1000, 0);
+//        }
+        if (flickering_time >= 1.0f) {  //the timer of 1second to normalize after has been hit
             animations = Animations.BOY_IDLE;
             flickering_time = 0f;
             stricken = false;
         }
 
-        aim();
-        if (body.getPosition().y < 200 && jetPack){
-            body.setTransform(body.getPosition().x, 200, 0);
-        }
-        if (body.getPosition().y < -200){
-            body.setTransform(position,0f);
-            animations = Animations.BOY_STRICKEN;
-            setStricken(true);
-        }
+        aim();  //the commands and precision of pointing and shoot
+//        if (body.getPosition().y < 200 && jetPack){
+//            body.setTransform(body.getPosition().x, 200, 0);
+//        }
+//        if (body.getPosition().y < -200){
+//            body.setTransform(position,0f);
+//            animations = Animations.BOY_STRICKEN;
+//            setStricken(true);
+//        }
         if (Math.abs(getBody().getLinearVelocity().y) < 0.05f && !animations.name().equals("BOY_JUMPING")){
             secondJump = 0;
         }
     }
 
     private void fly() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && jetPack){
+        if (PowerBar.sp > 10 && Gdx.input.isKeyPressed(Input.Keys.SPACE) && jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
+        }
+        if (jetPack && PowerBar.sp > 0) {
+            chargingSPTimer3 += Gdx.graphics.getDeltaTime();
+            if (chargingSPTimer3 > 0.2f) {
+                PowerBar.sp--;
+                chargingSPTimer3 = 0;
+            }
+        }
+        if (PowerBar.sp <= 0f){
+            chargingSP = true;
+        }
+        if (chargingSP) {
+            chargingSPTimer += Gdx.graphics.getDeltaTime();
+            if (chargingSPTimer > 3f) {
+                chargingSPTimer2 += Gdx.graphics.getDeltaTime();
+                if (chargingSPTimer2 > 0.3f) {
+                    PowerBar.sp++;
+                    chargingSPTimer2 = 0f;
+                }
+            }
+            if (PowerBar.sp > 200f) {
+                chargingSPTimer = 0f;
+                chargingSPTimer2 = 0f;
+                chargingSP = false;
+            }
         }
     }
 
@@ -257,7 +286,7 @@ public class Boy extends Objeto{
     }
 
     @Override
-    public void render(ShapeRenderer s) {
+    public void renderShape(ShapeRenderer s) {
 //        s.rect(body.getPosition().x, body.getPosition().y, width, height);
         s.rect(getBodyBounds().x, getBodyBounds().y, getBodyBounds().width, getBodyBounds().height);
         s.rect(actionRect.x, actionRect.y, actionRect.width, actionRect.height);
@@ -269,7 +298,7 @@ public class Boy extends Objeto{
     }
 
     public void keyDown(int keycode){
-        if (keycode == Input.Keys.SPACE && jetPack) {
+        if (keycode == Input.Keys.SPACE && jetPack && PowerBar.sp > 10) {
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
             body.setGravityScale(0f);
         }
@@ -278,7 +307,7 @@ public class Boy extends Objeto{
             if (jetPack) {
                 jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
 //                body.setGravityScale(0.5f);
-                JETPACK.loop(0.3f);
+                JETPACK.loop(0.4f);
             }
             else {
 //                jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y - 10);
@@ -417,6 +446,6 @@ public class Boy extends Objeto{
     }
 
     public Rectangle getBodyBounds() {
-        return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, dimensions.x, dimensions.y);
+        return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, DIMENSIONS_FOR_SHAPE.x, DIMENSIONS_FOR_SHAPE.y);
     }
 }
