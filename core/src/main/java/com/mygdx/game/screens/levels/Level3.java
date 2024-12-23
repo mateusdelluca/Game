@@ -11,6 +11,7 @@ import com.mygdx.game.Application;
 import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Bullet;
+import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.objetos.Fan;
@@ -47,6 +48,17 @@ public class Level3 extends Level implements ContactListener {
         fans.add(new Fan(world, new Vector2(1400, 6000 - 1120)));
         fans.add(new Fan(world, new Vector2(1280, 6000 - 640)));
 
+        monsters1.clear();
+
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(640, 6000 - 320), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(480, 6000 - 2000), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2080, 6000 - 360), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3200, 6000 - 1080), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4800, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
+
+
         world.setContactListener(this);
     }
 
@@ -63,6 +75,7 @@ public class Level3 extends Level implements ContactListener {
             camera.position.x = 970f;
         camera.update();
         renderObjects();
+        System.out.println(boy.getBody().getPosition().x);
     }
 
     @Override
@@ -77,6 +90,9 @@ public class Level3 extends Level implements ContactListener {
         for (Fan fan : fans) {
             fan.render(spriteBatch);
         }
+        for (Monster1 monster1 : monsters1.values()){
+            monster1.render(spriteBatch);
+        }
         spriteBatch.end();
     }
 
@@ -88,6 +104,8 @@ public class Level3 extends Level implements ContactListener {
             world.step(delta, 7, 7);
             camera.update();
         }
+
+        collisions();
 
         for (Fan fan : fans)
             fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
@@ -114,6 +132,35 @@ public class Level3 extends Level implements ContactListener {
             if (body2.getUserData().equals("Thorns_Colliders") && body1.getUserData().toString().equals("Boy")) {
                 boyBeenHit();
             }
+        }
+
+        for (Monster1 m1 : monsters1.values()){
+            if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
+                || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")){
+                boyBeenHit();
+            }
+            if ((body1.getUserData().toString().equals("Bullet") &&
+                body2.getUserData().toString().equals(m1.toString())
+            ) || body2.getUserData().toString().equals("Bullet") &&
+                body1.getUserData().toString().equals(m1.toString())){
+                if (body1.getUserData().toString().equals("Bullet")){
+                    monster1BeenHit(m1, body1);
+                    body1.setUserData("null");
+                    body1.setGravityScale(0.1f);
+                } else{
+                    if (body2.getUserData().toString().equals("Bullet")){
+                        monster1BeenHit(m1, body2);
+                        body2.setUserData("null");
+                        body2.setGravityScale(0.1f);
+                    }
+                }
+            }
+        }
+        if (body1.getUserData().toString().equals("null")){
+            bodiesToDestroy.add(body1);
+        }
+        if (body2.getUserData().toString().equals("null")){
+            bodiesToDestroy.add(body2);
         }
     }
 

@@ -51,7 +51,7 @@ public class Monster1 extends Objeto{
         polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 100f;
+        fixtureDef.density = 10f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
         body.setUserData(getClass().getSimpleName() + id);
@@ -83,12 +83,14 @@ public class Monster1 extends Objeto{
             for (Fixture f : getBody().getFixtureList()){
                 f.setSensor(true);
             }
+            body.setUserData("null");
 //            getBody().setGravityScale(0f);
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task(){
                 @Override
                 public void run() {
                     setVisible(false);
+
                 }
             }, 1);
         } else {

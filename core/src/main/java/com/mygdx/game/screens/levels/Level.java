@@ -54,7 +54,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public ArrayList<RectangleMapObject> thornsRectangleMapObjects;
     public ArrayList<Rectangle> horizontalRectsThorns;
     public ArrayList<Rectangle> verticalRectsThorns;
-    protected PowerBar powerBar;        //TODO corrigir na Classe PowerBar as variáveis estáticas sp e hp para atributos da Classe
+    protected PowerBar powerBar;
+
     protected ArrayList<Fan> fans = new ArrayList<>();
     protected Boy boy;
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
@@ -66,8 +67,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     private BitmapFont font;
     private String mensage = "Collect all blue crystals!";
     public static ArrayList<Bullet> bullets = new ArrayList<>();
-    private ArrayList<Body> bodiesToDestroy = new ArrayList<>();
-
+    protected ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
     public Level(){
         world = new World(new Vector2(0,-10f), true);
@@ -97,7 +97,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.2f);
-
     }
 
     public Level(String tilePath, Application app){
@@ -283,6 +282,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             PowerBar.hp = PowerBar.WIDTH2;
             PowerBar.sp = PowerBar.WIDTH2;
         }
+
+    }
+
+    protected void collisions(){
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
                 monster1.getBody().setLinearVelocity(0,0);
@@ -302,9 +305,9 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 monster1.getBody().setFixedRotation(true);
             }
             else
-            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-//                boyBeenHit(monster1);
-            }
+//            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+////                boyBeenHit(monster1);
+//            }
             if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
                 monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
                 monster1.animations = Animations.MONSTER1_FLICKERING;
@@ -321,20 +324,20 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //                }
 //            }
         }
-        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-            jack.setBeenHit(true);
-        }
+//        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+//            jack.setBeenHit(true);
+//        }
         for (Body body : bodiesToDestroy) {
             if (body.getTransform().getPosition().x != 0) {
                 body.setTransform(0, 0, 0);
-
             }
         } bodiesToDestroy.clear();
-        for (Monster1 m : monsters1.values()){
-            fans.getFirst().bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
-        }
-        fans.getFirst().bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
+//        for (Monster1 m : monsters1.values()){
+//            fans.getFirst().bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
+//        }
+//        fans.getFirst().bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
     }
+
 
     public void renderObjects(){
         spriteBatch.begin();
@@ -584,7 +587,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         }
     }
 
-    private void monster1BeenHit(Monster1 m1, Body body) {
+   protected void monster1BeenHit(Monster1 m1, Body body) {
         String name = "MONSTER1_FLICKERING";
         m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
         m1.animations = Animations.valueOf(name);
@@ -595,7 +598,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-
         if (fixtureA == null || fixtureB == null)
             return;
         if (fixtureA.getBody() == null || fixtureB.getBody() == null)
