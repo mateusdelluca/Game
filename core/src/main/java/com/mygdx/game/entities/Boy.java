@@ -239,7 +239,7 @@ public class Boy extends Objeto{
                             hit = false;
                             saberTime = 0f;
                             animations = Animations.BOY_IDLE;
-                            getBody().setLinearVelocity(0f, getBody().getLinearVelocity().y);
+                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
                         }
                     }
                 } else {

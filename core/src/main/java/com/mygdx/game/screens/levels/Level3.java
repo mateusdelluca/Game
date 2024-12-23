@@ -54,7 +54,7 @@ public class Level3 extends Level{
         camera.update();
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
-        powerBar.render();
+
         tile.render(camera);
         boy.render(spriteBatch);
         for (Bullet bullet : bullets)
@@ -62,6 +62,7 @@ public class Level3 extends Level{
         for (Fan fan : fans) {
             fan.render(spriteBatch);
         }
+        powerBar.render();
         spriteBatch.end();
     }
 

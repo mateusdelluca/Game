@@ -18,8 +18,6 @@ public class PowerBar {
     }
 
     public void render(){
-        camera.update();
-        s.setProjectionMatrix(camera.combined);
         s.begin();
         s.draw(Images.hp, 70, 1000, WIDTH, HEIGHT);
         s.draw(Images.hp2, 70 + 40, 1000, hp, HEIGHT);
