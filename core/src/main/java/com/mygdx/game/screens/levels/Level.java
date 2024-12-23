@@ -441,7 +441,11 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     @Override
     public void pause() {
-
+        Gdx.input.setInputProcessor(app.jogo.pauseScreen);
+        app.setScreen(app.jogo.pauseScreen);
+//        level_musicPosition = songLevel1.getPosition();
+        if (Sounds.LEVEL1.isPlaying())
+            Sounds.LEVEL1.pause();
     }
 
     @Override
@@ -470,19 +474,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        if (player.isStand()) {
 //            player.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE) {
-            Gdx.input.setInputProcessor(app.jogo.pauseScreen);
-            app.setScreen(app.jogo.pauseScreen);
-//          level_musicPosition = songLevel1.getPosition();
-            Sounds.LEVEL1.stop();
-//            if (!Sounds.PAUSE_SCREEN.isPlaying()) {
-//                Sounds.PAUSE_SCREEN.play();
-////                Sounds.PAUSE_SCREEN.setPosition(PauseScreen.pause_musicPosition);
-//            }
+            pause();;
         }
-
-
-
-//        }
         return false;
     }
 
@@ -557,11 +550,11 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //    }
 
     protected void boyBeenHit(){
-        if (!boy.isStricken()) {
+        if (!boy.isBeenHit()) {
             boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 20f);
             boy.animations = Animations.BOY_STRICKEN;
             PowerBar.hp -= 20;
-            boy.setStricken(true);
+            boy.setBeenHit(true);
             Sounds.HURT.play();
         }
     }

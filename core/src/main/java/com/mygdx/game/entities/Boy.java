@@ -33,7 +33,7 @@ public class Boy extends Objeto{
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
     @Setter @Getter
-    private boolean stricken;
+    private boolean beenHit;
     private boolean shooting;
     private float imgX, imgY, degrees, radians, dx, dy;
     private int secondJump;
@@ -70,17 +70,17 @@ public class Boy extends Objeto{
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
             jetPackSprite.draw(s);
         }
-        if (stricken) { //when take a damage and stay flickering
+        if (beenHit) { //when take a damage and stay flickering
             Sprite flickering = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             flickering.setPosition(body.getPosition().x, body.getPosition().y);
             flickering.draw(s);
         }
-        if ((!shooting && !stricken) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
+        if ((!shooting && !beenHit) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
             Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             anim.setPosition(body.getPosition().x, body.getPosition().y);
             anim.draw(s);
         }
-        if (shooting && !stricken) {    //when actives the gun and shooting and he is not moving
+        if (shooting && !beenHit) {    //when actives the gun and shooting and he is not moving and he has not been hit
             Sprite legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
             if (isMoving() && !jetPack) //when he is moving and didn't active the jetpack
                 legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
@@ -128,7 +128,7 @@ public class Boy extends Objeto{
         if (flickering_time >= 1.0f) {  //the timer of 1second to normalize after has been hit
             animations = Animations.BOY_IDLE;
             flickering_time = 0f;
-            stricken = false;
+            beenHit = false;
         }
 
         aim();  //the commands and precision of pointing and shoot
@@ -210,13 +210,13 @@ public class Boy extends Objeto{
 //                animations = Animations.BOY_IDLE;
 //            }
 //        } else{
-        if (name.equals("BOY_STRICKEN")){
+        if (name.equals("BOY_STRICKEN") || beenHit){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);
             if (flickering_time >= 1f) {
                 animations = Animations.BOY_IDLE;
                 flickering_time = 0f;
-                stricken = false;
+                beenHit = false;
                 Sounds.HURT.stop();
             }
         } else {
@@ -227,7 +227,7 @@ public class Boy extends Objeto{
                     punchingAnimationTimer = 0f;
                 }
             }
-            if (!stricken) {
+            if (!beenHit) {
                 if (name.equals("BOY_SABER")) {
                     if (saber_taken && !hit) {
                         setFrameCounter(0);
@@ -324,13 +324,13 @@ public class Boy extends Objeto{
                 }
                 flip0 = keycode == Input.Keys.A;
             }
-            if (!stricken && !shooting && !jetPack) {
+            if (!beenHit && !shooting && !jetPack) {
                 animations = Animations.BOY_WALKING;
             }
             usingOnlyLastFrame = false;
             looping = true;
         }
-        if (!stricken) {
+        if (!beenHit) {
             if (keycode == Input.Keys.SPACE && !jetPack) {
                 if (Math.abs(getBody().getLinearVelocity().x) < 15f && !jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
@@ -349,7 +349,7 @@ public class Boy extends Objeto{
     public void keyUp(int keycode){
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
-            if (!stricken && !shooting)
+            if (!beenHit && !shooting)
                 animations = Animations.BOY_IDLE;
         }
         if (keycode == Input.Keys.SPACE && jetPack) {
@@ -385,7 +385,7 @@ public class Boy extends Objeto{
                 bullets.add(bullet);
                 GUNSHOT.play();
             }
-            if (!shooting && !stricken && !saber_taken){ //punches
+            if (!shooting && !beenHit && !saber_taken){ //punches
                 punchingAnimationTimer = 0f;
                 animations = Animations.BOY_PUNCHING;
                 JUMP.play();

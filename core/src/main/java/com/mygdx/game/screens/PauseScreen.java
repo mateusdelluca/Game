@@ -155,7 +155,7 @@ public class PauseScreen implements Screen, InputProcessor {
             app.setScreen(app.jogo.levelManager.currentLevel);
             Sounds.PAUSE_SCREEN.pause();
             if (!Sounds.LEVEL1.isPlaying()) {
-//                pause_musicPosition = Sounds.LEVEL1.getPosition();
+//                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                 Sounds.LEVEL1.play();
             }
             Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
@@ -178,9 +178,9 @@ public class PauseScreen implements Screen, InputProcessor {
         switch (this.optionChoosed) {
             case RETURN: {
                 app.setScreen(app.jogo.levelManager.currentLevel);
-                Sounds.PAUSE_SCREEN.pause();
+//                Sounds.PAUSE_SCREEN.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
-//                    pause_musicPosition = Sounds.LEVEL1.getPosition();
+//                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                     Sounds.LEVEL1.play();
                 }
                 Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);

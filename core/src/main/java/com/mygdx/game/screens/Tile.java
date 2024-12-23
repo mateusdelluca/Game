@@ -56,7 +56,7 @@ public class Tile {
                 f.setFriction(0f);
                 f.setSensor(isSensor);
                 body.setUserData(userData);
-                if (userData.equals("Thorns"))
+                if (userData.equals("Thorns") || userData.equals("Thorns_Colliders"))
                     bodies_of_thorns.add(body);
                 if (userData.equals("Rects"))
                     bodies_of_rects.add(body);

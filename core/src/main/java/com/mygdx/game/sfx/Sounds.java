@@ -36,7 +36,7 @@ public class Sounds implements Serializable{
 
     public static final Music PAUSE_SCREEN = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses2.mp3"));
 
-    public static final Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise2.mp3"));
+    public static Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise2.mp3"));
 
     public static final Sound TELETRANSPORT = Gdx.audio.newSound(Gdx.files.internal("sounds/Eletric Whoosh.wav"));
 
@@ -45,6 +45,8 @@ public class Sounds implements Serializable{
     public static final Sound GIRL_HURT = Gdx.audio.newSound(Gdx.files.internal("sounds/girl_saying_oh.mp3"));
 
     public static final Sound JETPACK = Gdx.audio.newSound(Gdx.files.internal("sounds/jetpack_burning.mp3"));
+    public static float pause_musicPosition;
+    public static boolean isLevel3running = true;
 
     public Sounds() {
     }
