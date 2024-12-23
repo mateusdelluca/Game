@@ -6,17 +6,21 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.mygdx.game.Application;
+import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Bullet;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.objetos.Fan;
 import com.mygdx.game.screens.Tile;
 
-public class Level3 extends Level{
+public class Level3 extends Level implements ContactListener {
 
     public Level3(Application app) {
-        super("Level3/Level3.tmx", app);
+        super();
+        super.app = app;
 
         tile = new Tile("Level3/Level3.tmx");
         staticObjects = tile.loadMapObjects("Rects");
@@ -28,6 +32,10 @@ public class Level3 extends Level{
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
 
+        background = new Background();
+
+        powerBar = new PowerBar();
+
         boy = new Boy(world, new Vector2(10, 5700), viewport);
 
         fans.clear();
@@ -38,6 +46,8 @@ public class Level3 extends Level{
         fans.add(new Fan(world, new Vector2(1200, 6000 - 1640)));
         fans.add(new Fan(world, new Vector2(1400, 6000 - 1120)));
         fans.add(new Fan(world, new Vector2(1280, 6000 - 640)));
+
+        world.setContactListener(this);
     }
 
     @Override
@@ -52,17 +62,21 @@ public class Level3 extends Level{
         if (camera.position.x < 970f)
             camera.position.x = 970f;
         camera.update();
+        renderObjects();
+    }
+
+    @Override
+    public void renderObjects(){
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
-
         tile.render(camera);
-        boy.render(spriteBatch);
+        powerBar.render(spriteBatch, camera);
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
+        boy.render(spriteBatch);
         for (Fan fan : fans) {
             fan.render(spriteBatch);
         }
-        powerBar.render();
         spriteBatch.end();
     }
 
@@ -81,11 +95,11 @@ public class Level3 extends Level{
 
     @Override
     public void beginContact(Contact contact){
-        super.beginContact(contact);
+//        super.beginContact(contact);
         if (contact.getFixtureA() == null || contact.getFixtureB() == null)
             return;
-//        if (fixtureA.getBody() == null || fixtureB.getBody() == null)
-//            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
         if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
             return;
 

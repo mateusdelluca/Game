@@ -2,33 +2,37 @@ package com.mygdx.game.images;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.screens.levels.Level;
+
+import java.util.Vector;
 
 public class PowerBar {
 
     public static final float WIDTH = Images.hp.getWidth()/2f, HEIGHT = Images.hp.getHeight()/2f;
     public static final float WIDTH2 = Images.hp2.getWidth()/3f, HEIGHT2 = Images.hp2.getHeight()/2f;
-    private final SpriteBatch s = new SpriteBatch();
-    private OrthographicCamera camera = new OrthographicCamera(Level.WIDTH, Level.HEIGHT);
 
     public static float hp = WIDTH2, sp = WIDTH2;
 
-    public PowerBar(){
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+    private Vector3 position = new Vector3();
+
+    public void render(SpriteBatch s, OrthographicCamera playerBody){
+        position = playerBody.position;
+        s.draw(Images.hp, -900 + position.x + 70, position.y + 470, WIDTH, HEIGHT);
+        s.draw(Images.hp2,-900 + position.x +  70 + 40, position.y + 470, hp, HEIGHT);
+        s.draw(Images.sp, -900 + position.x +  70, position.y + 420, WIDTH, HEIGHT);
+        s.draw(Images.sp2, -900 + position.x + 70 + 40, position.y + 420, sp, HEIGHT);
+        if (position.y > 5400f)
+            position.y = 5400f;
+        if (position.x < 970f)
+            position.x = 970f;
     }
 
-    public void render(){
-        s.begin();
-        s.draw(Images.hp, 70, 1000, WIDTH, HEIGHT);
-        s.draw(Images.hp2, 70 + 40, 1000, hp, HEIGHT);
-        s.draw(Images.sp, 70, 950, WIDTH, HEIGHT);
-        s.draw(Images.sp2, 70 + 40, 950, sp, HEIGHT);
-        s.end();
-
-    }
 
     public void dispose(){
-        s.dispose();
         Images.hp.dispose();
         Images.hp2.dispose();
         Images.sp.dispose();

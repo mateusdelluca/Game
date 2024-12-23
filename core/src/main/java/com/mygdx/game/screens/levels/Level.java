@@ -68,6 +68,38 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public static ArrayList<Bullet> bullets = new ArrayList<>();
     private ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
+
+    public Level(){
+        world = new World(new Vector2(0,-10f), true);
+
+//        player = new Player(world, this);
+//        enemies = new ArrayList<Enemy>();
+//        for (int i = 1; i < 5; i++){
+//            enemies.add(new Enemy(world, new Vector2(1000 * i, 350)));
+//        }
+//        camera.setToOrtho(false);
+//        camera.viewportHeight = Gdx.graphics.getHeight() * (float) 1/32;
+//        camera.viewportWidth = Gdx.graphics.getWidth() * (float) 1/32;
+
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        // Constructs a new OrthographicCamera, using the given viewport width and height
+        // Height is multiplied by aspect ratio.
+
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        viewport = new ScreenViewport(camera);
+        camera.update();
+        thorns_rects = new ArrayList<>();
+
+        Texture t = new Texture(Gdx.files.internal("Font2.png"));
+        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        font.getData().scale(0.2f);
+
+    }
+
     public Level(String tilePath, Application app){
         this.app = app;
         this.tilePath = tilePath;
@@ -99,27 +131,23 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.2f);
 
-        if (!(this instanceof Level3)){
-            boy = new Boy(world, new Vector2(100, 800), viewport);
-            tile = new Tile(tilePath);
-            staticObjects = tile.loadMapObjects("Rects");
-            tile.createBodies(staticObjects, world, false, "Rects");
-            thorns = tile.loadMapObjects("Thorns");
-            tile.createBodies(thorns, world, false, "Thorns");
+        boy = new Boy(world, new Vector2(100, 800), viewport);
+        tile = new Tile(tilePath);
+        staticObjects = tile.loadMapObjects("Rects");
+        tile.createBodies(staticObjects, world, false, "Rects");
+        thorns = tile.loadMapObjects("Thorns");
+        tile.createBodies(thorns, world, false, "Thorns");
 
-            thornsRectangleMapObjects = new ArrayList<>();
-            horizontalRectsThorns = new ArrayList<>();
-            verticalRectsThorns = new ArrayList<>();
+        thornsRectangleMapObjects = new ArrayList<>();
+        horizontalRectsThorns = new ArrayList<>();
+        verticalRectsThorns = new ArrayList<>();
 
-            for (MapObject m : thorns) {
+        for (MapObject m : thorns) {
                 RectangleMapObject t1 = (RectangleMapObject) m;
                 thornsRectangleMapObjects.add(t1);
                 t1.getRectangle().height += 7f;
                 t1.getRectangle().y -= 7f;
-                verticalRectsThorns.add(t1.getRectangle());
-            }
-        }
-
+                verticalRectsThorns.add(t1.getRectangle());}
         crystals = new ArrayList<>();
         portal = new Portal();
         for (int i = 0; i < Crystal.X_POSITIONS.length; i++) {
@@ -130,17 +158,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //
 //        shapeRenderer = new ShapeRenderer();
         powerBar = new PowerBar();
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2300, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2700, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3500, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3800, 650), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4200, 650), Monster1.class.getSimpleName() + monsters1.size()));
 
-
-        if (this instanceof Level1) {
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2300, 650), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2700, 650), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3500, 650), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3800, 650), Monster1.class.getSimpleName() + monsters1.size()));
-            monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4200, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        }
         for (int i = 0; i < leafs.length; i++)
             leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
         jack = new Jack(world, new Vector2(2150, 650));
@@ -170,7 +195,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        update(delta);
 
         background.render();
-        powerBar.render();
+//        powerBar.render();
 //        box2DDebugRenderer.render(world, camera.combined);
 
 //        shapeRenderer.setProjectionMatrix(camera.combined);
