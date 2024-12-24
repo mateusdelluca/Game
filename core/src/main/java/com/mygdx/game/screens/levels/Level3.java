@@ -12,10 +12,13 @@ import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Bullet;
 import com.mygdx.game.entities.Monster1;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.objetos.Fan;
+import com.mygdx.game.fans.Fan;
+import com.mygdx.game.fans.Fan2;
+import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
+
+import java.util.ArrayList;
 
 public class Level3 extends Level implements ContactListener {
 
@@ -48,6 +51,8 @@ public class Level3 extends Level implements ContactListener {
         fans.add(new Fan(world, new Vector2(1400, 6000 - 1120)));
         fans.add(new Fan(world, new Vector2(1280, 6000 - 640)));
 
+        fans.add(new Fan2(world, new Vector2(350, 6000 - 2100)));
+
         monsters1.clear();
 
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(640, 6000 - 320), Monster1.class.getSimpleName() + monsters1.size()));
@@ -68,14 +73,14 @@ public class Level3 extends Level implements ContactListener {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         spriteBatch.setProjectionMatrix(camera.combined);
         update(delta);
-        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
+        camera.position.set(boy.getFanBody().getPosition().x, boy.getFanBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
             camera.position.x = 970f;
         camera.update();
         renderObjects();
-        System.out.println(boy.getBody().getPosition().x);
+        System.out.println(boy.getFanBody().getPosition().x);
     }
 
     @Override
@@ -87,7 +92,7 @@ public class Level3 extends Level implements ContactListener {
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         boy.render(spriteBatch);
-        for (Fan fan : fans) {
+        for (Fans fan : fans) {
             fan.render(spriteBatch);
         }
         for (Monster1 monster1 : monsters1.values()){
@@ -107,8 +112,10 @@ public class Level3 extends Level implements ContactListener {
 
         collisions();
 
-        for (Fan fan : fans)
-            fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
+        for (Fans fan : fans)
+            fan.bodyCloseToFan2(boy.getFanBody(), Boy.BOX_WIDTH);
+
+
     }
 
     @Override

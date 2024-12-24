@@ -17,7 +17,7 @@ public abstract class Objeto{
 
     @Getter
     @Setter
-    protected Body body;
+    protected Body fanBody;
     protected PolygonShape polygonShape;
     protected FixtureDef fixtureDef;
     @Getter
@@ -38,8 +38,8 @@ public abstract class Objeto{
         this.height = height;
         this.world = world;
         visible = true;
-        if (body != null) {
-            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
+        if (fanBody != null) {
+            rect = new Rectangle(fanBody.getPosition().x - width / 2f, fanBody.getPosition().y - height / 2f, width, height);
         }
     }
 
@@ -48,8 +48,8 @@ public abstract class Objeto{
         this.height = height;
         this.world = world;
         visible = true;
-        if (body != null) {
-            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
+        if (fanBody != null) {
+            rect = new Rectangle(fanBody.getPosition().x - width / 2f, fanBody.getPosition().y - height / 2f, width, height);
         }
     }
 
@@ -127,7 +127,7 @@ public abstract class Objeto{
     }
 
     public Rectangle getRect(){
-       return new Rectangle(body.getPosition().x - width/2f,body.getPosition().y - height/2f, width, height);
+       return new Rectangle(fanBody.getPosition().x - width/2f, fanBody.getPosition().y - height/2f, width, height);
     }
 
 

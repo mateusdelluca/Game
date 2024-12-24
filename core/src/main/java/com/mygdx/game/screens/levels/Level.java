@@ -21,7 +21,8 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.objetos.Fan;
+import com.mygdx.game.fans.Fan;
+import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -56,7 +57,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public ArrayList<Rectangle> verticalRectsThorns;
     protected PowerBar powerBar;
 
-    protected ArrayList<Fan> fans = new ArrayList<>();
+    protected ArrayList<Fans> fans = new ArrayList<>();
     protected Boy boy;
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
     protected Jack jack;
@@ -205,11 +206,11 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        System.out.println(boy.getBody().getPosition().toString());
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        if (boy.getBody().getPosition().x > WIDTH/2f && boy.getBody().getPosition().x < (6000 - WIDTH))
-            camera.position.set((boy.getBody().getPosition().x) + WIDTH/4f, 400 + HEIGHT/4f, 0);
-        if (boy.getBody().getPosition().x >= (6000 - WIDTH))
+        if (boy.getFanBody().getPosition().x > WIDTH/2f && boy.getFanBody().getPosition().x < (6000 - WIDTH))
+            camera.position.set((boy.getFanBody().getPosition().x) + WIDTH/4f, 400 + HEIGHT/4f, 0);
+        if (boy.getFanBody().getPosition().x >= (6000 - WIDTH))
             camera.position.set(6000 - WIDTH/2f, HEIGHT / 2f, 0);
-        if (boy.getBody().getPosition().x < WIDTH/2f)
+        if (boy.getFanBody().getPosition().x < WIDTH/2f)
             camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
         renderObjects();
         update2();
@@ -272,7 +273,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             getTile().bodies_of_thorns.clear();
             app.jogo.levelManager.changeLevel("Level" + ++numLevel, app);
 //            app.jogo.levels.changeLevel("Level3", app);
-            boy.getBody().setTransform(100, 800, 0);
+            boy.getFanBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
             numCrystalsCollected = 0;
             Portal.Y = 450;
@@ -288,28 +289,28 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     protected void collisions(){
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-                monster1.getBody().setLinearVelocity(0,0);
+                monster1.getFanBody().setLinearVelocity(0,0);
                 if (boy.animations.name().equals("BOY_SABER")) {
                     monster1.animations = Animations.MONSTER1_SPLIT;
                     monster1.setSplit(true);
-                    for (Fixture f : monster1.getBody().getFixtureList()){
+                    for (Fixture f : monster1.getFanBody().getFixtureList()){
                         f.setSensor(true);
                     }
-                    monster1.getBody().setGravityScale(0f);
-                    monster1.getBody().setLinearVelocity(0f,0f);
+                    monster1.getFanBody().setGravityScale(0f);
+                    monster1.getFanBody().setLinearVelocity(0f,0f);
                 }
                 else {
                     if (!monster1.isSplit())
                         monster1.animations = Animations.MONSTER1_FLICKERING;
                 }
-                monster1.getBody().setFixedRotation(true);
+                monster1.getFanBody().setFixedRotation(true);
             }
             else
 //            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
 ////                boyBeenHit(monster1);
 //            }
             if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
+                monster1.getFanBody().setLinearVelocity(monster1.getFanBody().getLinearVelocity().x + monster1.getFanBody().getPosition().x > boy.getFanBody().getPosition().x ? 15 : -15, monster1.getFanBody().getLinearVelocity().y + 20f);
                 monster1.animations = Animations.MONSTER1_FLICKERING;
             }
 
@@ -488,8 +489,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     @Override
     public void dispose() {
-        for (Crystal c : crystals)
-            c.dispose();
+//        for (Crystal c : crystals)
+//            c.dispose();
         spriteBatch.dispose();
         world.dispose();
         background.dispose();
@@ -579,7 +580,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     protected void boyBeenHit(){
         if (!boy.isBeenHit()) {
-            boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 20f);
+            boy.getFanBody().setLinearVelocity(boy.getFanBody().getLinearVelocity().x, 20f);
             boy.animations = Animations.BOY_STRICKEN;
             PowerBar.hp -= 20;
             boy.setBeenHit(true);
@@ -589,7 +590,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
    protected void monster1BeenHit(Monster1 m1, Body body) {
         String name = "MONSTER1_FLICKERING";
-        m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
+        m1.getFanBody().setLinearVelocity(m1.getFanBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getFanBody().getLinearVelocity().x + 10f : m1.getFanBody().getLinearVelocity().x - 10f, m1.getFanBody().getLinearVelocity().y + 20);
         m1.animations = Animations.valueOf(name);
         Sounds.MONSTER_HURT.play();
     }

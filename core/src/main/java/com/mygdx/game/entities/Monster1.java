@@ -13,8 +13,6 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
-
 public class Monster1 extends Objeto{
 
     public static final float WIDTH = 94, HEIGHT = 128;
@@ -34,8 +32,8 @@ public class Monster1 extends Objeto{
     public Monster1(World world, Vector2 position, String userData){
         super(world, WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
-        body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
-        body.setTransform(position, 0);
+        fanBody = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
+        fanBody.setTransform(position, 0);
 //        System.out.println(id);
 
     }
@@ -65,7 +63,7 @@ public class Monster1 extends Objeto{
         if (visible){
             update();
             Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.setPosition(fanBody.getPosition().x, fanBody.getPosition().y);
             sprite.draw(spriteBatch);
         }
     }
@@ -73,17 +71,17 @@ public class Monster1 extends Objeto{
     private void update(){
         String name = animations.name();
         if (!visible)
-            body.setTransform(0,0,0);
+            fanBody.setTransform(0,0,0);
         if (HP <= 0){
             animations = Animations.MONSTER1_SPLIT;
             split = true;
         }
         if (name.equals("MONSTER1_SPLIT")){
             looping = false;
-            for (Fixture f : getBody().getFixtureList()){
+            for (Fixture f : getFanBody().getFixtureList()){
                 f.setSensor(true);
             }
-            body.setUserData("null");
+            fanBody.setUserData("null");
 //            getBody().setGravityScale(0f);
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task(){
@@ -102,7 +100,7 @@ public class Monster1 extends Objeto{
                 }
                 if (flickering_time >= 1.0f) {
                     flickering_time = 0f;
-                    body.setLinearVelocity(0,0);
+                    fanBody.setLinearVelocity(0,0);
                     setBeenHit(false);
                     animations = Animations.MONSTER1_WALKING;
                     soundRunning = false;
@@ -130,7 +128,7 @@ public class Monster1 extends Objeto{
     public Rectangle getBodyBounds() {
         if (split)
             return new Rectangle();
-        return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, dimensions.x + 20f, dimensions.y + 5f);
+        return new Rectangle(fanBody.getPosition().x - 2.5f, fanBody.getPosition().y + 5f, dimensions.x + 20f, dimensions.y + 5f);
     }
 
     public void setStateTime(float time){

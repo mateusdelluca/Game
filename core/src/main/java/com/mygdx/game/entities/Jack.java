@@ -30,25 +30,25 @@ public class Jack extends Objeto{
     private float timer, deltaTime;
     public Jack(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
-        body.setTransform(position, 0);
-        body.setUserData(this.toString());
+        fanBody = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
+        fanBody.setTransform(position, 0);
+        fanBody.setUserData(this.toString());
         sprite.flip(flip, false);
     }
 
     private void update(){
         deltaTime += Gdx.graphics.getDeltaTime();
         if (deltaTime > 4f){
-            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-                WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-                getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
+            bullets.add(new Bullet(world, new Vector2(!flip ? getFanBody().getPosition().x +
+                WIDTH / 2f : getFanBody().getPosition().x - WIDTH / 2f,
+                getFanBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
             deltaTime = 0f;
             SHOTGUN.play();
         }
     }
 
     public void render(SpriteBatch s){
-        if (body.getPosition().y > 0 && HP > 0) {
+        if (fanBody.getPosition().y > 0 && HP > 0) {
             update();
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
@@ -69,10 +69,10 @@ public class Jack extends Objeto{
                 sprite.setAlpha(alpha);
             }
             sprite.setSize(WIDTH, HEIGHT);
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.setPosition(fanBody.getPosition().x, fanBody.getPosition().y);
             sprite.draw(s);
         } else{
-            body.setTransform(0,0,0);
+            fanBody.setTransform(0,0,0);
         }
     }
 
@@ -89,7 +89,7 @@ public class Jack extends Objeto{
     public Rectangle getBodyBounds() {
         if (HP <= 0)
             return new Rectangle();
-        return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
+        return new Rectangle(fanBody.getPosition().x - 2.5f, fanBody.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
     }
 
 }

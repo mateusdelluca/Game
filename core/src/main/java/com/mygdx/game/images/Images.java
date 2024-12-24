@@ -35,7 +35,7 @@ public class Images {
     public static Texture crystal, crystal3;
     public static Texture bullet;
     public static Texture splashScreen;
-    public static Animator portal, fire, fan;
+    public static Animator portal, fire, fan, fan2;
     public static Texture hp, hp2;
     public static Texture sp, sp2;
     public static Texture pauseBox;
@@ -100,6 +100,7 @@ public class Images {
         leaf = new Texture(Gdx.files.internal("boy/Leaf.png"));
         fire = new Animator(4, 4, 5, 32, 55, "fire/fire.png");
         fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
+        fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
         spriteBatch = new SpriteBatch();}
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {
