@@ -36,11 +36,11 @@ public class Level2 extends Level implements ContactListener {
     @Override
     public void render(float deltaTime){
         super.render(deltaTime);
-        if (boy.getFanBody().getPosition().x > WIDTH/2f && boy.getFanBody().getPosition().x < (6000 - WIDTH))
-            camera.position.set((boy.getFanBody().getPosition().x) + WIDTH/4f, HEIGHT/2f, 0);
-        if (boy.getFanBody().getPosition().x >= (6000 - WIDTH))
+        if (boy.getBody().getPosition().x > WIDTH/2f && boy.getBody().getPosition().x < (6000 - WIDTH))
+            camera.position.set((boy.getBody().getPosition().x) + WIDTH/4f, HEIGHT/2f, 0);
+        if (boy.getBody().getPosition().x >= (6000 - WIDTH))
             camera.position.set(6000 - WIDTH/2f, HEIGHT / 2f, 0);
-        if (boy.getFanBody().getPosition().x < WIDTH/2f)
+        if (boy.getBody().getPosition().x < WIDTH/2f)
             camera.position.set(0f + WIDTH / 2f, HEIGHT / 2f, 0);
         getTile().render(camera);
         spriteBatch.begin();
@@ -69,8 +69,8 @@ public class Level2 extends Level implements ContactListener {
         Body body2 = fixtureB.getBody();
         if (body1.getUserData().toString().equals("Thorns") && body2.getUserData().toString().equals("Boy") ||
             (body2.getUserData().toString().equals("Thorns") && body1.getUserData().toString().equals("Boy"))){
-            float y = boy.getFanBody().getPosition().y;
-            float x = boy.getFanBody().getPosition().x;
+            float y = boy.getBody().getPosition().y;
+            float x = boy.getBody().getPosition().x;
             if ((y > 260f && y < 270f && x < 3320)
                 || (y > 380f && y < 390f && x < 3520) ||
             (y > 500f && y < 510f && x < 3720))

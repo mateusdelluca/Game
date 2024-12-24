@@ -17,16 +17,16 @@ public class Fan2 extends Objeto implements Fans{
 
     public Fan2(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
-        fanBody = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,true);
-        fanBody.setTransform(position, 0);
+        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,true);
+        body.setTransform(position, 0);
     }
 
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Images.fan2.currentSpriteFrame(useOnlyLastFrame,true,true), fanBody.getPosition().x, fanBody.getPosition().y, WIDTH, HEIGHT);
+        spriteBatch.draw(Images.fan2.currentSpriteFrame(useOnlyLastFrame,true,true), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     public boolean bodyCloseToFan(Body anotherBody, float width){
-        return (Math.abs(anotherBody.getPosition().x) - (fanBody.getPosition().x) < 70f && Math.abs(anotherBody.getPosition().y - fanBody.getPosition().y) <= 10);
+        return (Math.abs(anotherBody.getPosition().x) - (body.getPosition().x) < 70f && Math.abs(anotherBody.getPosition().y - body.getPosition().y) <= 10);
     }
 
     public void bodyCloseToFan2(Body b, float width){

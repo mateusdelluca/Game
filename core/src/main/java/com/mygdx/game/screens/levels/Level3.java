@@ -18,8 +18,6 @@ import com.mygdx.game.fans.Fan2;
 import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
 
-import java.util.ArrayList;
-
 public class Level3 extends Level implements ContactListener {
 
     public Level3(Application app) {
@@ -73,14 +71,14 @@ public class Level3 extends Level implements ContactListener {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         spriteBatch.setProjectionMatrix(camera.combined);
         update(delta);
-        camera.position.set(boy.getFanBody().getPosition().x, boy.getFanBody().getPosition().y, 0);
+        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
             camera.position.x = 970f;
         camera.update();
         renderObjects();
-        System.out.println(boy.getFanBody().getPosition().x);
+        System.out.println(boy.getBody().getPosition().x);
     }
 
     @Override
@@ -113,14 +111,13 @@ public class Level3 extends Level implements ContactListener {
         collisions();
 
         for (Fans fan : fans)
-            fan.bodyCloseToFan2(boy.getFanBody(), Boy.BOX_WIDTH);
+            fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
 
 
     }
 
     @Override
     public void beginContact(Contact contact){
-//        super.beginContact(contact);
         if (contact.getFixtureA() == null || contact.getFixtureB() == null)
             return;
         if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
@@ -145,6 +142,13 @@ public class Level3 extends Level implements ContactListener {
             if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
                 || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")){
                 boyBeenHit();
+            }
+            if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals(m1.getBody().getUserData())) {
+                monster1BeenHit(m1, body1);
+            } else {
+                if (body2.getUserData().equals("Thorns_Colliders") && body1.getUserData().toString().equals(m1.getBody().getUserData())) {
+                    monster1BeenHit(m1, body2);
+                }
             }
             if ((body1.getUserData().toString().equals("Bullet") &&
                 body2.getUserData().toString().equals(m1.toString())
