@@ -18,6 +18,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.entities.items.Bullet;
+import com.mygdx.game.entities.items.Crystal;
+import com.mygdx.game.entities.items.Leaf;
+import com.mygdx.game.entities.items.Portal;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
@@ -32,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.mygdx.game.entities.Crystal.numCrystalsCollected;
+import static com.mygdx.game.entities.items.Crystal.numCrystalsCollected;
 
 public abstract class Level implements Screen, InputProcessor, ContactListener{
 

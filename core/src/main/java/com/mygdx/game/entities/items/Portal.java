@@ -1,14 +1,12 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.entities.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-public class Portal extends Objeto{
+public class Portal extends Objeto implements Item {
 
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
     public static float X = 5650f, Y = 80f;

@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.entities.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -8,16 +8,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 
 import java.util.Random;
 
-public class Crystal extends Objeto{
+public class Crystal extends Objeto implements Item {
 
     public static final float WIDTH = 40f, HEIGHT = 40f;
     private Random r = new Random();

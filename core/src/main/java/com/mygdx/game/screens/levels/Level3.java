@@ -10,15 +10,20 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.mygdx.game.Application;
 import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
-import com.mygdx.game.entities.Bullet;
+import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.Monster1;
+import com.mygdx.game.entities.items.Rifle;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.fans.Fan;
 import com.mygdx.game.fans.Fan2;
 import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
+import com.mygdx.game.entities.items.Item;
+import java.util.ArrayList;
 
 public class Level3 extends Level implements ContactListener {
+
+    private ArrayList<Item> items = new ArrayList<>();
 
     public Level3(Application app) {
         super();
@@ -63,6 +68,8 @@ public class Level3 extends Level implements ContactListener {
 
 
         world.setContactListener(this);
+
+        items.add(new Rifle(world,new Vector2(640, 6000 - 600)));
     }
 
     @Override
@@ -78,7 +85,7 @@ public class Level3 extends Level implements ContactListener {
             camera.position.x = 970f;
         camera.update();
         renderObjects();
-        System.out.println(boy.getBody().getPosition().x);
+//        System.out.println(boy.getBody().getPosition().x);
     }
 
     @Override
@@ -90,6 +97,8 @@ public class Level3 extends Level implements ContactListener {
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         boy.render(spriteBatch);
+        for (Item item : items)
+            item.render(spriteBatch);
         for (Fans fan : fans) {
             fan.render(spriteBatch);
         }

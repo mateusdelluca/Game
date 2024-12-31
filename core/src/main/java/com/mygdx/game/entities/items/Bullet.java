@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.entities.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-public class Bullet extends Objeto{
+public class Bullet extends Objeto implements Item {
 
     public static final int WIDTH = 27, HEIGHT = 9;
     private boolean flip;
