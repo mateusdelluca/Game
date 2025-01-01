@@ -189,8 +189,8 @@ public class Boy extends Objeto implements Person{
         if (shooting) {
 //            imgX = Gdx.graphics.getWidth() / 2f;
 //            imgY = Gdx.graphics.getHeight() / 2f;
-            float dx = worldX - Math.abs(body.getPosition().x + 64) - 3;
-            float dy = worldY - Math.abs(body.getPosition().y + 64) - 9;
+            float dx = worldX - Math.abs(body.getPosition().x + 64);
+            float dy = worldY - Math.abs(body.getPosition().y + 52);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
 //          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
@@ -391,8 +391,8 @@ public class Boy extends Objeto implements Person{
                 if (rifle != null) {
                     rifle.getMagazine().updateItem();
                     if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0) {
-                        Bullet bullet = new Bullet(world, new Vector2(bodyPosition.x + WIDTH/2,
-                            bodyPosition.y + HEIGHT / 2f), flip, radians, true);
+                        Bullet bullet = new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
+                            WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f, bodyPosition.y - 12f + HEIGHT/2f), flip, radians, true);
                         rifle.getMagazine().newBullet(bullet);
                     }
                 }

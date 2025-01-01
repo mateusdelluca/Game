@@ -49,7 +49,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public World world;
     public Background background;
     public ArrayList<Crystal> crystals;
-//    Box2DDebugRenderer box2DDebugRenderer;
+    protected Box2DDebugRenderer box2DDebugRenderer;
 //    ShapeRenderer shapeRenderer;
     @Getter @Setter
     protected Tile tile;

@@ -2,9 +2,11 @@ package com.mygdx.game.screens.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.mygdx.game.Application;
@@ -24,7 +26,7 @@ import java.util.HashMap;
 public class Level3 extends Level implements ContactListener {
 
     private HashMap<String, Item> items = new HashMap<>();
-
+    ShapeRenderer shapeRenderer = new ShapeRenderer();;
     public Level3(Application app) {
         super();
         super.app = app;
@@ -69,12 +71,18 @@ public class Level3 extends Level implements ContactListener {
         world.setContactListener(this);
 
         items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
+
+        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
 
     @Override
     public void render(float delta){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+//        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+
+        box2DDebugRenderer.render(world, camera.combined);
+
+
         spriteBatch.setProjectionMatrix(camera.combined);
         update(delta);
         camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
@@ -89,6 +97,14 @@ public class Level3 extends Level implements ContactListener {
 
     @Override
     public void renderObjects(){
+//        shapeRenderer.setProjectionMatrix(camera.combined);
+//        shapeRenderer.setAutoShapeType(true);
+//        shapeRenderer.begin();
+//        boy.renderShape(shapeRenderer);
+//        shapeRenderer.end();
+
+
+
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
         tile.render(camera);
@@ -105,6 +121,8 @@ public class Level3 extends Level implements ContactListener {
             monster1.render(spriteBatch);
         }
         spriteBatch.end();
+
+        box2DDebugRenderer.render(world, camera.combined);
     }
 
     @Override
