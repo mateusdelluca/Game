@@ -68,6 +68,11 @@ public class Monster1 extends Objeto{
         }
     }
 
+    @Override
+    public void updateItem() {
+
+    }
+
     private void update(){
         String name = animations.name();
         if (!visible)

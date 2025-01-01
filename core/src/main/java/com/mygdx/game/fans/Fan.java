@@ -25,6 +25,11 @@ public class Fan extends Objeto implements Fans {
         spriteBatch.draw(Images.fan.currentSpriteFrame(useOnlyLastFrame,true,false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
+    @Override
+    public void updateItem() {
+
+    }
+
     public boolean bodyCloseToFan(Body b, float width){
         return (((b.getPosition().x + width) >= (body.getPosition().x - WIDTH/2f) && (b.getPosition().x) < (body.getPosition().x + WIDTH))
           && Math.abs(b.getPosition().y - body.getPosition().y) <= 100);

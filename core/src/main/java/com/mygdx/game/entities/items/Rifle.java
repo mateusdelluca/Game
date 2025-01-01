@@ -10,7 +10,7 @@ import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import lombok.Getter;
 
-public class Rifle extends Objeto implements Item {
+public class Rifle extends Objeto {
 
     public static final float WIDTH = Images.rifle.getWidth();
     public static final float HEIGHT = Images.rifle.getHeight();
@@ -18,14 +18,15 @@ public class Rifle extends Objeto implements Item {
     public final float MULTIPLY = 1/6f;
     @Getter
     private Magazine magazine = new Magazine(MAX_ROUNDS);
-
+    private Vector2 position;
     private float angle = 0f;
 
     public Rifle(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         super.width = WIDTH * MULTIPLY;
         super.height = HEIGHT * MULTIPLY;
-        body = createBoxBody(position, BodyDef.BodyType.StaticBody, true);
+        this.position = position;
+        body = createBoxBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
     }
@@ -33,11 +34,12 @@ public class Rifle extends Objeto implements Item {
 
     @Override
     public void render(SpriteBatch s) {
+        position = body.getPosition();
         Sprite rifle = new Sprite(Images.rifle);
         rifle.setSize(width, height);
         rifle.setOriginCenter();
         rifle.setRotation(angle++);
-        rifle.setPosition(body.getPosition().x, body.getPosition().y);
+        rifle.setPosition(position.x,position.y);
         rifle.draw(s);
         magazine.render(s);
     }

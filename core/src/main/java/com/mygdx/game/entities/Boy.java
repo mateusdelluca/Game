@@ -119,8 +119,14 @@ public class Boy extends Objeto implements Person{
 
     }
 
+    @Override
+    public void updateItem() {
+
+    }
+
     public void update(){
         this.bodyPosition = body.getPosition();
+        shooting = Magazine.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
         animations();   //gives orders of physics of body in animations
 //        if (body.getPosition().x < 32){
@@ -461,8 +467,10 @@ public class Boy extends Objeto implements Person{
     }
 
     public void equip_Item(Item item){
-        if (item instanceof Rifle)
+        if (item instanceof Rifle) {
             rifle = (Rifle) item;
+            Magazine.showingNumbBullets = true;
+        }
         items.add(item);
         TRIGGER.play();
     }

@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.entities.items.Item;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Random;
 
-public abstract class Objeto{
+public abstract class Objeto implements Item {
 
     @Getter
     @Setter

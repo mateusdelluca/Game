@@ -68,7 +68,7 @@ public class Level3 extends Level implements ContactListener {
 
         world.setContactListener(this);
 
-        items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(640, 6000 - 630)));
+        items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
     }
 
     @Override
@@ -96,11 +96,11 @@ public class Level3 extends Level implements ContactListener {
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         boy.render(spriteBatch);
-        for (Item item : items.values())
-            item.render(spriteBatch);
+
         for (Fans fan : fans) {
             fan.render(spriteBatch);
-        }
+        }for (Item item : items.values())
+            item.render(spriteBatch);
         for (Monster1 monster1 : monsters1.values()){
             monster1.render(spriteBatch);
         }
@@ -139,8 +139,8 @@ public class Level3 extends Level implements ContactListener {
         System.out.println(tile.bodies_of_thorns);
 
         for (Item item : items.values()) {
-            if ((body1.getUserData().equals(item.toString()) && body2.getUserData().equals("Boy")) ||
-                (body2.getUserData().equals(item.toString()) && body1.getUserData().equals("Boy"))) {
+            if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy")) ||
+                (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy"))) {
                 boy.equip_Item(item);
 
                 if (body1.getUserData().equals(item.toString()))
