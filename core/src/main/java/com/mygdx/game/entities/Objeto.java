@@ -14,7 +14,7 @@ import lombok.Setter;
 
 import java.util.Random;
 
-public abstract class Objeto implements Item {
+public abstract class Objeto{
 
     @Getter
     @Setter

@@ -1,12 +1,12 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.items.Item;
 import com.mygdx.game.images.Images;
 
-public class Portal extends Objeto implements Item {
+public class Portal extends Objeto{
 
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
     public static float X = 5650f, Y = 80f;
@@ -16,11 +16,6 @@ public class Portal extends Objeto implements Item {
     public void render(SpriteBatch s){
         s.setColor(1f,1f,1f,1f);
         s.draw(Images.portal.currentSpriteFrame(!open_portal, true, false), X, Y, WIDTH, HEIGHT);
-    }
-
-    @Override
-    public void updateItem() {
-
     }
 
     @Override

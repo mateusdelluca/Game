@@ -21,7 +21,7 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.items.Crystal;
 import com.mygdx.game.entities.items.Leaf;
-import com.mygdx.game.entities.items.Portal;
+import com.mygdx.game.entities.Portal;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;

@@ -66,7 +66,7 @@ public class Bullet extends Objeto implements Item {
     }
 
     public void update(){
-        if (Math.abs(body.getLinearVelocity().x) < 10f && visible) {
+        if (Math.abs(body.getLinearVelocity().x) < 20f && visible) {
             body.setTransform(0, 0, 0);
             visible = false;
         }

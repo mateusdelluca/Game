@@ -10,7 +10,7 @@ import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import lombok.Getter;
 
-public class Rifle extends Objeto {
+public class Rifle extends Objeto implements Item{
 
     public static final float WIDTH = Images.rifle.getWidth();
     public static final float HEIGHT = Images.rifle.getHeight();

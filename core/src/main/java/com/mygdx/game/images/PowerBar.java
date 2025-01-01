@@ -27,7 +27,7 @@ public class PowerBar {
 
     public void render(SpriteBatch s, OrthographicCamera playerBody){
         position = playerBody.position;
-        font.draw(s, Magazine.numbBullets, -900 + position.x, position.y - 400);
+        font.draw(s, Magazine.stringNumbBullets, -900 + position.x, position.y - 400);
         s.draw(Images.hp, -900 + position.x + 70, position.y + 470, WIDTH, HEIGHT);
         s.draw(Images.hp2,-900 + position.x +  70 + 40, position.y + 470, hp, HEIGHT);
         s.draw(Images.sp, -900 + position.x +  70, position.y + 420, WIDTH, HEIGHT);

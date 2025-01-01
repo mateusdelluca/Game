@@ -87,11 +87,6 @@ public class Girl extends Objeto{
     }
 
     @Override
-    public void updateItem() {
-
-    }
-
-    @Override
     public void renderShape(ShapeRenderer s) {
 
     }

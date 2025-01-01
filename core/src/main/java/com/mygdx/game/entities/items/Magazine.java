@@ -10,45 +10,44 @@ import static com.mygdx.game.sfx.Sounds.GUNSHOT;
 
 public class Magazine implements Item{
 
-    private int bulletsLimit = 30;
-
+    private final int bulletsLimitMagazine;
+    @Getter @Setter
+    private int numberOfBulletsInMagazine;
     @Getter
     @Setter
     private ArrayList<Bullet> bullets = new ArrayList<>();
-    public static String numbBullets = "30/90";
+    public static String stringNumbBullets = "";
     public static boolean showingNumbBullets = false;
-
-    public Magazine(int bulletsLimit){
-        this.bulletsLimit = bulletsLimit;
+    @Getter @Setter
+    private int numMagazines = 3;
+    public Magazine(final int bulletsLimitMagazine){
+        this.bulletsLimitMagazine = bulletsLimitMagazine;
+        numberOfBulletsInMagazine = bulletsLimitMagazine;
     }
 
     @Override
     public void render(SpriteBatch s) {
-       if (limitOfBullets()) {
-           for (Bullet bullet : bullets)
-               bullet.render(s);
-       }
+        for (Bullet bullet : bullets)
+            bullet.render(s);
         if (showingNumbBullets)
-            numbBullets = bulletsLimit + " /90";
+            stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsLimitMagazine * numMagazines;
         else
-            numbBullets = "";
+            stringNumbBullets = "";
     }
 
     @Override
     public void updateItem() {
-
-    }
-
-    private boolean limitOfBullets(){
-        return bullets.size() < bulletsLimit;
+        if (numMagazines > 0 && numberOfBulletsInMagazine <= 0) {
+            numMagazines--;
+            numberOfBulletsInMagazine = bulletsLimitMagazine;
+        }
     }
 
     public void newBullet(Bullet bullet){
-        bullets.add(bullet);
-        if (bulletsLimit > 0) {
-            bulletsLimit--;
+        if (numberOfBulletsInMagazine > 0) {
+            numberOfBulletsInMagazine--;
             GUNSHOT.play();
+            bullets.add(bullet);
         }
-
     }
 }

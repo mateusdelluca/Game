@@ -119,11 +119,6 @@ public class Boy extends Objeto implements Person{
 
     }
 
-    @Override
-    public void updateItem() {
-
-    }
-
     public void update(){
         this.bodyPosition = body.getPosition();
         shooting = Magazine.showingNumbBullets;
@@ -392,12 +387,15 @@ public class Boy extends Objeto implements Person{
 //    WIDTH : getBody().getPosition().x
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
-            if (shooting){
-//                System.out.println(true);
-                Bullet bullet = new Bullet(world, new Vector2(getBody().getPosition().x + WIDTH/2f,
-                    getBody().getPosition().y + HEIGHT/2f), flip, radians, true);
-                if (rifle != null)
-                    rifle.getMagazine().newBullet(bullet);
+            if (shooting && Magazine.showingNumbBullets){
+                if (rifle != null) {
+                    rifle.getMagazine().updateItem();
+                    if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0) {
+                        Bullet bullet = new Bullet(world, new Vector2(bodyPosition.x + WIDTH/2,
+                            bodyPosition.y + HEIGHT / 2f), flip, radians, true);
+                        rifle.getMagazine().newBullet(bullet);
+                    }
+                }
             }
             if (!shooting && !beenHit && !saber_taken){ //punches
                 punchingAnimationTimer = 0f;
@@ -429,11 +427,13 @@ public class Boy extends Objeto implements Person{
                     break;
                 }
                 case 1:{
-                    Magazine.showingNumbBullets = true;
-                    shooting = true;
-                    saber_taken = false;
-                    animations = Animations.BOY_SHOOTING_AND_WALKING;
-                    break;
+                    if (rifle != null) {
+                        Magazine.showingNumbBullets = true;
+                        shooting = true;
+                        saber_taken = false;
+                        animations = Animations.BOY_SHOOTING_AND_WALKING;
+                        break;
+                    }
                 }
                 case 2:{
                     Magazine.showingNumbBullets = false;

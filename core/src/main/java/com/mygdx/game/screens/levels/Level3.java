@@ -95,12 +95,12 @@ public class Level3 extends Level implements ContactListener {
         powerBar.render(spriteBatch, camera);
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
+        for (Item item : items.values())
+            item.render(spriteBatch);
         boy.render(spriteBatch);
-
         for (Fans fan : fans) {
             fan.render(spriteBatch);
-        }for (Item item : items.values())
-            item.render(spriteBatch);
+        }
         for (Monster1 monster1 : monsters1.values()){
             monster1.render(spriteBatch);
         }
