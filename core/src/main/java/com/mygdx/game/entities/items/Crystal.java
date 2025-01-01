@@ -84,6 +84,11 @@ public class Crystal extends Objeto implements Item {
         }
     }
 
+    @Override
+    public void updateItem() {
+
+    }
+
     public void dispose(){
         Images.crystal.dispose();
         Images.crystal3.dispose();

@@ -8,13 +8,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import lombok.Getter;
 
 public class Rifle extends Objeto implements Item {
 
     public static final float WIDTH = Images.rifle.getWidth();
     public static final float HEIGHT = Images.rifle.getHeight();
-
-    public final float MULTIPLY = 1/5f;
+    public static final int MAX_ROUNDS = 30;
+    public final float MULTIPLY = 1/6f;
+    @Getter
+    private Magazine magazine = new Magazine(MAX_ROUNDS);
 
     private float angle = 0f;
 
@@ -24,6 +27,7 @@ public class Rifle extends Objeto implements Item {
         super.height = HEIGHT * MULTIPLY;
         body = createBoxBody(position, BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
+        body.setUserData(getClass().getSimpleName());
     }
 
 
@@ -35,6 +39,12 @@ public class Rifle extends Objeto implements Item {
         rifle.setRotation(angle++);
         rifle.setPosition(body.getPosition().x, body.getPosition().y);
         rifle.draw(s);
+        magazine.render(s);
+    }
+
+    @Override
+    public void updateItem() {
+
     }
 
     @Override

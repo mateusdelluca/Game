@@ -11,17 +11,21 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.items.Bullet;
+import com.mygdx.game.entities.items.Magazine;
+import com.mygdx.game.entities.items.Rifle;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.sfx.Sounds;
+import com.mygdx.game.entities.items.Item;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.mygdx.game.screens.levels.Level.bullets;
+import java.util.ArrayList;
+
 import static com.mygdx.game.sfx.Sounds.*;
 
-public class Boy extends Objeto{
+public class Boy extends Objeto implements Person{
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
     public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
@@ -51,16 +55,19 @@ public class Boy extends Objeto{
     private float chargingSPTimer2;
     private float chargingSPTimer3;
     private boolean chargingSP;
-
-    public Boy(World world, Vector2 position, Viewport viewport){
+    @Setter @Getter
+    private ArrayList<Item> items = new ArrayList<Item>();
+    private Rifle rifle;
+    private Vector2 bodyPosition;
+    public Boy(World world, Vector2 bodyPosition, Viewport viewport){
         super(world, WIDTH, HEIGHT);
+        this.bodyPosition = bodyPosition;
         body = createBoxBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
-        body.setTransform(position, 0);
+        body.setTransform(bodyPosition, 0);
         body.setUserData(this.toString());
         this.viewport = viewport;
         jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
-
     }
 
     @Override
@@ -113,7 +120,7 @@ public class Boy extends Objeto{
     }
 
     public void update(){
-
+        this.bodyPosition = body.getPosition();
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
         animations();   //gives orders of physics of body in animations
 //        if (body.getPosition().x < 32){
@@ -383,8 +390,8 @@ public class Boy extends Objeto{
 //                System.out.println(true);
                 Bullet bullet = new Bullet(world, new Vector2(getBody().getPosition().x + WIDTH/2f,
                     getBody().getPosition().y + HEIGHT/2f), flip, radians, true);
-                bullets.add(bullet);
-                GUNSHOT.play();
+                if (rifle != null)
+                    rifle.getMagazine().newBullet(bullet);
             }
             if (!shooting && !beenHit && !saber_taken){ //punches
                 punchingAnimationTimer = 0f;
@@ -408,6 +415,7 @@ public class Boy extends Objeto{
             counterWeaponTaken++;
             switch(counterWeaponTaken){
                 default:{
+                    Magazine.showingNumbBullets = false;
                     shooting = false;
                     saber_taken = false;
                     animations = Animations.BOY_IDLE;
@@ -415,12 +423,14 @@ public class Boy extends Objeto{
                     break;
                 }
                 case 1:{
+                    Magazine.showingNumbBullets = true;
                     shooting = true;
                     saber_taken = false;
                     animations = Animations.BOY_SHOOTING_AND_WALKING;
                     break;
                 }
                 case 2:{
+                    Magazine.showingNumbBullets = false;
                     shooting = false;
                     saber_taken = true;
                     animations = Animations.BOY_SABER;
@@ -448,5 +458,12 @@ public class Boy extends Objeto{
 
     public Rectangle getBodyBounds() {
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, DIMENSIONS_FOR_SHAPE.x, DIMENSIONS_FOR_SHAPE.y);
+    }
+
+    public void equip_Item(Item item){
+        if (item instanceof Rifle)
+            rifle = (Rifle) item;
+        items.add(item);
+        TRIGGER.play();
     }
 }

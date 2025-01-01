@@ -79,15 +79,19 @@ public class Bullet extends Objeto implements Item {
 
     public void render(SpriteBatch spriteBatch){
         Sprite sprite = new Sprite(Images.bullet);
-        sprite.setOrigin(0,0);
+        sprite.setOriginCenter();
         sprite.flip(flip, false);
-//        sprite.setOrigin(0,0);
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setSize(WIDTH, HEIGHT);
         if (visible)
             sprite.draw(spriteBatch);
         update();
+    }
+
+    @Override
+    public void updateItem() {
+
     }
 
     @Override

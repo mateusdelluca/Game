@@ -334,7 +334,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //        }
         for (Body body : bodiesToDestroy) {
             if (body.getTransform().getPosition().x != 0) {
-                body.setTransform(0, 0, 0);
+                body.setTransform(new Random().nextFloat(1000), new Random().nextFloat(3000), 0);
             }
         } bodiesToDestroy.clear();
 //        for (Monster1 m : monsters1.values()){
@@ -497,7 +497,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //            c.dispose();
         spriteBatch.dispose();
         world.dispose();
-        background.dispose();
+//        background.dispose();
         powerBar.dispose();
     }
 

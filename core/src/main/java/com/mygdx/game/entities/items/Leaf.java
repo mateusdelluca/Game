@@ -19,13 +19,15 @@ public class Leaf extends Objeto implements Item {
     public Leaf(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH, HEIGHT), BodyDef.BodyType.DynamicBody, true);
-        body.setGravityScale(0.005f);
+        body.setGravityScale(0.05f);
         body.setTransform(position, new Random().nextInt(91));
-        float velocity_x = -100;
+        float velocity_x = -new Random().nextInt(100);
         body.setLinearVelocity(velocity_x, 0);
     }
 
     public void render(SpriteBatch s){
+        if (body.getPosition().x < - 10)
+            return;
         Sprite sprite = new Sprite(Images.leaf);
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         sprite.rotate(1f);
@@ -35,6 +37,12 @@ public class Leaf extends Objeto implements Item {
             sprite.flip(new Random().nextBoolean(), new Random().nextBoolean());
             body.setTransform(body.getPosition().x - 7_000, 7000, 0);
         }
+
+    }
+
+    @Override
+    public void updateItem() {
+
     }
 
     @Override

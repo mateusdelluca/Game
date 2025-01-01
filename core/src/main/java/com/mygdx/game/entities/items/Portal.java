@@ -19,6 +19,11 @@ public class Portal extends Objeto implements Item {
     }
 
     @Override
+    public void updateItem() {
+
+    }
+
+    @Override
     public void renderShape(ShapeRenderer s) {
         s.rect(X, Y, WIDTH, HEIGHT);
     }

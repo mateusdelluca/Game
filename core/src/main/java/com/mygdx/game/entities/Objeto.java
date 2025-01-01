@@ -69,6 +69,7 @@ public abstract class Objeto{
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 100f;
+        fixtureDef.restitution = 0.1f;
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);
         body.setActive(true);
@@ -88,6 +89,7 @@ public abstract class Objeto{
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 100f;
+        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);
@@ -109,6 +111,7 @@ public abstract class Objeto{
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 10f;
+        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);

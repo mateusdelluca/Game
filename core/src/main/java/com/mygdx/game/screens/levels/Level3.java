@@ -19,11 +19,11 @@ import com.mygdx.game.fans.Fan2;
 import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.entities.items.Item;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Level3 extends Level implements ContactListener {
 
-    private ArrayList<Item> items = new ArrayList<>();
+    private HashMap<String, Item> items = new HashMap<>();
 
     public Level3(Application app) {
         super();
@@ -66,10 +66,9 @@ public class Level3 extends Level implements ContactListener {
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
 
-
         world.setContactListener(this);
 
-        items.add(new Rifle(world,new Vector2(640, 6000 - 600)));
+        items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(640, 6000 - 630)));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class Level3 extends Level implements ContactListener {
         for (Bullet bullet : bullets)
             bullet.render(spriteBatch);
         boy.render(spriteBatch);
-        for (Item item : items)
+        for (Item item : items.values())
             item.render(spriteBatch);
         for (Fans fan : fans) {
             fan.render(spriteBatch);
@@ -138,6 +137,19 @@ public class Level3 extends Level implements ContactListener {
         Body body2 = contact.getFixtureB().getBody();
 
         System.out.println(tile.bodies_of_thorns);
+
+        for (Item item : items.values()) {
+            if ((body1.getUserData().equals(item.toString()) && body2.getUserData().equals("Boy")) ||
+                (body2.getUserData().equals(item.toString()) && body1.getUserData().equals("Boy"))) {
+                boy.equip_Item(item);
+
+                if (body1.getUserData().equals(item.toString()))
+                    body1.setUserData("null");
+                else
+                    if (body2.getUserData().equals(item.toString()))
+                        body2.setUserData("null");
+            }
+        }
 
         if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals("Boy")) {
             boyBeenHit();

@@ -37,8 +37,8 @@ public class Background {
     }
 
 
-    public void dispose(){
-        spriteBatch.dispose();
-    }
+//    public void dispose(){
+//        spriteBatch.dispose();
+//    }
 
 }
