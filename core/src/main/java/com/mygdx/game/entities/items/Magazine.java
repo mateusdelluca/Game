@@ -37,16 +37,17 @@ public class Magazine implements Item{
             stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsLimitMagazine * numMagazines;
         else
             stringNumbBullets = "";
-        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0) {
+        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0 && numMagazines < 3) {
             recharging = true;
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
-                    if (recharging)
+                    if (recharging) {
                         numMagazines--;
-                    recharging = false;
-                    numberOfBulletsInMagazine = bulletsLimitMagazine;
+                        numberOfBulletsInMagazine = bulletsLimitMagazine;
+                        recharging = false;
+                    }
                 }
             }, 1);
         }
