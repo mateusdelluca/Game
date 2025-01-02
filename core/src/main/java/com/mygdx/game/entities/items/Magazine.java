@@ -11,7 +11,7 @@ import static com.mygdx.game.sfx.Sounds.GUNSHOT;
 
 public class Magazine implements Item{
 
-    private final int bulletsLimitMagazine;
+    private final int bulletsPerMagazine;
     @Getter @Setter
     private int numberOfBulletsInMagazine;
     @Getter
@@ -20,13 +20,20 @@ public class Magazine implements Item{
     public static String stringNumbBullets = "";
     public static boolean showingNumbBullets = false;
     @Getter @Setter
-    private int numMagazines = 3;
+    private int numMagazines;
     @Getter @Setter
     private boolean recharging;
 
-    public Magazine(final int bulletsLimitMagazine){
-        this.bulletsLimitMagazine = bulletsLimitMagazine;
-        numberOfBulletsInMagazine = bulletsLimitMagazine;
+    public Magazine(final int bulletsPerMagazine){
+        this.bulletsPerMagazine = bulletsPerMagazine;
+        numberOfBulletsInMagazine = bulletsPerMagazine;
+        numMagazines = 3;
+    }
+
+    public Magazine(final int bulletsPerMagazine, int numMagazines){
+        this.bulletsPerMagazine = bulletsPerMagazine;
+        numberOfBulletsInMagazine = bulletsPerMagazine;
+        this.numMagazines = numMagazines;
     }
 
     @Override
@@ -34,18 +41,19 @@ public class Magazine implements Item{
         for (Bullet bullet : bullets)
             bullet.render(s);
         if (showingNumbBullets)
-            stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsLimitMagazine * numMagazines;
+            stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsPerMagazine * numMagazines;
         else
             stringNumbBullets = "";
-        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0 && numMagazines < 3) {
+        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0) {
             recharging = true;
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     if (recharging) {
-                        numMagazines--;
-                        numberOfBulletsInMagazine = bulletsLimitMagazine;
+                        if (numMagazines >= 2)
+                            numMagazines--;
+                        numberOfBulletsInMagazine = bulletsPerMagazine;
                         recharging = false;
                     }
                 }
