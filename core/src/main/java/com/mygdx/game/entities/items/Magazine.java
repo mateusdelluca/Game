@@ -1,6 +1,7 @@
 package com.mygdx.game.entities.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Timer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,9 @@ public class Magazine implements Item{
     public static boolean showingNumbBullets = false;
     @Getter @Setter
     private int numMagazines = 3;
+    @Getter @Setter
+    private boolean recharging;
+
     public Magazine(final int bulletsLimitMagazine){
         this.bulletsLimitMagazine = bulletsLimitMagazine;
         numberOfBulletsInMagazine = bulletsLimitMagazine;
@@ -33,14 +37,27 @@ public class Magazine implements Item{
             stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsLimitMagazine * numMagazines;
         else
             stringNumbBullets = "";
+        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0) {
+            recharging = true;
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    if (recharging)
+                        numMagazines--;
+                    recharging = false;
+                    numberOfBulletsInMagazine = bulletsLimitMagazine;
+                }
+            }, 1);
+        }
     }
 
     @Override
     public void updateItem() {
-        if (numMagazines > 0 && numberOfBulletsInMagazine <= 0) {
-            numMagazines--;
-            numberOfBulletsInMagazine = bulletsLimitMagazine;
-        }
+//        if (numMagazines > 0 && numberOfBulletsInMagazine <= 0) {
+//            numMagazines--;
+//            numberOfBulletsInMagazine = bulletsLimitMagazine;
+//        }
     }
 
     public void newBullet(Bullet bullet){

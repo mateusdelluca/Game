@@ -59,6 +59,7 @@ public class Boy extends Objeto implements Person{
     private ArrayList<Item> items = new ArrayList<Item>();
     private Rifle rifle;
     private Vector2 bodyPosition;
+
     public Boy(World world, Vector2 bodyPosition, Viewport viewport){
         super(world, WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
@@ -93,7 +94,10 @@ public class Boy extends Objeto implements Person{
             if (isMoving() && !jetPack) //when he is moving and didn't active the jetpack
                 legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
             legs.setPosition(body.getPosition().x, body.getPosition().y);
-            Sprite top = new Sprite(Images.shooting1);   //BOY SPRITE TOP
+
+            //BOY SPRITE TOP
+//            Sprite top = new Sprite(Images.shooting1);
+            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, rifle.getMagazine().isRecharging(), flip)));
             top.setPosition(body.getPosition().x , body.getPosition().y);
             top.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
