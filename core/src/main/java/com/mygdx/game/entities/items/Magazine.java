@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 import static com.mygdx.game.sfx.Sounds.GUNSHOT;
+import static com.mygdx.game.sfx.Sounds.TRIGGER;
 
 public class Magazine implements Item{
 
@@ -55,6 +56,7 @@ public class Magazine implements Item{
                             numMagazines--;
                         numberOfBulletsInMagazine = bulletsPerMagazine;
                         recharging = false;
+                        TRIGGER.play();
                     }
                 }
             }, 1);

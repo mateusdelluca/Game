@@ -394,7 +394,7 @@ public class Boy extends Objeto implements Person{
             if (shooting && Magazine.showingNumbBullets){
                 if (rifle != null) {
                     rifle.getMagazine().updateItem();
-                    if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0) {
+                    if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0 && !rifle.getMagazine().isRecharging()) {
                         Bullet bullet = new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
                             WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f, bodyPosition.y - 12f + HEIGHT/2f), flip, radians, true);
                         rifle.getMagazine().newBullet(bullet);

@@ -66,7 +66,7 @@ public class Bullet extends Objeto implements Item {
     }
 
     public void update(){
-        if (Math.abs(body.getLinearVelocity().x) < 20f && visible && Math.abs(body.getLinearVelocity().y) < 20f) {
+        if (Math.abs(body.getLinearVelocity().x) < 10f && visible && Math.abs(body.getLinearVelocity().y) < 10f) {
             body.setTransform(0, 0, 0);
             visible = false;
         }
@@ -79,10 +79,11 @@ public class Bullet extends Objeto implements Item {
 
     public void render(SpriteBatch spriteBatch){
         Sprite sprite = new Sprite(Images.bullet);
-        sprite.setOriginCenter();
+//        sprite.setOriginCenter();
         sprite.flip(flip, false);
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
-//        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
+        sprite.setOrigin(WIDTH/2f, HEIGHT/2f);
+        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setSize(WIDTH, HEIGHT);
         if (visible)
             sprite.draw(spriteBatch);
