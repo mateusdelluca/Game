@@ -31,7 +31,7 @@ public class Boy extends Objeto implements Person{
     public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
-    private boolean flip;
+    private boolean isFacingLeft;
     private float punchingAnimationTimer;
     public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
     private final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
@@ -92,12 +92,12 @@ public class Boy extends Objeto implements Person{
         if (shooting && !beenHit) {    //when actives the gun and shooting and he is not moving and he has not been hit
             Sprite legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
             if (isMoving() && !jetPack) //when he is moving and didn't active the jetpack
-                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, flip));
+                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
             legs.setPosition(body.getPosition().x, body.getPosition().y);
 
             //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1);
-            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, rifle.getMagazine().isRecharging(), flip)));
+            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, rifle.getMagazine().isRecharging(), isFacingLeft)));
             top.setPosition(body.getPosition().x , body.getPosition().y);
             top.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
@@ -116,7 +116,7 @@ public class Boy extends Objeto implements Person{
             legs.draw(s);
 
             Sprite aim = new Sprite(Images.shoot);
-            aim.setPosition(worldX - 3, worldY - 9);    //these negatives numbers are there to aim the center of mouse
+            aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
             aim.draw(s);
 
         }
@@ -194,7 +194,7 @@ public class Boy extends Objeto implements Person{
 //            imgX = Gdx.graphics.getWidth() / 2f;
 //            imgY = Gdx.graphics.getHeight() / 2f;
             float dx = worldX - Math.abs(body.getPosition().x + 64);
-            float dy = worldY - Math.abs(body.getPosition().y + 52);
+            float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
 //          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
@@ -331,7 +331,7 @@ public class Boy extends Objeto implements Person{
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
             if (!shooting) {
-                if (!flip) {
+                if (!isFacingLeft) {
                     degrees = 0f;
                     radians = 0f;
                 }
@@ -381,8 +381,8 @@ public class Boy extends Objeto implements Person{
 
             Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
 
-            viewport.unproject(worldCoordinates);
 
+            viewport.unproject(worldCoordinates);
             worldX = worldCoordinates.x;
             worldY = worldCoordinates.y;
         }
@@ -395,8 +395,8 @@ public class Boy extends Objeto implements Person{
                 if (rifle != null) {
                     rifle.getMagazine().updateItem();
                     if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0 && !rifle.getMagazine().isRecharging()) {
-                        Bullet bullet = new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-                            WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f, bodyPosition.y - 12f + HEIGHT/2f), flip, radians, true);
+                        Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
+                            WIDTH / 2f ): (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT/2f)), isFacingLeft, radians, true);
                         rifle.getMagazine().newBullet(bullet);
                     }
                 }
@@ -422,31 +422,29 @@ public class Boy extends Objeto implements Person{
         if (button == Input.Buttons.RIGHT) {
             counterWeaponTaken++;
             switch(counterWeaponTaken){
-                default:{
-                    Magazine.showingNumbBullets = false;
-                    shooting = false;
-                    saber_taken = false;
-                    animations = Animations.BOY_IDLE;
-                    counterWeaponTaken = 0;
-                    break;
-                }
                 case 1:{
-                    if (rifle != null) {
-                        Magazine.showingNumbBullets = true;
-                        shooting = true;
-                        saber_taken = false;
-                        animations = Animations.BOY_SHOOTING_AND_WALKING;
-                        break;
-                    }
-                }
-                case 2:{
                     Magazine.showingNumbBullets = false;
                     shooting = false;
                     saber_taken = true;
                     animations = Animations.BOY_SABER;
                     break;
                 }
-
+                default:{
+                    saber_taken = false;
+                    if (rifle != null && counterWeaponTaken == 2) {
+                        Magazine.showingNumbBullets = true;
+                        shooting = true;
+//                        counterWeaponTaken = 0;
+                        animations = Animations.BOY_SHOOTING_AND_WALKING;
+                    } else {
+                        Magazine.showingNumbBullets = false;
+                        shooting = false;
+//                        saber_taken = false;
+                        animations = Animations.BOY_IDLE;
+                        counterWeaponTaken = 0;
+                    }
+                    break;
+                }
             }
 //            shooting = !shooting;
 //            degrees = 0f;

@@ -62,7 +62,7 @@ public abstract class Objeto{
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.active = true;
-        bodyDef.position.set(0,0);
+//        bodyDef.position.set(0,0);
         bodyDef.fixedRotation = true;
         polygonShape = new PolygonShape();
 //         Adicione formas (fixtures) ao corpo para representar sua geometria
@@ -82,7 +82,7 @@ public abstract class Objeto{
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.active = true;
-        bodyDef.position.set(0,0);
+//        bodyDef.position.set(0,0);
         bodyDef.fixedRotation = true;
         polygonShape = new PolygonShape();
 //         Adicione formas (fixtures) ao corpo para representar sua geometria
@@ -104,7 +104,7 @@ public abstract class Objeto{
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
         bodyDef.active = true;
-        bodyDef.position.set(0,0);
+//        bodyDef.position.set(0,0);
         bodyDef.fixedRotation = true;
         polygonShape = new PolygonShape();
 //         Adicione formas (fixtures) ao corpo para representar sua geometria
@@ -138,7 +138,7 @@ public abstract class Objeto{
     public abstract String toString();
 
     public void beenHit(Sprite sprite, SpriteBatch spriteBatch){
-        spriteBatch.begin();
+//        spriteBatch.begin();
         if (beenHit) {
             deltaTime += Gdx.graphics.getDeltaTime();
             if (deltaTime > 0.3f) {

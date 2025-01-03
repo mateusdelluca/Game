@@ -11,34 +11,34 @@ import com.mygdx.game.images.Images;
 
 public class Bullet extends Objeto implements Item {
 
-    public static final int WIDTH = 27, HEIGHT = 9;
-    private boolean flip;
+    public static final float WIDTH = 27, HEIGHT = 9;
+    private boolean isFacingLeft;
     public static  float VELOCITY = 300f;
     private float degrees, radians;
     private float timer;
 
-    public Bullet(World world, Vector2 position, boolean flip){
+    public Bullet(World world, Vector2 position, boolean isFacingLeft){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH, HEIGHT));
         body.setGravityScale(0.1f);
-        this.flip = flip;
+        this.isFacingLeft = isFacingLeft;
         body.setTransform(position, radians);
-        body.setLinearVelocity(flip ? -VELOCITY : VELOCITY, 0f);
+        body.setLinearVelocity(isFacingLeft ? -VELOCITY : VELOCITY, 0f);
         getBody().setAwake(true);
 //        getBody().setBullet(true);
         visible = true;
         body.setUserData(this.toString());
     }
 
-    public Bullet(World world, Vector2 position, boolean flip, float radians){
+    public Bullet(World world, Vector2 position, boolean isFacingLeft, float radians){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH, HEIGHT));
         body.setGravityScale(0.1f);
-        this.flip = flip;
+        this.isFacingLeft = isFacingLeft;
         body.setTransform(position, radians);
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
-        body.setLinearVelocity((!flip ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
+        body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
 //        getBody().setAwake(true);
 //        getBody().setBullet(true);
         visible = true;
@@ -46,27 +46,33 @@ public class Bullet extends Objeto implements Item {
         body.setUserData(this.toString());
     }
 
-    public Bullet(World world, Vector2 position, boolean flip, float radians, boolean isSensor){
+    public Bullet(World world, Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){
         super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH, HEIGHT), isSensor); //boy -> sensor = true
+        super.width = WIDTH;
+        super.height = HEIGHT;
+        Vector2 size = new Vector2(width/2f, height/2f);
+        body = createBoxBody(size, BodyDef.BodyType.DynamicBody, isSensor); //boy -> sensor = true
         body.setGravityScale(0f);
-        this.flip = flip;
+        this.isFacingLeft = isFacingLeft;
 //      position.add(Boy.WIDTH/2f, Boy.HEIGHT/2f);
-        body.setTransform(position, radians);
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
+
+        body.setTransform(position, 0);
 //      getBody().setAwake(true);
 //      getBody().setBullet(false);
-        body.setLinearVelocity((!flip ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
+        body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
-        body.setFixedRotation(true);
+//        body.setFixedRotation(true);
         body.setUserData(this.toString());
-
-
+        if (degrees > 90f)
+            this.isFacingLeft = true;
+        else
+            body.setTransform(position, (float) Math.toRadians(degrees));
     }
 
     public void update(){
-        if (Math.abs(body.getLinearVelocity().x) < 10f && visible && Math.abs(body.getLinearVelocity().y) < 10f) {
+        if (Math.abs(body.getLinearVelocity().x) < 10f && Math.abs(body.getLinearVelocity().y) < 10f) {
             body.setTransform(0, 0, 0);
             visible = false;
         }
@@ -79,12 +85,12 @@ public class Bullet extends Objeto implements Item {
 
     public void render(SpriteBatch spriteBatch){
         Sprite sprite = new Sprite(Images.bullet);
-//        sprite.setOriginCenter();
-        sprite.flip(flip, false);
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
-        sprite.setOrigin(WIDTH/2f, HEIGHT/2f);
-        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setSize(WIDTH, HEIGHT);
+//        sprite.setOriginCenter();
+        sprite.flip(isFacingLeft, false);
+        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
+        sprite.setPosition(body.getPosition().x , body.getPosition().y);
+        sprite.setOrigin(WIDTH/2f, HEIGHT/2f);
         if (visible)
             sprite.draw(spriteBatch);
         update();

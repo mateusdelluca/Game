@@ -257,6 +257,28 @@ public class Animator {
         return s;
     }
 
+    public TextureRegion currentSpriteFrame(boolean useOnlyLastFrame, boolean looping){
+        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+        // Get current frame of animation for the current stateTime
+        Sprite s = null;
+        if (!useOnlyLastFrame) {
+            s = new Sprite(animation.getKeyFrame(stateTime, looping));
+        } if (useOnlyLastFrame){
+            s = new Sprite(lastFrame());
+        }
+        if (looping && ani_finished())
+            stateTime = 0f;
+//        s.setColor(color);
+//        SpriteBatch s1 = new SpriteBatch();
+//        s1.begin();
+//        s.draw(s1);
+//        s1.end();
+//        s1.dispose();
+//        s.setRotation((float) Math.toDegrees(rotation));
+//        System.out.println(s.getRotation());
+        return s;
+    }
+
     public TextureRegion currentSpriteFrame(int frameUnique, boolean looping, boolean flip){
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime

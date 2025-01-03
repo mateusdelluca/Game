@@ -77,7 +77,7 @@ public class Level3 extends Level implements ContactListener {
 
     @Override
     public void render(float delta){
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
         box2DDebugRenderer.render(world, camera.combined);
@@ -167,6 +167,23 @@ public class Level3 extends Level implements ContactListener {
                     if (body2.getUserData().equals(item.toString()))
                         body2.setUserData("null");
             }
+        }
+
+        if ((body1.getUserData().toString().equals("Bullet") &&
+           body2.getUserData().toString().equals("Boy"))
+            || (body2.getUserData().toString().equals("Bullet") &&
+            body1.getUserData().toString().equals("Boy"))) {
+            if (body1.getFixtureList().get(0).isSensor() ||
+                body2.getFixtureList().get(0).isSensor())
+                return;
+            if (body1.getUserData().toString().equals("Bullet")){
+                body1.setUserData("null");
+            } else{
+                if (body2.getUserData().toString().equals("Bullet")){
+                    body2.setUserData("null");
+                }
+            }
+            boyBeenHit();
         }
 
         if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals("Boy")) {
