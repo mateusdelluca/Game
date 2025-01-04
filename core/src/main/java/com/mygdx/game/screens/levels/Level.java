@@ -100,80 +100,80 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         font.getData().scale(0.2f);
     }
 
-    public Level(String tilePath, Application app){
-        this.app = app;
-        this.tilePath = tilePath;
-        world = new World(new Vector2(0,-10f), false);
-
-//        player = new Player(world, this);
-//        enemies = new ArrayList<Enemy>();
-//        for (int i = 1; i < 5; i++){
-//            enemies.add(new Enemy(world, new Vector2(1000 * i, 350)));
-//        }
-//        camera.setToOrtho(false);
-//        camera.viewportHeight = Gdx.graphics.getHeight() * (float) 1/32;
-//        camera.viewportWidth = Gdx.graphics.getWidth() * (float) 1/32;
-
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
-
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        viewport = new ScreenViewport(camera);
-        camera.update();
-        thorns_rects = new ArrayList<>();
-
-        Texture t = new Texture(Gdx.files.internal("Font2.png"));
-        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
-        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        font.getData().scale(0.2f);
-
-        boy = new Boy(world, new Vector2(100, 800), viewport);
-        tile = new Tile(tilePath);
-        staticObjects = tile.loadMapObjects("Rects");
-        tile.createBodies(staticObjects, world, false, "Rects");
-        thorns = tile.loadMapObjects("Thorns");
-        tile.createBodies(thorns, world, false, "Thorns");
-
-        thornsRectangleMapObjects = new ArrayList<>();
-        horizontalRectsThorns = new ArrayList<>();
-        verticalRectsThorns = new ArrayList<>();
-
-        for (MapObject m : thorns) {
-                RectangleMapObject t1 = (RectangleMapObject) m;
-                thornsRectangleMapObjects.add(t1);
-                t1.getRectangle().height += 7f;
-                t1.getRectangle().y -= 7f;
-                verticalRectsThorns.add(t1.getRectangle());}
-        portal = new Portal();
-
-        background = new Background();
-//        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+//    public Level(String tilePath, Application app){
+//        this.app = app;
+//        this.tilePath = tilePath;
+//        world = new World(new Vector2(0,-10f), false);
 //
-//        shapeRenderer = new ShapeRenderer();
-        powerBar = new PowerBar();
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2300, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2700, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3500, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3800, 650), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4200, 650), Monster1.class.getSimpleName() + monsters1.size()));
-
-        for (int i = 0; i < leafs.length; i++)
-            leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
-        jack = new Jack(world, new Vector2(2150, 650));
-        girl = new Girl(world, new Vector2(2550, 650));
-        fans.add(new Fan(world, new Vector2(1440f, 150f)));
-        world.setContactListener(this);
-        for (Monster1 m : monsters1.values())
-            System.out.println(m.toString());
-
-
-    }
+////        player = new Player(world, this);
+////        enemies = new ArrayList<Enemy>();
+////        for (int i = 1; i < 5; i++){
+////            enemies.add(new Enemy(world, new Vector2(1000 * i, 350)));
+////        }
+////        camera.setToOrtho(false);
+////        camera.viewportHeight = Gdx.graphics.getHeight() * (float) 1/32;
+////        camera.viewportWidth = Gdx.graphics.getWidth() * (float) 1/32;
+//
+//        float w = Gdx.graphics.getWidth();
+//        float h = Gdx.graphics.getHeight();
+//
+//        // Constructs a new OrthographicCamera, using the given viewport width and height
+//        // Height is multiplied by aspect ratio.
+//
+//        camera = new OrthographicCamera(WIDTH, HEIGHT);
+//        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+//        viewport = new ScreenViewport(camera);
+//        camera.update();
+//        thorns_rects = new ArrayList<>();
+//
+//        Texture t = new Texture(Gdx.files.internal("Font2.png"));
+//        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+//        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+//        font.getData().scale(0.2f);
+//
+//        boy = new Boy(world, new Vector2(100, 800), viewport);
+//        tile = new Tile(tilePath);
+//        staticObjects = tile.loadMapObjects("Rects");
+//        tile.createBodies(staticObjects, world, false, "Rects");
+//        thorns = tile.loadMapObjects("Thorns");
+//        tile.createBodies(thorns, world, false, "Thorns");
+//
+//        thornsRectangleMapObjects = new ArrayList<>();
+//        horizontalRectsThorns = new ArrayList<>();
+//        verticalRectsThorns = new ArrayList<>();
+//
+//        for (MapObject m : thorns) {
+//                RectangleMapObject t1 = (RectangleMapObject) m;
+//                thornsRectangleMapObjects.add(t1);
+//                t1.getRectangle().height += 7f;
+//                t1.getRectangle().y -= 7f;
+//                verticalRectsThorns.add(t1.getRectangle());}
+//        portal = new Portal();
+//
+//        background = new Background();
+////        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+////
+////        shapeRenderer = new ShapeRenderer();
+//        powerBar = new PowerBar();
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(300, 450), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(1600, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2300, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2700, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3500, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3800, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4200, 650), Monster1.class.getSimpleName() + monsters1.size()));
+//
+//        for (int i = 0; i < leafs.length; i++)
+//            leafs[i] = new Leaf(world, new Vector2(new Random().nextFloat(10_000), new Random().nextFloat(10_000)));
+//        jack = new Jack(world, new Vector2(2150, 650));
+//        girl = new Girl(world, new Vector2(2550, 650));
+//        fans.add(new Fan(world, new Vector2(1440f, 150f)));
+//        world.setContactListener(this);
+//        for (Monster1 m : monsters1.values())
+//            System.out.println(m.toString());
+//
+//
+//    }
 
     @Override
     public void show() {
@@ -184,14 +184,14 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public void render(float delta) {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
-        for (int i = 0; i < 5; i++)
-            update(delta);
-//        player.update(delta);
-//        for (Enemy enemy : enemies)
-//            enemy.update(delta);
-//        update(delta);
-
-        background.render();
+//        for (int i = 0; i < 5; i++)
+//            update(delta);
+////        player.update(delta);
+////        for (Enemy enemy : enemies)
+////            enemy.update(delta);
+////        update(delta);
+//
+//        background.render();
 //        powerBar.render();
 //        box2DDebugRenderer.render(world, camera.combined);
 
@@ -202,15 +202,15 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
 //        System.out.println(boy.getBody().getPosition().toString());
 
-        spriteBatch.setProjectionMatrix(camera.combined);
-        if (boy.getBody().getPosition().x > WIDTH/2f && boy.getBody().getPosition().x < (6000 - WIDTH))
-            camera.position.set((boy.getBody().getPosition().x) + WIDTH/4f, 400 + HEIGHT/4f, 0);
-        if (boy.getBody().getPosition().x >= (6000 - WIDTH))
-            camera.position.set(6000 - WIDTH/2f, HEIGHT / 2f, 0);
-        if (boy.getBody().getPosition().x < WIDTH/2f)
-            camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
-//        renderObjects();
-        update2();
+//        spriteBatch.setProjectionMatrix(camera.combined);
+//        if (boy.getBody().getPosition().x > WIDTH/2f && boy.getBody().getPosition().x < (6000 - WIDTH))
+//            camera.position.set((boy.getBody().getPosition().x) + WIDTH/4f, 400 + HEIGHT/4f, 0);
+//        if (boy.getBody().getPosition().x >= (6000 - WIDTH))
+//            camera.position.set(6000 - WIDTH/2f, HEIGHT / 2f, 0);
+//        if (boy.getBody().getPosition().x < WIDTH/2f)
+//            camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
+////        renderObjects();
+//        update2();
 //        shapeRenderer();
 //        shapeRenderer.begin();
 ////        for (Enemy enemy : enemies)
@@ -279,58 +279,12 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     }
 
-    protected void collisions(){
-        for (Monster1 monster1 : monsters1.values()) {
-            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
-                monster1.getBody().setLinearVelocity(0,0);
-                if (boy.animations.name().equals("BOY_SABER")) {
-                    monster1.animations = Animations.MONSTER1_SPLIT;
-                    monster1.setSplit(true);
-                    for (Fixture f : monster1.getBody().getFixtureList()){
-                        f.setSensor(true);
-                    }
-                    monster1.getBody().setGravityScale(0f);
-                    monster1.getBody().setLinearVelocity(0f,0f);
-                }
-                else {
-                    if (!monster1.isSplit())
-                        monster1.animations = Animations.MONSTER1_FLICKERING;
-                }
-                monster1.getBody().setFixedRotation(true);
-            }
-            else
-//            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-////                boyBeenHit(monster1);
-//            }
-            if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-                monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
-                monster1.animations = Animations.MONSTER1_FLICKERING;
-            }
 
-//            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
-//                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
-//                monster1.animations = Animations.MONSTER1_FLICKERING;
-//                boyBeenHit();
-//            }
-//            for (Rectangle rect : verticalRectsThorns) {
-//                if (boy.getBodyBounds().overlaps(rect)) {
-//                    boyBeenHit();
-//                }
-//            }
-        }
-//        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-//            jack.setBeenHit(true);
-//        }
-        for (Body body : bodiesToDestroy) {
-            if (body.getTransform().getPosition().x != 0) {
-                body.setTransform(new Random().nextFloat(1000), new Random().nextFloat(3000), 0);
-            }
-        } bodiesToDestroy.clear();
 //        for (Monster1 m : monsters1.values()){
 //            fans.getFirst().bodyCloseToFan2(m.getBody(), Monster1.BOX_WIDTH);
 //        }
 //        fans.getFirst().bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
-    }
+//    }
 
 
     public void renderObjects(){
@@ -359,10 +313,10 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     }
 
     public void update(float delta){
-        world.step(delta, 7,7);
-        camera.update();
-        world.step(delta, 7,7);
-        camera.update();
+//        world.step(delta, 7,7);
+//        camera.update();
+//        world.step(delta, 7,7);
+//        camera.update();
 
 //        for (Rectangle rect : horizontalRectsThorns) {
 //            if (rect.overlaps(player.getBodyBounds())){

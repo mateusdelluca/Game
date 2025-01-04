@@ -13,7 +13,7 @@ public class Level2 extends Level implements ContactListener {
     private Boy boy;
 
     public Level2(Application app){
-        super("Level2/Level2.tmx", app);
+//        super("Level2/Level2.tmx", app);
 
         spriteBatch = new SpriteBatch();
 //        monsters1.get("Monster10").getBody().setTransform(1800, 200, 0);

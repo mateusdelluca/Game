@@ -14,7 +14,7 @@ public class Level1 extends Level{
 //    }
 
     public Level1(Application app){
-        super("Level1/Level1.tmx", app);
+//        super("Level1/Level1.tmx", app);
 //        Monster1.id = 0;
     }
 

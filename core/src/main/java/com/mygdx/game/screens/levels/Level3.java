@@ -3,10 +3,7 @@ package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
 import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
@@ -14,6 +11,7 @@ import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.items.Crystal;
 import com.mygdx.game.entities.items.Rifle;
+import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.fans.Fan;
 import com.mygdx.game.fans.Fan2;
@@ -21,6 +19,7 @@ import com.mygdx.game.fans.Fans;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.entities.items.Item;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Level3 extends Level implements ContactListener {
 
@@ -72,9 +71,9 @@ public class Level3 extends Level implements ContactListener {
         items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
 
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 10; index++) {
-            if (index < 4)
+            if (index < 5)
                 posX = 320 + (100 * index);
-            if (index >= 4) {
+            if (index >= 5) {
                 posY = 6000 - 240 - (200 * index);
                 posX = 320 + 3 * 200;
             }
@@ -151,7 +150,7 @@ public class Level3 extends Level implements ContactListener {
     }
 
     @Override
-    public void beginContact(Contact contact){
+    public void beginContact(Contact contact) {
         if (contact.getFixtureA() == null || contact.getFixtureB() == null)
             return;
         if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
@@ -171,23 +170,22 @@ public class Level3 extends Level implements ContactListener {
 
                 if (body1.getUserData().equals(item.toString()))
                     body1.setUserData("null");
-                else
-                    if (body2.getUserData().equals(item.toString()))
-                        body2.setUserData("null");
+                else if (body2.getUserData().equals(item.toString()))
+                    body2.setUserData("null");
             }
         }
 
         if ((body1.getUserData().toString().equals("Bullet") &&
-           body2.getUserData().toString().equals("Boy"))
+            body2.getUserData().toString().equals("Boy"))
             || (body2.getUserData().toString().equals("Bullet") &&
             body1.getUserData().toString().equals("Boy"))) {
             if (body1.getFixtureList().get(0).isSensor() ||
                 body2.getFixtureList().get(0).isSensor())
                 return;
-            if (body1.getUserData().toString().equals("Bullet")){
+            if (body1.getUserData().toString().equals("Bullet")) {
                 body1.setUserData("null");
-            } else{
-                if (body2.getUserData().toString().equals("Bullet")){
+            } else {
+                if (body2.getUserData().toString().equals("Bullet")) {
                     body2.setUserData("null");
                 }
             }
@@ -202,9 +200,9 @@ public class Level3 extends Level implements ContactListener {
             }
         }
 
-        for (Monster1 m1 : monsters1.values()){
+        for (Monster1 m1 : monsters1.values()) {
             if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
-                || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")){
+                || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")) {
                 boyBeenHit();
             }
             if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals(m1.getBody().getUserData())) {
@@ -217,13 +215,13 @@ public class Level3 extends Level implements ContactListener {
             if ((body1.getUserData().toString().equals("Bullet") &&
                 body2.getUserData().toString().equals(m1.toString())
             ) || body2.getUserData().toString().equals("Bullet") &&
-                body1.getUserData().toString().equals(m1.toString())){
-                if (body1.getUserData().toString().equals("Bullet")){
+                body1.getUserData().toString().equals(m1.toString())) {
+                if (body1.getUserData().toString().equals("Bullet")) {
                     monster1BeenHit(m1, body1);
                     body1.setUserData("null");
                     body1.setGravityScale(0.1f);
-                } else{
-                    if (body2.getUserData().toString().equals("Bullet")){
+                } else {
+                    if (body2.getUserData().toString().equals("Bullet")) {
                         monster1BeenHit(m1, body2);
                         body2.setUserData("null");
                         body2.setGravityScale(0.1f);
@@ -231,12 +229,61 @@ public class Level3 extends Level implements ContactListener {
                 }
             }
         }
-        if (body1.getUserData().toString().equals("null")){
+        if (body1.getUserData().toString().equals("null")) {
             bodiesToDestroy.add(body1);
         }
-        if (body2.getUserData().toString().equals("null")){
+        if (body2.getUserData().toString().equals("null")) {
             bodiesToDestroy.add(body2);
         }
+
     }
+
+    protected void collisions() {
+        for (Monster1 monster1 : monsters1.values()) {
+            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
+                monster1.getBody().setLinearVelocity(0, 0);
+                if (boy.animations.name().equals("BOY_SABER")) {
+                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.setSplit(true);
+                    for (Fixture f : monster1.getBody().getFixtureList()) {
+                        f.setSensor(true);
+                    }
+                    monster1.getBody().setGravityScale(0f);
+                    monster1.getBody().setLinearVelocity(0f, 0f);
+                } else {
+                    if (!monster1.isSplit())
+                        monster1.animations = Animations.MONSTER1_FLICKERING;
+                }
+                monster1.getBody().setFixedRotation(true);
+            } else
+//            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+////                boyBeenHit(monster1);
+//            }
+                if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+                    monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
+                    monster1.animations = Animations.MONSTER1_FLICKERING;
+                }
+
+//            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
+//                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
+//                monster1.animations = Animations.MONSTER1_FLICKERING;
+//                boyBeenHit();
+//            }
+//            for (Rectangle rect : verticalRectsThorns) {
+//                if (boy.getBodyBounds().overlaps(rect)) {
+//                    boyBeenHit();
+//                }
+//            }
+        }
+//        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+//            jack.setBeenHit(true);
+//        }
+            for (Body body : bodiesToDestroy) {
+                if (body.getTransform().getPosition().x != 0) {
+                    body.setTransform(new Random().nextFloat(1000), new Random().nextFloat(3000), 0);
+                }
+         }
+            bodiesToDestroy.clear();
+        }
 
 }
