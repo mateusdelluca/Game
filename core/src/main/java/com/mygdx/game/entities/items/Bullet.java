@@ -72,9 +72,10 @@ public class Bullet extends Objeto implements Item {
     }
 
     public void update(){
-        if (Math.abs(body.getLinearVelocity().x) < 10f && Math.abs(body.getLinearVelocity().y) < 10f) {
-            body.setTransform(0, 0, 0);
+        if ((Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 30f) && visible) {
+            body.setTransform(-1500, 0, 0);
             visible = false;
+            body.setUserData("null");
         }
         if (body == null || body.getFixtureList().size == 0)
             return;

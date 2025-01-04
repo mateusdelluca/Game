@@ -50,6 +50,9 @@ public class Sounds implements Serializable{
     public static float pause_musicPosition;
     public static boolean isLevel3running = true;
 
+    public static final Sound clink = Gdx.audio.newSound(Gdx.files.internal("sounds/clink.mp3"));
+    public static final Sound clink2 = Gdx.audio.newSound(Gdx.files.internal("sounds/clink2.mp3"));
+
     public Sounds() {
     }
 

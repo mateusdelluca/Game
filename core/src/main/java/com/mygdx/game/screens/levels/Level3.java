@@ -1,7 +1,5 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +12,7 @@ import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.Monster1;
+import com.mygdx.game.entities.items.Crystal;
 import com.mygdx.game.entities.items.Rifle;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.fans.Fan;
@@ -71,7 +70,7 @@ public class Level3 extends Level implements ContactListener {
         world.setContactListener(this);
 
         items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
-
+        items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(320, 6000 - 240)));
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
 
@@ -80,7 +79,7 @@ public class Level3 extends Level implements ContactListener {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
-        box2DDebugRenderer.render(world, camera.combined);
+//        box2DDebugRenderer.render(world, camera.combined);
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
@@ -123,7 +122,6 @@ public class Level3 extends Level implements ContactListener {
         }
         spriteBatch.end();
 
-        box2DDebugRenderer.render(world, camera.combined);
     }
 
     @Override

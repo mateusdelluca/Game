@@ -1,14 +1,18 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +25,14 @@ public class Tile {
 
     public ArrayList<Body> bodies_of_thorns = new ArrayList<>();
     public ArrayList<Body> bodies_of_rects = new ArrayList<>();
+    @Getter
+    @Setter
+    private String name = "";
 
-    public Tile(String level) {
+    public Tile(String name) {
+        this.name = name;
         tmxMapLoader = new TmxMapLoader();
-        tiledMap = tmxMapLoader.load(level);
+        tiledMap = tmxMapLoader.load(name);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
 
     }
@@ -63,21 +71,6 @@ public class Tile {
         }
     }
 
-//    public void createBodies(MapObjects mapObjects, World world, float angle) {
-//        for (MapObject mapObject : mapObjects) {
-//            if (mapObject instanceof RectangleMapObject) {
-//                BodyDef bodyDef = new BodyDef();
-//                bodyDef.active = true;
-//                bodyDef.type = BodyDef.BodyType.StaticBody;
-//                Body body = world.createBody(bodyDef);
-//                PolygonShape shape = createPolygonShape((RectangleMapObject) mapObject, angle);
-//                Fixture f = body.createFixture(shape, 1f);
-//                f.setFriction(10f);
-//            }
-//
-//        }
-//    }
-
     private PolygonShape createPolygonShape(RectangleMapObject mapObject) {
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(mapObject.getRectangle().getWidth() / 2f, mapObject.getRectangle().getHeight() / 2f,
@@ -86,19 +79,18 @@ public class Tile {
         return polygonShape;
     }
 
-//    private PolygonShape createPolygonShape(RectangleMapObject mapObject, float angle) {
-//        PolygonShape polygonShape = new PolygonShape();
-//        polygonShape.setAsBox(mapObject.getRectangle().getWidth() / 2f, mapObject.getRectangle().getHeight() / 2f,
-//                new Vector2(mapObject.getRectangle().getX() + mapObject.getRectangle().getWidth() / 2f,
-//                        mapObject.getRectangle().getY() + mapObject.getRectangle().getHeight() / 2f), (float) Math.toRadians(angle));
-//        return polygonShape;
-//    }
-//
-//    public ArrayList<RectangleMapObject> getRectanglesMapObjects(MapObjects mapObjects) {
-//        ArrayList<RectangleMapObject> a = new ArrayList<>();
-//        for (MapObject m : mapObjects)
-//            a.add((RectangleMapObject) m);
-//        return a;
-//    }
-
+    public void invisible(String layerName){
+        TiledMap map = new TmxMapLoader().load(name);
+        MapLayer layer = map.getLayers().get(layerName);
+        for (MapObject object : layer.getObjects()) { // Verificar se o objeto é do tipo Tile
+            if (object instanceof TiledMapTileMapObject) {
+                TiledMapTileMapObject tileObject = (TiledMapTileMapObject) object;
+                // Verificar a propriedade 'visible'
+                boolean isVisible = tileObject.getProperties().get("visible", Boolean.class); // Ajustar a visibilidade com base na propriedade
+                if (!isVisible) {
+                    tileObject.setVisible(false);
+                }
+            }
+        }
+    }
 }

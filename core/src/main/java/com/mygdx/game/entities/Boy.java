@@ -10,14 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.entities.items.Bullet;
-import com.mygdx.game.entities.items.Magazine;
-import com.mygdx.game.entities.items.Rifle;
+import com.mygdx.game.entities.items.*;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.sfx.Sounds;
-import com.mygdx.game.entities.items.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -472,6 +469,11 @@ public class Boy extends Objeto implements Person{
         if (item instanceof Rifle) {
             rifle = (Rifle) item;
             Magazine.showingNumbBullets = true;
+        }
+        if (item instanceof Crystal) {
+            item = (Crystal) item;
+            PowerBar.sp += 20;
+            clink2.play();
         }
         items.add(item);
         TRIGGER.play();

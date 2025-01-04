@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.entities.items.Bullet;
-import com.mygdx.game.entities.items.Crystal;
 import com.mygdx.game.entities.items.Leaf;
 import com.mygdx.game.entities.Portal;
 import com.mygdx.game.images.Animations;
@@ -36,8 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.mygdx.game.entities.items.Crystal.numCrystalsCollected;
-
 public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
@@ -48,7 +45,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
     public OrthographicCamera camera;
     public World world;
     public Background background;
-    public ArrayList<Crystal> crystals;
     protected Box2DDebugRenderer box2DDebugRenderer;
 //    ShapeRenderer shapeRenderer;
     @Getter @Setter
@@ -152,11 +148,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
                 t1.getRectangle().height += 7f;
                 t1.getRectangle().y -= 7f;
                 verticalRectsThorns.add(t1.getRectangle());}
-        crystals = new ArrayList<>();
         portal = new Portal();
-        for (int i = 0; i < Crystal.X_POSITIONS.length; i++) {
-            crystals.add(new Crystal(world));
-        }
+
         background = new Background();
 //        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
 //
@@ -216,7 +209,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
             camera.position.set(6000 - WIDTH/2f, HEIGHT / 2f, 0);
         if (boy.getBody().getPosition().x < WIDTH/2f)
             camera.position.set(0f + WIDTH / 2f, 400 + HEIGHT / 4f, 0);
-        renderObjects();
+//        renderObjects();
         update2();
 //        shapeRenderer();
 //        shapeRenderer.begin();
@@ -245,9 +238,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //    }
 
     protected void update2(){
-        for (int index = 0; index < Crystal.X_POSITIONS.length; index++){
-            crystals.get(index).taked(boy.getBodyBounds());
-        }
 //        if (portal.getRectangle().contains(player.getBodyBounds())){
 //            teletransport.play();
 //            player.getBody().setTransform(350, 400, 0);
@@ -266,11 +256,11 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //            }
 //        }
 
-        if (numCrystalsCollected >= 1) {
-            Portal.open_portal = true;
-            mensage = "The portal is opened!";
-            app.jogo.levelManager.changeLevel("Level3", app);
-        }
+//        if (numCrystalsCollected >= 1) { TODO: USAR NÚMERO DE CRISTAIS PARA TROCAR DE FASE
+//            Portal.open_portal = true;
+//            mensage = "The portal is opened!";
+//            app.jogo.levelManager.changeLevel("Level3", app);
+//        }
 
         if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
             Sounds.TELETRANSPORT.play();
@@ -279,7 +269,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //            app.jogo.levels.changeLevel("Level3", app);
             boy.getBody().setTransform(100, 800, 0);
             mensage = "Collect all blue crystals!";
-            numCrystalsCollected = 0;
             Portal.Y = 450;
             Portal.open_portal = false;
             jack.HP = 5;
@@ -345,30 +334,28 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
 
     public void renderObjects(){
-        spriteBatch.begin();
-//        level1.render(camera);
-        tile.render(camera);
-        portal.render(spriteBatch);
-
-        for (Crystal crystal : crystals)
-            crystal.render(spriteBatch);
-//        for (Enemy enemy : enemies)
-//            enemy.render(spriteBatch);
-//        player.render(spriteBatch);
-        boy.render(spriteBatch);
-        jack.render(spriteBatch);
-        for (Monster1 m : monsters1.values())
-            m.render(spriteBatch);
-        for (Leaf l : leafs)
-            l.render(spriteBatch);
-        jack.render(spriteBatch);
-        girl.render(spriteBatch);
-        for (Bullet bullet : bullets)
-            bullet.render(spriteBatch);
-        font.draw(spriteBatch,mensage, 850,400);
-        spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 1600, 150, 32 * 2, 55 * 2);
-        fans.getFirst().render(spriteBatch);
-        spriteBatch.end();
+//        spriteBatch.begin();
+////        level1.render(camera);
+//        tile.render(camera);
+//        portal.render(spriteBatch);
+//
+////        for (Enemy enemy : enemies)
+////            enemy.render(spriteBatch);
+////        player.render(spriteBatch);
+//        boy.render(spriteBatch);
+//        jack.render(spriteBatch);
+//        for (Monster1 m : monsters1.values())
+//            m.render(spriteBatch);
+//        for (Leaf l : leafs)
+//            l.render(spriteBatch);
+//        jack.render(spriteBatch);
+//        girl.render(spriteBatch);
+//        for (Bullet bullet : bullets)
+//            bullet.render(spriteBatch);
+//        font.draw(spriteBatch,mensage, 850,400);
+//        spriteBatch.draw(Images.fire.currentSpriteFrame(false,true,false), 1600, 150, 32 * 2, 55 * 2);
+//        fans.getFirst().render(spriteBatch);
+//        spriteBatch.end();
     }
 
     public void update(float delta){
