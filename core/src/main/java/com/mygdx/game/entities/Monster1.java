@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.sfx.Sounds;
+import ktx.box2d.RayCast;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -61,14 +62,25 @@ public class Monster1 extends Objeto{
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-            update();
             Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(spriteBatch);
         }
     }
 
-    private void update(){
+    public void update(Boy boy){
+        if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100){
+            if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
+                if (boy.getBody().getPosition().x < body.getPosition().x) {
+                    facingRight = false;
+                    body.setLinearVelocity(-5,body.getLinearVelocity().y);
+                }
+                else{
+                    body.setLinearVelocity(5,body.getLinearVelocity().y);
+                    facingRight = true;
+                }
+            }
+        }
         String name = animations.name();
         if (!visible)
             body.setTransform(0,0,0);
@@ -88,7 +100,6 @@ public class Monster1 extends Objeto{
                 @Override
                 public void run() {
                     setVisible(false);
-
                 }
             }, 1);
         } else {

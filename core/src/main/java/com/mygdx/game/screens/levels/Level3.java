@@ -49,7 +49,7 @@ public class Level3 extends Level implements ContactListener {
 
         fans.clear();
 
-        fans.add(new Fan(world, new Vector2(1200, 6000 - 2400)));
+//        fans.add(new Fan(world, new Vector2(1200, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200 + 76, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200 + 2*76, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200, 6000 - 1640)));
@@ -119,6 +119,7 @@ public class Level3 extends Level implements ContactListener {
         }
         for (Monster1 monster1 : monsters1.values()){
             monster1.render(spriteBatch);
+            monster1.update(boy);
         }
         spriteBatch.end();
 
