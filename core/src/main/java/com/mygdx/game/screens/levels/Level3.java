@@ -70,13 +70,22 @@ public class Level3 extends Level implements ContactListener {
         world.setContactListener(this);
 
         items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
-        items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(320, 6000 - 240)));
+
+        for (int index = 1, posX = 320, posY = (6000 - 240); index < 10; index++) {
+            if (index < 4)
+                posX = 320 + (100 * index);
+            if (index >= 4) {
+                posY = 6000 - 240 - (200 * index);
+                posX = 320 + 3 * 200;
+            }
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(posX, posY)));
+        }
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
 
     @Override
     public void render(float delta){
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
 //        box2DDebugRenderer.render(world, camera.combined);
