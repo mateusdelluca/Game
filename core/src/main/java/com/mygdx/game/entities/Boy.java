@@ -55,6 +55,7 @@ public class Boy extends Objeto implements Person{
     @Setter @Getter
     private ArrayList<Item> items = new ArrayList<Item>();
     private Rifle rifle;
+//    private JetPack jetPack;
     private Vector2 bodyPosition;
 
     public Boy(World world, Vector2 bodyPosition, Viewport viewport){

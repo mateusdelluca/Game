@@ -34,7 +34,7 @@ public class Portal extends Objeto implements Item{
 
     @Override
     public void renderShape(ShapeRenderer s) {
-        s.rect(X, Y, WIDTH, HEIGHT);
+        s.rect(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Portal extends Objeto implements Item{
     }
 
     public Rectangle getRectangle(){
-        return new Rectangle(X, Y, WIDTH, HEIGHT);
+        return new Rectangle(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
 }

@@ -28,7 +28,7 @@ public class Images {
     public static Texture sunglasses_equip, sunglasses_equip2;
     public static Texture headset, headset_equip;
     public static Texture tiger_face;
-    public static Sprite s1, rifle;
+    public static Sprite s1, rifle, jetPack;
     public static Sprite mountains4;
 
     public static Sprite backGround2;
@@ -102,6 +102,7 @@ public class Images {
         fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
         fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
         rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
+        jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
         spriteBatch = new SpriteBatch();}
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {
