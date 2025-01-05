@@ -12,7 +12,7 @@ public enum Animations {
     BOY_JETPACK(new Animator(4,4,14,128,128, "boy/JetPack.png")),
     BOY_WALKING(new Animator(6,6, 5, 128, 128, "boy/Walking.png")),
     BOY_IDLE(new Animator(1,1, 1, 128, 128, "boy/Idle.png")),
-    BOY_SABER(new Animator(3,3, 15, 128, 128, "boy/Saber.png")),
+    BOY_SABER(new Animator(4,4, 15, 128, 128, "boy/saber_Sheet.png")),
     BOY_STRICKEN(new Animator(2,2, 3, 128, 128, "boy/Stricken.png")),
     BOY_JUMPING(new Animator(1,1, 1, 128, 128, "boy/Jumping3.png")),
     BOY_JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),

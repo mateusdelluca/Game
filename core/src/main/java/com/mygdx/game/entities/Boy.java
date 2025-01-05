@@ -244,8 +244,11 @@ public class Boy extends Objeto implements Person{
                         setFrameCounter(0);
                     }
                     if (frameCounter() >= 2f) {
-                        setFrameCounter(2);
                         saberTime += Gdx.graphics.getDeltaTime();
+                        if (saberTime < 0.4f)
+                            setFrameCounter(2);
+                       if (saberTime >= 0.4f)
+                           setFrameCounter(3);
                         if (saberTime >= 0.5f) {
                             hit = false;
                             saberTime = 0f;
