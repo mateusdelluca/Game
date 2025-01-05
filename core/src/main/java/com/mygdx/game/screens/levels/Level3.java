@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Application;
 import com.mygdx.game.entities.Background;
 import com.mygdx.game.entities.Boy;
+import com.mygdx.game.entities.Portal;
 import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.items.Crystal;
@@ -24,7 +25,7 @@ import java.util.Random;
 public class Level3 extends Level implements ContactListener {
 
     private HashMap<String, Item> items = new HashMap<>();
-    ShapeRenderer shapeRenderer = new ShapeRenderer();;
+
     public Level3(Application app) {
         super();
         super.app = app;
@@ -68,17 +69,29 @@ public class Level3 extends Level implements ContactListener {
 
         world.setContactListener(this);
 
-        items.put(Rifle.class.getSimpleName() + items.size(), new Rifle(world,new Vector2(440, 6000 - 350)));
+        items.put(Rifle.class.getSimpleName(), new Rifle(world,new Vector2(440, 6000 - 350)));
 
-        for (int index = 1, posX = 320, posY = (6000 - 240); index < 10; index++) {
-            if (index < 5)
+        for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
+            if (index < 5) {
                 posX = 320 + (100 * index);
+            }
             if (index >= 5) {
-                posY = 6000 - 240 - (200 * index);
+                posY = 6000 - 240 - (150 * index);
                 posX = 320 + 3 * 200;
+            }
+            if ((index >= 8 && index <= 11)) {
+                posX = 320 + (100 * (index - 5));
+                posY = 6000 - 2000;
+            }
+            if ((index >= 12 && index <= 15)) {
+                posX = 520 + (100 * (index - 10));
+                posY = 6000 - 2300;
             }
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(posX, posY)));
         }
+
+        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2600,6000 - 5440)));
+        items.get("Portal").updateItem();
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
 

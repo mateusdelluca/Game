@@ -107,7 +107,6 @@ public class Monster1 extends Objeto{
                 if (!soundRunning) {
                     Sounds.MONSTER_HURT.play();
                     soundRunning = true;
-                    HP--;
                 }
                 if (flickering_time >= 1.0f) {
                     flickering_time = 0f;

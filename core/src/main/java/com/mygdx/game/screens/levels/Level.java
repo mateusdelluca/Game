@@ -262,20 +262,20 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //            app.jogo.levelManager.changeLevel("Level3", app);
 //        }
 
-        if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
-            Sounds.TELETRANSPORT.play();
-            getTile().bodies_of_thorns.clear();
-            app.jogo.levelManager.changeLevel("Level" + ++numLevel, app);
-//            app.jogo.levels.changeLevel("Level3", app);
-            boy.getBody().setTransform(100, 800, 0);
-            mensage = "Collect all blue crystals!";
-            Portal.Y = 450;
-            Portal.open_portal = false;
-            jack.HP = 5;
-            girl.HP = 5;
-            PowerBar.hp = PowerBar.WIDTH2;
-            PowerBar.sp = PowerBar.WIDTH2;
-        }
+//        if (portal.getRectangle().contains(boy.getBodyBounds()) && Portal.open_portal){
+//            Sounds.TELETRANSPORT.play();
+//            getTile().bodies_of_thorns.clear();
+//            app.jogo.levelManager.changeLevel("Level" + ++numLevel, app);
+////            app.jogo.levels.changeLevel("Level3", app);
+//            boy.getBody().setTransform(100, 800, 0);
+//            mensage = "Collect all blue crystals!";
+//            Portal.Y = 450;
+//            Portal.open_portal = false;
+//            jack.HP = 5;
+//            girl.HP = 5;
+//            PowerBar.hp = PowerBar.WIDTH2;
+//            PowerBar.sp = PowerBar.WIDTH2;
+//        }
 
     }
 
@@ -525,9 +525,9 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     protected void boyBeenHit(){
         if (!boy.isBeenHit()) {
-            boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, 20f);
+            boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 40f);
             boy.animations = Animations.BOY_STRICKEN;
-            PowerBar.hp -= 20;
+            PowerBar.hp -= 10;
             boy.setBeenHit(true);
             Sounds.HURT.play();
         }
@@ -538,6 +538,7 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
         m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
         m1.animations = Animations.valueOf(name);
         Sounds.MONSTER_HURT.play();
+        m1.setHP(m1.getHP() - 1);
     }
 
     @Override
