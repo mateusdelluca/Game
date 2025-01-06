@@ -34,13 +34,15 @@ public class Rifle extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        position = body.getPosition();
-        Sprite rifle = new Sprite(Images.rifle);
-        rifle.setSize(width, height);
-        rifle.setOriginCenter();
-        rifle.setRotation(angle++);
-        rifle.setPosition(position.x,position.y);
-        rifle.draw(s);
+        if (!body.getUserData().toString().equals("null")) {
+            position = body.getPosition();
+            Sprite rifle = new Sprite(Images.rifle);
+            rifle.setSize(width, height);
+            rifle.setOriginCenter();
+            rifle.setRotation(angle++);
+            rifle.setPosition(position.x, position.y);
+            rifle.draw(s);
+        }
         magazine.render(s);
     }
 

@@ -12,68 +12,72 @@ import static com.mygdx.game.sfx.Sounds.TRIGGER;
 
 public class Magazine implements Item{
 
-    private final int bulletsPerMagazine;
+    private final int numberBulletsPerMagazine;
     @Getter @Setter
-    private int numberOfBulletsInMagazine;
+    private int numberBulletsInMagazine;
     @Getter
     @Setter
     private ArrayList<Bullet> bullets = new ArrayList<>();
     public static String stringNumbBullets = "";
     public static boolean showingNumbBullets = false;
     @Getter @Setter
-    private int numMagazines;
+    private int numberMagazines, restOfBullets;
     @Getter @Setter
     private boolean recharging;
-
-    public Magazine(final int bulletsPerMagazine){
-        this.bulletsPerMagazine = bulletsPerMagazine;
-        numberOfBulletsInMagazine = bulletsPerMagazine;
-        numMagazines = 3;
+    private int total;
+    public Magazine(final int numberBulletsPerMagazine){
+        this.numberBulletsPerMagazine = numberBulletsPerMagazine;
+        numberBulletsInMagazine = numberBulletsPerMagazine;
+        numberMagazines = 3;
     }
 
-    public Magazine(final int bulletsPerMagazine, int numMagazines){
-        this.bulletsPerMagazine = bulletsPerMagazine;
-        numberOfBulletsInMagazine = bulletsPerMagazine;
-        this.numMagazines = numMagazines;
+    public Magazine(final int numberBulletsPerMagazine, int numberMagazines){
+        this.numberBulletsPerMagazine = numberBulletsPerMagazine;
+        numberBulletsInMagazine = numberBulletsPerMagazine;
+        this.numberMagazines = numberMagazines;
     }
 
     @Override
     public void render(SpriteBatch s) {
         for (Bullet bullet : bullets)
             bullet.render(s);
-        if (showingNumbBullets)
-            stringNumbBullets = numberOfBulletsInMagazine + "/" + bulletsPerMagazine * numMagazines;
+        if (showingNumbBullets) {
+            total = (numberBulletsPerMagazine * numberMagazines) + restOfBullets;
+            stringNumbBullets = numberBulletsInMagazine + "/" + total;
+        }
         else
             stringNumbBullets = "";
-        if (numberOfBulletsInMagazine <= 0 && numMagazines > 0) {
-            recharging = true;
-            Timer timer = new Timer();
-            timer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    if (recharging) {
-                        if (numMagazines >= 2)
-                            numMagazines--;
-                        numberOfBulletsInMagazine = bulletsPerMagazine;
-                        recharging = false;
-                        TRIGGER.play();
+    }
+
+    private void recharging(){
+        Timer timer = new Timer();
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                if (recharging) {
+                    if (numberMagazines == 0 && restOfBullets > 0)
+                        numberBulletsInMagazine = restOfBullets;
+                    if (numberMagazines > 0) {
+                        if (numberBulletsInMagazine < numberBulletsPerMagazine)
+                            restOfBullets += numberBulletsInMagazine;
+                        numberBulletsInMagazine = numberBulletsPerMagazine;
+                        numberMagazines--;
                     }
+                    TRIGGER.play();
+                    recharging = false;
                 }
-            }, 1);
-        }
+            }
+        }, 1);
     }
 
     @Override
     public void updateItem() {
-//        if (numMagazines > 0 && numberOfBulletsInMagazine <= 0) {
-//            numMagazines--;
-//            numberOfBulletsInMagazine = bulletsLimitMagazine;
-//        }
+        recharging();
     }
 
     public void newBullet(Bullet bullet){
-        if (numberOfBulletsInMagazine > 0) {
-            numberOfBulletsInMagazine--;
+        if (numberBulletsInMagazine > 0 && !recharging) {
+            numberBulletsInMagazine--;
             GUNSHOT.play();
             bullets.add(bullet);
         }

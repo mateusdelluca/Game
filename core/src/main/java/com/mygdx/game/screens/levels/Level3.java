@@ -88,8 +88,8 @@ public class Level3 extends Level implements ContactListener {
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(posX, posY)));
         }
 
-        items.put(JetPack.class.getSimpleName(), new JetPack(world, new Vector2(400, 6000 - 2500)));
-        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2600,6000 - 5350)));
+        items.put(JetPack.class.getSimpleName(), new JetPack(world, new Vector2(400, 6000 - 2400)));
+        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2300,6000 - 5500)));
         items.get("Portal").updateItem();
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }

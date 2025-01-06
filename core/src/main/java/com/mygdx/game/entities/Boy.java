@@ -45,7 +45,8 @@ public class Boy extends Objeto implements Person{
     private float worldX;
     private float worldY;
     private Viewport viewport;
-    private boolean jetPack;
+    @Getter @Setter
+    private boolean use_jetPack;
     private Sprite jetPackSprite;
     private Vector2 jetPackPosition;
     private float chargingSPTimer;
@@ -72,7 +73,7 @@ public class Boy extends Objeto implements Person{
     @Override
     public void render(SpriteBatch s){
         update();
-        if (jetPack){   //when actives jetPack
+        if (use_jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
             jetPackSprite.draw(s);
@@ -89,7 +90,7 @@ public class Boy extends Objeto implements Person{
         }
         if (shooting && !beenHit) {    //when actives the gun and shooting and he is not moving and he has not been hit
             Sprite legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-            if (isMoving() && !jetPack) //when he is moving and didn't active the jetpack
+            if (isMoving() && !use_jetPack) //when he is moving and didn't active the jetpack
                 legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
             legs.setPosition(body.getPosition().x, body.getPosition().y);
 
@@ -157,10 +158,10 @@ public class Boy extends Objeto implements Person{
     }
 
     private void fly() {
-        if (PowerBar.sp > 10 && Gdx.input.isKeyPressed(Input.Keys.SPACE) && jetPack){
+        if (PowerBar.sp > 10 && Gdx.input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
-        if (jetPack && PowerBar.sp > 0) {
+        if (use_jetPack && PowerBar.sp > 0) {
             chargingSPTimer3 += Gdx.graphics.getDeltaTime();
             if (chargingSPTimer3 > 0.2f) {
                 PowerBar.sp--;
@@ -267,14 +268,14 @@ public class Boy extends Objeto implements Person{
                         if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_JETPACK")) {
 
                         } else {
-                            if (onGround() && !jetPack) {
+                            if (onGround() && !use_jetPack) {
                                 if (isMoving())
                                     animations = Animations.BOY_WALKING;
                                 else
                                     animations = Animations.BOY_IDLE;
                                 //                   usingOnlyLastFrame = true;
                             } else {
-                                if (isMoving() || jetPack)
+                                if (isMoving() || use_jetPack)
                                     animations = Animations.BOY_JUMPING;
                                 else
                                     animations = Animations.BOY_JUMPING_FRONT;
@@ -312,13 +313,21 @@ public class Boy extends Objeto implements Person{
     }
 
     public void keyDown(int keycode){
-        if (keycode == Input.Keys.SPACE && jetPack && PowerBar.sp > 10) {
+        if (keycode == Input.Keys.SPACE && use_jetPack && PowerBar.sp > 10) {
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
             body.setGravityScale(0f);
         }
+        if (keycode == Input.Keys.R){
+            if (rifle != null) {
+                if (!rifle.getMagazine().isRecharging()) {
+                    rifle.getMagazine().setRecharging(true);
+                    rifle.getMagazine().updateItem();
+                }
+            }
+        }
         if (keycode == Input.Keys.T) {
-            jetPack = !jetPack;
-            if (jetPack) {
+            use_jetPack = !use_jetPack;
+            if (use_jetPack) {
                 jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
 //                body.setGravityScale(0.5f);
                 JETPACK.loop(0.4f);
@@ -338,21 +347,21 @@ public class Boy extends Objeto implements Person{
                 }
                 flip0 = keycode == Input.Keys.A;
             }
-            if (!beenHit && !shooting && !jetPack) {
+            if (!beenHit && !shooting && !use_jetPack) {
                 animations = Animations.BOY_WALKING;
             }
             usingOnlyLastFrame = false;
             looping = true;
         }
         if (!beenHit) {
-            if (keycode == Input.Keys.SPACE && !jetPack) {
-                if (Math.abs(getBody().getLinearVelocity().x) < 15f && !jetPack)
+            if (keycode == Input.Keys.SPACE && !use_jetPack) {
+                if (Math.abs(getBody().getLinearVelocity().x) < 15f && !use_jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
-                if (Math.abs(getBody().getLinearVelocity().x) >= 15f || jetPack)
+                if (Math.abs(getBody().getLinearVelocity().x) >= 15f || use_jetPack)
                     animations = Animations.BOY_JUMPING;
                 if (secondJump < 2) {
                     getBody().setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-                    if (!jetPack)
+                    if (!use_jetPack)
                         secondJump++;
                 }
                 JUMP.play();
@@ -366,7 +375,7 @@ public class Boy extends Objeto implements Person{
             if (!beenHit && !shooting)
                 animations = Animations.BOY_IDLE;
         }
-        if (keycode == Input.Keys.SPACE && jetPack) {
+        if (keycode == Input.Keys.SPACE && use_jetPack) {
             body.setGravityScale(0.2f);
 
         }
@@ -394,8 +403,8 @@ public class Boy extends Objeto implements Person{
         if (button == Input.Buttons.LEFT) { //shoots
             if (shooting && Magazine.showingNumbBullets){
                 if (rifle != null) {
-                    rifle.getMagazine().updateItem();
-                    if (rifle.getMagazine().getNumberOfBulletsInMagazine() > 0 && !rifle.getMagazine().isRecharging()) {
+//                    rifle.getMagazine().updateItem();
+                    if (rifle.getMagazine().getNumberBulletsInMagazine() > 0 && !rifle.getMagazine().isRecharging()) {
                         Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
                             WIDTH / 2f ): (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT/2f)), isFacingLeft, radians, true);
                         rifle.getMagazine().newBullet(bullet);
@@ -411,9 +420,9 @@ public class Boy extends Objeto implements Person{
                 looping = false;
                 animations.animator.resetStateTime();
             }
-            if (saber_taken && PowerBar.sp >= 50f) {  //hits
+            if (saber_taken && PowerBar.sp >= 20f) {  //hits
                 hit = true;
-                PowerBar.sp -= 50f;
+                PowerBar.sp -= 20f;
                 SABER.play();
                 animations = Animations.BOY_SABER;
                 setFrameCounter(0);
@@ -479,6 +488,8 @@ public class Boy extends Objeto implements Person{
             PowerBar.sp += 20;
             clink2.play();
         }
+        if (item instanceof JetPack)
+            use_jetPack = true;
         items.add(item);
         TRIGGER.play();
     }
