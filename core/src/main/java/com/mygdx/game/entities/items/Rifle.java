@@ -83,10 +83,10 @@ public class Rifle extends Objeto implements Item{
                 if (Cartridge.reloading) {
                     if (!currentCartridge.getBulletsLeft().isEmpty() &&
                         currentCartridge.getBulletsLeft().size() < Cartridge.MAX_ROUNDS) {
-                        numCartridges.getLast().getBulletsLeft().clear();
-                        numCartridges.getLast().setBulletsLeft(numCartridges.getLast().init(currentCartridge.getBulletsLeft().size()));
+                        numCartridges.getFirst().getBulletsLeft().clear();
+                        numCartridges.getFirst().setBulletsLeft(new Cartridge().init(currentCartridge.getBulletsLeft().size()));
                         currentCartridge.getBulletsLeft().clear();
-                        currentCartridge.setBulletsLeft(currentCartridge.init(Cartridge.MAX_ROUNDS));
+                        currentCartridge.setBulletsLeft(new Cartridge().init(Cartridge.MAX_ROUNDS));
                     } else {
                         if (!numCartridges.isEmpty()) {
                             if (numCartridges.getLast().getBulletsLeft().isEmpty())
