@@ -27,12 +27,11 @@ public class Rifle extends Objeto implements Item{
     private Cartridge currentCartridge;
     private Vector2 position;
     private float angle = 0f;
-    @Getter @Setter
-    private boolean reloading;
+
     @Getter @Setter
     private boolean buttonReloadingPressed;
     public static boolean showingNumbBullets = false;
-
+    private int total;
     public static String stringNumbBullets = "";
 
     public Rifle(World world, Vector2 position){
@@ -63,7 +62,7 @@ public class Rifle extends Objeto implements Item{
             rifle.draw(s);
         }
         if (showingNumbBullets) {
-            int total = 0;
+            total = 0;
             for (Cartridge c : numCartridges) {
                 if (c.equals(currentCartridge))
                     continue;
@@ -81,19 +80,28 @@ public class Rifle extends Objeto implements Item{
         timer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                if (reloading) {
-                    if (!numCartridges.isEmpty()) {
-                        if (numCartridges.getLast().getBulletsLeft().isEmpty())
-                            numCartridges.removeLast();
-                        if (currentCartridge.getBulletsLeft().isEmpty()) {
-                            currentCartridge = new Cartridge();
-                            if (numCartridges.size() > 0)
+                if (Cartridge.reloading) {
+                    if (!currentCartridge.getBulletsLeft().isEmpty() &&
+                        currentCartridge.getBulletsLeft().size() < Cartridge.MAX_ROUNDS) {
+                        numCartridges.getLast().getBulletsLeft().clear();
+                        numCartridges.getLast().setBulletsLeft(numCartridges.getLast().init(currentCartridge.getBulletsLeft().size()));
+                        currentCartridge.getBulletsLeft().clear();
+                        currentCartridge.setBulletsLeft(currentCartridge.init(Cartridge.MAX_ROUNDS));
+                    } else {
+                        if (!numCartridges.isEmpty()) {
+                            if (numCartridges.getLast().getBulletsLeft().isEmpty())
                                 numCartridges.removeLast();
-                            numCartridges.addLast(currentCartridge);
+                            if (currentCartridge.getBulletsLeft().isEmpty()) {
+                                currentCartridge = new Cartridge();
+                                if (!numCartridges.isEmpty())
+                                    numCartridges.removeLast();
+                                numCartridges.addLast(currentCartridge);
+                            }
                         }
                     }
-                } buttonReloadingPressed = false;
-                reloading = false;
+                    buttonReloadingPressed = false;
+                    Cartridge.reloading = false;
+                }
             }
         }, 1f);
     }

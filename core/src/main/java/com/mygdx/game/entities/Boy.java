@@ -97,7 +97,7 @@ public class Boy extends Objeto implements Person{
 
             //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1);
-            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, rifle.isReloading(), isFacingLeft)));
+            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, Cartridge.reloading, isFacingLeft)));
             top.setPosition(body.getPosition().x , body.getPosition().y);
             top.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
@@ -320,10 +320,10 @@ public class Boy extends Objeto implements Person{
         }
         if (keycode == Input.Keys.R){
             if (rifle != null) {
-                if (!rifle.isReloading() && !rifle.isButtonReloadingPressed()) {
-                    rifle.setReloading(true);
-                    rifle.updateItem();
+                if (!Cartridge.reloading && !rifle.isButtonReloadingPressed()) {
                     rifle.setButtonReloadingPressed(true);
+                    Cartridge.reloading = true;
+                    rifle.updateItem();
                 }
             }
         }
@@ -403,33 +403,34 @@ public class Boy extends Objeto implements Person{
 //    WIDTH : getBody().getPosition().x
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
-            if (shooting && Rifle.showingNumbBullets){
+            if (shooting && Rifle.showingNumbBullets) {
                 if (rifle != null) {
 //                    rifle.getMagazine().updateItem();
-//                    if (rifle.getMagazine().getNumberBulletsInMagazine() > 0 && !rifle.getMagazine().isReloading()) {
+                    if (!Cartridge.reloading) {
                         rifle.updateItem();
                         Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
-                            WIDTH / 2f ): (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT/2f)), isFacingLeft, radians, true);
+                            WIDTH / 2f) : (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT / 2f)), isFacingLeft, radians, true);
                         rifle.getNumCartridges().getLast().addAndRemove(bullet);
 //                    }
+                    }
                 }
-            }
-            if (!shooting && !beenHit && !saber_taken){ //punches
-                punchingAnimationTimer = 0f;
-                animations = Animations.BOY_PUNCHING;
-                JUMP.play();
-                HIYAH.play();
-                usingOnlyLastFrame = false;
-                looping = false;
-                animations.animator.resetStateTime();
-            }
-            if (saber_taken && PowerBar.sp >= 20f) {  //hits
-                hit = true;
-                PowerBar.sp -= 20f;
-                SABER.play();
-                animations = Animations.BOY_SABER;
-                setFrameCounter(0);
-                getBody().setLinearVelocity(!flip0 ? 50f : -50f, getBody().getLinearVelocity().y);
+                if (!shooting && !beenHit && !saber_taken) { //punches
+                    punchingAnimationTimer = 0f;
+                    animations = Animations.BOY_PUNCHING;
+                    JUMP.play();
+                    HIYAH.play();
+                    usingOnlyLastFrame = false;
+                    looping = false;
+                    animations.animator.resetStateTime();
+                }
+                if (saber_taken && PowerBar.sp >= 20f) {  //hits
+                    hit = true;
+                    PowerBar.sp -= 20f;
+                    SABER.play();
+                    animations = Animations.BOY_SABER;
+                    setFrameCounter(0);
+                    getBody().setLinearVelocity(!flip0 ? 50f : -50f, getBody().getLinearVelocity().y);
+                }
             }
         }
         if (button == Input.Buttons.RIGHT) {

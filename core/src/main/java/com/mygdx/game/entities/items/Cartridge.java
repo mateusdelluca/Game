@@ -13,21 +13,31 @@ public class Cartridge implements Item{
     @Getter @Setter
     private ArrayList<Bullet> bulletsLeft = new ArrayList<>(); //just to count
     private ArrayList<Bullet> bulletsToDraw = new ArrayList<>();  //just to draw the bullets
-    @Getter
-    private boolean reloading;
+
+    public static boolean reloading;
+
 //    public static String stringNumbBullets = "";
 
-    public static final int TOTAL_BULLETS_PER_CARTRIDGE = 30;
+    public static final int MAX_ROUNDS = 30;
+
 //    public static String usingRifle = "";
 //    public static boolean showingNumBullets;
+
     public Cartridge(){
-        for (int index = 1; index <= TOTAL_BULLETS_PER_CARTRIDGE; index++){
+        bulletsLeft = init(MAX_ROUNDS);
+    }
+
+    public ArrayList<Bullet> init(int max_rounds){
+        if (!bulletsLeft.isEmpty())
+            bulletsLeft.clear();
+        for (int index = 1; index <= max_rounds; index++){
             bulletsLeft.add(new Bullet());
         }
+        return bulletsLeft;
     }
 
     public void addAndRemove(Bullet bullet){    //este é o método para contar as balas do pente dentro do rifle
-        if (!reloading) {
+        if (!Cartridge.reloading) {
             if (!bulletsLeft.isEmpty()) {
                 bulletsLeft.removeLast();
                 bulletsToDraw.add(bullet);
