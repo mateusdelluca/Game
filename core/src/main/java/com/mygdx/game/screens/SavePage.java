@@ -2,8 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,8 +11,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
+import com.mygdx.game.manager.State;
 
-public class SaveScreen implements Screen, InputProcessor {
+public class SavePage extends State {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
@@ -24,7 +23,6 @@ public class SaveScreen implements Screen, InputProcessor {
     private OrthographicCamera camera = new OrthographicCamera(WIDTH, HEIGHT);
     private OrthographicCamera camera2 = new OrthographicCamera(WIDTH, HEIGHT);
     private ScreenViewport viewport = new ScreenViewport(camera);
-    private Application app;
 
     private Rectangle mouseRectangle = new Rectangle(0, 0, 3, 9);
 
@@ -32,8 +30,7 @@ public class SaveScreen implements Screen, InputProcessor {
 
     private Sprite[] sprites = new Sprite[7];
 
-    public SaveScreen(Application app){
-        this.app = app;
+    public SavePage(){
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         for (int k = 0; k < 6; k++) {
@@ -60,10 +57,6 @@ public class SaveScreen implements Screen, InputProcessor {
         }
     }
 
-    @Override
-    public void show() {
-    }
-
     public void update(){
         camera.update();
         if (camera.position.y < (5690 - 1080))
@@ -71,7 +64,7 @@ public class SaveScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
@@ -106,6 +99,11 @@ public class SaveScreen implements Screen, InputProcessor {
     }
 
     @Override
+    public void create() {
+
+    }
+
+    @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
@@ -121,11 +119,6 @@ public class SaveScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
 
     }
@@ -133,8 +126,8 @@ public class SaveScreen implements Screen, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-            app.setScreen(app.jogo.pauseScreen);
-            Gdx.input.setInputProcessor(app.jogo.pauseScreen);
+//            app.setScreen(app.jogo.pauseMenu);
+//            Gdx.input.setInputProcessor(app.jogo.pauseMenu);
         }
         return false;
     }

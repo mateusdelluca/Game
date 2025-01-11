@@ -58,6 +58,7 @@ public class Boy extends Objeto implements Person{
     private Rifle rifle;
 //    private JetPack jetPack;
     private Vector2 bodyPosition;
+    private boolean buttonReloadingPressed;
 
     public Boy(World world, Vector2 bodyPosition, Viewport viewport){
         super(world, WIDTH, HEIGHT);
@@ -96,7 +97,7 @@ public class Boy extends Objeto implements Person{
 
             //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1);
-            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, rifle.getMagazine().isRecharging(), isFacingLeft)));
+            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, Cartridge.reloading, isFacingLeft)));
             top.setPosition(body.getPosition().x , body.getPosition().y);
             top.setRotation(degrees);
             if (Math.abs(degrees) > 90f) {
@@ -124,7 +125,7 @@ public class Boy extends Objeto implements Person{
 
     public void update(){
         this.bodyPosition = body.getPosition();
-        shooting = Magazine.showingNumbBullets;
+        shooting = Rifle.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
         animations();   //gives orders of physics of body in animations
 //        if (body.getPosition().x < 32){
@@ -319,9 +320,10 @@ public class Boy extends Objeto implements Person{
         }
         if (keycode == Input.Keys.R){
             if (rifle != null) {
-                if (!rifle.getMagazine().isRecharging()) {
-                    rifle.getMagazine().setRecharging(true);
-                    rifle.getMagazine().updateItem();
+                if (!Cartridge.reloading && !rifle.isButtonReloadingPressed()) {
+                    rifle.setButtonReloadingPressed(true);
+                    Cartridge.reloading = true;
+                    rifle.updateItem();
                 }
             }
         }
@@ -401,17 +403,18 @@ public class Boy extends Objeto implements Person{
 //    WIDTH : getBody().getPosition().x
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
-            if (shooting && Magazine.showingNumbBullets){
+            if (shooting && Rifle.showingNumbBullets) {
                 if (rifle != null) {
 //                    rifle.getMagazine().updateItem();
-                    if (rifle.getMagazine().getNumberBulletsInMagazine() > 0 && !rifle.getMagazine().isRecharging()) {
-                        Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
-                            WIDTH / 2f ): (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT/2f)), isFacingLeft, radians, true);
-                        rifle.getMagazine().newBullet(bullet);
+                if (!Cartridge.reloading) {
+                    rifle.updateItem();
+                    Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
+                        WIDTH / 2f) : (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT / 2f)), isFacingLeft, radians, true);
+                    rifle.getNumCartridges().getLast().addAndRemove(bullet);
                     }
                 }
             }
-            if (!shooting && !beenHit && !saber_taken){ //punches
+            if (!shooting && !beenHit && !saber_taken) { //punches
                 punchingAnimationTimer = 0f;
                 animations = Animations.BOY_PUNCHING;
                 JUMP.play();
@@ -433,7 +436,7 @@ public class Boy extends Objeto implements Person{
             counterWeaponTaken++;
             switch(counterWeaponTaken){
                 case 1:{
-                    Magazine.showingNumbBullets = false;
+                    Rifle.showingNumbBullets = false;
                     shooting = false;
                     saber_taken = true;
                     animations = Animations.BOY_SABER;
@@ -442,12 +445,12 @@ public class Boy extends Objeto implements Person{
                 default:{
                     saber_taken = false;
                     if (rifle != null && counterWeaponTaken == 2) {
-                        Magazine.showingNumbBullets = true;
+                        Rifle.showingNumbBullets = true;
                         shooting = true;
 //                        counterWeaponTaken = 0;
                         animations = Animations.BOY_SHOOTING_AND_WALKING;
                     } else {
-                        Magazine.showingNumbBullets = false;
+                        Rifle.showingNumbBullets = false;
                         shooting = false;
 //                        saber_taken = false;
                         animations = Animations.BOY_IDLE;
@@ -479,9 +482,11 @@ public class Boy extends Objeto implements Person{
     }
 
     public void equip_Item(Item item){
+        if (item instanceof Portal)
+            return;
         if (item instanceof Rifle) {
             rifle = (Rifle) item;
-            Magazine.showingNumbBullets = true;
+            Rifle.showingNumbBullets = true;
         }
         if (item instanceof Crystal) {
             item = (Crystal) item;

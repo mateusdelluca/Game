@@ -2,8 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +11,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
-public class LoadScreen implements Screen, InputProcessor {
+import com.mygdx.game.manager.State;
+
+public class LoadPage extends State {
 
     public static final float WIDTH = 1920, HEIGHT = 1080;
     public static final float WIDTH2 = 1920, HEIGHT2 = 5690;
@@ -22,7 +22,6 @@ public class LoadScreen implements Screen, InputProcessor {
     private OrthographicCamera camera = new OrthographicCamera(WIDTH, HEIGHT);
     private OrthographicCamera camera2 = new OrthographicCamera(WIDTH, HEIGHT);
     private ScreenViewport viewport = new ScreenViewport(camera);
-    private Application app;
 
     private Rectangle mouseRectangle = new Rectangle(0, 0, 3, 9);
 
@@ -30,8 +29,7 @@ public class LoadScreen implements Screen, InputProcessor {
 
     private Sprite[] sprites = new Sprite[7];
 
-    public LoadScreen(Application app){
-        this.app = app;
+    public LoadPage(){
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
@@ -47,11 +45,6 @@ public class LoadScreen implements Screen, InputProcessor {
 
     }
 
-    @Override
-    public void show() {
-
-    }
-
     public void update(){
         camera.update();
         if (camera.position.y < (5690 - 1080))
@@ -59,7 +52,7 @@ public class LoadScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
@@ -111,9 +104,15 @@ public class LoadScreen implements Screen, InputProcessor {
     }
 
     @Override
+    public void create() {
+
+    }
+
+    @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
+
 
     @Override
     public void pause() {
@@ -126,28 +125,23 @@ public class LoadScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
 
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE){
-            if (Jogo.currentScreen.equals(SplashScreen.class.toString())) {
-                app.setScreen(app.jogo.splashScreen);
-                Gdx.input.setInputProcessor(app.jogo.splashScreen);
-            } else{
-                if (Jogo.currentScreen.equals(PauseScreen.class.toString())) {
-                    app.setScreen(app.jogo.pauseScreen);
-                    Gdx.input.setInputProcessor(app.jogo.pauseScreen);
-                }
-            }
-        }
+//        if (keycode == Input.Keys.ESCAPE){
+//            if (Jogo.currentScreen.equals(MainPage.class.toString())) {
+//                app.setScreen(app.jogo.mainMenu);
+//                Gdx.input.setInputProcessor(app.jogo.mainMenu);
+//            } else{
+//                if (Jogo.currentScreen.equals(PausePage.class.toString())) {
+//                    app.setScreen(app.jogo.pauseMenu);
+//                    Gdx.input.setInputProcessor(app.jogo.pauseMenu);
+//                }
+//            }
+//        }
         return false;
     }
 

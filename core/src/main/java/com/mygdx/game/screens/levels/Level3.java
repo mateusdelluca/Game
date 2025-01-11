@@ -20,13 +20,12 @@ import com.mygdx.game.screens.Tile;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Level3 extends Level implements ContactListener {
+public class Level3 extends Level{
 
     private HashMap<String, Item> items = new HashMap<>();
 
-    public Level3(Application app) {
+    public Level3() {
         super();
-        super.app = app;
 
         tile = new Tile("Level3/Level3.tmx");
         staticObjects = tile.loadMapObjects("Rects");
@@ -46,7 +45,6 @@ public class Level3 extends Level implements ContactListener {
 
         fans.clear();
 
-//        fans.add(new Fan(world, new Vector2(1200, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200 + 76, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200 + 2*76, 6000 - 2400)));
         fans.add(new Fan(world, new Vector2(1200, 6000 - 1640)));
@@ -89,7 +87,7 @@ public class Level3 extends Level implements ContactListener {
         }
 
         items.put(JetPack.class.getSimpleName(), new JetPack(world, new Vector2(400, 6000 - 2400)));
-        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2300,6000 - 5500)));
+        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2450,6000 - 5600)));
         items.get("Portal").updateItem();
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
@@ -180,9 +178,9 @@ public class Level3 extends Level implements ContactListener {
                 (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy"))) {
                 boy.equip_Item(item);
 
-                if (body1.getUserData().equals(item.toString()))
+                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString()))
                     body1.setUserData("null");
-                else if (body2.getUserData().equals(item.toString()))
+                else if (!item.toString().equals("Portal") && body2.getUserData().equals(item.toString()))
                     body2.setUserData("null");
             }
         }
@@ -298,4 +296,8 @@ public class Level3 extends Level implements ContactListener {
             bodiesToDestroy.clear();
         }
 
+    @Override
+    public void create() {
+
+    }
 }

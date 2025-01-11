@@ -2,8 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,10 +12,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
+import com.mygdx.game.manager.State;
 import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
-public class PauseScreen implements Screen, InputProcessor {
+public class PausePage extends State {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
@@ -47,10 +46,7 @@ public class PauseScreen implements Screen, InputProcessor {
     private Camera camera = new OrthographicCamera(WIDTH, HEIGHT);
     private Viewport viewport;
 
-    private Application app;
-
-    public PauseScreen(Application app){
-        this.app = app;
+    public PausePage(){
         for(int index = EXIT; index <= RETURN; ++index) {
             this.x[index] = 850;
             this.y[index] = 370 + 100 * index;
@@ -71,13 +67,8 @@ public class PauseScreen implements Screen, InputProcessor {
         viewport = new ScreenViewport(camera);
     }
 
-    @Override
-    public void show() {
-
-    }
-
     public void update(){
-        Jogo.currentScreen = getClass().toString();
+//        Jogo.currentScreen = getClass().toString();
 
         camera.update();
 
@@ -98,15 +89,15 @@ public class PauseScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
         update();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        app.jogo.levelManager.currentLevel.background.render(Level_Manager.currentLevelName);
-        app.jogo.levelManager.currentLevel.renderObjects();
+//        app.jogo.levelManager.currentLevel.background.render(Level_Manager.currentLevelName);
+//        app.jogo.levelManager.currentLevel.renderObjects();
         spriteBatch.begin();
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
@@ -125,9 +116,15 @@ public class PauseScreen implements Screen, InputProcessor {
     }
 
     @Override
+    public void create() {
+
+    }
+
+    @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
+
 
     @Override
     public void pause() {
@@ -140,26 +137,21 @@ public class PauseScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         Images.pauseBox.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE){
-            app.setScreen(app.jogo.levelManager.currentLevel);
-            Sounds.PAUSE_SCREEN.pause();
-            if (!Sounds.LEVEL1.isPlaying()) {
-//                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
-                Sounds.LEVEL1.play();
-            }
-            Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
-        }
+//        if (keycode == Input.Keys.ESCAPE){
+//            app.setScreen(app.jogo.levelManager.currentLevel);
+//            Sounds.PAUSE_SCREEN.pause();
+//            if (!Sounds.LEVEL1.isPlaying()) {
+////                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
+//                Sounds.LEVEL1.play();
+//            }
+//            Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
+//        }
         return false;
     }
 
@@ -177,28 +169,28 @@ public class PauseScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
-                app.setScreen(app.jogo.levelManager.currentLevel);
-//                Sounds.PAUSE_SCREEN.pause();
-                if (!Sounds.LEVEL1.isPlaying()) {
-//                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
-                    Sounds.LEVEL1.play();
-                }
-                Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
+//                app.setScreen(app.jogo.levelManager.currentLevel);
+////                Sounds.PAUSE_SCREEN.pause();
+//                if (!Sounds.LEVEL1.isPlaying()) {
+////                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
+//                    Sounds.LEVEL1.play();
+//                }
+//                Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
                 break;
             }
             case SAVEGAME:{
-                app.setScreen(app.jogo.saveScreen);
-                Gdx.input.setInputProcessor(app.jogo.saveScreen);
+//                app.setScreen(app.jogo.saveMenu);
+//                Gdx.input.setInputProcessor(app.jogo.saveMenu);
                 break;
             }
             case LOADGAME:{
-                app.setScreen(app.jogo.loadScreen);
-                Gdx.input.setInputProcessor(app.jogo.loadScreen);
+//                app.setScreen(app.jogo.loadScreen);
+//                Gdx.input.setInputProcessor(app.jogo.loadScreen);
                 break;
             }
             case EXIT: {
-                app.setScreen(app.jogo.splashScreen);
-                Gdx.input.setInputProcessor(app.jogo.splashScreen);
+//                app.setScreen(app.jogo.mainMenu);
+//                Gdx.input.setInputProcessor(app.jogo.mainMenu);
 //                Sounds.PAUSE_SCREEN.stop();
                 break;
             }

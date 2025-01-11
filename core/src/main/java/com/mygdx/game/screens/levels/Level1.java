@@ -1,11 +1,6 @@
 package com.mygdx.game.screens.levels;
 
 import com.mygdx.game.Application;
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.entities.Monster1;
-import com.mygdx.game.screens.Jogo;
-
-import java.util.HashMap;
 
 public class Level1 extends Level{
 
@@ -13,9 +8,14 @@ public class Level1 extends Level{
 //        super("Level1/Level1.tmx", app);
 //    }
 
-    public Level1(Application app){
+    public Level1(){
 //        super("Level1/Level1.tmx", app);
 //        Monster1.id = 0;
+    }
+
+    @Override
+    public void create() {
+
     }
 
 //    @Override

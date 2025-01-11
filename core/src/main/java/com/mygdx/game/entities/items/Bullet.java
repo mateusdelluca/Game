@@ -17,6 +17,9 @@ public class Bullet extends Objeto implements Item {
     private float degrees, radians;
     private float timer;
 
+    public Bullet(){
+    }
+
     public Bullet(World world, Vector2 position, boolean isFacingLeft){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH, HEIGHT));

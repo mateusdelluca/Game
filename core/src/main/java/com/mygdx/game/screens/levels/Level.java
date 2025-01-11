@@ -10,7 +10,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,10 +21,9 @@ import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.entities.items.Leaf;
 import com.mygdx.game.entities.Portal;
 import com.mygdx.game.images.Animations;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.fans.Fan;
 import com.mygdx.game.fans.Fans;
+import com.mygdx.game.manager.State;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -33,12 +31,10 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
-public abstract class Level implements Screen, InputProcessor, ContactListener{
+public abstract class Level extends State implements ContactListener{
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
-    protected Application app;
 
     public SpriteBatch spriteBatch = new SpriteBatch();
     public Viewport viewport;
@@ -175,13 +171,13 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 //
 //    }
 
-    @Override
+
     public void show() {
 
     }
 
     @Override
-    public void render(float delta) {
+    public void render() {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 //        for (int i = 0; i < 5; i++)
@@ -415,8 +411,8 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     @Override
     public void pause() {
-        Gdx.input.setInputProcessor(app.jogo.pauseScreen);
-        app.setScreen(app.jogo.pauseScreen);
+//        Gdx.input.setInputProcessor(app.jogo.pauseMenu);
+//        app.setScreen(app.jogo.pauseMenu);
 //        level_musicPosition = songLevel1.getPosition();
         if (Sounds.LEVEL1.isPlaying())
             Sounds.LEVEL1.pause();
@@ -424,11 +420,6 @@ public abstract class Level implements Screen, InputProcessor, ContactListener{
 
     @Override
     public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
 
     }
 

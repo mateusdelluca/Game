@@ -5,10 +5,7 @@
 
 package com.mygdx.game.screens;
 
-import com.mygdx.game.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -23,18 +20,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.screens.levels.Level_Manager;
+import com.mygdx.game.manager.State;
+import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 
-public class SplashScreen implements Screen, InputProcessor {
+public class MainPage extends State {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
     public static final int NEWGAME = 2;
     public static final int LOADGAME = 1;
     public static final int EXIT = 0;
-
-    public Application app;
 
     public static final int NUM_OPTIONS = 3;
 
@@ -50,14 +46,13 @@ public class SplashScreen implements Screen, InputProcessor {
     private int optionChoosed = -1;
 
     private BitmapFont font;
-    private SpriteBatch spriteBatch = new SpriteBatch();
+    private SpriteBatch spriteBatch;
 
-    private Camera camera = new OrthographicCamera(WIDTH, HEIGHT);
-    private Viewport viewport = new ScreenViewport(camera);
+    private Camera camera;
+    private Viewport viewport;
     private Sound shot;
 
-    public SplashScreen(Application app){
-        this.app = app;
+    public MainPage(){
         for(int index = EXIT; index <= NEWGAME; ++index) {
             this.x[index] = (1920/2) - 200;
             this.y[index] = 120 + 55 * index;
@@ -73,16 +68,24 @@ public class SplashScreen implements Screen, InputProcessor {
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.5f);
 
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         if (!Sounds.PAUSE_SCREEN.isPlaying()) {
             Sounds.PAUSE_SCREEN.play();
             Sounds.PAUSE_SCREEN.setLooping(true);
         }
+        spriteBatch = new SpriteBatch();
+        viewport = new ScreenViewport(camera);
+    }
+
+    @Override
+    public void create() {
+
     }
 
     public void update() {
-        Jogo.currentScreen = getClass().toString();
+//        Jogo.currentScreen = getClass().toString();
 
         camera.update();
         if (!Sounds.PAUSE_SCREEN.isPlaying())
@@ -103,13 +106,10 @@ public class SplashScreen implements Screen, InputProcessor {
         }
     }
 
-    @Override
-    public void show() {
 
-    }
 
     @Override
-    public void render(float delta) {
+    public void render() {
         update();
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
@@ -134,6 +134,8 @@ public class SplashScreen implements Screen, InputProcessor {
         spriteBatch.end();
     }
 
+
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -146,11 +148,6 @@ public class SplashScreen implements Screen, InputProcessor {
 
     @Override
     public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
 
     }
 
@@ -178,18 +175,18 @@ public class SplashScreen implements Screen, InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case NEWGAME: {
-                app.jogo.levelManager = new Level_Manager(app);
                 Sounds.PAUSE_SCREEN.stop();
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
+                StateManager.currentState = States.
                 Gdx.input.setInputProcessor(app.jogo.levelManager);
                 app.jogo.levelManager.changeLevel("Level3", app);
                 break;
             }
             case LOADGAME:{
-                app.setScreen(app.jogo.loadScreen);
-                Gdx.input.setInputProcessor(app.jogo.loadScreen);
+//                app.setScreen(app.jogo.loadScreen);
+//                Gdx.input.setInputProcessor(app.jogo.loadScreen);
                 break;
             }
             case EXIT: {
@@ -235,5 +232,4 @@ public class SplashScreen implements Screen, InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         return false;
     }
-
 }

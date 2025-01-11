@@ -8,11 +8,11 @@ import com.mygdx.game.entities.Monster1;
 
 import java.util.HashMap;
 
-public class Level2 extends Level implements ContactListener {
+public class Level2 extends Level {
 
     private Boy boy;
 
-    public Level2(Application app){
+    public Level2(){
 //        super("Level2/Level2.tmx", app);
 
         spriteBatch = new SpriteBatch();
@@ -77,6 +77,11 @@ public class Level2 extends Level implements ContactListener {
                 return;
             boyBeenHit();
         }
+    }
+
+    @Override
+    public void create() {
+
     }
 
 //    @Override
