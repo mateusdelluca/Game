@@ -113,13 +113,14 @@ public class StateManager extends Game {
     };
 
     public static States currentState;
-//    public static States oldState;
+    public static String oldState;
 
     public StateManager(){
     }
 
     public static void setState(States newState) {
-//        oldState = currentState;
+        if (currentState != null && newState != null)
+            oldState = currentState.name();
         currentState = newState;
         Gdx.input.setInputProcessor(currentState);
     }

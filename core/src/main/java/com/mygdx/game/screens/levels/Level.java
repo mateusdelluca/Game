@@ -220,8 +220,8 @@ public class Level extends State implements ContactListener{
     }
 
     public void update(){
-        for (int i = 0; i < 5; i++) {
-            world.step(6, 7, 7);
+        for (int i = 0; i < 4; i++) {
+            world.step(7, 7, 7);
             camera.update();
 //            world.step(60, 7, 7);
 //            camera.update();
@@ -432,7 +432,7 @@ public class Level extends State implements ContactListener{
     public boolean keyDown(int keycode) {
         boy.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
-            StateManager.setState(StateManager.States.LOAD);
+            StateManager.setState(StateManager.States.PAUSE);
         }
         return false;
     }
@@ -472,7 +472,6 @@ public class Level extends State implements ContactListener{
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         boy.mouseMoved(screenX, screenY);
-        System.out.println(screenX);
         return false;
     }
 

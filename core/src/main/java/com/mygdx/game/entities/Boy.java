@@ -25,7 +25,7 @@ import static com.mygdx.game.sfx.Sounds.*;
 public class Boy extends Objeto implements Person{
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
-    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 7000000f;
+    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     private boolean isFacingLeft;
@@ -273,7 +273,7 @@ public class Boy extends Objeto implements Person{
     }
 
     private boolean onGround(){
-        return Math.abs(body.getLinearVelocity().y) <= 0.01f;
+        return Math.abs(body.getLinearVelocity().y) <= 0.1f;
     }
 
     private boolean isMoving(){
@@ -345,11 +345,11 @@ public class Boy extends Objeto implements Person{
                     animations = Animations.BOY_JUMPING_FRONT;
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f || use_jetPack)
                     animations = Animations.BOY_JUMPING;
-                if (secondJump < 2) {
-                    getBody().setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
+//                if (secondJump < 2) {
+                body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
                     if (!use_jetPack)
                         secondJump++;
-                }
+//                }
                 JUMP.play();
             }
         }

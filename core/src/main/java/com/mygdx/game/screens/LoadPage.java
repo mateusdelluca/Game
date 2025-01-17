@@ -16,6 +16,7 @@ import com.mygdx.game.manager.StateManager;
 
 import static com.badlogic.gdx.Gdx.app;
 import static com.mygdx.game.manager.StateManager.currentState;
+import static com.mygdx.game.manager.StateManager.oldState;
 //import static com.mygdx.game.manager.StateManager.oldState;
 
 public class LoadPage extends State {
@@ -137,14 +138,13 @@ public class LoadPage extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-//            if (oldState.name().equals("MAIN_MENU")) {
-//                StateManager.setState(StateManager.States.MAIN_MENU);
-//            } else{
-//                if (oldState.name().equals("LEVEL")) {
-//                    StateManager.setState(StateManager.States.LEVEL);
-//                }
-//            }
-            StateManager.setState(StateManager.States.MAIN_MENU);
+            if (oldState.equals("MAIN_MENU")) {
+                StateManager.setState(StateManager.States.MAIN_MENU);
+            } else{
+                if (oldState.equals("PAUSE")) {
+                    StateManager.setState(StateManager.States.PAUSE);
+                }
+            }
         }
         return false;
     }
