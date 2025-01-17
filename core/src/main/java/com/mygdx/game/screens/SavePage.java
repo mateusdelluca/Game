@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
+import com.mygdx.game.manager.StateManager;
+
+import static com.mygdx.game.manager.StateManager.oldState;
 
 public class SavePage extends State {
 
@@ -126,8 +129,13 @@ public class SavePage extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-//            app.setScreen(app.jogo.pauseMenu);
-//            Gdx.input.setInputProcessor(app.jogo.pauseMenu);
+            if (oldState.equals("MAIN_MENU")) {
+                StateManager.setState(StateManager.States.MAIN_MENU);
+            } else{
+                if (oldState.equals("PAUSE")) {
+                    StateManager.setState(StateManager.States.PAUSE);
+                }
+            }
         }
         return false;
     }
