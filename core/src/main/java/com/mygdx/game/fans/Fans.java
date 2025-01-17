@@ -9,4 +9,6 @@ public interface Fans {
 
     public abstract void bodyCloseToFan2(Body b, float width);
 
+    public abstract void update();
+
 }

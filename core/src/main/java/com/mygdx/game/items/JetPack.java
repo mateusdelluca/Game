@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +15,8 @@ public class JetPack extends Objeto implements Item{
 
     private float angle = 0;
 
+    private Sprite sprite = Images.jetPack;
+
     public JetPack(World world, Vector2 position){
         super(world, WIDTH, HEIGHT);
         body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
@@ -25,9 +27,9 @@ public class JetPack extends Objeto implements Item{
     @Override
     public void render(SpriteBatch s) {
         if (!body.getUserData().toString().equals("null")) {
-            Images.jetPack.draw(s);
-            Images.jetPack.setPosition(body.getPosition().x, body.getPosition().y);
-            Images.jetPack.setRotation(angle++);
+            sprite.setOriginCenter();
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.setRotation(angle++);
         } else{
             body.setTransform(-1000, - 1000, 0);
         }
@@ -35,6 +37,11 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void updateItem() {
+
+    }
+
+    @Override
+    public void update() {
 
     }
 

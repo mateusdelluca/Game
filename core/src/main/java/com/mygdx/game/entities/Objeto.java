@@ -7,12 +7,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.entities.items.Item;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Random;
 
 public abstract class Objeto{
 
@@ -34,6 +31,7 @@ public abstract class Objeto{
     private boolean beenHit;
     @Getter @Setter
     private float  deltaTime;
+
     public Objeto(World world, float width, float height){
         this.width = width;
         this.height = height;
@@ -104,7 +102,7 @@ public abstract class Objeto{
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
         bodyDef.active = true;
-//        bodyDef.position.set(0,0);
+        bodyDef.position.set(0,0);
         bodyDef.fixedRotation = true;
         polygonShape = new PolygonShape();
 //         Adicione formas (fixtures) ao corpo para representar sua geometria
@@ -112,7 +110,7 @@ public abstract class Objeto{
         fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 10f;
-        fixtureDef.restitution = 0.1f;
+//        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);
@@ -137,15 +135,14 @@ public abstract class Objeto{
 
     public abstract String toString();
 
-    public void beenHit(Sprite sprite, SpriteBatch spriteBatch){
-//        spriteBatch.begin();
+    public void beenHit(Sprite sprite){
         if (beenHit) {
             deltaTime += Gdx.graphics.getDeltaTime();
             if (deltaTime > 0.3f) {
-                alpha = new Random().nextFloat(1f);
+//                alpha = new Random().nextFloat(1f);
                 deltaTime = 0f;
                 Sounds.HURT.play();
-                sprite.setAlpha(alpha);
+//                sprite.setAlpha(alpha);
             }
         }
     }

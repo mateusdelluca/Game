@@ -6,6 +6,7 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 
 import static com.mygdx.game.manager.StateManager.currentState;
+import static com.mygdx.game.manager.StateManager.setState;
 
 public class Application extends Game {
 
@@ -21,7 +22,7 @@ public class Application extends Game {
         images = new Images();
         sounds = new Sounds();
         stateManager = new StateManager();
-        currentState = StateManager.States.MAIN_MENU;
+        setState(StateManager.States.MAIN_MENU);
     }
 
     @Override

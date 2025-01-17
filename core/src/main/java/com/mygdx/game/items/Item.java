@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lombok.Getter;
@@ -10,4 +10,5 @@ public interface Item {
 
     void updateItem();
 
+    void update();
 }

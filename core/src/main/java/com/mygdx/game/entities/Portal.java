@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entities.items.Item;
+import com.mygdx.game.items.Item;
 import com.mygdx.game.images.Images;
 
 public class Portal extends Objeto implements Item{
@@ -30,6 +30,11 @@ public class Portal extends Objeto implements Item{
     @Override
     public void updateItem() {
         open_portal = true;
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override

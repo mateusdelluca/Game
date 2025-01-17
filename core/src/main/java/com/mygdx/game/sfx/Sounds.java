@@ -34,7 +34,7 @@ public class Sounds implements Serializable{
     public static final Sound HURT = Gdx.audio.newSound(Gdx.files.internal(("sounds/hurt.mp3")));
     public static final Sound MONSTER_HURT = Gdx.audio.newSound(Gdx.files.internal(("sounds/monster_hurt.mp3")));
 
-    public static final Music PAUSE_SCREEN = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses2.mp3"));
+    public static final Music PAUSE_SONG = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses2.mp3"));
 
     public static Music LEVEL1 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunrise2.mp3"));
 

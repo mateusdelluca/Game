@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import ktx.box2d.RayCast;
 import lombok.Getter;
@@ -35,7 +36,6 @@ public class Monster1 extends Objeto{
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBoxBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-//        System.out.println(id);
 
     }
     @Override
@@ -56,13 +56,14 @@ public class Monster1 extends Objeto{
         body.setUserData(getClass().getSimpleName() + id);
         body.setActive(true);
         body.createFixture(fixtureDef);
-//        System.out.println(body.getUserData());
+        System.out.println(body.getUserData());
         return body;
     }
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
+//            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(StateManager.oldState == StateManager.States.LEVEL, looping, facingRight));
+            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false, looping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(spriteBatch);
         }

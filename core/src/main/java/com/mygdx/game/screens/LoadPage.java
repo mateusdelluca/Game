@@ -12,6 +12,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
+import com.mygdx.game.manager.StateManager;
+
+import static com.badlogic.gdx.Gdx.app;
+import static com.mygdx.game.manager.StateManager.currentState;
+//import static com.mygdx.game.manager.StateManager.oldState;
 
 public class LoadPage extends State {
 
@@ -131,17 +136,16 @@ public class LoadPage extends State {
 
     @Override
     public boolean keyDown(int keycode) {
-//        if (keycode == Input.Keys.ESCAPE){
-//            if (Jogo.currentScreen.equals(MainPage.class.toString())) {
-//                app.setScreen(app.jogo.mainMenu);
-//                Gdx.input.setInputProcessor(app.jogo.mainMenu);
+        if (keycode == Input.Keys.ESCAPE){
+//            if (oldState.name().equals("MAIN_MENU")) {
+//                StateManager.setState(StateManager.States.MAIN_MENU);
 //            } else{
-//                if (Jogo.currentScreen.equals(PausePage.class.toString())) {
-//                    app.setScreen(app.jogo.pauseMenu);
-//                    Gdx.input.setInputProcessor(app.jogo.pauseMenu);
+//                if (oldState.name().equals("LEVEL")) {
+//                    StateManager.setState(StateManager.States.LEVEL);
 //                }
 //            }
-//        }
+            StateManager.setState(StateManager.States.MAIN_MENU);
+        }
         return false;
     }
 

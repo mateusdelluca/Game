@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.entities.items.Bullet;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import lombok.Setter;
 
 import java.util.Random;
 
-import static com.mygdx.game.screens.levels.Level.bullets;
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
 public class Jack extends Objeto{
@@ -40,9 +38,9 @@ public class Jack extends Objeto{
     private void update(){
         deltaTime += Gdx.graphics.getDeltaTime();
         if (deltaTime > 4f){
-            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-                WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-                getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI));
+//            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
+//                WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
+//                getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI)); //TODO fazer renderizar bullets
             deltaTime = 0f;
             SHOTGUN.play();
         }

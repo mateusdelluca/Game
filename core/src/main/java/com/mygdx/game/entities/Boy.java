@@ -10,10 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.entities.items.*;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
+import com.mygdx.game.items.*;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +25,7 @@ import static com.mygdx.game.sfx.Sounds.*;
 public class Boy extends Objeto implements Person{
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
-    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
+    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 7000000f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     private boolean isFacingLeft;
@@ -37,7 +37,8 @@ public class Boy extends Objeto implements Person{
     @Setter @Getter
     private boolean beenHit;
     private boolean shooting;
-    private float imgX, imgY, degrees, radians, dx, dy;
+    private float imgX, imgY, degrees, radians;
+    private float dx, dy;
     private int secondJump;
     private float saberTime;
     private boolean saber_taken, hit;
@@ -59,13 +60,15 @@ public class Boy extends Objeto implements Person{
 //    private JetPack jetPack;
     private Vector2 bodyPosition;
     private boolean buttonReloadingPressed;
-
+    private Sprite top;
+    private Sprite aim = new Sprite(Images.shoot);
+    private Sprite legs;
     public Boy(World world, Vector2 bodyPosition, Viewport viewport){
         super(world, WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
         body = createBoxBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(bodyPosition, 0);
-        body.setUserData(this.toString());
+        body.setUserData(getClass().getSimpleName());
         this.viewport = viewport;
         jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
@@ -73,7 +76,7 @@ public class Boy extends Objeto implements Person{
 
     @Override
     public void render(SpriteBatch s){
-        update();
+        viewport.update(1920, 1080);
         if (use_jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
@@ -83,76 +86,61 @@ public class Boy extends Objeto implements Person{
             Sprite flickering = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             flickering.setPosition(body.getPosition().x, body.getPosition().y);
             flickering.draw(s);
-        }
-        if ((!shooting && !beenHit) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
-            Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
-            anim.setPosition(body.getPosition().x, body.getPosition().y);
-            anim.draw(s);
-        }
-        if (shooting && !beenHit) {    //when actives the gun and shooting and he is not moving and he has not been hit
-            Sprite legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-            if (isMoving() && !use_jetPack) //when he is moving and didn't active the jetpack
-                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
-            legs.setPosition(body.getPosition().x, body.getPosition().y);
+        } else{
+            if ((!shooting) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
+                Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
+                anim.setPosition(body.getPosition().x, body.getPosition().y);
+                anim.draw(s);
+         } else{
+                if (shooting) {    //when actives the gun and shooting and he is not moving and he has not been hit
+                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
+                    if (isMoving()) //when he is moving and didn't active the jetpack
+                        legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
+                    legs.setPosition(body.getPosition().x, body.getPosition().y);
 
-            //BOY SPRITE TOP
-//            Sprite top = new Sprite(Images.shooting1);
-            Sprite top = new Sprite((Animations.BOY_RECHARGING.animator.currentSpriteFrame(false, Cartridge.reloading, isFacingLeft)));
-            top.setPosition(body.getPosition().x , body.getPosition().y);
-            top.setRotation(degrees);
-            if (Math.abs(degrees) > 90f) {
-                top.setRotation(-Math.abs(180f - degrees));
-                top.flip(true, false);
-                legs.flip(true, false);
-                jetPackSprite.flip(true, false);
+                    //BOY SPRITE TOP
+//            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
+                    top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!Cartridge.reloading, Cartridge.reloading, isFacingLeft));
+                    top.setRotation(degrees);
+                    top.setPosition(body.getPosition().x, body.getPosition().y);
+                    if (Math.abs(degrees) > 90f) {
+                        top.setRotation(-Math.abs(180f - degrees));
+                        top.flip(true, false);
+                        legs.flip(true, false);
+                        jetPackSprite.flip(true, false);
+                    }
+                    else{
+                        top.flip(false, false);
+                        legs.flip(false, false);
+                        jetPackSprite.flip(false, false);
+                    }
+//                    top.setOriginCenter();
+                    legs.draw(s);
+//                    s.draw(top, body.getPosition().x, body.getPosition().y);
+//                    top.rotate(degrees);
+                    top.draw(s);
+//                    aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
+                    s.draw(aim, worldX - 13, worldY - 13);
+                }
             }
-            else{
-                top.flip(false, false);
-                legs.flip(false, false);
-                jetPackSprite.flip(false, false);
-            }
-
-            top.draw(s);
-            legs.draw(s);
-
-            Sprite aim = new Sprite(Images.shoot);
-            aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
-            aim.draw(s);
-
         }
-
+        for (Item item : items)
+            item.render(s);
     }
 
     public void update(){
         this.bodyPosition = body.getPosition();
-        shooting = Rifle.showingNumbBullets;
+//        shooting = Rifle.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
         animations();   //gives orders of physics of body in animations
-//        if (body.getPosition().x < 32){
-//            body.setTransform(32, body.getPosition().y, 0);
-//        }
-//        if (body.getPosition().y <= 400 && !Sounds.LEVEL1.isPlaying()) {
-//            Sounds.LEVEL1.play();
-//        }
         actionRect = actionRect();
-//        if (body.getPosition().y > 1000){
-//            body.setTransform(body.getPosition().x, 1000, 0);
-//        }
-        if (flickering_time >= 1.0f) {  //the timer of 1second to normalize after has been hit
+        if (flickering_time >= 1.0f && beenHit) {  //the timer of 1second to normalize after has been hit
             animations = Animations.BOY_IDLE;
             flickering_time = 0f;
             beenHit = false;
         }
 
-        aim();  //the commands and precision of pointing and shoot
-//        if (body.getPosition().y < 200 && jetPack){
-//            body.setTransform(body.getPosition().x, 200, 0);
-//        }
-//        if (body.getPosition().y < -200){
-//            body.setTransform(position,0f);
-//            animations = Animations.BOY_STRICKEN;
-//            setStricken(true);
-//        }
+       aim();  //the commands and precision of pointing and shoot
         if (Math.abs(getBody().getLinearVelocity().y) < 0.05f && !animations.name().equals("BOY_JUMPING")){
             secondJump = 0;
         }
@@ -190,15 +178,15 @@ public class Boy extends Objeto implements Person{
     }
 
     private void aim(){
-        if (shooting) {
+//        if (shooting) {
 //            imgX = Gdx.graphics.getWidth() / 2f;
 //            imgY = Gdx.graphics.getHeight() / 2f;
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-//          System.out.println(degrees);
+          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
-        }
+//        }
     }
 
     public Rectangle actionRect(){
@@ -208,7 +196,7 @@ public class Boy extends Objeto implements Person{
                         getBody().getPosition().y + HEIGHT / 2f - 25, 45, 45);
         } else{
             if (animations.name().equals("BOY_SABER")) {
-                if (frameCounter() <= 2)
+                if (frameCounter() > 0)
                     return new Rectangle(!flip0 ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
                             getBody().getPosition().y + HEIGHT / 2f - 25, 70, 45);
             }
@@ -218,11 +206,6 @@ public class Boy extends Objeto implements Person{
 
     private void animations() {
         String name = animations.name();
-//        if (name.equals("BOY_JUMPING")) {
-//            if (body.getLinearVelocity().y < -29f) {
-//                animations = Animations.BOY_IDLE;
-//            }
-//        } else{
         if (name.equals("BOY_STRICKEN") || beenHit){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);
@@ -255,7 +238,7 @@ public class Boy extends Objeto implements Person{
                             hit = false;
                             saberTime = 0f;
                             animations = Animations.BOY_IDLE;
-                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
+//                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
                         }
                     }
                 } else {
@@ -266,8 +249,8 @@ public class Boy extends Objeto implements Person{
                             punchingAnimationTimer = 0f;
                         }
                     } else {
-                        if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_JETPACK")) {
-
+                        if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
+                        || animations == Animations.BOY_RELOADING) {
                         } else {
                             if (onGround() && !use_jetPack) {
                                 if (isMoving())
@@ -294,7 +277,7 @@ public class Boy extends Objeto implements Person{
     }
 
     private boolean isMoving(){
-        return Math.abs(body.getLinearVelocity().x) > 0.2f;
+        return body.getLinearVelocity().x != 0f;
     }
 
     public void resize(SpriteBatch spriteBatch, int width, int height){
@@ -318,6 +301,7 @@ public class Boy extends Objeto implements Person{
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
             body.setGravityScale(0f);
         }
+
         if (keycode == Input.Keys.R){
             if (rifle != null) {
                 if (!Cartridge.reloading && !rifle.isButtonReloadingPressed()) {
@@ -344,8 +328,8 @@ public class Boy extends Objeto implements Person{
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
             if (!shooting) {
                 if (!isFacingLeft) {
-                    degrees = 0f;
-                    radians = 0f;
+//                    degrees = 0f;
+//                    radians = 0f;
                 }
                 flip0 = keycode == Input.Keys.A;
             }
@@ -356,7 +340,7 @@ public class Boy extends Objeto implements Person{
             looping = true;
         }
         if (!beenHit) {
-            if (keycode == Input.Keys.SPACE && !use_jetPack) {
+            if (keycode == Input.Keys.SPACE) {
                 if (Math.abs(getBody().getLinearVelocity().x) < 15f && !use_jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f || use_jetPack)
@@ -379,39 +363,37 @@ public class Boy extends Objeto implements Person{
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
             body.setGravityScale(0.2f);
-
         }
     }
 
     public void mouseMoved(int screenX, int screenY){
-        if (shooting) {
+//        if (shooting) {  //TODO: este código até a float angle2 estava como comentário descobrir o que desenha o a imagem de mira
 //            dx = screenX - body.getPosition().x;
 //            dy = (Gdx.graphics.getHeight() - screenY) - body.getPosition().y; // Invert Y-axis
-//            angle = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
+//            float angle = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
 //            System.out.println(angle);
-//            angle2 = (float) Math.atan2(dy, dx);
+//            float angle2 = (float) Math.atan2(dy, dx);
 
             Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
-
 
             viewport.unproject(worldCoordinates);
             worldX = worldCoordinates.x;
             worldY = worldCoordinates.y;
-        }
+//        }
     }
 //!flip ? getBody().getPosition().x +
 //    WIDTH : getBody().getPosition().x
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
             if (shooting && Rifle.showingNumbBullets) {
-                if (rifle != null) {
-//                    rifle.getMagazine().updateItem();
+//                if (rifle != null) {
+                    rifle.updateItem();
                 if (!Cartridge.reloading) {
                     rifle.updateItem();
                     Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
                         WIDTH / 2f) : (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT / 2f)), isFacingLeft, radians, true);
                     rifle.getNumCartridges().getLast().addAndRemove(bullet);
-                    }
+//                    }
                 }
             }
             if (!shooting && !beenHit && !saber_taken) { //punches
@@ -429,7 +411,7 @@ public class Boy extends Objeto implements Person{
                 SABER.play();
                 animations = Animations.BOY_SABER;
                 setFrameCounter(0);
-                getBody().setLinearVelocity(!flip0 ? 50f : -50f, getBody().getLinearVelocity().y);
+                getBody().setLinearVelocity(!flip0 ? 100f : -100f, getBody().getLinearVelocity().y);
             }
         }
         if (button == Input.Buttons.RIGHT) {
@@ -444,24 +426,23 @@ public class Boy extends Objeto implements Person{
                 }
                 default:{
                     saber_taken = false;
-                    if (rifle != null && counterWeaponTaken == 2) {
+                    if (rifle != null) {
                         Rifle.showingNumbBullets = true;
                         shooting = true;
-//                        counterWeaponTaken = 0;
-                        animations = Animations.BOY_SHOOTING_AND_WALKING;
-                    } else {
-                        Rifle.showingNumbBullets = false;
-                        shooting = false;
-//                        saber_taken = false;
-                        animations = Animations.BOY_IDLE;
                         counterWeaponTaken = 0;
+                        animations = Animations.BOY_RELOADING;
+                        degrees = 0;
+                        radians = 0;
+                        beenHit = false;
+                        break;
                     }
+                    Rifle.showingNumbBullets = false;
+                    shooting = false;
+                    animations = Animations.BOY_IDLE;
+                    counterWeaponTaken = 0;
                     break;
                 }
             }
-//            shooting = !shooting;
-//            degrees = 0f;
-//            radians = 0f;
         }
     }
 
@@ -489,7 +470,7 @@ public class Boy extends Objeto implements Person{
             Rifle.showingNumbBullets = true;
         }
         if (item instanceof Crystal) {
-            item = (Crystal) item;
+//            item = (Crystal) item;
             PowerBar.sp += 20;
             clink2.play();
         }

@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,8 +20,6 @@ public class Rifle extends Objeto implements Item{
     public static final float HEIGHT = Images.rifle.getHeight();
 //    public static final int MAX_ROUNDS = 30;
     public final float MULTIPLY = 1/6f;
-//    @Getter
-//    private Magazine magazine = new Magazine(MAX_ROUNDS);
     @Getter
     private ArrayList<Cartridge> numCartridges = new ArrayList<>();
     private Cartridge currentCartridge;
@@ -57,7 +55,7 @@ public class Rifle extends Objeto implements Item{
             Sprite rifle = new Sprite(Images.rifle);
             rifle.setSize(width, height);
             rifle.setOriginCenter();
-            rifle.setRotation(angle++);
+            rifle.setRotation(angle);
             rifle.setPosition(position.x, position.y);
             rifle.draw(s);
         }
@@ -109,6 +107,11 @@ public class Rifle extends Objeto implements Item{
     @Override
     public void updateItem() {
        reloading();
+    }
+
+    @Override
+    public void update() {
+        angle++;
     }
 
     @Override

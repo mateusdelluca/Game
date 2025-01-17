@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -74,6 +74,7 @@ public class Bullet extends Objeto implements Item {
             body.setTransform(position, (float) Math.toRadians(degrees));
     }
 
+    @Override
     public void update(){
         if ((Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 30f) && visible) {
             body.setTransform(-1500, 0, 0);
@@ -97,7 +98,6 @@ public class Bullet extends Objeto implements Item {
         sprite.setOrigin(WIDTH/2f, HEIGHT/2f);
         if (visible)
             sprite.draw(spriteBatch);
-        update();
     }
 
     @Override

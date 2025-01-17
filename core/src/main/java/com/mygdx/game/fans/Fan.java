@@ -41,6 +41,11 @@ public class Fan extends Objeto implements Fans {
     }
 
     @Override
+    public void update() {
+
+    }
+
+    @Override
     public void renderShape(ShapeRenderer s) {
     }
 

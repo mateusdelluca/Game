@@ -1,4 +1,4 @@
-package com.mygdx.game.entities.items;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,6 +42,11 @@ public class Leaf extends Objeto implements Item {
 
     @Override
     public void updateItem() {
+
+    }
+
+    @Override
+    public void update() {
 
     }
 

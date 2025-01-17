@@ -11,12 +11,13 @@ import lombok.Getter;
 public class StateManager extends Game {
 
 
-    public enum States implements ApplicationListener, InputProcessor{
+    public enum States implements StateInterface{
          MAIN_MENU(new MainPage()),
-         LEVEL(new Level_Manager()),
+         LOAD(new LoadPage()),
          PAUSE(new PausePage()),
          SAVE(new SavePage()),
-         LOAD(new LoadPage()),
+         LEVEL(new Level_Manager()),
+
          GAME_OVER(new GameOver());
 
          @Getter
@@ -26,114 +27,104 @@ public class StateManager extends Game {
             this.state = state;
          }
 
-         @Override
-         public void create() {
-             state.create();
-         }
+        @Override
+        public void create() {
+            state.create();
+        }
 
-         @Override
-         public void render() {
-             if (state != null) {
-                 state.render();
-             }
-         }
+        @Override
+        public void resize(int width, int height) {
+            state.resize(width, height);
+        }
 
-         public void resize(int width, int height) {
-             if (state != null) {
-                 state.resize(width, height);
-             }
-         }
+        @Override
+        public void render() {
+            state.render();
+        }
 
-         public void pause() {
-             if (state != null) {
-                 state.pause();
-             }
-         }
+        @Override
+        public void pause() {
+            state.pause();
+        }
 
-         public void resume() {
-             if (state != null) {
-                 state.resume();
-             }
-         }
+        @Override
+        public void resume() {
+            state.resume();
+        }
 
+        @Override
+        public void dispose() {
+            state.dispose();
+        }
 
-         public void dispose() {
-             if (state != null) {
-                 state.dispose();
-             }
-         }
-
-         @Override
-         public boolean keyDown(int keycode) {
+        @Override
+        public boolean keyDown(int keycode) {
              state.keyDown(keycode);
-             return false;
-         }
+            return false;
+        }
 
-         @Override
-         public boolean keyUp(int keycode) {
-             state.keyUp(keycode);
+        @Override
+        public boolean keyUp(int keycode) {
+            state.keyUp(keycode);
              return false;
-         }
+        }
 
-         @Override
-         public boolean keyTyped(char character) {
+        @Override
+        public boolean keyTyped(char character) {
              state.keyTyped(character);
-             return false;
-         }
+            return false;
+        }
 
-         @Override
-         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-             state.touchDown(screenX, screenY, pointer, button);
+        @Override
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            state.touchDown(screenX, screenY, pointer, button);
              return false;
-         }
+        }
 
-         @Override
-         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-             state.touchUp(screenX, screenY, pointer, button);
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            state.touchUp(screenX, screenY, pointer, button);
              return false;
-         }
+        }
 
-         @Override
-         public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-             state.touchCancelled(screenX, screenY, pointer, button);
+        @Override
+        public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+            state.touchCancelled(screenX, screenY, pointer, button);
              return false;
-         }
+        }
 
-         @Override
-         public boolean touchDragged(int screenX, int screenY, int pointer) {
-             state.touchDragged(screenX, screenY, pointer);
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            state.touchDragged(screenX, screenY, pointer);
              return false;
-         }
+        }
 
-         @Override
-         public boolean mouseMoved(int screenX, int screenY) {
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
              state.mouseMoved(screenX, screenY);
-             return false;
-         }
+            return false;
+        }
 
-         @Override
-         public boolean scrolled(float amountX, float amountY) {
+        @Override
+        public boolean scrolled(float amountX, float amountY) {
              state.scrolled(amountX, amountY);
-             return false;
-         }
+            return false;
+        }
     };
 
-    public static States currentState = States.MAIN_MENU;
+    public static States currentState;
+//    public static States oldState;
 
     public StateManager(){
-        Gdx.input.setInputProcessor(currentState);
     }
+
     public static void setState(States newState) {
-        if (currentState != null) {
-            currentState.dispose();
-        }
+//        oldState = currentState;
         currentState = newState;
-        currentState.create();
         Gdx.input.setInputProcessor(currentState);
     }
 
     @Override
     public void create() {
-
     }
 }

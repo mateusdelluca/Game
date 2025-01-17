@@ -1,80 +1,64 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
-import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.screens.Tile;
 
 public class Level_Manager extends State {
 
-//    public Level level1, level2, level3;
+    public Level level1;
     public Level currentLevel;
     public static String currentLevelName = "Level3";
 
     public Level_Manager(){
-//        level1 = new Level1();
+        level1 = new Level();
 //        level2 = new Level2(app);
 //        level3 = new Level3(app);
-//        changeLevel("Level3");
+        changeLevel("Level3");
     }
 
     public void changeLevel(String levelName){
-//        currentLevel = returnLevel(levelName);
+        currentLevel = returnLevel(levelName);
         currentLevel.setTile(new Tile(levelName + "/" + levelName + ".tmx"));
 //      currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
-        Gdx.input.setInputProcessor(this);
+//        Gdx.input.setInputProcessor(this);
 //        app.setScreen(currentLevel);
     }
 
-//    public Level returnLevel(String level){
-//        switch(level){
-//            case "Level1":{
-//                currentLevelName = "Level1";
-//                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
-//                return level1;
-//            }
-//            case "Level2":{
-//                currentLevelName = "Level2";
-//                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
-//                return new Level2(app);
-//            }
-//            case "Level3":{
-//                currentLevelName = "Level3";
-////                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
-//               return new Level3(app);
-//            }
-//            default: {
-//                return level1;
-//            }
-//        }
-//    }
-@Override
-public void create() {
+    public Level returnLevel(String level){
+        switch(level){
+            case "Level1":{
+                currentLevelName = "Level1";
+                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
+                return level1;
+            }
+            case "Level2":{
+                currentLevelName = "Level2";
+                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
+                return level1;
+            }
+            case "Level3":{
+               currentLevelName = "Level3";
+               return level1;
+            }
+            default: {
+                return level1;
+            }
+        }
+    }
+    @Override
+    public void create() {
 
-}
-
-    public void show() {
-        currentLevel.show();
     }
 
     @Override
     public void render() {
         currentLevel.render();
-        currentLevel.spriteBatch.begin();
-        currentLevel.boy.render(currentLevel.spriteBatch);
-        currentLevel.spriteBatch.end();
     }
-
-
 
     @Override
     public void resize(int i, int i1) {
         currentLevel.resize(i,i1);
     }
-
-
 
     @Override
     public void pause() {
@@ -86,9 +70,6 @@ public void create() {
         currentLevel.resume();
     }
 
-    public void hide() {
-        currentLevel.hide();
-    }
 
     @Override
     public void dispose() {

@@ -11,9 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
-import com.mygdx.game.screens.levels.Level_Manager;
+import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 
 public class PausePage extends State {
@@ -67,14 +66,12 @@ public class PausePage extends State {
         viewport = new ScreenViewport(camera);
     }
 
+
     public void update(){
-//        Jogo.currentScreen = getClass().toString();
-
         camera.update();
-
         int counter = 0;
         for(int index = EXIT; index <= RETURN; ++index) {
-            if (this.mouseRectangle.overlaps(this.options_rects[index])) {
+            if (this.options_rects[index].contains(this.mouseRectangle)) {
                 this.isTouched[index] = true;
                 this.optionChoosed = index;
             } else {
@@ -96,8 +93,7 @@ public class PausePage extends State {
         update();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-//        app.jogo.levelManager.currentLevel.background.render(Level_Manager.currentLevelName);
-//        app.jogo.levelManager.currentLevel.renderObjects();
+//        StateManager.oldState.render();
         spriteBatch.begin();
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
@@ -143,15 +139,13 @@ public class PausePage extends State {
 
     @Override
     public boolean keyDown(int keycode) {
-//        if (keycode == Input.Keys.ESCAPE){
-//            app.setScreen(app.jogo.levelManager.currentLevel);
-//            Sounds.PAUSE_SCREEN.pause();
-//            if (!Sounds.LEVEL1.isPlaying()) {
-////                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
-//                Sounds.LEVEL1.play();
-//            }
-//            Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
-//        }
+        if (keycode == Input.Keys.ESCAPE){
+            StateManager.setState(StateManager.States.LEVEL);
+            if (!Sounds.LEVEL1.isPlaying()) {
+//                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
+                Sounds.LEVEL1.play();
+            }
+        }
         return false;
     }
 
@@ -169,29 +163,24 @@ public class PausePage extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
-//                app.setScreen(app.jogo.levelManager.currentLevel);
-////                Sounds.PAUSE_SCREEN.pause();
-//                if (!Sounds.LEVEL1.isPlaying()) {
-////                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
-//                    Sounds.LEVEL1.play();
-//                }
-//                Gdx.input.setInputProcessor(app.jogo.levelManager.currentLevel);
+                StateManager.setState(StateManager.States.LEVEL);
+//                Sounds.PAUSE_SCREEN.pause();
+                if (!Sounds.LEVEL1.isPlaying()) {
+//                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
+                    Sounds.LEVEL1.play();
+                }
                 break;
             }
             case SAVEGAME:{
-//                app.setScreen(app.jogo.saveMenu);
-//                Gdx.input.setInputProcessor(app.jogo.saveMenu);
+                StateManager.setState(StateManager.States.SAVE);
                 break;
             }
             case LOADGAME:{
-//                app.setScreen(app.jogo.loadScreen);
-//                Gdx.input.setInputProcessor(app.jogo.loadScreen);
+                StateManager.setState(StateManager.States.LOAD);
                 break;
             }
             case EXIT: {
-//                app.setScreen(app.jogo.mainMenu);
-//                Gdx.input.setInputProcessor(app.jogo.mainMenu);
-//                Sounds.PAUSE_SCREEN.stop();
+                StateManager.setState(StateManager.States.MAIN_MENU);
                 break;
             }
         }
@@ -217,15 +206,21 @@ public class PausePage extends State {
     public boolean mouseMoved(int screenX, int screenY) {
         // Suponha que você tenha uma câmera (por exemplo, OrthographicCamera) configurada
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
-        viewport.unproject(worldCoordinates);
+        camera.unproject(worldCoordinates);
 
         // Agora 'worldCoordinates' contém as coordenadas do mundo
         float worldX = worldCoordinates.x;
         float worldY = worldCoordinates.y;
 
         this.mouseRectangle.setPosition(worldX, worldY);
-//        System.out.println(worldX + " " + worldY);
+        System.out.println(worldX + " " + worldY);
+        System.out.println(" teste:" + options_rects);
+
+
+
+
         return false;
+
     }
 
     @Override

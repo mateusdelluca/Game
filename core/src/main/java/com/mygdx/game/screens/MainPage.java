@@ -71,9 +71,9 @@ public class MainPage extends State {
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        if (!Sounds.PAUSE_SCREEN.isPlaying()) {
-            Sounds.PAUSE_SCREEN.play();
-            Sounds.PAUSE_SCREEN.setLooping(true);
+        if (!Sounds.PAUSE_SONG.isPlaying()) {
+            Sounds.PAUSE_SONG.play();
+            Sounds.PAUSE_SONG.setLooping(true);
         }
         spriteBatch = new SpriteBatch();
         viewport = new ScreenViewport(camera);
@@ -88,8 +88,8 @@ public class MainPage extends State {
 //        Jogo.currentScreen = getClass().toString();
 
         camera.update();
-        if (!Sounds.PAUSE_SCREEN.isPlaying())
-            Sounds.PAUSE_SCREEN.play();
+        if (!Sounds.PAUSE_SONG.isPlaying())
+            Sounds.PAUSE_SONG.play();
         int counter = 0;
         for(int index = EXIT; index <= NEWGAME; ++index) {
             if (this.mouseRectangle.overlaps(this.options_rects[index])) {
@@ -175,18 +175,15 @@ public class MainPage extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case NEWGAME: {
-                Sounds.PAUSE_SCREEN.stop();
+                Sounds.PAUSE_SONG.stop();
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
-                StateManager.currentState = States.
-                Gdx.input.setInputProcessor(app.jogo.levelManager);
-                app.jogo.levelManager.changeLevel("Level3", app);
+                StateManager.setState(StateManager.States.LEVEL);
                 break;
             }
             case LOADGAME:{
-//                app.setScreen(app.jogo.loadScreen);
-//                Gdx.input.setInputProcessor(app.jogo.loadScreen);
+                StateManager.setState(StateManager.States.LOAD);
                 break;
             }
             case EXIT: {
