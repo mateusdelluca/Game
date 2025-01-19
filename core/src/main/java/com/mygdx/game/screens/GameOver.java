@@ -81,4 +81,8 @@ public class GameOver extends State {
     }
 
 
+    @Override
+    public void update() {
+
+    }
 }

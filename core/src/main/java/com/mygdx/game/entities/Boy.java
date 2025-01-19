@@ -386,7 +386,7 @@ public class Boy extends Objeto implements Person{
                             WIDTH / 2f) : (getBody().getPosition().x),
                             (getBody().getPosition().y + HEIGHT / 2f)),
                             isFacingLeft, radians, true);
-                        rifle.getNumCartridges().getLast().addAndRemove(bullet);
+                        rifle.getLeftSideBullets().addAndRemove(bullet);
                     }
                 }
             }

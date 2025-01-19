@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lombok.Getter;
 import lombok.Setter;
 
-public interface Item {
+import java.io.Serializable;
+
+public interface Item extends Serializable {
 
     void render(SpriteBatch s);
 

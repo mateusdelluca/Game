@@ -13,6 +13,7 @@ import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.system.Save;
 
 import static com.mygdx.game.manager.StateManager.oldState;
 
@@ -152,6 +153,11 @@ public class SavePage extends State {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (int i = 0; i < rects.length; i++){
+            if (rects[i].contains(mouseRectangle)){
+                new Save(i);
+            }
+        }
         return false;
     }
 

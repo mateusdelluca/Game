@@ -13,6 +13,7 @@ import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.system.Load;
 
 import static com.badlogic.gdx.Gdx.app;
 import static com.mygdx.game.manager.StateManager.currentState;
@@ -161,6 +162,11 @@ public class LoadPage extends State {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (int i = 0; i < rects.length; i++) {
+            if (rects[i].contains(mouseRectangle)) {
+                new Load(i);
+            }
+        }
         return false;
     }
 

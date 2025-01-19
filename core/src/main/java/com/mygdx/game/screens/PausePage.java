@@ -87,8 +87,11 @@ public class PausePage extends State {
 
     @Override
     public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
+//        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+
+        if (StateManager.oldState.equals("LEVEL"))
+            StateManager.States.valueOf(StateManager.oldState).render();
 
         update();
 
@@ -98,7 +101,9 @@ public class PausePage extends State {
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
         spriteBatch.setColor(1f, 1f, 1f, 1f);
+
         for(int index = EXIT; index <= RETURN; ++index) {
+
             font.setColor(Color.BLACK);
             font.draw(spriteBatch, this.options[index], this.x[index] + 2, this.y[index] + 2);
             font.setColor(Color.WHITE);
@@ -108,6 +113,7 @@ public class PausePage extends State {
                 font.draw(spriteBatch, this.options[index], this.x[index], this.y[index]);
             }
         }
+
         spriteBatch.end();
     }
 
@@ -213,14 +219,9 @@ public class PausePage extends State {
         float worldY = worldCoordinates.y;
 
         this.mouseRectangle.setPosition(worldX, worldY);
-        System.out.println(worldX + " " + worldY);
-        System.out.println(" teste:" + options_rects);
-
-
-
-
+//        System.out.println(worldX + " " + worldY);
+//        System.out.println(" teste:" + options_rects);
         return false;
-
     }
 
     @Override

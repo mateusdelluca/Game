@@ -15,6 +15,8 @@ import ktx.box2d.RayCast;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 public class Monster1 extends Objeto{
 
     public static final float WIDTH = 94, HEIGHT = 128;
@@ -56,13 +58,12 @@ public class Monster1 extends Objeto{
         body.setUserData(getClass().getSimpleName() + id);
         body.setActive(true);
         body.createFixture(fixtureDef);
-        System.out.println(body.getUserData());
+//        System.out.println(body.getUserData());
         return body;
     }
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-//            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(StateManager.oldState == StateManager.States.LEVEL, looping, facingRight));
             Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false, looping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(spriteBatch);

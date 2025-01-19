@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.items.Rifle;
 
+import java.io.Serializable;
+
 public class PowerBar {
 
     public static final float WIDTH = Images.hp.getWidth()/2f, HEIGHT = Images.hp.getHeight()/2f;

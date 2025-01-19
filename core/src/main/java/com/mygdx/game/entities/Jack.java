@@ -12,11 +12,12 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
-public class Jack extends Objeto{
+public class Jack extends Objeto {
 
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.jack.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;

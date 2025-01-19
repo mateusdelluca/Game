@@ -11,6 +11,7 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;

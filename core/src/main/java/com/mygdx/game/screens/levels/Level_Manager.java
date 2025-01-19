@@ -1,25 +1,36 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.mygdx.game.manager.State;
+import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
+import com.mygdx.game.entities.BodyData;
 
-public class Level_Manager extends State {
+import java.io.Serializable;
 
-    public Level level1;
+public class Level_Manager extends State implements Serializable {
+
+    private Level level1;
     public Level currentLevel;
     public static String currentLevelName = "Level3";
+
+    public BodyData[] bodiesData;
 
     public Level_Manager(){
         level1 = new Level();
 //        level2 = new Level2(app);
 //        level3 = new Level3(app);
         changeLevel("Level3");
+        bodiesData = new BodyData[currentLevel.world.getBodyCount()];
     }
 
     public void changeLevel(String levelName){
         currentLevel = returnLevel(levelName);
         currentLevel.setTile(new Tile(levelName + "/" + levelName + ".tmx"));
-//      currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
+//        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
 //        Gdx.input.setInputProcessor(this);
 //        app.setScreen(currentLevel);
     }
@@ -52,7 +63,8 @@ public class Level_Manager extends State {
 
     @Override
     public void render() {
-        currentLevel.render();
+        if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
+            currentLevel.render();
     }
 
     @Override
@@ -129,4 +141,30 @@ public class Level_Manager extends State {
         currentLevel.scrolled(v, v1);
         return false;
     }
+
+    @Override
+    public void update() {
+        currentLevel.update();
+    }
+
+    public void savingBodies(){
+        Array<Body> bodies = new Array<>();
+        currentLevel.world.getBodies(bodies);
+        for (int i = 0; i < bodies.size; i++){
+            bodiesData[i] = new BodyData(bodies.get(i).getPosition(), bodies.get(i).getAngle(),
+                bodies.get(i).getLinearVelocity(), bodies.get(i).getUserData().toString());
+        }
+    }
+
+//    @Override
+//    public void write(Json json) {
+//        json.writeObjectStart();
+//        json.writeValue(bodiesData);
+//        json.writeObjectEnd();
+//    }
+//
+//    @Override
+//    public void read(Json json, JsonValue jsonData) {
+//
+//    }
 }

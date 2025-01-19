@@ -3,7 +3,7 @@ package com.mygdx.game.images;
 import lombok.Getter;
 
 @Getter
-public enum Animations {
+public enum Animations{
 
 
     //boy

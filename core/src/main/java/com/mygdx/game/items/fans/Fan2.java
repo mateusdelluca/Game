@@ -1,4 +1,4 @@
-package com.mygdx.game.fans;
+package com.mygdx.game.items.fans;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,7 +29,7 @@ public class Fan2 extends Objeto implements Fans{
         return (Math.abs(anotherBody.getPosition().x) - (body.getPosition().x) < 70f && Math.abs(anotherBody.getPosition().y - body.getPosition().y) <= 10);
     }
 
-    public void bodyCloseToFan2(Body b, float width){
+    public void update2(Body b, float width){
         if (bodyCloseToFan(b, width)) {
 //            System.out.println(b.getPosition().y - fanBody.getPosition().y);
             useOnlyLastFrame = false;

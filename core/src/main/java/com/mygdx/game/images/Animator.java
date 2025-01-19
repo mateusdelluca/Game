@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.mygdx.game.manager.StateManager;
 import lombok.Getter;
 
-public class Animator {
+import java.io.Serializable;
+
+public class Animator{
 
     private int numColumns, numRows, numFrames, fps, width, height;    //rows and columns of the sprite sheet
     private String path;

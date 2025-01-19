@@ -8,9 +8,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Leaf extends Objeto implements Item {
+public class Leaf extends Objeto implements Item{
 
     public static final float DIVIDED_BY = 25f;
     public static final float WIDTH = 850/DIVIDED_BY, HEIGHT = 850/DIVIDED_BY;

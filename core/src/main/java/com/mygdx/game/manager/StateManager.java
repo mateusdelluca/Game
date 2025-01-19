@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.screens.*;
 import com.mygdx.game.screens.levels.Level_Manager;
 import lombok.Getter;
+import lombok.Setter;
 
 public class StateManager extends Game {
 
@@ -20,96 +21,99 @@ public class StateManager extends Game {
 
          GAME_OVER(new GameOver());
 
-         @Getter
+         @Getter @Setter
          private State state;
-
          States(State state) {
             this.state = state;
          }
 
-        @Override
-        public void create() {
+         @Override
+         public void create() {
             state.create();
-        }
+         }
 
-        @Override
-        public void resize(int width, int height) {
+         @Override
+         public void resize(int width, int height) {
             state.resize(width, height);
-        }
+         }
 
-        @Override
-        public void render() {
+         @Override
+         public void render() {
             state.render();
-        }
+         }
 
-        @Override
-        public void pause() {
+         public void update(){
+            state.update();
+         }
+
+         @Override
+         public void pause() {
             state.pause();
-        }
+         }
 
-        @Override
-        public void resume() {
+         @Override
+         public void resume() {
             state.resume();
-        }
+         }
 
-        @Override
-        public void dispose() {
+         @Override
+         public void dispose() {
             state.dispose();
-        }
+         }
 
-        @Override
-        public boolean keyDown(int keycode) {
+         @Override
+         public boolean keyDown(int keycode) {
              state.keyDown(keycode);
             return false;
-        }
+         }
 
-        @Override
-        public boolean keyUp(int keycode) {
+         @Override
+         public boolean keyUp(int keycode) {
             state.keyUp(keycode);
              return false;
-        }
+         }
 
-        @Override
-        public boolean keyTyped(char character) {
+         @Override
+         public boolean keyTyped(char character) {
              state.keyTyped(character);
             return false;
-        }
+         }
 
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            state.touchDown(screenX, screenY, pointer, button);
+         @Override
+         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+             state.touchDown(screenX, screenY, pointer, button);
              return false;
-        }
+         }
 
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            state.touchUp(screenX, screenY, pointer, button);
+         @Override
+         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+             state.touchUp(screenX, screenY, pointer, button);
              return false;
-        }
+         }
 
-        @Override
-        public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+         @Override
+         public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
             state.touchCancelled(screenX, screenY, pointer, button);
              return false;
-        }
+         }
 
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
+         @Override
+         public boolean touchDragged(int screenX, int screenY, int pointer) {
             state.touchDragged(screenX, screenY, pointer);
              return false;
-        }
+         }
 
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
+         @Override
+         public boolean mouseMoved(int screenX, int screenY) {
              state.mouseMoved(screenX, screenY);
             return false;
-        }
+         }
 
-        @Override
-        public boolean scrolled(float amountX, float amountY) {
+         @Override
+         public boolean scrolled(float amountX, float amountY) {
              state.scrolled(amountX, amountY);
-            return false;
-        }
+             return false;
+         }
     };
 
     public static States currentState;

@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.items.Item;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
 public class Portal extends Objeto implements Item{

@@ -31,13 +31,21 @@ public class Application extends Game {
     }
 
     public void update(){
+        currentState.update();
     }
 
     @Override
     public void render() {
-        update();
-        super.render();
-        currentState.render();
+        if (!StateManager.currentState.name().equals("PAUSE")) {
+            update();
+            super.render();
+            currentState.render();
+        }
+        else {
+            StateManager.States.valueOf("LEVEL").render();
+            StateManager.States.valueOf("PAUSE").render();
+            pause();
+        }
     }
 
     @Override

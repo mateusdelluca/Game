@@ -15,13 +15,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.fans.Fan;
-import com.mygdx.game.fans.Fan2;
-import com.mygdx.game.fans.Fans;
-import com.mygdx.game.items.Crystal;
-import com.mygdx.game.items.Item;
-import com.mygdx.game.items.JetPack;
-import com.mygdx.game.items.Rifle;
+import com.mygdx.game.items.*;
+import com.mygdx.game.items.fans.Fan;
+import com.mygdx.game.items.fans.Fan2;
+import com.mygdx.game.items.fans.Fans;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
@@ -33,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Level extends State implements ContactListener{
+public class Level extends State implements ContactListener {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
@@ -65,7 +62,7 @@ public class Level extends State implements ContactListener{
     protected ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
     public Level() {
-        world = new World(new Vector2(0,-10f), true);
+        world = new World(new Vector2(0,-10f), false);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -120,7 +117,6 @@ public class Level extends State implements ContactListener{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
 
 
-
         items.put(Rifle.class.getSimpleName(), new Rifle(world, new Vector2(440, 6000 - 350)));
 
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
@@ -148,6 +144,8 @@ public class Level extends State implements ContactListener{
 
         world.setContactListener(this);
 
+        Box2D.init();
+
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
     }
 
@@ -160,8 +158,7 @@ public class Level extends State implements ContactListener{
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
-
-//        if (StateManager.oldState != StateManager.States.LEVEL)
+        if (!StateManager.oldState.equals("PAUSE"))
             update();
 
 
@@ -189,8 +186,8 @@ public class Level extends State implements ContactListener{
     public void dispose() {
         spriteBatch.dispose();
         world.dispose();
-//        background.dispose();
         powerBar.dispose();
+        box2DDebugRenderer.dispose();
     }
 
 
@@ -220,8 +217,8 @@ public class Level extends State implements ContactListener{
     }
 
     public void update(){
-        for (int i = 0; i < 4; i++) {
-            world.step(7, 7, 7);
+        for (int i = 0; i < 3; i++) {
+            world.step(1/60f, 7, 7);
             camera.update();
 //            world.step(60, 7, 7);
 //            camera.update();
@@ -230,7 +227,7 @@ public class Level extends State implements ContactListener{
         collisions();
 
         for (Fans fan : fans)
-            fan.bodyCloseToFan2(boy.getBody(), Boy.BOX_WIDTH);
+            fan.update2(boy.getBody(), Boy.BOX_WIDTH);
         updateObjects();
 
     }
@@ -287,27 +284,27 @@ public class Level extends State implements ContactListener{
                     body2.setUserData("null");
                 }
             }
-//            boyBeenHit();
+            boyBeenHit();
         }
 
         if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals("Boy")) {
-//            boyBeenHit();
+            boyBeenHit();
         } else {
             if (body2.getUserData().equals("Thorns_Colliders") && body1.getUserData().toString().equals("Boy")) {
-//                boyBeenHit();
+                boyBeenHit();
             }
         }
 
         for (Monster1 m1 : monsters1.values()) {
             if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
                 || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")) {
-//                boyBeenHit();
+                boyBeenHit();
             }
             if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals(m1.getBody().getUserData())) {
-//                monster1BeenHit(m1, body1);
+                monster1BeenHit(m1, body1);
             } else {
                 if (body2.getUserData().equals("Thorns_Colliders") && body1.getUserData().toString().equals(m1.getBody().getUserData())) {
-//                    monster1BeenHit(m1, body2);
+                    monster1BeenHit(m1, body2);
                 }
             }
             if ((body1.getUserData().toString().equals("Bullet") &&
@@ -315,12 +312,12 @@ public class Level extends State implements ContactListener{
             ) || body2.getUserData().toString().equals("Bullet") &&
                 body1.getUserData().toString().equals(m1.toString())) {
                 if (body1.getUserData().toString().equals("Bullet")) {
-//                    monster1BeenHit(m1, body1);
+                    monster1BeenHit(m1, body1);
                     body1.setUserData("null");
                     body1.setGravityScale(0.1f);
                 } else {
                     if (body2.getUserData().toString().equals("Bullet")) {
-//                        monster1BeenHit(m1, body2);
+                        monster1BeenHit(m1, body2);
                         body2.setUserData("null");
                         body2.setGravityScale(0.1f);
                     }
