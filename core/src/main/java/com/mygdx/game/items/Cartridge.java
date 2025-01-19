@@ -19,7 +19,8 @@ public class Cartridge implements Item{
 //    public static String stringNumbBullets = "";
 
     public static final int MAX_ROUNDS = 30;
-
+    @Getter @Setter
+    private int accumulated = 0;
 //    public static String usingRifle = "";
 //    public static boolean showingNumBullets;
 
@@ -41,6 +42,8 @@ public class Cartridge implements Item{
             if (!bulletsLeft.isEmpty()) {
                 bulletsLeft.removeLast();
                 bulletsToDraw.add(bullet);
+                if (accumulated < MAX_ROUNDS)
+                    accumulated++;
                 GUNSHOT.play();
             }
         }

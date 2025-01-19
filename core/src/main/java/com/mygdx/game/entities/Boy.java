@@ -45,7 +45,7 @@ public class Boy extends Objeto implements Person{
     private int counterWeaponTaken;
     private float worldX;
     private float worldY;
-    private Viewport viewport;
+    private transient Viewport viewport;
     @Getter @Setter
     private boolean use_jetPack;
     private Sprite jetPackSprite;
@@ -67,7 +67,7 @@ public class Boy extends Objeto implements Person{
         super(world, WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
         body = createBoxBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
-        body.setTransform(bodyPosition, 0);
+        body.setTransform(bodyPosition, 0);;
         body.setUserData(getClass().getSimpleName());
         this.viewport = viewport;
         jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
@@ -184,7 +184,7 @@ public class Boy extends Objeto implements Person{
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-          System.out.println(degrees);
+//          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
 //        }
     }
@@ -238,7 +238,7 @@ public class Boy extends Objeto implements Person{
                             hit = false;
                             saberTime = 0f;
                             animations = Animations.BOY_IDLE;
-//                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
+                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
                         }
                     }
                 } else {
@@ -346,9 +346,10 @@ public class Boy extends Objeto implements Person{
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f || use_jetPack)
                     animations = Animations.BOY_JUMPING;
 //                if (secondJump < 2) {
-                body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-                    if (!use_jetPack)
-                        secondJump++;
+//                body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
+                body.setLinearVelocity(body.getLinearVelocity().x, JUMP_VELOCITY);
+                if (!use_jetPack)
+                    secondJump++;
 //                }
                 JUMP.play();
             }
@@ -357,43 +358,36 @@ public class Boy extends Objeto implements Person{
 
     public void keyUp(int keycode){
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
-            body.setLinearVelocity(0f, body.getLinearVelocity().y);
-            if (!beenHit && !shooting)
+            body.setLinearVelocity((Math.abs(body.getLinearVelocity().x) - VELOCITY_X) * (Math.abs(body.getLinearVelocity().x) / (0.1f + body.getLinearVelocity().x)),
+                body.getLinearVelocity().y);
+            if (!beenHit && !shooting && !use_jetPack)
                 animations = Animations.BOY_IDLE;
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
             body.setGravityScale(0.2f);
         }
+        System.out.println(body.getLinearVelocity().y);
     }
 
     public void mouseMoved(int screenX, int screenY){
-//        if (shooting) {  //TODO: este código até a float angle2 estava como comentário descobrir o que desenha o a imagem de mira
-//            dx = screenX - body.getPosition().x;
-//            dy = (Gdx.graphics.getHeight() - screenY) - body.getPosition().y; // Invert Y-axis
-//            float angle = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-//            System.out.println(angle);
-//            float angle2 = (float) Math.atan2(dy, dx);
-
-            Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
-
-            viewport.unproject(worldCoordinates);
-            worldX = worldCoordinates.x;
-            worldY = worldCoordinates.y;
-//        }
+        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
+        viewport.unproject(worldCoordinates);
+        worldX = worldCoordinates.x;
+        worldY = worldCoordinates.y;
     }
-//!flip ? getBody().getPosition().x +
-//    WIDTH : getBody().getPosition().x
+
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
             if (shooting && Rifle.showingNumbBullets) {
-//                if (rifle != null) {
-                    rifle.updateItem();
                 if (!Cartridge.reloading) {
-                    rifle.updateItem();
-                    Bullet bullet = new Bullet(world, new Vector2(!isFacingLeft ? (getBody().getPosition().x +
-                        WIDTH / 2f) : (getBody().getPosition().x), (getBody().getPosition().y + HEIGHT / 2f)), isFacingLeft, radians, true);
-                    rifle.getNumCartridges().getLast().addAndRemove(bullet);
-//                    }
+                    if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                        Bullet bullet = new Bullet(world,
+                            new Vector2(!isFacingLeft ? (getBody().getPosition().x +
+                            WIDTH / 2f) : (getBody().getPosition().x),
+                            (getBody().getPosition().y + HEIGHT / 2f)),
+                            isFacingLeft, radians, true);
+                        rifle.getNumCartridges().getLast().addAndRemove(bullet);
+                    }
                 }
             }
             if (!shooting && !beenHit && !saber_taken) { //punches
@@ -411,7 +405,7 @@ public class Boy extends Objeto implements Person{
                 SABER.play();
                 animations = Animations.BOY_SABER;
                 setFrameCounter(0);
-                getBody().setLinearVelocity(!flip0 ? 100f : -100f, getBody().getLinearVelocity().y);
+                getBody().setLinearVelocity(!flip0 ? VELOCITY_X * 5 : -VELOCITY_X * 5, getBody().getLinearVelocity().y);
             }
         }
         if (button == Input.Buttons.RIGHT) {

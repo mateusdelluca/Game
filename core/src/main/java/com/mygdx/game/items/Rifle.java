@@ -14,6 +14,8 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.items.Cartridge.MAX_ROUNDS;
+
 public class Rifle extends Objeto implements Item{
 
     public static final float WIDTH = Images.rifle.getWidth();
@@ -22,31 +24,36 @@ public class Rifle extends Objeto implements Item{
     public final float MULTIPLY = 1/6f;
     @Getter
     private ArrayList<Cartridge> numCartridges = new ArrayList<>();
-    private Cartridge currentCartridge;
+    @Getter
+    private Cartridge leftSideBullets;
     private Vector2 position;
     private float angle = 0f;
 
     @Getter @Setter
     private boolean buttonReloadingPressed;
     public static boolean showingNumbBullets = false;
-    private int total;
+    private int rightSide;
     public static String stringNumbBullets = "";
+    private int total;
 
     public Rifle(World world, Vector2 position){
+
         super(world, WIDTH, HEIGHT);
         super.width = WIDTH * MULTIPLY;
         super.height = HEIGHT * MULTIPLY;
         this.position = position;
+
         body = createBoxBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
 
-        for (int index = 0; index < 4; index++){
+        for (int index = 0; index < 1; index++){
             numCartridges.add(new Cartridge());
         }
-        currentCartridge = numCartridges.getLast();
-    }
 
+        leftSideBullets = new Cartridge();
+        numCartridges.add(leftSideBullets);
+    }
 
     @Override
     public void render(SpriteBatch s) {
@@ -60,17 +67,18 @@ public class Rifle extends Objeto implements Item{
             rifle.draw(s);
         }
         if (showingNumbBullets) {
-            total = 0;
+            rightSide = 0;
             for (Cartridge c : numCartridges) {
-                if (c.equals(currentCartridge))
-                    continue;
-                total += c.getBulletsLeft().size();
+                if (c.equals(leftSideBullets))
+                    break;
+                rightSide += c.getBulletsLeft().size();
             }
-            stringNumbBullets = currentCartridge + "/" + total;
+            total = rightSide;
+            stringNumbBullets = leftSideBullets + "/" + rightSide;
         } else{
             stringNumbBullets = "";
         }
-        currentCartridge.render(s);
+        leftSideBullets.render(s);
     }
 
     public void reloading() {
@@ -79,22 +87,23 @@ public class Rifle extends Objeto implements Item{
             @Override
             public void run() {
                 if (Cartridge.reloading) {
-                    if (!currentCartridge.getBulletsLeft().isEmpty() &&
-                        currentCartridge.getBulletsLeft().size() < Cartridge.MAX_ROUNDS) {
-                        numCartridges.getFirst().getBulletsLeft().clear();
-                        numCartridges.getFirst().setBulletsLeft(new Cartridge().init(currentCartridge.getBulletsLeft().size()));
-                        currentCartridge.getBulletsLeft().clear();
-                        currentCartridge.setBulletsLeft(new Cartridge().init(Cartridge.MAX_ROUNDS));
-                    } else {
-                        if (!numCartridges.isEmpty()) {
-                            if (numCartridges.getLast().getBulletsLeft().isEmpty())
-                                numCartridges.removeLast();
-                            if (currentCartridge.getBulletsLeft().isEmpty()) {
-                                currentCartridge = new Cartridge();
-                                if (!numCartridges.isEmpty())
-                                    numCartridges.removeLast();
-                                numCartridges.addLast(currentCartridge);
+                    if (!numCartridges.isEmpty()) {
+                        if (!leftSideBullets.getBulletsLeft().isEmpty() &&  //se não estiver vazio e não estiver cheio o cartucho que aparece na esquerda
+                            leftSideBullets.getBulletsLeft().size() < MAX_ROUNDS) {
+                            removeBulletsFromFirstCartridge(leftSideBullets.getAccumulated());
+                            if (!leftSideBullets.equals(numCartridges.getFirst())) {
+                                leftSideBullets.getBulletsLeft().clear();
+                                leftSideBullets.setBulletsLeft(init(max_bullets()));
                             }
+                        }
+                        if (numCartridges.getFirst().getBulletsLeft().isEmpty())
+                            numCartridges.removeFirst();
+                        else {
+
+                        }
+                        if (leftSideBullets.getBulletsLeft().isEmpty()) {
+                            if (numCartridges.size() > 1 && total >= MAX_ROUNDS)
+                                leftSideBullets = new Cartridge();
                         }
                     }
                     buttonReloadingPressed = false;
@@ -121,5 +130,27 @@ public class Rifle extends Objeto implements Item{
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    private ArrayList<Bullet> init(int max_rounds){
+        ArrayList<Bullet> bullets = new ArrayList<>();
+        for (int index = 1; index <= max_rounds; index++){
+            bullets.add(new Bullet());
+        }
+        return bullets;
+    }
+
+    private void removeBulletsFromFirstCartridge(int accumulated) {
+        if (numCartridges.getFirst().equals(leftSideBullets))
+            return;
+        for (int i = accumulated; i > 0; i--)
+            numCartridges.getFirst().getBulletsLeft().removeLast();
+        leftSideBullets.setAccumulated(0);
+    }
+
+    private int max_bullets(){
+        total = leftSideBullets.getBulletsLeft().size()
+            + total - (total >= MAX_ROUNDS ? MAX_ROUNDS : leftSideBullets.getBulletsLeft().size());
+        return Math.max(total, MAX_ROUNDS);
     }
 }

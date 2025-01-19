@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
+import java.io.Serializable;
+
 public class JetPack extends Objeto implements Item{
 
     public static final float WIDTH = 128, HEIGHT = 128;
@@ -30,7 +32,8 @@ public class JetPack extends Objeto implements Item{
             sprite.setOriginCenter();
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.setRotation(angle++);
-        } else{
+        }
+        else{
             body.setTransform(-1000, - 1000, 0);
         }
     }
