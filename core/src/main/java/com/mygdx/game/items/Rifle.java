@@ -47,12 +47,14 @@ public class Rifle extends Objeto implements Item{
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
 
-        for (int index = 0; index < 1; index++){
+        for (int index = 0; index < 2; index++){
             numCartridges.add(new Cartridge());
         }
 
         leftSideBullets = new Cartridge();
-        numCartridges.add(leftSideBullets);
+        for (Cartridge c : numCartridges) {
+            total += c.getBulletsLeft().size();
+        }
     }
 
     @Override
@@ -67,14 +69,7 @@ public class Rifle extends Objeto implements Item{
             rifle.draw(s);
         }
         if (showingNumbBullets) {
-            rightSide = 0;
-            for (Cartridge c : numCartridges) {
-                if (c.equals(leftSideBullets))
-                    break;
-                rightSide += c.getBulletsLeft().size();
-            }
-            total = rightSide;
-            stringNumbBullets = leftSideBullets + "/" + rightSide;
+            stringNumbBullets = leftSideBullets.getBulletsLeft().size() + "/" + total;
         } else{
             stringNumbBullets = "";
         }
@@ -87,25 +82,7 @@ public class Rifle extends Objeto implements Item{
             @Override
             public void run() {
                 if (Cartridge.reloading) {
-                    if (!numCartridges.isEmpty()) {
-                        if (!leftSideBullets.getBulletsLeft().isEmpty() &&  //se não estiver vazio e não estiver cheio o cartucho que aparece na esquerda
-                            leftSideBullets.getBulletsLeft().size() < MAX_ROUNDS) {
-                            removeBulletsFromFirstCartridge(leftSideBullets.getAccumulated());
-                            if (!leftSideBullets.equals(numCartridges.getFirst())) {
-                                leftSideBullets.getBulletsLeft().clear();
-                                leftSideBullets.setBulletsLeft(init(max_bullets()));
-                            }
-                        }
-                        if (numCartridges.getFirst().getBulletsLeft().isEmpty())
-                            numCartridges.removeFirst();
-                        else {
-
-                        }
-                        if (leftSideBullets.getBulletsLeft().isEmpty()) {
-                            if (numCartridges.size() > 1 && total >= MAX_ROUNDS)
-                                leftSideBullets = new Cartridge();
-                        }
-                    }
+                    leftSideBullets.setBulletsLeft(init(max_bullets()));
                     buttonReloadingPressed = false;
                     Cartridge.reloading = false;
                 }
@@ -140,17 +117,36 @@ public class Rifle extends Objeto implements Item{
         return bullets;
     }
 
-    private void removeBulletsFromFirstCartridge(int accumulated) {
-        if (numCartridges.getFirst().equals(leftSideBullets))
-            return;
-        for (int i = accumulated; i > 0; i--)
-            numCartridges.getFirst().getBulletsLeft().removeLast();
-        leftSideBullets.setAccumulated(0);
+    private void removeBulletsFromFirstCartridge() {
+//        if (numCartridges.getFirst().equals(leftSideBullets))
+//            return;
+        if (!numCartridges.isEmpty()) {
+            for (int i = leftSideBullets.getAccumulated(); i > 0; i--)
+                numCartridges.getFirst().getBulletsLeft().removeLast();
+            numCartridges.removeFirst();
+            leftSideBullets.setAccumulated(0);
+        }
     }
 
+    /*
+    30/30
+    25/30
+    30/25
+    25/25
+    30/20
+    5/20
+    20/0
+     */
+
     private int max_bullets(){
-        total = leftSideBullets.getBulletsLeft().size()
-            + total - (total >= MAX_ROUNDS ? MAX_ROUNDS : leftSideBullets.getBulletsLeft().size());
-        return Math.max(total, MAX_ROUNDS);
+        if ((total + leftSideBullets.getBulletsLeft().size()) >= MAX_ROUNDS) {
+            total = total - leftSideBullets.getAccumulated();
+            leftSideBullets.setAccumulated(0);
+            return MAX_ROUNDS;
+        } else{
+            int value = total + leftSideBullets.getBulletsLeft().size();
+            total = 0;
+            return value;
+        }
     }
 }
