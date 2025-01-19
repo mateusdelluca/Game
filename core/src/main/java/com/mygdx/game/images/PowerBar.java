@@ -11,7 +11,7 @@ import com.mygdx.game.items.Rifle;
 
 import java.io.Serializable;
 
-public class PowerBar {
+public class PowerBar implements Serializable{
 
     public static final float WIDTH = Images.hp.getWidth()/2f, HEIGHT = Images.hp.getHeight()/2f;
     public static final float WIDTH2 = Images.hp2.getWidth()/3f, HEIGHT2 = Images.hp2.getHeight()/2f;
@@ -19,17 +19,17 @@ public class PowerBar {
     public static float hp = WIDTH2, sp = WIDTH2;
 
     private Vector3 position = new Vector3();
-    private BitmapFont font;
+
     public PowerBar(){
         Texture t = new Texture(Gdx.files.internal("Font.png"));
-        font = new BitmapFont(Gdx.files.internal("Font.fnt"), new TextureRegion(t));
+        Images.font = new BitmapFont(Gdx.files.internal("Font.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        font.getData().scale(0.5f);
+        Images.font.getData().scale(0.5f);
     }
 
     public void render(SpriteBatch s, OrthographicCamera playerBody){
         position = playerBody.position;
-        font.draw(s, Rifle.stringNumbBullets, -900 + position.x, position.y - 400);
+        Images.font.draw(s, Rifle.stringNumbBullets, -900 + position.x, position.y - 400);
         s.draw(Images.hp, -900 + position.x + 70, position.y + 470, WIDTH, HEIGHT);
         s.draw(Images.hp2,-900 + position.x +  70 + 40, position.y + 470, hp, HEIGHT);
         s.draw(Images.sp, -900 + position.x +  70, position.y + 420, WIDTH, HEIGHT);

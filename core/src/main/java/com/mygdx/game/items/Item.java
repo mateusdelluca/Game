@@ -1,6 +1,8 @@
 package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.Objeto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +14,8 @@ public interface Item extends Serializable {
 
     void updateItem();
 
+    void updateItem(World wolrd);
+
     void update();
+
 }

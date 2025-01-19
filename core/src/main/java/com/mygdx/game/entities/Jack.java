@@ -12,7 +12,6 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
@@ -28,15 +27,15 @@ public class Jack extends Objeto {
     public int HP = 5;
     Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
-    public Jack(World world, Vector2 position){
-        super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
+    public Jack(Vector2 position){
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
         sprite.flip(flip, false);
     }
 
-    private void update(){
+    public void update(){
         deltaTime += Gdx.graphics.getDeltaTime();
         if (deltaTime > 4f){
 //            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +

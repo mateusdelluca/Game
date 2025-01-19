@@ -12,15 +12,13 @@ public class Application extends Game {
 
     StateManager stateManager;
 
-    Images images;
 
-    Sounds sounds;
 
     @Override
     public void create() {
 //        stateManager.create();
-        images = new Images();
-        sounds = new Sounds();
+//        images = new Images();
+//        sounds = new Sounds();
         stateManager = new StateManager();
         setState(StateManager.States.MAIN_MENU);
     }

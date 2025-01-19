@@ -4,8 +4,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.*;
 import com.mygdx.game.screens.levels.Level_Manager;
+import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -119,7 +121,17 @@ public class StateManager extends Game {
     public static States currentState;
     public static String oldState;
 
+    Images images;
+
+    Sounds sounds;
+
     public StateManager(){
+        init();
+    }
+
+    public void init(){
+        images = new Images();
+        sounds = new Sounds();
     }
 
     public static void setState(States newState) {

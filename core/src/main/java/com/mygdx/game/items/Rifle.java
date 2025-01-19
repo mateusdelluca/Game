@@ -36,14 +36,14 @@ public class Rifle extends Objeto implements Item{
     public static String stringNumbBullets = "";
     private int total;
 
-    public Rifle(World world, Vector2 position){
+    public Rifle(Vector2 position){
 
-        super(world, WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT);
         super.width = WIDTH * MULTIPLY;
         super.height = HEIGHT * MULTIPLY;
         this.position = position;
 
-        body = createBoxBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
+        body = createBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
 
@@ -96,8 +96,18 @@ public class Rifle extends Objeto implements Item{
     }
 
     @Override
+    public void updateItem(World wolrd) {
+
+    }
+
+    @Override
     public void update() {
         angle++;
+    }
+
+    @Override
+    public Objeto objeto() {
+        return this;
     }
 
     @Override

@@ -2,8 +2,13 @@ package com.mygdx.game.images;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObjects;
+import com.mygdx.game.screens.Tile;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Images {
     public static Texture[] saves = new Texture[6];
@@ -41,11 +46,23 @@ public class Images {
     public static Texture pauseBox;
     public static Texture jack, girl;
     public static Texture leaf;
-    public static Texture shooting1, shooting2, shoot;
+    public static Sprite shooting1, shooting2, shoot;
+    public static Sprite top;
+    public static Sprite aim;
+    public static Sprite legs;
+    public static MapObjects thorns ;
+    public static MapObjects staticObjects;
+    @Getter
+    @Setter
+    public static Tile tile;
+    public static BitmapFont font;
+
+    public static Sprite spriteJetPack;
+    public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, false));
+
     public SpriteBatch spriteBatch;
 
     public Images() {
-
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
 //        game_over = new Texture(Gdx.files.internal("src/main/res/Game Over.png"));
@@ -89,20 +106,23 @@ public class Images {
         sp = new Texture(Gdx.files.internal("SP_Bar.png"));
         sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
+
         for (int i = 0; i < saves.length; i++){
             saves[i] = new Texture(Gdx.files.internal("saves/Save" + i + ".png"));
         }
         jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
         girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
-        shoot = new Texture(Gdx.files.internal("boy/Shoot.png"));
-        shooting1 = new Texture(Gdx.files.internal("boy/Shooting1.png"));
-        shooting2 = new Texture(Gdx.files.internal("boy/Shooting2.png"));
+        shoot = new Sprite(new Texture(Gdx.files.internal("boy/Shoot.png")));
+        shooting1 = new Sprite(new Texture(Gdx.files.internal("boy/Shooting1.png")));
+        shooting2 = new Sprite(new Texture(Gdx.files.internal("boy/Shooting2.png")));
         leaf = new Texture(Gdx.files.internal("boy/Leaf.png"));
         fire = new Animator(4, 4, 5, 32, 55, "fire/fire.png");
         fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
         fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
         rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
+        aim = Images.shoot;
+        spriteJetPack = Images.jetPack;
         spriteBatch = new SpriteBatch();}
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {

@@ -1,6 +1,7 @@
 package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +41,7 @@ public class Cartridge implements Item{
     public void addAndRemove(Bullet bullet){    //este é o método para contar as balas do pente dentro do rifle
         if (!Cartridge.reloading) {
             if (!bulletsLeft.isEmpty()) {
-                bulletsLeft.removeLast();
+                bulletsLeft.remove((bulletsLeft.size() - 1));
                 bulletsToDraw.add(bullet);
                 if (accumulated < MAX_ROUNDS)
                     accumulated++;
@@ -57,6 +58,11 @@ public class Cartridge implements Item{
 
     @Override
     public void updateItem() {
+
+    }
+
+    @Override
+    public void updateItem(World wolrd) {
 
     }
 

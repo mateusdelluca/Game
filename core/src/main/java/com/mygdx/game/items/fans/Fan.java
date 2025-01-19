@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
@@ -15,9 +14,9 @@ public class Fan extends Objeto implements Fans {
     public static final float WIDTH = 76 * multiply, HEIGHT = 93 * multiply;
     private boolean useOnlyLastFrame = true;
 
-    public Fan(World world, Vector2 position){
-        super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,true);
+    public Fan(Vector2 position){
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody,true);
         body.setTransform(position, 0);
     }
 

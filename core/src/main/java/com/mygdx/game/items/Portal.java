@@ -15,9 +15,9 @@ public class Portal extends Objeto implements Item{
 
     public boolean open_portal;
 
-    public Portal(World world, Vector2 position){
-        super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
+    public Portal(Vector2 position){
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setUserData(getClass().getSimpleName());
         body.setTransform(position, 0);
     }
@@ -30,6 +30,11 @@ public class Portal extends Objeto implements Item{
     @Override
     public void updateItem() {
         open_portal = true;
+    }
+
+    @Override
+    public void updateItem(World wolrd) {
+
     }
 
     @Override

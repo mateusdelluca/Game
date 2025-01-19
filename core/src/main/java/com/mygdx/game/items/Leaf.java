@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-import java.io.Serializable;
 import java.util.Random;
 
 public class Leaf extends Objeto implements Item{
@@ -18,8 +17,8 @@ public class Leaf extends Objeto implements Item{
     private Body body;
 
     public Leaf(World world, Vector2 position){
-        super(world, WIDTH, HEIGHT);
-        body = createBoxBody(new Vector2(WIDTH, HEIGHT), BodyDef.BodyType.DynamicBody, true);
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH, HEIGHT), BodyDef.BodyType.DynamicBody, true);
         body.setGravityScale(0.05f);
         body.setTransform(position, new Random().nextInt(91));
         float velocity_x = -new Random().nextInt(100);
@@ -43,6 +42,11 @@ public class Leaf extends Objeto implements Item{
 
     @Override
     public void updateItem() {
+
+    }
+
+    @Override
+    public void updateItem(World wolrd) {
 
     }
 

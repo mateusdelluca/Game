@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
@@ -23,47 +22,41 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
-import lombok.Getter;
-import lombok.Setter;
+import static com.mygdx.game.screens.levels.Level_Manager.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Level extends State implements ContactListener {
+import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
+
+public class Level extends State implements ContactListener, Serializable {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
-    protected SpriteBatch spriteBatch = new SpriteBatch();
-    protected Viewport viewport;
-    protected OrthographicCamera camera;
-    protected World world;
-    protected Background background;
-    protected Box2DDebugRenderer box2DDebugRenderer;
+
+    protected transient Viewport viewport;
+    protected transient OrthographicCamera camera;
+
+    protected transient Background background;
+    protected transient Box2DDebugRenderer box2DDebugRenderer;
 
     private HashMap<String, Item> items = new HashMap<>();
-    private BitmapFont font;
+    private HashMap<String, Objeto> items2 = new HashMap<>();
+    private transient BitmapFont font;
     protected Boy boy;
-
-    protected MapObjects thorns, staticObjects;
-
-    @Getter
-    @Setter
-    protected Tile tile;
 
     protected PowerBar powerBar;
 
     protected ArrayList<Fans> fans = new ArrayList<>();
 
     protected HashMap<String, Monster1> monsters1 = new HashMap<>();
-    protected Jack jack;
-    protected Girl girl;
 
-    protected ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
-    public Level() {
-        world = new World(new Vector2(0,-10f), false);
-
+    public void init(){
+        Box2D.init();
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -75,11 +68,6 @@ public class Level extends State implements ContactListener {
         viewport = new ScreenViewport(camera);
         camera.update();
 
-        Texture t = new Texture(Gdx.files.internal("Font2.png"));
-        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
-        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        font.getData().scale(0.2f);
-
         tile = new Tile("Level3/Level3.tmx");
         staticObjects = tile.loadMapObjects("Rects");
         tile.createBodies(staticObjects, world, false, "Rects");
@@ -89,36 +77,56 @@ public class Level extends State implements ContactListener {
 
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
+        Texture t = new Texture(Gdx.files.internal("Font2.png"));
+
+        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        font.getData().scale(0.2f);
 
         background = new Background();
 
+        fans = new ArrayList<>();
+
+        fans.add(new Fan(new Vector2(1200 + 76, 6000 - 2400)));
+        fans.add(new Fan(new Vector2(1200 + 2*76, 6000 - 2400)));
+        fans.add(new Fan(new Vector2(1200, 6000 - 1640)));
+        fans.add(new Fan(new Vector2(1400, 6000 - 1120)));
+        fans.add(new Fan(new Vector2(1280, 6000 - 640)));
+
+        fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
+
+        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+
+        world.setContactListener(this);
+
+    }
+
+    public Level() {
+        init();
+
+
+
+
+
         powerBar = new PowerBar();
 
-        boy = new Boy(world, new Vector2(10, 5700), viewport);
+        boy = new Boy(new Vector2(10, 5700), viewport);
 
-        fans.clear();
 
-        fans.add(new Fan(world, new Vector2(1200 + 76, 6000 - 2400)));
-        fans.add(new Fan(world, new Vector2(1200 + 2*76, 6000 - 2400)));
-        fans.add(new Fan(world, new Vector2(1200, 6000 - 1640)));
-        fans.add(new Fan(world, new Vector2(1400, 6000 - 1120)));
-        fans.add(new Fan(world, new Vector2(1280, 6000 - 640)));
-
-        fans.add(new Fan2(world, new Vector2(350, 6000 - 2100)));
 
         monsters1.clear();
 
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(640, 6000 - 320), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(480, 6000 - 2000), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2080, 6000 - 360), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(3200, 6000 - 1080), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(4800, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(world, new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 320), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3200, 6000 - 1080), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
+        //TODO: colocar nomes de hashmap e userdata de body de monsters1 em cada monster1 para que funcione o
 
-
-        items.put(Rifle.class.getSimpleName(), new Rifle(world, new Vector2(440, 6000 - 350)));
-
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
+        items2.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
             if (index < 5) {
                 posX = 320 + (100 * index);
@@ -135,18 +143,28 @@ public class Level extends State implements ContactListener {
                 posX = 520 + (100 * (index - 10));
                 posY = 6000 - 2300;
             }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(world, new Vector2(posX, posY)));
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
+            items2.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
         }
 
-        items.put(JetPack.class.getSimpleName(), new JetPack(world, new Vector2(400, 6000 - 2400)));
-        items.put(Portal.class.getSimpleName(), new Portal(world, new Vector2(2450,6000 - 5600)));
+        items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
+        items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.get("Portal").updateItem();
 
-        world.setContactListener(this);
+        items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
+        items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 
-        Box2D.init();
 
-        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+        objetos.addAll(items2.values());
+        objetos.add(boy);
+        objetos.addAll(monsters1.values());
+
+
+
+
+
+
+
     }
 
     @Override
@@ -203,15 +221,12 @@ public class Level extends State implements ContactListener {
         tile.render(camera);
 //        for (Bullet bullet : bullets)
 //            bullet.render(spriteBatch);
-        for (Item item : items.values())
-            item.render(spriteBatch);
-        for (Fans fan : fans) {
-            fan.render(spriteBatch);
-        }
-        for (Monster1 monster1 : monsters1.values()){
-            monster1.render(spriteBatch);
-        }
-        boy.render(spriteBatch);
+        for (Objeto objeto : objetos)
+            objeto.render(spriteBatch);
+//        for (Monster1 monster1 : monsters1.values()){
+//            monster1.render(spriteBatch);
+//        }
+//        boy.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
     }
@@ -235,11 +250,10 @@ public class Level extends State implements ContactListener {
     public void updateObjects(){
 //        for (Bullet bullet : bullets)
 //            bullet.update();
-        for (Item item : items.values())
-            item.update();
-        boy.update();
-        for (Fans fan : fans) {
-            fan.update();
+        for (Objeto objeto : objetos) {
+            if (objeto instanceof Monster1)
+                continue;
+            objeto.update();
         }
         for (Monster1 monster1 : monsters1.values()){
             monster1.update(boy);
@@ -324,12 +338,12 @@ public class Level extends State implements ContactListener {
                 }
             }
         }
-        if (body1.getUserData().toString().equals("null")) {
-            bodiesToDestroy.add(body1);
-        }
-        if (body2.getUserData().toString().equals("null")) {
-            bodiesToDestroy.add(body2);
-        }
+//        if (body1.getUserData().toString().equals("null")) {
+//            bodiesToDestroy.add(body1);
+//        }
+//        if (body2.getUserData().toString().equals("null")) {
+//            bodiesToDestroy.add(body2);
+//        }
 
     }
 
@@ -392,7 +406,7 @@ public class Level extends State implements ContactListener {
                 if (body.getTransform().getPosition().x != 0) {
                     body.setTransform(new Random().nextFloat(1000), new Random().nextFloat(3000), 0);
                 }
-         }
+            }
             bodiesToDestroy.clear();
         }
 
@@ -431,6 +445,29 @@ public class Level extends State implements ContactListener {
         if (keycode == Input.Keys.ESCAPE){
             StateManager.setState(StateManager.States.PAUSE);
         }
+//        if (keycode == Input.Keys.P) {
+//            boy.setBodyData(new BodyData(boy.getBody(), (new Vector2(Boy.DIMENSIONS_FOR_SHAPE.x / 2f - 5, Boy.DIMENSIONS_FOR_SHAPE.y / 2f)), Boy.WIDTH, Boy.HEIGHT));
+//            bodiesToDestroy.add(boy.getBody());
+//            boy.getBody().setUserData("null");
+//            boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
+//
+//        }
+
+//        if (keycode == Input.Keys.M){
+//            try {
+//                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
+//                bodiesToDestroy.add(boy.getBody());
+////                boy = (Boy) ois.readObject();
+//                init();
+//                boy.loadBodyAndWorld(world, BodyDef.BodyType.DynamicBody, false);
+////                boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
+//                boy.setViewport(viewport);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
         return false;
     }
 

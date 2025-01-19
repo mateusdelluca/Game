@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Animations;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.sfx.Sounds;
@@ -20,9 +19,10 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.sfx.Sounds.*;
 
-public class Boy extends Objeto implements Person{
+public class Boy extends Objeto {
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
     public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
@@ -31,7 +31,7 @@ public class Boy extends Objeto implements Person{
     private boolean isFacingLeft;
     private float punchingAnimationTimer;
     public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
-    private final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
+    public static final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
     @Setter @Getter
@@ -45,10 +45,11 @@ public class Boy extends Objeto implements Person{
     private int counterWeaponTaken;
     private float worldX;
     private float worldY;
+    @Getter @Setter
     private transient Viewport viewport;
     @Getter @Setter
     private boolean use_jetPack;
-    private Sprite jetPackSprite;
+
     private Vector2 jetPackPosition;
     private float chargingSPTimer;
     private float chargingSPTimer2;
@@ -60,17 +61,17 @@ public class Boy extends Objeto implements Person{
 //    private JetPack jetPack;
     private Vector2 bodyPosition;
     private boolean buttonReloadingPressed;
-    private Sprite top;
-    private Sprite aim = new Sprite(Images.shoot);
-    private Sprite legs;
-    public Boy(World world, Vector2 bodyPosition, Viewport viewport){
-        super(world, WIDTH, HEIGHT);
+
+
+
+    public Boy(Vector2 bodyPosition, Viewport viewport){
+        super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
-        body = createBoxBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
+        body = createBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(bodyPosition, 0);;
         body.setUserData(getClass().getSimpleName());
+        bodyData.userData = "" + body.getUserData();
         this.viewport = viewport;
-        jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
     }
 
@@ -381,7 +382,7 @@ public class Boy extends Objeto implements Person{
             if (shooting && Rifle.showingNumbBullets) {
                 if (!Cartridge.reloading) {
                     if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
-                        Bullet bullet = new Bullet(world,
+                        Bullet bullet = new Bullet(
                             new Vector2(!isFacingLeft ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x),
                             (getBody().getPosition().y + HEIGHT / 2f)),

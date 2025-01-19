@@ -1,61 +1,77 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.Monster1;
+import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.images.Images;
+import com.mygdx.game.items.Crystal;
+import com.mygdx.game.items.JetPack;
+import com.mygdx.game.items.Portal;
+import com.mygdx.game.items.Rifle;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
-import com.mygdx.game.entities.BodyData;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
 
-public class Level_Manager extends State implements Serializable {
+public class Level_Manager extends State {
 
     private Level level1;
     public Level currentLevel;
     public static String currentLevelName = "Level3";
 
-    public BodyData[] bodiesData;
+    public static ArrayList<Objeto> objetos = new ArrayList<>();
 
-    public Level_Manager(){
+    public static ArrayList<Body> bodiesToDestroy = new ArrayList<>();
+
+    public static SpriteBatch spriteBatch = new SpriteBatch();
+
+    public static World world = new World(new Vector2(0, -10), true);
+
+    public Level_Manager() {
         level1 = new Level();
 //        level2 = new Level2(app);
 //        level3 = new Level3(app);
         changeLevel("Level3");
-        bodiesData = new BodyData[currentLevel.world.getBodyCount()];
     }
 
-    public void changeLevel(String levelName){
+    public void changeLevel(String levelName) {
         currentLevel = returnLevel(levelName);
-        currentLevel.setTile(new Tile(levelName + "/" + levelName + ".tmx"));
+        Images.tile = new Tile(levelName + "/" + levelName + ".tmx");
+        assert currentLevel != null;
 //        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
 //        Gdx.input.setInputProcessor(this);
 //        app.setScreen(currentLevel);
     }
 
-    public Level returnLevel(String level){
-        switch(level){
-            case "Level1":{
+    public Level returnLevel(String level) {
+        switch (level) {
+            case "Level1": {
                 currentLevelName = "Level1";
-                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
+                Images.staticObjects = Images.tile.loadMapObjects("Rects");
                 return level1;
             }
-            case "Level2":{
+            case "Level2": {
                 currentLevelName = "Level2";
-                currentLevel.staticObjects = currentLevel.getTile().loadMapObjects("Rects");
+                Images.staticObjects = Images.tile.loadMapObjects("Rects");
                 return level1;
             }
-            case "Level3":{
-               currentLevelName = "Level3";
-               return level1;
+            case "Level3": {
+                currentLevelName = "Level3";
+                return level1;
             }
             default: {
                 return level1;
             }
         }
     }
+
     @Override
     public void create() {
 
@@ -69,7 +85,7 @@ public class Level_Manager extends State implements Serializable {
 
     @Override
     public void resize(int i, int i1) {
-        currentLevel.resize(i,i1);
+        currentLevel.resize(i, i1);
     }
 
     @Override
@@ -89,8 +105,48 @@ public class Level_Manager extends State implements Serializable {
     }
 
     @Override
-    public boolean keyDown(int i) {
-        currentLevel.keyDown(i);
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.P) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.dat"));
+                oos.writeObject(currentLevel);
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (keycode == Input.Keys.M) {
+            try {
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
+                for (Objeto objeto : objetos) {
+//                    objeto.getBody().setUserData("null");
+                    bodiesToDestroy.add(objeto.getBody());
+                    world.destroyBody(objeto.getBody());
+                }
+
+                currentLevel = (Level) ois.readObject();
+                world = new World(new Vector2(0,-10), true);
+                currentLevel.init();
+////                changeLevel("Level3");
+                currentLevel.boy.loadWorldAndBody(BodyDef.BodyType.DynamicBody, false);
+//                boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
+                currentLevel.boy.setViewport(currentLevel.viewport);
+                for (Objeto objeto : objetos) {
+                    if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
+                        || objeto instanceof Portal)
+                        objeto.loadWorldAndBody(BodyDef.BodyType.StaticBody, true);
+                    if (objeto instanceof Monster1)
+                        objeto.loadWorldAndBody(BodyDef.BodyType.DynamicBody, false);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        currentLevel.keyDown(keycode);
         return false;
     }
 
@@ -132,7 +188,7 @@ public class Level_Manager extends State implements Serializable {
 
     @Override
     public boolean mouseMoved(int i, int i1) {
-        currentLevel.mouseMoved(i,i1);
+        currentLevel.mouseMoved(i, i1);
         return false;
     }
 
@@ -147,21 +203,23 @@ public class Level_Manager extends State implements Serializable {
         currentLevel.update();
     }
 
-    public void savingBodies(){
-        Array<Body> bodies = new Array<>();
-        currentLevel.world.getBodies(bodies);
-        for (int i = 0; i < bodies.size; i++){
-            bodiesData[i] = new BodyData(bodies.get(i).getPosition(), bodies.get(i).getAngle(),
-                bodies.get(i).getLinearVelocity(), bodies.get(i).getUserData().toString());
-        }
-    }
-
-//    @Override
-//    public void write(Json json) {
+    public void write() {
+//        Json json = new Json();
+//        json.toJson();
 //        json.writeObjectStart();
 //        json.writeValue(bodiesData);
+//        json.writeValue(this);
 //        json.writeObjectEnd();
-//    }
+
+
+//        Json json = new Json();
+//        String jsonString = json.toJson(this);
+//
+//        FileHandle file = Gdx.files.local("data.json");
+//        file.writeString(jsonString, false); // false para sobrescrever o arquivo
+
+
+    }
 //
 //    @Override
 //    public void read(Json json, JsonValue jsonData) {
