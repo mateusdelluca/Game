@@ -62,6 +62,8 @@ public class Boy extends Objeto {
     private Vector2 bodyPosition;
     private boolean buttonReloadingPressed;
 
+    public static String nameOfAnimation;
+
 
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
@@ -77,7 +79,6 @@ public class Boy extends Objeto {
 
     @Override
     public void render(SpriteBatch s){
-        viewport.update(1920, 1080);
         if (use_jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
@@ -207,6 +208,7 @@ public class Boy extends Objeto {
 
     private void animations() {
         String name = animations.name();
+        nameOfAnimation = name;
         if (name.equals("BOY_STRICKEN") || beenHit){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);

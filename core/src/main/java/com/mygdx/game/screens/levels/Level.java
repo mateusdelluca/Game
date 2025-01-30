@@ -126,7 +126,7 @@ public class Level extends State implements ContactListener, Serializable {
         //TODO: colocar nomes de hashmap e userdata de body de monsters1 em cada monster1 para que funcione o
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
-        items2.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
+        items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
             if (index < 5) {
                 posX = 320 + (100 * index);
@@ -221,12 +221,14 @@ public class Level extends State implements ContactListener, Serializable {
         tile.render(camera);
 //        for (Bullet bullet : bullets)
 //            bullet.render(spriteBatch);
-        for (Objeto objeto : objetos)
-            objeto.render(spriteBatch);
+        for (Objeto objeto : objetos) {
+            if (!(objeto instanceof Boy))
+                objeto.render(spriteBatch);
+        }
 //        for (Monster1 monster1 : monsters1.values()){
 //            monster1.render(spriteBatch);
 //        }
-//        boy.render(spriteBatch);
+        boy.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
     }

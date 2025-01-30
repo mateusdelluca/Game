@@ -6,8 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.items.Crystal;
 import com.mygdx.game.items.JetPack;
@@ -131,6 +133,8 @@ public class Level_Manager extends State {
                 currentLevel.boy.loadWorldAndBody(BodyDef.BodyType.DynamicBody, false);
 //                boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
                 currentLevel.boy.setViewport(currentLevel.viewport);
+                currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
+//                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
                 for (Objeto objeto : objetos) {
                     if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
                         || objeto instanceof Portal)

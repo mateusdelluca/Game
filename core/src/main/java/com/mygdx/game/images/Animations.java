@@ -2,8 +2,10 @@ package com.mygdx.game.images;
 
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public enum Animations{
+public enum Animations implements Serializable {
 
 
     //boy

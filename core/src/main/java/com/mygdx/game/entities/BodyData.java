@@ -41,6 +41,7 @@ public class BodyData implements Serializable {
         body.setUserData(userData);
         body.setActive(true);
         body.createFixture(fixtureDef);
+        body.setTransform(position, angle);
         return body;
     }
 

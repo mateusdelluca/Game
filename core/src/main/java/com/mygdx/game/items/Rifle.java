@@ -12,11 +12,12 @@ import com.mygdx.game.images.Images;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.mygdx.game.items.Cartridge.MAX_ROUNDS;
 
-public class Rifle extends Objeto implements Item{
+public class Rifle extends Objeto implements Item, Serializable {
 
     public static final float WIDTH = Images.rifle.getWidth();
     public static final float HEIGHT = Images.rifle.getHeight();
@@ -27,7 +28,6 @@ public class Rifle extends Objeto implements Item{
     @Getter
     private Cartridge leftSideBullets;
     private Vector2 position;
-    private float angle = 0f;
 
     @Getter @Setter
     private boolean buttonReloadingPressed;
@@ -35,6 +35,8 @@ public class Rifle extends Objeto implements Item{
     private int rightSide;
     public static String stringNumbBullets = "";
     private int total;
+    private int angle;
+    private transient Sprite rifle = new Sprite(Images.rifle);
 
     public Rifle(Vector2 position){
 
@@ -44,7 +46,7 @@ public class Rifle extends Objeto implements Item{
         this.position = position;
 
         body = createBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
-        body.setTransform(position, 0);
+        body.setTransform(position, body.getAngle());
         body.setUserData(getClass().getSimpleName());
 
         for (int index = 0; index < 2; index++){
@@ -59,13 +61,16 @@ public class Rifle extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
+        if (rifle == null) {
+            rifle = new Sprite(Images.rifle);
+            angle = 0;
+        }
+        position = body.getPosition();
+        rifle.setSize(width, height);
+        rifle.setOriginCenter();
+        rifle.setRotation(angle++);
+        rifle.setPosition(position.x, position.y);
         if (!body.getUserData().toString().equals("null")) {
-            position = body.getPosition();
-            Sprite rifle = new Sprite(Images.rifle);
-            rifle.setSize(width, height);
-            rifle.setOriginCenter();
-            rifle.setRotation(angle);
-            rifle.setPosition(position.x, position.y);
             rifle.draw(s);
         }
         if (showingNumbBullets) {
@@ -102,7 +107,7 @@ public class Rifle extends Objeto implements Item{
 
     @Override
     public void update() {
-        angle++;
+//        bodyData.angle++;
     }
 
     @Override
@@ -158,5 +163,9 @@ public class Rifle extends Objeto implements Item{
             total = 0;
             return value;
         }
+    }
+    @Override
+    public void loadWorldAndBody(BodyDef.BodyType type, boolean isSensor){
+        body = bodyData.convertDataToBody(type, isSensor);
     }
 }
