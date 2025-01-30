@@ -103,6 +103,7 @@ public class Boy extends Objeto {
                     //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
                     top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!Cartridge.reloading, Cartridge.reloading, isFacingLeft));
+                    top.setOriginCenter();
                     top.setRotation(degrees);
                     top.setPosition(body.getPosition().x, body.getPosition().y);
                     if (Math.abs(degrees) > 90f) {
@@ -116,13 +117,13 @@ public class Boy extends Objeto {
                         legs.flip(false, false);
                         jetPackSprite.flip(false, false);
                     }
-//                    top.setOriginCenter();
+
                     legs.draw(s);
-//                    s.draw(top, body.getPosition().x, body.getPosition().y);
+                    s.draw(top, body.getPosition().x, body.getPosition().y);
 //                    top.rotate(degrees);
                     top.draw(s);
 //                    aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
-                    s.draw(aim, worldX - 13, worldY - 13);
+                    s.draw(shoot, worldX - 13, worldY - 13);
                 }
             }
         }
@@ -132,7 +133,7 @@ public class Boy extends Objeto {
 
     public void update(){
         this.bodyPosition = body.getPosition();
-//        shooting = Rifle.showingNumbBullets;
+        shooting = Rifle.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
         animations();   //gives orders of physics of body in animations
         actionRect = actionRect();
@@ -209,6 +210,7 @@ public class Boy extends Objeto {
     private void animations() {
         String name = animations.name();
         nameOfAnimation = name;
+        shooting = rifle.showingNumbBullets;
         if (name.equals("BOY_STRICKEN") || beenHit){
             flickering_time += Gdx.graphics.getDeltaTime();
 //            System.out.println(flickering_time);

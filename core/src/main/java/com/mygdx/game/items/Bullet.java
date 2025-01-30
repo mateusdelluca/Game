@@ -60,6 +60,9 @@ public class Bullet extends Objeto implements Item {
     }
 
     public void render(SpriteBatch spriteBatch){
+        if (body == null) {
+            body = bodyData.convertDataToBody(BodyDef.BodyType.DynamicBody, true);
+        }
         Sprite sprite = new Sprite(Images.bullet);
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setOriginCenter();
@@ -79,9 +82,7 @@ public class Bullet extends Objeto implements Item {
 
     @Override
     public void updateItem(World world) {
-        if (body == null && world == null) {
-            body = bodyData.convertDataToBody(BodyDef.BodyType.DynamicBody, true);
-        }
+
     }
 
     @Override

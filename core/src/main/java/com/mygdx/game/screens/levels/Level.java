@@ -65,8 +65,9 @@ public class Level extends State implements ContactListener, Serializable {
 
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        viewport = new ScreenViewport(camera);
         camera.update();
+        viewport = new ScreenViewport(camera);
+        viewport.update(Level.WIDTH, Level.HEIGHT);
 
         tile = new Tile("Level3/Level3.tmx");
         staticObjects = tile.loadMapObjects("Rects");
@@ -229,6 +230,11 @@ public class Level extends State implements ContactListener, Serializable {
 //            monster1.render(spriteBatch);
 //        }
         boy.render(spriteBatch);
+//        Rifle rifle = (Rifle) items.get("Rifle");
+//        rifle.getLeftSideBullets().render(spriteBatch);
+//        items.get("Rifle").render(spriteBatch);
+        for (Fans fan : fans)
+            fan.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
     }
@@ -243,8 +249,7 @@ public class Level extends State implements ContactListener, Serializable {
 
         collisions();
 
-        for (Fans fan : fans)
-            fan.update2(boy.getBody(), Boy.BOX_WIDTH);
+
         updateObjects();
 
     }
@@ -257,9 +262,12 @@ public class Level extends State implements ContactListener, Serializable {
                 continue;
             objeto.update();
         }
+        items.get("Rifle").update();
         for (Monster1 monster1 : monsters1.values()){
             monster1.update(boy);
         }
+        for (Fans fan : fans)
+            fan.update2(boy.getBody(), Boy.BOX_WIDTH);
     }
 
     @Override

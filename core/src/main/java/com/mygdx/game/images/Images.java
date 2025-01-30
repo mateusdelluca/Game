@@ -121,7 +121,7 @@ public class Images {
         fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
         rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
-        aim = Images.shoot;
+        aim = new Sprite(Images.shoot);
         spriteJetPack = Images.jetPack;
         spriteBatch = new SpriteBatch();}
 

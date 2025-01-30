@@ -13,6 +13,7 @@ public class Cartridge implements Item{
 
     @Getter @Setter
     private ArrayList<Bullet> bulletsLeft = new ArrayList<>(); //just to count
+    @Getter @Setter
     private ArrayList<Bullet> bulletsToDraw = new ArrayList<>();  //just to draw the bullets
 
     public static boolean reloading;
@@ -41,7 +42,7 @@ public class Cartridge implements Item{
     public void addAndRemove(Bullet bullet){    //este é o método para contar as balas do pente dentro do rifle
         if (!Cartridge.reloading) {
             if (!bulletsLeft.isEmpty()) {
-                bulletsLeft.remove((bulletsLeft.size() - 1));
+                bulletsLeft.removeLast();
                 bulletsToDraw.add(bullet);
                 if (accumulated < MAX_ROUNDS)
                     accumulated++;
