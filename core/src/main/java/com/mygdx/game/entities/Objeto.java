@@ -156,6 +156,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void loadWorldAndBody(BodyDef.BodyType type, boolean isSensor){
         body = bodyData.convertDataToBody(type, isSensor);
+        body.setUserData(this.toString());
+        System.out.println(this);
     }
 
     public Objeto objeto(){

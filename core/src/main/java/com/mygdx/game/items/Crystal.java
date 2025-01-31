@@ -21,7 +21,7 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        if (body.getUserData().equals(getClass().getSimpleName()))
+        if (body != null && body.getUserData().equals(getClass().getSimpleName()))
             s.draw(Images.crystal, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 

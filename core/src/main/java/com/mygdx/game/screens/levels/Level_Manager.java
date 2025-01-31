@@ -121,7 +121,7 @@ public class Level_Manager extends State {
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
                 for (Objeto objeto : objetos) {
-//                    objeto.getBody().setUserData("null");
+                    objeto.getBody().setUserData("null");
                     bodiesToDestroy.add(objeto.getBody());
                     world.destroyBody(objeto.getBody());
                 }

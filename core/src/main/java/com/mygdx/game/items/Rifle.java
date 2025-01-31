@@ -1,5 +1,7 @@
 package com.mygdx.game.items;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -15,12 +17,13 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static com.mygdx.game.images.Images.rifle;
 import static com.mygdx.game.items.Cartridge.MAX_ROUNDS;
 
 public class Rifle extends Objeto implements Item, Serializable {
 
-    public static final float WIDTH = Images.rifle.getWidth();
-    public static final float HEIGHT = Images.rifle.getHeight();
+    public static final float WIDTH = rifle.getWidth();
+    public static final float HEIGHT = rifle.getHeight();
 //    public static final int MAX_ROUNDS = 30;
     public final float MULTIPLY = 1/6f;
     @Getter
@@ -36,7 +39,6 @@ public class Rifle extends Objeto implements Item, Serializable {
     public static String stringNumbBullets = "";
     private int total;
     private int angle;
-    private transient Sprite rifle = new Sprite(Images.rifle);
 
     public Rifle(Vector2 position){
 
@@ -61,16 +63,17 @@ public class Rifle extends Objeto implements Item, Serializable {
 
     @Override
     public void render(SpriteBatch s) {
-        if (rifle == null) {
-            rifle = new Sprite(Images.rifle);
-            angle = 0;
+        if (body == null) {
+            position = bodyData.position;
+//            rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         }
-        position = body.getPosition();
+        else
+            position = body.getPosition();
         rifle.setSize(width, height);
         rifle.setOriginCenter();
-        rifle.setRotation(angle++);
+        rifle.rotate(1f);
         rifle.setPosition(position.x, position.y);
-        if (!body.getUserData().toString().equals("null")) {
+        if (body != null && body.getUserData().toString().equals(this.toString()) ) {
             rifle.draw(s);
         }
         if (showingNumbBullets) {
@@ -164,8 +167,5 @@ public class Rifle extends Objeto implements Item, Serializable {
             return value;
         }
     }
-    @Override
-    public void loadWorldAndBody(BodyDef.BodyType type, boolean isSensor){
-        body = bodyData.convertDataToBody(type, isSensor);
-    }
+   
 }
