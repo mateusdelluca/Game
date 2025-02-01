@@ -148,8 +148,8 @@ public class Level_Manager extends State {
                     if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
                         || objeto instanceof Portal)
                         objeto.loadBody(BodyDef.BodyType.StaticBody, true);
-                    if (objeto instanceof Monster1)
-                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
+//                    if (objeto instanceof Monster1)
+//                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

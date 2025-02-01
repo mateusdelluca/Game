@@ -23,6 +23,8 @@ public class Portal extends Objeto implements Item{
     }
 
     public void render(SpriteBatch s){
+        if (body == null)
+            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
         s.setColor(1f,1f,1f,1f);
         s.draw(Images.portal.currentSpriteFrame(!open_portal, true, false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }

@@ -229,7 +229,7 @@ public class Boy extends Objeto {
                 }
             }
             if (!beenHit) {
-                if (name.equals("BOY_SABER")) {
+                if (name.equals("BOY_SABER") && !shooting) {
                     if (saber_taken && !hit) {
                         setFrameCounter(0);
                     }

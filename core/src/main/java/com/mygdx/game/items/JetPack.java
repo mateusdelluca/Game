@@ -26,10 +26,13 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
+        if (body == null)
+            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
         if (!body.getUserData().toString().equals("null")) {
-            spriteJetPack.setOriginCenter();
+            spriteJetPack.setOrigin(WIDTH/2f, HEIGHT/2f);
             spriteJetPack.setPosition(body.getPosition().x, body.getPosition().y);
             spriteJetPack.setRotation(angle++);
+            spriteJetPack.draw(s);
         }
         else{
             body.setTransform(-1000, - 1000, 0);

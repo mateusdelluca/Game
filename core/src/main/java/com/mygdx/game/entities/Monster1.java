@@ -72,6 +72,7 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     public void update(Boy boy){
+        update();
         if (boy != null && boy.getBody() != null && body != null) {
             if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
                 if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
@@ -155,7 +156,15 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void update(){
+        if (body == null)
+            loadBody(BodyDef.BodyType.DynamicBody, false);
+    }
 
+    @Override
+    public void loadBody(BodyDef.BodyType type, boolean isSensor){
+        body = bodyData.convertDataToBody(type, isSensor);
+        body.setUserData(this.toString());
+        System.out.println(this);
     }
 
 }

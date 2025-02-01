@@ -3,11 +3,13 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class BodyData implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     public float angle;
     public Vector2 position, linearVelocity;
