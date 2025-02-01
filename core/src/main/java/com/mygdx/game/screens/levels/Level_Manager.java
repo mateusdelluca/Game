@@ -1,11 +1,13 @@
 package com.mygdx.game.screens.levels;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
@@ -35,6 +37,11 @@ public class Level_Manager extends State {
     public static SpriteBatch spriteBatch = new SpriteBatch();
 
     public static World world = new World(new Vector2(0, -10), true);
+
+    public static Viewport viewport;
+    public static OrthographicCamera camera;
+
+    public static boolean loaded;
 
     public Level_Manager() {
         level1 = new Level();
@@ -119,28 +126,30 @@ public class Level_Manager extends State {
         }
         if (keycode == Input.Keys.M) {
             try {
+                loaded = true;
+
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
                 for (Objeto objeto : objetos) {
                     objeto.getBody().setUserData("null");
                     bodiesToDestroy.add(objeto.getBody());
                     world.destroyBody(objeto.getBody());
                 }
-
+                currentLevel.boy.setViewport(viewport);
                 currentLevel = (Level) ois.readObject();
+                ois.close();
                 world = new World(new Vector2(0,-10), true);
                 currentLevel.init();
-////                changeLevel("Level3");
-                currentLevel.boy.loadWorldAndBody(BodyDef.BodyType.DynamicBody, false);
-//                boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
-                currentLevel.boy.setViewport(currentLevel.viewport);
+                world.setContactListener(currentLevel);
+                currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
+                currentLevel.boy.setViewport(viewport);
                 currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
-//                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
+                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
                 for (Objeto objeto : objetos) {
                     if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
                         || objeto instanceof Portal)
-                        objeto.loadWorldAndBody(BodyDef.BodyType.StaticBody, true);
+                        objeto.loadBody(BodyDef.BodyType.StaticBody, true);
                     if (objeto instanceof Monster1)
-                        objeto.loadWorldAndBody(BodyDef.BodyType.DynamicBody, false);
+                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

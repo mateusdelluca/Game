@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
@@ -142,19 +143,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public abstract String toString();
 
-    public void beenHit(Sprite sprite){
-        if (beenHit) {
-            deltaTime += Gdx.graphics.getDeltaTime();
-            if (deltaTime > 0.3f) {
-//                alpha = new Random().nextFloat(1f);
-                deltaTime = 0f;
-                Sounds.HURT.play();
-//                sprite.setAlpha(alpha);
-            }
-        }
-    }
-
-    public void loadWorldAndBody(BodyDef.BodyType type, boolean isSensor){
+    public void loadBody(BodyDef.BodyType type, boolean isSensor){
         body = bodyData.convertDataToBody(type, isSensor);
         body.setUserData(this.toString());
         System.out.println(this);

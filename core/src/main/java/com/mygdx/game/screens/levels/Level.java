@@ -36,10 +36,6 @@ public class Level extends State implements ContactListener, Serializable {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
-
-    protected transient Viewport viewport;
-    protected transient OrthographicCamera camera;
-
     protected transient Background background;
     protected transient Box2DDebugRenderer box2DDebugRenderer;
 
@@ -60,14 +56,7 @@ public class Level extends State implements ContactListener, Serializable {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
-
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        camera.update();
-        viewport = new ScreenViewport(camera);
-        viewport.update(Level.WIDTH, Level.HEIGHT);
+        background = new Background();
 
         tile = new Tile("Level3/Level3.tmx");
         staticObjects = tile.loadMapObjects("Rects");
@@ -78,13 +67,11 @@ public class Level extends State implements ContactListener, Serializable {
 
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
-        Texture t = new Texture(Gdx.files.internal("Font2.png"));
 
+        Texture t = new Texture(Gdx.files.internal("Font2.png"));
         font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.2f);
-
-        background = new Background();
 
         fans = new ArrayList<>();
 
@@ -103,11 +90,21 @@ public class Level extends State implements ContactListener, Serializable {
     }
 
     public Level() {
+
+        // Constructs a new OrthographicCamera, using the given viewport width and height
+        // Height is multiplied by aspect ratio.
+
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        camera.update();
+        viewport = new ScreenViewport(camera);
+        viewport.update(Level.WIDTH, Level.HEIGHT);
+
+
+
+
+
         init();
-
-
-
-
 
         powerBar = new PowerBar();
 
@@ -187,6 +184,7 @@ public class Level extends State implements ContactListener, Serializable {
         if (camera.position.x < 970f)
             camera.position.x = 970f;
         camera.update();
+        viewport.update(Level.WIDTH, Level.HEIGHT);
         renderObjects();
         box2DDebugRenderer.render(world, camera.combined);
     }
@@ -258,7 +256,7 @@ public class Level extends State implements ContactListener, Serializable {
 //        for (Bullet bullet : bullets)
 //            bullet.update();
         for (Objeto objeto : objetos) {
-            if (objeto instanceof Monster1)
+            if (objeto instanceof Monster1 || objeto instanceof Boy)
                 continue;
             objeto.update();
         }
@@ -266,6 +264,7 @@ public class Level extends State implements ContactListener, Serializable {
         for (Monster1 monster1 : monsters1.values()){
             monster1.update(boy);
         }
+        boy.update();
         for (Fans fan : fans)
             fan.update2(boy.getBody(), Boy.BOX_WIDTH);
     }
@@ -278,9 +277,16 @@ public class Level extends State implements ContactListener, Serializable {
             return;
         if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
             return;
-
+        if (loaded){
+            loaded = false;
+            return;
+        }
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
 
         for (Item item : items.values()) {
             if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy")) ||
@@ -320,6 +326,8 @@ public class Level extends State implements ContactListener, Serializable {
         }
 
         for (Monster1 m1 : monsters1.values()) {
+            if (m1.getBody() == null)
+                continue;
             if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
                 || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")) {
                 boyBeenHit();
@@ -331,29 +339,33 @@ public class Level extends State implements ContactListener, Serializable {
                     monster1BeenHit(m1, body2);
                 }
             }
+
             if ((body1.getUserData().toString().equals("Bullet") &&
-                body2.getUserData().toString().equals(m1.toString())
-            ) || body2.getUserData().toString().equals("Bullet") &&
-                body1.getUserData().toString().equals(m1.toString())) {
+                body2.getUserData().toString().equals(m1.toString()))
+                    || body2.getUserData().toString().equals("Bullet") &&
+                        body1.getUserData().toString().equals(m1.toString())) {
                 if (body1.getUserData().toString().equals("Bullet")) {
                     monster1BeenHit(m1, body1);
                     body1.setUserData("null");
                     body1.setGravityScale(0.1f);
+                    body1.setLinearVelocity(0,0);
                 } else {
                     if (body2.getUserData().toString().equals("Bullet")) {
                         monster1BeenHit(m1, body2);
                         body2.setUserData("null");
                         body2.setGravityScale(0.1f);
+                        body2.setLinearVelocity(0,0);
                     }
                 }
             }
         }
-//        if (body1.getUserData().toString().equals("null")) {
-//            bodiesToDestroy.add(body1);
-//        }
-//        if (body2.getUserData().toString().equals("null")) {
-//            bodiesToDestroy.add(body2);
-//        }
+
+        if (body1.getUserData().toString().equals("null") && body1.getLinearVelocity().x <= 1f) {
+            bodiesToDestroy.add(body1);
+        }
+        if (body2.getUserData().toString().equals("null") && body2.getLinearVelocity().x <= 1f) {
+            bodiesToDestroy.add(body2);
+        }
 
     }
 
@@ -431,11 +443,13 @@ public class Level extends State implements ContactListener, Serializable {
     }
 
     protected void monster1BeenHit(Monster1 m1, Body body) {
-        String name = "MONSTER1_FLICKERING";
-        m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
-        m1.animations = Animations.valueOf(name);
-        Sounds.MONSTER_HURT.play();
-        m1.setHP(m1.getHP() - 1);
+        if (m1.getBody() != null) {
+            String name = "MONSTER1_FLICKERING";
+            m1.getBody().setLinearVelocity(m1.getBody().getWorldCenter().x > body.getWorldCenter().x ? m1.getBody().getLinearVelocity().x + 10f : m1.getBody().getLinearVelocity().x - 10f, m1.getBody().getLinearVelocity().y + 20);
+            m1.animations = Animations.valueOf(name);
+            Sounds.MONSTER_HURT.play();
+            m1.setHP(m1.getHP() - 1);
+        }
     }
 
     @Override

@@ -105,7 +105,7 @@ public class Boy extends Objeto {
                     top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!Cartridge.reloading, Cartridge.reloading, isFacingLeft));
                     top.setOriginCenter();
                     top.setRotation(degrees);
-                    top.setPosition(body.getPosition().x, body.getPosition().y);
+                    top.setPosition(bodyPosition.x, bodyPosition.y);
                     if (Math.abs(degrees) > 90f) {
                         top.setRotation(-Math.abs(180f - degrees));
                         top.flip(true, false);
@@ -119,11 +119,11 @@ public class Boy extends Objeto {
                     }
 
                     legs.draw(s);
-                    s.draw(top, body.getPosition().x, body.getPosition().y);
+//                    s.draw(top, body.getPosition().x, body.getPosition().y);
 //                    top.rotate(degrees);
                     top.draw(s);
 //                    aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
-                    s.draw(shoot, worldX - 13, worldY - 13);
+                    s.draw(shoot, worldX - 13, worldY - 9);
                 }
             }
         }
@@ -135,7 +135,7 @@ public class Boy extends Objeto {
         this.bodyPosition = body.getPosition();
         shooting = Rifle.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
-        animations();   //gives orders of physics of body in animations
+        animations();   //gives orders of physics of body on animations
         actionRect = actionRect();
         if (flickering_time >= 1.0f && beenHit) {  //the timer of 1second to normalize after has been hit
             animations = Animations.BOY_IDLE;
@@ -181,15 +181,15 @@ public class Boy extends Objeto {
     }
 
     private void aim(){
-//        if (shooting) {
+        if (shooting) {
 //            imgX = Gdx.graphics.getWidth() / 2f;
 //            imgY = Gdx.graphics.getHeight() / 2f;
-            float dx = worldX - Math.abs(body.getPosition().x + 64);
-            float dy = worldY - Math.abs(body.getPosition().y + 64);
+            float dx = worldX - Math.abs(bodyPosition.x + 64);
+            float dy = worldY - Math.abs(bodyPosition.y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
 //          System.out.println(degrees);
             radians = (float) Math.atan2(dy, dx);
-//        }
+        }
     }
 
     public Rectangle actionRect(){

@@ -10,7 +10,9 @@ import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Images {
+import java.io.Serializable;
+
+public class Images implements Serializable {
     public static Texture[] saves = new Texture[6];
     public static Texture box;
     public static Texture menu;

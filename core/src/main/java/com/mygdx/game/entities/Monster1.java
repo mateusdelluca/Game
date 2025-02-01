@@ -13,9 +13,11 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
-public class Monster1 extends Objeto{
+public class Monster1 extends Objeto implements Serializable {
 
     public static final float WIDTH = 94, HEIGHT = 128;
     public static float BOX_WIDTH = 78f, BOX_HEIGHT = 118f;
