@@ -227,13 +227,14 @@ public class Level extends State implements ContactListener, Serializable {
         for (Monster1 monster1 : monsters1.values()){
             monster1.render(spriteBatch);
         }
-        boy.render(spriteBatch);
+
 //        Rifle rifle = (Rifle) items.get("Rifle");
 //        rifle.getLeftSideBullets().render(spriteBatch);
         for (Item item : items.values())
             item.render(spriteBatch);
         for (Fans fan : fans)
             fan.render(spriteBatch);
+        boy.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
     }

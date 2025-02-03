@@ -15,8 +15,6 @@ public class JetPack extends Objeto implements Item{
 
     private float angle = 0;
 
-
-
     public JetPack(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);

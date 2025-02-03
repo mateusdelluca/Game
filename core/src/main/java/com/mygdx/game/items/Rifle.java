@@ -64,6 +64,7 @@ public class Rifle extends Objeto implements Item, Serializable {
     @Override
     public void render(SpriteBatch s) {
         if (body == null) {
+            loadBody(BodyDef.BodyType.StaticBody, true);
             position = bodyData.position;
 //            rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         }
@@ -73,7 +74,7 @@ public class Rifle extends Objeto implements Item, Serializable {
         rifle.setOriginCenter();
         rifle.rotate(1f);
         rifle.setPosition(position.x, position.y);
-        if (body != null && body.getUserData().toString().equals(this.toString()) ) {
+        if (body.getUserData().toString().equals(this.toString())) {
             rifle.draw(s);
         }
         if (showingNumbBullets) {
@@ -167,5 +168,5 @@ public class Rifle extends Objeto implements Item, Serializable {
             return value;
         }
     }
-   
+
 }
