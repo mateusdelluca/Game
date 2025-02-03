@@ -17,6 +17,7 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.system.Load;
 
 import static com.badlogic.gdx.Gdx.app;
+import static com.mygdx.game.images.Images.sprites;
 import static com.mygdx.game.manager.StateManager.currentState;
 import static com.mygdx.game.manager.StateManager.oldState;
 //import static com.mygdx.game.manager.StateManager.oldState;
@@ -35,16 +36,14 @@ public class LoadPage extends State {
 
     private Rectangle[] rects = new Rectangle[6];
 
-    private Sprite[] sprites = new Sprite[7];
+
 
     public LoadPage(){
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
-        for (int k = 0; k < 6; k++) {
-            sprites[k] = new Sprite(Images.saves[k]);
-        }
-        sprites[6] = new Sprite(Images.box);
+
+
         boxes();
 
 //        rects[0].x = -615;
@@ -60,7 +59,7 @@ public class LoadPage extends State {
                 int b = (pixelColor >> 8) & 0xff;  // Componente azul
                 int a = pixelColor & 0xff;         // Componente alfa
 
-                if (a == 1f)
+//                if (a == 1f)
                     sprites[index] = Images.screenshootsSaves[index];
             }
         } catch(RuntimeException e){

@@ -1,9 +1,6 @@
 package com.mygdx.game.system;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.google.gson.Gson;
-import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.levels.Level;
+
 import com.mygdx.game.screens.levels.Level_Manager;
 
 import java.io.*;
@@ -42,7 +39,7 @@ public class Save {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        takeScreenshot(index);
+
     }
 
 

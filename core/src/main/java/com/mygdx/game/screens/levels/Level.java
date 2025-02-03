@@ -31,6 +31,7 @@ import java.util.Random;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
+import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Level extends State implements ContactListener, Serializable {
 
@@ -469,6 +470,7 @@ public class Level extends State implements ContactListener, Serializable {
     public boolean keyDown(int keycode) {
         boy.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
+            takeScreenshot(0);
             StateManager.setState(StateManager.States.PAUSE);
         }
 //        if (keycode == Input.Keys.P) {
