@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.nio.ByteBuffer;
-
 public class ScreenshotHelper {
         public static void takeScreenshot(int index) {
             // Obtém a largura e a altura da tela
