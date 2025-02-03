@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -49,6 +50,22 @@ public class LoadPage extends State {
 //        rects[0].x = -615;
 //        y[0] = ;
 
+        try {
+            for (int index = 0; index < 6; index++) {
+                Images.screenshootsSaves[index].getTexture().getTextureData().prepare();
+                Pixmap pixmap = Images.screenshootsSaves[index].getTexture().getTextureData().consumePixmap();
+                int pixelColor = pixmap.getPixel(10, 10);
+                int r = (pixelColor >> 24) & 0xff; // Componente vermelho
+                int g = (pixelColor >> 16) & 0xff; // Componente verde
+                int b = (pixelColor >> 8) & 0xff;  // Componente azul
+                int a = pixelColor & 0xff;         // Componente alfa
+
+                if (a == 1f)
+                    sprites[index] = Images.screenshootsSaves[index];
+            }
+        } catch(RuntimeException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -79,8 +96,9 @@ public class LoadPage extends State {
 
 
         for (int k = 0; k < rects.length; k++) {
-            sprites[k].draw(spriteBatch2);
             sprites[k].setPosition(rects[k].x, rects[k].y);
+            sprites[k].draw(spriteBatch2);
+
         }
 
         for (Rectangle rectangle : rects) {

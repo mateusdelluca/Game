@@ -57,6 +57,7 @@ public class Boy extends Objeto {
     private boolean chargingSP;
     @Setter @Getter
     private ArrayList<Item> items = new ArrayList<Item>();
+    @Getter
     private Rifle rifle;
 //    private JetPack jetPack;
     private Vector2 bodyPosition;

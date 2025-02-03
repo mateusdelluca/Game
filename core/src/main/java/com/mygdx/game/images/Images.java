@@ -59,6 +59,8 @@ public class Images implements Serializable {
     public static Tile tile;
     public static BitmapFont font;
 
+    public static Sprite[] screenshootsSaves = new Sprite[6];
+
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, false));
 
@@ -125,7 +127,17 @@ public class Images implements Serializable {
         jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
         aim = new Sprite(Images.shoot);
         spriteJetPack = Images.jetPack;
-        spriteBatch = new SpriteBatch();}
+
+        try {
+            for (int i = 0; i < screenshootsSaves.length; i++) {
+                screenshootsSaves[i] = new Sprite(new Texture(Gdx.files.external("saves/Save" + i + ".png")));
+            }
+        } catch(RuntimeException e){
+            e.printStackTrace();
+        }
+
+        spriteBatch = new SpriteBatch();
+    }
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {
 //        double radians = Math.toRadians(degrees);

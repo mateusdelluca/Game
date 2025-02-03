@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class Level_Manager extends State {
 
     private Level level1;
-    public Level currentLevel;
+    public static Level currentLevel;
     public static String currentLevelName = "Level3";
 
     public static ArrayList<Objeto> objetos = new ArrayList<>();

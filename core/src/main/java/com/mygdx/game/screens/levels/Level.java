@@ -42,7 +42,7 @@ public class Level extends State implements ContactListener, Serializable {
     private HashMap<String, Item> items = new HashMap<>();
     private HashMap<String, Objeto> items2 = new HashMap<>();
     private transient BitmapFont font;
-    protected Boy boy;
+    public Boy boy;
 
     protected PowerBar powerBar;
 
