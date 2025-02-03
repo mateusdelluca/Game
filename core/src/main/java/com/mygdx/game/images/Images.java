@@ -135,11 +135,11 @@ public class Images implements Serializable {
                 sprites[k] = new Sprite(Images.saves[k]);
             }
             sprites[6] = new Sprite(Images.box);
-            for (int i = 0; i < screenshootsSaves.length; i++) {
-                Texture t = new Texture(Gdx.files.external("Save" + i + ".png"));
-                screenshootsSaves[i] = new Sprite(t);
-                screenshootsSaves[i].setSize(248,166);
-            }
+//            for (int i = 0; i < screenshootsSaves.length; i++) {
+//                Texture t = new Texture(Gdx.files.external("Save" + i + ".png"));
+//                screenshootsSaves[i] = new Sprite(t);
+//                screenshootsSaves[i].setSize(248,166);
+//            }
         } catch(RuntimeException e){
             e.printStackTrace();
         }

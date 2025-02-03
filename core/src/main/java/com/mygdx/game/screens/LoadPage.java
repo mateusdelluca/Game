@@ -49,22 +49,22 @@ public class LoadPage extends State {
 //        rects[0].x = -615;
 //        y[0] = ;
 
-        try {
-            for (int index = 0; index < 6; index++) {
-                Images.screenshootsSaves[index].getTexture().getTextureData().prepare();
-                Pixmap pixmap = Images.screenshootsSaves[index].getTexture().getTextureData().consumePixmap();
-                int pixelColor = pixmap.getPixel(10, 10);
-                int r = (pixelColor >> 24) & 0xff; // Componente vermelho
-                int g = (pixelColor >> 16) & 0xff; // Componente verde
-                int b = (pixelColor >> 8) & 0xff;  // Componente azul
-                int a = pixelColor & 0xff;         // Componente alfa
-
-//                if (a == 1f)
-                    sprites[index] = Images.screenshootsSaves[index];
-            }
-        } catch(RuntimeException e){
-            e.printStackTrace();
-        }
+//        try {
+//            for (int index = 0; index < 6; index++) {
+//                Images.screenshootsSaves[index].getTexture().getTextureData().prepare();
+//                Pixmap pixmap = Images.screenshootsSaves[index].getTexture().getTextureData().consumePixmap();
+//                int pixelColor = pixmap.getPixel(10, 10);
+//                int r = (pixelColor >> 24) & 0xff; // Componente vermelho
+//                int g = (pixelColor >> 16) & 0xff; // Componente verde
+//                int b = (pixelColor >> 8) & 0xff;  // Componente azul
+//                int a = pixelColor & 0xff;         // Componente alfa
+//
+////                if (a == 1f)
+//                    sprites[index] = Images.screenshootsSaves[index];
+//            }
+//        } catch(RuntimeException e){
+//            e.printStackTrace();
+//        }
 
     }
 
