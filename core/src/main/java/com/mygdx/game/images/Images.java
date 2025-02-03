@@ -66,6 +66,8 @@ public class Images implements Serializable {
 
     public SpriteBatch spriteBatch;
 
+    public static Sprite[] sprites = new Sprite[7];
+
     public Images() {
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
@@ -129,8 +131,14 @@ public class Images implements Serializable {
         spriteJetPack = Images.jetPack;
 
         try {
+            for (int k = 0; k < 6; k++) {
+                sprites[k] = new Sprite(Images.saves[k]);
+            }
+            sprites[6] = new Sprite(Images.box);
             for (int i = 0; i < screenshootsSaves.length; i++) {
-                screenshootsSaves[i] = new Sprite(new Texture(Gdx.files.external("saves/Save" + i + ".png")));
+                Texture t = new Texture(Gdx.files.external("Save" + i + ".png"));
+                screenshootsSaves[i] = new Sprite(t);
+                screenshootsSaves[i].setSize(248,166);
             }
         } catch(RuntimeException e){
             e.printStackTrace();

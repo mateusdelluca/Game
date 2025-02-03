@@ -96,19 +96,19 @@ public class StateManager extends Game {
          @Override
          public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
             state.touchCancelled(screenX, screenY, pointer, button);
-             return false;
+            return false;
          }
 
          @Override
          public boolean touchDragged(int screenX, int screenY, int pointer) {
             state.touchDragged(screenX, screenY, pointer);
-             return false;
+            return false;
          }
 
          @Override
          public boolean mouseMoved(int screenX, int screenY) {
              state.mouseMoved(screenX, screenY);
-            return false;
+             return false;
          }
 
          @Override
