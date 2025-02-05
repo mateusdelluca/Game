@@ -11,7 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Gdx;
 public class Images implements Serializable {
     public static Texture[] saves = new Texture[6];
     public static Texture box;
@@ -66,7 +69,7 @@ public class Images implements Serializable {
 
     public SpriteBatch spriteBatch;
 
-    public static Sprite[] sprites = new Sprite[7];
+    public static Sprite[] sprites = new Sprite[8];
 
     public Images() {
         box = new Texture(Gdx.files.internal("saves/Box.png"));
@@ -112,9 +115,12 @@ public class Images implements Serializable {
         sp = new Texture(Gdx.files.internal("SP_Bar.png"));
         sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
-
-        for (int i = 0; i < saves.length; i++){
-            saves[i] = new Texture(Gdx.files.internal("saves/Save" + i + ".png"));
+        try {
+            for (int i = 0; i < saves.length; i++) {
+//                saves[i] = new Texture(Gdx.files.local("saves/Save" + i + ".png"));
+            }
+        } catch(Exception e){
+            e.printStackTrace();
         }
         jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
         girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
@@ -131,8 +137,13 @@ public class Images implements Serializable {
         spriteJetPack = Images.jetPack;
 
         try {
-            for (int k = 0; k < 6; k++) {
-                sprites[k] = new Sprite(Images.saves[k]);
+            for (int k = 3; k < 4; k++) {
+                FileHandle file = Gdx.files.local("saves/Save" + k + ".png"); // Caminho do arquivo de entrada
+                Pixmap pixmap = new Pixmap(file);
+                sprites[k] = new Sprite(new Texture(pixmap));
+                sprites[k].flip(false, true);
+                sprites[k].setSize(248, 166);
+//                sprites[k] = new Sprite(Images.box);
             }
             sprites[6] = new Sprite(Images.box);
 //            for (int i = 0; i < screenshootsSaves.length; i++) {

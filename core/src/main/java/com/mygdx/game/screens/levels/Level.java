@@ -470,7 +470,7 @@ public class Level extends State implements ContactListener, Serializable {
     public boolean keyDown(int keycode) {
         boy.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
-            takeScreenshot(0);
+            takeScreenshot();
             StateManager.setState(StateManager.States.PAUSE);
         }
 //        if (keycode == Input.Keys.P) {

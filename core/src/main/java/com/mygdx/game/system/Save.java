@@ -1,11 +1,20 @@
 package com.mygdx.game.system;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.game.screens.levels.Level_Manager;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 
-import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
+import static com.mygdx.game.images.Images.sprites;
+import static com.mygdx.game.system.ScreenshotHelper.*;
 
 public class Save {
 
@@ -33,14 +42,23 @@ public class Save {
 
     public Save(int index){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Save" + index + ".dat"));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("saves/Save" + index + ".dat"));
             oos.writeObject(Level_Manager.currentLevel);
             oos.close();
+
+            FileHandle file = Gdx.files.local("saves/Save" + index + ".png"); // Define o caminho de saída
+            // Tenta salvar o pixmap
+            sprites[index] = new Sprite(new Texture(printscreen));
+            sprites[index].flip(false,true);
+            sprites[index].setSize(248,166);
+            PixmapIO.writePNG(file, printscreen);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new GdxRuntimeException(e);
         }
 
     }
+
+
 
 
 }

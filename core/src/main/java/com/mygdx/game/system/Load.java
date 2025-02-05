@@ -41,7 +41,7 @@ public class Load{
     public Load(int index){
         try {
             loaded = true;
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Save" + index + ".dat"));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
             for (Objeto objeto : objetos) {
                 objeto.getBody().setUserData("null");
                 bodiesToDestroy.add(objeto.getBody());

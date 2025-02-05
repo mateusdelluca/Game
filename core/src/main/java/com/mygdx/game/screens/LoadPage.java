@@ -15,6 +15,9 @@ import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.system.Load;
+import com.mygdx.game.system.Save;
+
+import java.io.File;
 
 import static com.badlogic.gdx.Gdx.app;
 import static com.mygdx.game.images.Images.sprites;
@@ -94,7 +97,7 @@ public class LoadPage extends State {
         spriteBatch2.begin();
 
 
-        for (int k = 0; k < rects.length; k++) {
+        for (int k = 3; k < 4; k++) {
             sprites[k].setPosition(rects[k].x, rects[k].y);
             sprites[k].draw(spriteBatch2);
 
@@ -112,8 +115,8 @@ public class LoadPage extends State {
     }
 
     public void boxes() {
-        float width = Images.saves[0].getWidth();
-        float height = Images.saves[0].getHeight();
+        float width = Images.box.getWidth();
+        float height = Images.box.getHeight();
 
         for (int i = 0, j = 0, k = 0; k < 6; i++, k++) {
 
@@ -179,9 +182,20 @@ public class LoadPage extends State {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        for (int i = 0; i < rects.length; i++) {
-            if (rects[i].contains(mouseRectangle)) {
-                new Load(i);
+        if (button == Input.Buttons.LEFT) {
+            for (int i = 0; i < rects.length; i++) {
+                if (rects[i].contains(mouseRectangle)) {
+                    new Load(i);
+                }
+            }
+        }
+        if (button == Input.Buttons.RIGHT){
+            for (int index = 3; index < 4; index++) {
+                if (rects[index].contains(mouseRectangle)) {
+                    File file = new File("saves/Save" + index + ".dat");
+                    file.delete();
+                    sprites[index] = new Sprite(Images.box);
+                }
             }
         }
         return false;
