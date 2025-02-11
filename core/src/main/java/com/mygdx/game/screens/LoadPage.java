@@ -14,6 +14,7 @@ import com.mygdx.game.images.Images;
 import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.system.Delete;
 import com.mygdx.game.system.Load;
 import com.mygdx.game.system.Save;
 
@@ -97,7 +98,7 @@ public class LoadPage extends State {
         spriteBatch2.begin();
 
 
-        for (int k = 3; k < 4; k++) {
+        for (int k = 0; k < 6; k++) {
             sprites[k].setPosition(rects[k].x, rects[k].y);
             sprites[k].draw(spriteBatch2);
 
@@ -190,10 +191,9 @@ public class LoadPage extends State {
             }
         }
         if (button == Input.Buttons.RIGHT){
-            for (int index = 3; index < 4; index++) {
+            for (int index = 0; index < 6; index++) {
                 if (rects[index].contains(mouseRectangle)) {
-                    File file = new File("saves/Save" + index + ".dat");
-                    file.delete();
+                    new Delete(index);
                     sprites[index] = new Sprite(Images.box);
                 }
             }

@@ -67,6 +67,7 @@ public class Load{
 //                    if (objeto instanceof Monster1)
 //                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
             }
+            StateManager.currentState = StateManager.States.LEVEL;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

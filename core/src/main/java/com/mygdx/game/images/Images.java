@@ -71,6 +71,8 @@ public class Images implements Serializable {
 
     public static Sprite[] sprites = new Sprite[8];
 
+    public static Pixmap pixMapBox;
+
     public Images() {
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
@@ -137,7 +139,7 @@ public class Images implements Serializable {
         spriteJetPack = Images.jetPack;
 
         try {
-            for (int k = 3; k < 4; k++) {
+            for (int k = 0; k < 6; k++) {
                 FileHandle file = Gdx.files.local("saves/Save" + k + ".png"); // Caminho do arquivo de entrada
                 Pixmap pixmap = new Pixmap(file);
                 sprites[k] = new Sprite(new Texture(pixmap));
@@ -154,7 +156,7 @@ public class Images implements Serializable {
         } catch(RuntimeException e){
             e.printStackTrace();
         }
-
+        pixMapBox = new Pixmap(248, 166, Pixmap.Format.RGBA8888);
         spriteBatch = new SpriteBatch();
     }
 

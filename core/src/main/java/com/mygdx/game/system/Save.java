@@ -13,6 +13,7 @@ import com.mygdx.game.screens.levels.Level_Manager;
 import javax.imageio.ImageIO;
 import java.io.*;
 
+import static com.mygdx.game.images.Images.pixMapBox;
 import static com.mygdx.game.images.Images.sprites;
 import static com.mygdx.game.system.ScreenshotHelper.*;
 
@@ -57,8 +58,5 @@ public class Save {
         }
 
     }
-
-
-
 
 }
