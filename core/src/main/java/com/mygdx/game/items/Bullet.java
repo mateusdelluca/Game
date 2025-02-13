@@ -71,8 +71,10 @@ public class Bullet extends Objeto implements Item {
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
 
-        if (visible)
+        if (visible) {
             sprite.draw(spriteBatch);
+            fixBullet(this);
+        }
     }
 
     @Override

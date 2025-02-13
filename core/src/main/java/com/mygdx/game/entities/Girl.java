@@ -61,7 +61,7 @@ public class Girl extends Objeto{
                 isRunning = true;
             if (timer < 1.5f) {
                 alpha = new Random().nextFloat(1f);
-                s.setColor(1f,1f,1f,alpha);
+                sprite.setColor(1f,1f,1f,alpha);
 //                    sprite.setColor(1f,1f,1f,alpha);
             }
             if (timer > 1.5f) {

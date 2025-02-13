@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.items.Bullet;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     private float  deltaTime;
     @Getter @Setter
     protected BodyData bodyData;
+    protected float timer;
 
     public Objeto(float width, float height){
         this.width = width;
@@ -155,4 +157,14 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public abstract void update();
 
+    public void fixBullet(Bullet bullet){
+        timer += Gdx.graphics.getDeltaTime();
+        if (timer > 0.1f){
+            bullet.getBody().getFixtureList().get(0).setSensor(false);
+        }
+    }
+
+    public void beenHit(){
+
+    }
 }

@@ -54,7 +54,7 @@ public class Jack extends Objeto {
             if (deltaTime > 4f) {
                 Bullet bullet = new Bullet(new Vector2(!flip ? getBody().getPosition().x +
                     WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-                    getBody().getPosition().y + HEIGHT / 2f), flip, flip? (float) Math.PI : 0f, false);
+                    getBody().getPosition().y + HEIGHT / 2f), flip, flip? (float) Math.PI : 0f, true);
                 rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                 deltaTime = 0f;
                 SHOTGUN.play();
@@ -77,7 +77,7 @@ public class Jack extends Objeto {
                 timer += Gdx.graphics.getDeltaTime();
                 if (timer < 3f) {
                     alpha = new Random().nextFloat(1f);
-                    s.setColor(1f, 1f, 1f, alpha);
+                    sprite.setColor(1f, 1f, 1f, alpha);
                 }
                 if (timer > 3f) {
                     beenHit = false;
@@ -114,6 +114,11 @@ public class Jack extends Objeto {
         if (HP <= 0)
             return new Rectangle();
         return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
+    }
+
+    @Override
+    public void beenHit(){
+        beenHit = true;
     }
 
 }

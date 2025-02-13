@@ -167,4 +167,14 @@ public class Monster1 extends Objeto implements Serializable {
         System.out.println(this);
     }
 
+    @Override
+    public void beenHit() {
+        if (getBody() != null) {
+            String name = "MONSTER1_FLICKERING";
+            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
+            animations = Animations.valueOf(name);
+            Sounds.MONSTER_HURT.play();
+            setHP(getHP() - 1);
+        }
+    }
 }

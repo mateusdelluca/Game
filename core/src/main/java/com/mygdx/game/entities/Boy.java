@@ -479,4 +479,15 @@ public class Boy extends Objeto {
         items.add(item);
         TRIGGER.play();
     }
+
+    @Override
+    public void beenHit(){
+        if (!isBeenHit()) {
+            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
+            animations = Animations.BOY_STRICKEN;
+            PowerBar.hp -= 10;
+            setBeenHit(true);
+            Sounds.HURT.play();
+        }
+    }
 }
