@@ -54,7 +54,7 @@ public class Jack extends Objeto {
             if (deltaTime > 4f) {
                 Bullet bullet = new Bullet(new Vector2(!flip ? getBody().getPosition().x +
                     WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-                    getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI, false);
+                    getBody().getPosition().y + HEIGHT / 2f), flip, flip? (float) Math.PI : 0f, false);
                 rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                 deltaTime = 0f;
                 SHOTGUN.play();
