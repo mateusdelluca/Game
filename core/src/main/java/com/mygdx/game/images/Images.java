@@ -18,26 +18,10 @@ import com.badlogic.gdx.Gdx;
 public class Images implements Serializable {
     public static Texture[] saves = new Texture[6];
     public static Texture box;
-    public static Texture menu;
-    public static Texture level1;
-    public static Texture equipped;
-    public static Texture baseball_bat;
-    public static Texture baseball_bat_equip;
     public static Texture game_over;
     public static Texture load_page;
     public static Texture save_page;
-    public static Texture block;
-    public static Animator sea, tiger;
-    public static Texture grass, grass2, ny;
-    public static Texture printScreen;
     public static Texture saber;
-    public static Texture sabre_equip;
-    public static Texture cap, cap2;
-    public static Texture cap_equip, cap_equip2;
-    public static Texture sunglasses, sunglasses2;
-    public static Texture sunglasses_equip, sunglasses_equip2;
-    public static Texture headset, headset_equip;
-    public static Texture tiger_face;
     public static Sprite s1, rifle, jetPack;
     public static Sprite mountains4;
 
@@ -49,7 +33,7 @@ public class Images implements Serializable {
     public static Texture hp, hp2;
     public static Texture sp, sp2;
     public static Texture pauseBox;
-    public static Texture jack, girl;
+    public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
     public static Sprite top;
@@ -61,8 +45,6 @@ public class Images implements Serializable {
     @Setter
     public static Tile tile;
     public static BitmapFont font;
-
-    public static Sprite[] screenshootsSaves = new Sprite[6];
 
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, false));
@@ -105,6 +87,7 @@ public class Images implements Serializable {
 //        tiger = new Animator (3,3,20,256,256, "src/main/res/objects/Tiger.png");
 //        tiger_face = new Texture(Gdx.files.internal("src/main/res/objects/Tiger_face.png"));
 //        deleteTab();
+        jack_reloading = new Texture(Gdx.files.internal("Jack/Jack_Reloading.png"));
         saber = new Texture(Gdx.files.internal("Saber.png"));
         s1 = new Sprite(saber);
         crystal = new Texture(Gdx.files.internal("objects/Crystal.png"));

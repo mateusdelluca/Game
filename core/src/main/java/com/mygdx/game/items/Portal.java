@@ -35,7 +35,7 @@ public class Portal extends Objeto implements Item{
     }
 
     @Override
-    public void updateItem(World wolrd) {
+    public void updateItem(World world) {
 
     }
 

@@ -39,6 +39,8 @@ public class Rifle extends Objeto implements Item, Serializable {
     public static String stringNumbBullets = "";
     private int total;
     private int angle;
+    @Getter @Setter
+    private boolean reloading;
 
     public Rifle(Vector2 position){
 
@@ -47,7 +49,7 @@ public class Rifle extends Objeto implements Item, Serializable {
         super.height = HEIGHT * MULTIPLY;
         this.position = position;
 
-        body = createBody(new Vector2(width, height), BodyDef.BodyType.StaticBody, true);
+        body = createBody(new Vector2(width/2f, height/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, body.getAngle());
         body.setUserData(getClass().getSimpleName());
 
@@ -90,10 +92,10 @@ public class Rifle extends Objeto implements Item, Serializable {
         timer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                if (Cartridge.reloading) {
+                if (isReloading()) {
                     leftSideBullets.setBulletsLeft(init(max_bullets()));
                     buttonReloadingPressed = false;
-                    Cartridge.reloading = false;
+                    setReloading(false);
                 }
             }
         }, 1f);
@@ -105,8 +107,11 @@ public class Rifle extends Objeto implements Item, Serializable {
     }
 
     @Override
-    public void updateItem(World wolrd) {
-
+    public void updateItem(World world) {
+        if (leftSideBullets.getBulletsLeft().isEmpty()){
+            reloading = true;
+            reloading();
+        }
     }
 
     @Override

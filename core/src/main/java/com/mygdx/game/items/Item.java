@@ -14,7 +14,7 @@ public interface Item extends Serializable {
 
     void updateItem();
 
-    void updateItem(World wolrd);
+    void updateItem(World world);
 
     void update();
 

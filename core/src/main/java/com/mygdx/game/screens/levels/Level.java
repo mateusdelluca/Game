@@ -44,7 +44,7 @@ public class Level extends State implements ContactListener, Serializable {
     private HashMap<String, Objeto> items2 = new HashMap<>();
     private transient BitmapFont font;
     public Boy boy;
-
+    private Jack jack;
     protected PowerBar powerBar;
 
     protected ArrayList<Fans> fans = new ArrayList<>();
@@ -111,7 +111,7 @@ public class Level extends State implements ContactListener, Serializable {
 
         boy = new Boy(new Vector2(10, 5700), viewport);
 
-
+        jack = new Jack(new Vector2(500, 6000 - 680f));
 
         monsters1.clear();
 
@@ -156,6 +156,7 @@ public class Level extends State implements ContactListener, Serializable {
 
         objetos.addAll(items2.values());
         objetos.add(boy);
+        objetos.add(jack);
         objetos.addAll(monsters1.values());
 
 
@@ -228,7 +229,7 @@ public class Level extends State implements ContactListener, Serializable {
         for (Monster1 monster1 : monsters1.values()){
             monster1.render(spriteBatch);
         }
-
+        jack.render(spriteBatch);
 //        Rifle rifle = (Rifle) items.get("Rifle");
 //        rifle.getLeftSideBullets().render(spriteBatch);
         for (Item item : items.values())

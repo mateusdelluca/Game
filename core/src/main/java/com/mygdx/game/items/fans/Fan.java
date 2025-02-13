@@ -25,11 +25,12 @@ public class Fan extends Objeto implements Fans {
     }
 
     public boolean bodyCloseToFan(Body b, float width){
-        return (((b.getPosition().x + width) >= (body.getPosition().x - WIDTH/2f) && (b.getPosition().x) < (body.getPosition().x + WIDTH))
-          && Math.abs(b.getPosition().y - body.getPosition().y) <= 100);
+        return (((b.getPosition().x + (width/2f)) >= (body.getPosition().x - WIDTH/2f) && (b.getPosition().x) < (body.getPosition().x + WIDTH))
+          && Math.abs(b.getPosition().y - body.getPosition().y) <= 50);
     }
 
     public void update2(Body b, float width){
+        update();
         if (bodyCloseToFan(b, width)) {
             System.out.println(b.getPosition().x + " " + body.getPosition().x);
             useOnlyLastFrame = false;
@@ -41,7 +42,8 @@ public class Fan extends Objeto implements Fans {
 
     @Override
     public void update() {
-
+        if (body == null)
+            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
     }
 
     @Override

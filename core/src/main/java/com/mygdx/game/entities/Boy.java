@@ -103,7 +103,7 @@ public class Boy extends Objeto {
 
                     //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
-                    top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!Cartridge.reloading, Cartridge.reloading, isFacingLeft));
+                    top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), isFacingLeft));
                     top.setOriginCenter();
                     top.setRotation(degrees);
                     top.setPosition(bodyPosition.x, bodyPosition.y);
@@ -310,10 +310,10 @@ public class Boy extends Objeto {
 
         if (keycode == Input.Keys.R){
             if (rifle != null) {
-                if (!Cartridge.reloading && !rifle.isButtonReloadingPressed()) {
+                if (!rifle.isReloading() && !rifle.isButtonReloadingPressed()) {
                     rifle.setButtonReloadingPressed(true);
-                    Cartridge.reloading = true;
-                    rifle.updateItem();
+                    rifle.setReloading(true);
+
                 }
             }
         }
@@ -385,14 +385,14 @@ public class Boy extends Objeto {
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) { //shoots
             if (shooting && Rifle.showingNumbBullets) {
-                if (!Cartridge.reloading) {
+                if (!rifle.isReloading()) {
                     if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
                         Bullet bullet = new Bullet(
                             new Vector2(!isFacingLeft ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x),
                             (getBody().getPosition().y + HEIGHT / 2f)),
                             isFacingLeft, radians, true);
-                        rifle.getLeftSideBullets().addAndRemove(bullet);
+                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                     }
                 }
             }
@@ -471,7 +471,7 @@ public class Boy extends Objeto {
         }
         if (item instanceof Crystal) {
 //            item = (Crystal) item;
-            PowerBar.sp += 20;
+            PowerBar.sp += 10;
             clink2.play();
         }
         if (item instanceof JetPack)

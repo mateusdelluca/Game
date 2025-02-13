@@ -124,41 +124,41 @@ public class Level_Manager extends State {
                 throw new RuntimeException(e);
             }
         }
-        if (keycode == Input.Keys.M) {
-            try {
-                loaded = true;
-
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
-                for (Objeto objeto : objetos) {
-                    objeto.getBody().setUserData("null");
-                    bodiesToDestroy.add(objeto.getBody());
-                    world.destroyBody(objeto.getBody());
-                }
-                currentLevel.boy.setViewport(viewport);
-                currentLevel = (Level) ois.readObject();
-                ois.close();
-                world = new World(new Vector2(0,-10), true);
-                currentLevel.init();
-                world.setContactListener(currentLevel);
-                currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
-                currentLevel.boy.setViewport(viewport);
-                currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
-                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
-                for (Objeto objeto : objetos) {
-                    if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
-                        || objeto instanceof Portal)
-                        objeto.loadBody(BodyDef.BodyType.StaticBody, true);
-//                    if (objeto instanceof Monster1)
-//                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        if (keycode == Input.Keys.M) {
+//            try {
+//                loaded = true;
+//
+//                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
+//                for (Objeto objeto : objetos) {
+//                    objeto.getBody().setUserData("null");
+//                    bodiesToDestroy.add(objeto.getBody());
+//                    world.destroyBody(objeto.getBody());
+//                }
+//                currentLevel.boy.setViewport(viewport);
+//                currentLevel = (Level) ois.readObject();
+//                ois.close();
+//                world = new World(new Vector2(0,-10), true);
+//                currentLevel.init();
+//                world.setContactListener(currentLevel);
+//                currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
+//                currentLevel.boy.setViewport(viewport);
+//                currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
+//                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
+//                for (Objeto objeto : objetos) {
+//                    if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
+//                        || objeto instanceof Portal)
+//                        objeto.loadBody(BodyDef.BodyType.StaticBody, true);
+////                    if (objeto instanceof Monster1)
+////                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
+//                }
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } catch (ClassNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
         currentLevel.keyDown(keycode);
         return false;
     }

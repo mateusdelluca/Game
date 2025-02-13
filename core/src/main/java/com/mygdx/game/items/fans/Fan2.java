@@ -9,7 +9,7 @@ import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
 public class Fan2 extends Objeto implements Fans{
-    public static final float multiply = 1.0f;
+    public static final float multiply = 1.5f;
 
     public static final float WIDTH = 76 * multiply, HEIGHT = 79 * multiply;
     private boolean useOnlyLastFrame = true;
@@ -25,10 +25,11 @@ public class Fan2 extends Objeto implements Fans{
     }
 
     public boolean bodyCloseToFan(Body anotherBody, float width){
-        return (Math.abs(anotherBody.getPosition().x) - (body.getPosition().x) < 70f && Math.abs(anotherBody.getPosition().y - body.getPosition().y) <= 10);
+        return (Math.abs(anotherBody.getPosition().x) - (body.getPosition().x) < 80f && Math.abs(anotherBody.getPosition().y - body.getPosition().y) <= 10);
     }
 
     public void update2(Body b, float width){
+        update();
         if (bodyCloseToFan(b, width)) {
 //            System.out.println(b.getPosition().y - fanBody.getPosition().y);
             useOnlyLastFrame = false;
@@ -40,7 +41,8 @@ public class Fan2 extends Objeto implements Fans{
 
     @Override
     public void update() {
-
+        if (body == null)
+            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
     }
 
     @Override

@@ -16,11 +16,11 @@ public class Cartridge implements Item{
     @Getter @Setter
     private ArrayList<Bullet> bulletsToDraw = new ArrayList<>();  //just to draw the bullets
 
-    public static boolean reloading;
+
 
 //    public static String stringNumbBullets = "";
 
-    public static final int MAX_ROUNDS = 30;
+    public static final int MAX_ROUNDS = 20, MAX_ROUNDS2 = 30;
     @Getter @Setter
     private int accumulated = 0;
 //    public static String usingRifle = "";
@@ -39,8 +39,8 @@ public class Cartridge implements Item{
         return bulletsLeft;
     }
 
-    public void addAndRemove(Bullet bullet){    //este é o método para contar as balas do pente dentro do rifle
-        if (!Cartridge.reloading) {
+    public void addAndRemove(Bullet bullet, Rifle rifle){    //este é o método para contar as balas do pente dentro do rifle
+        if (!rifle.isReloading()) {
             if (!bulletsLeft.isEmpty()) {
                 bulletsLeft.removeLast();
                 bulletsToDraw.add(bullet);
@@ -63,13 +63,14 @@ public class Cartridge implements Item{
     }
 
     @Override
-    public void updateItem(World wolrd) {
+    public void updateItem(World world) {
 
     }
 
     @Override
     public void update() {
-
+        for (Bullet b : bulletsLeft)
+            b.update();
     }
 
     @Override

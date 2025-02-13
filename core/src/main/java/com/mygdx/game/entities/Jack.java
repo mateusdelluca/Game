@@ -8,42 +8,66 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.items.Bullet;
+import com.mygdx.game.items.Rifle;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
 public class Jack extends Objeto {
 
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.jack.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;
-    private boolean flip = true;
+    private boolean flip = false;
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
     public int HP = 5;
-    Sprite sprite = new Sprite(Images.jack);
+    public Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
+    private Rifle rifle = new Rifle(new Vector2(-1000, -1000));
+    private float deltaTime2;
+
     public Jack(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        body.setUserData(this.toString());
         sprite.flip(flip, false);
+        body.setUserData(this.toString());
+
+        rifle.updateItem();
     }
 
     public void update(){
+        sprite.flip(flip, false);
+        if (body == null)
+            loadBody(BodyDef.BodyType.DynamicBody, false);
         deltaTime += Gdx.graphics.getDeltaTime();
-        if (deltaTime > 4f){
-//            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-//                WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-//                getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI)); //TODO fazer renderizar bullets
-            deltaTime = 0f;
-            SHOTGUN.play();
+        rifle.update();
+        if (!rifle.isReloading()) {
+            sprite = new Sprite(Images.jack);
+            if (deltaTime > 4f) {
+                Bullet bullet = new Bullet(new Vector2(!flip ? getBody().getPosition().x +
+                    WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
+                    getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI, false);
+                rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                deltaTime = 0f;
+                SHOTGUN.play();
+            }
+        } if (rifle.isReloading()){
+            sprite = new Sprite(Images.jack_reloading);
+            deltaTime2 += Gdx.graphics.getDeltaTime();
+            if (deltaTime2 > 0.4f){
+                deltaTime2 = 0f;
+                rifle.setReloading(false);
+            }
         }
+        rifle.updateItem(world);
     }
 
     public void render(SpriteBatch s){
@@ -54,7 +78,6 @@ public class Jack extends Objeto {
                 if (timer < 3f) {
                     alpha = new Random().nextFloat(1f);
                     s.setColor(1f, 1f, 1f, alpha);
-//                    sprite.setColor(1f,1f,1f,alpha);
                 }
                 if (timer > 3f) {
                     beenHit = false;
@@ -73,6 +96,7 @@ public class Jack extends Objeto {
         } else{
             body.setTransform(0,0,0);
         }
+        rifle.render(s);
     }
 
 
