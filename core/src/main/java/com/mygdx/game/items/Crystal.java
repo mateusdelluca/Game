@@ -23,7 +23,7 @@ public class Crystal extends Objeto implements Item{
     public void render(SpriteBatch s) {
         if (body == null)
             loadBody(BodyDef.BodyType.StaticBody, true);
-        if (body.getUserData().equals(getClass().getSimpleName()))
+        if (visible)
             s.draw(Images.crystal, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
@@ -49,6 +49,6 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public void update() {
-
+        super.update();
     }
 }

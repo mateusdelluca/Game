@@ -86,8 +86,6 @@ public class Monster1 extends Objeto implements Serializable {
                 }
             }
             String name = animations.name();
-            if (!visible)
-                body.setTransform(0, 0, 0);
             if (HP <= 0) {
                 animations = Animations.MONSTER1_SPLIT;
                 split = true;
@@ -156,6 +154,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void update(){
+        super.update();
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
     }

@@ -241,7 +241,7 @@ public class Level extends State implements ContactListener, Serializable {
     }
 
     public void update(){
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             world.step(1/60f, 7, 7);
             camera.update();
 //            world.step(60, 7, 7);
@@ -366,10 +366,10 @@ public class Level extends State implements ContactListener, Serializable {
 //            }
 //        }
 
-        if (body1.getUserData().toString().equals("null") && body1.getLinearVelocity().x <= 1f) {
+        if (body1.getUserData().toString().equals("null")) {
             bodiesToDestroy.add(body1);
         }
-        if (body2.getUserData().toString().equals("null") && body2.getLinearVelocity().x <= 1f) {
+        if (body2.getUserData().toString().equals("null")) {
             bodiesToDestroy.add(body2);
         }
 
@@ -430,13 +430,13 @@ public class Level extends State implements ContactListener, Serializable {
 //        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
 //            jack.setBeenHit(true);
 //        }
+        for (Objeto o : objetos) {
             for (Body body : bodiesToDestroy) {
-                if (body.getTransform().getPosition().x != 0) {
-                    body.setTransform(new Random().nextFloat(1000), new Random().nextFloat(3000), 0);
-                }
+
             }
             bodiesToDestroy.clear();
         }
+    }
 
 
 

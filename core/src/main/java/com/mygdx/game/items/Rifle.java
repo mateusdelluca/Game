@@ -76,7 +76,7 @@ public class Rifle extends Objeto implements Item, Serializable {
         rifle.setOriginCenter();
         rifle.rotate(1f);
         rifle.setPosition(position.x, position.y);
-        if (body.getUserData().toString().equals(this.toString())) {
+        if (body.getUserData().toString().equals(this.toString()) && visible) {
             rifle.draw(s);
         }
         if (showingNumbBullets) {
@@ -117,6 +117,7 @@ public class Rifle extends Objeto implements Item, Serializable {
     @Override
     public void update() {
 //        bodyData.angle++;
+        super.update();
     }
 
     @Override

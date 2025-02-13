@@ -155,7 +155,11 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         return this;
     }
 
-    public abstract void update();
+    public void update(){
+        if (!isVisible() && body != null) {
+            body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
+        }
+    }
 
     public void fixBullet(Bullet bullet){
         timer += Gdx.graphics.getDeltaTime();

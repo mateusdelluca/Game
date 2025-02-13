@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Boy;
+import com.mygdx.game.entities.Jack;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.items.Crystal;
@@ -43,8 +44,6 @@ public class Load{
             loaded = true;
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
             for (Objeto objeto : objetos) {
-                objeto.getBody().setUserData("null");
-                bodiesToDestroy.add(objeto.getBody());
                 world.destroyBody(objeto.getBody());
             }
             currentLevel.boy.setViewport(viewport);
@@ -60,14 +59,16 @@ public class Load{
                 currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
             else
                 currentLevel.boy.animations = Animations.valueOf("BOY_IDLE");
-            for (Objeto objeto : objetos) {
-                if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
-                    || objeto instanceof Portal)
-                    objeto.loadBody(BodyDef.BodyType.StaticBody, true);
-//                    if (objeto instanceof Monster1)
-//                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
-            }
-            StateManager.currentState = StateManager.States.LEVEL;
+//            for (Objeto objeto : objetos) {
+//                if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
+//                    || objeto instanceof Portal)
+//                    objeto.loadBody(BodyDef.BodyType.StaticBody, true);
+////                    if (objeto instanceof Monster1)
+////                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
+//                if (objeto instanceof Jack)
+//                    objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
+//            }
+            StateManager.setState(StateManager.States.LEVEL);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

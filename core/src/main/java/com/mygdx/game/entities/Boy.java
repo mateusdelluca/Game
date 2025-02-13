@@ -133,6 +133,7 @@ public class Boy extends Objeto {
     }
 
     public void update(){
+        super.update();
         this.bodyPosition = body.getPosition();
         shooting = Rifle.showingNumbBullets;
         fly();      //check if he is using jetPack and fly away and when its pressed space and sp > 0
@@ -468,14 +469,18 @@ public class Boy extends Objeto {
         if (item instanceof Rifle) {
             rifle = (Rifle) item;
             Rifle.showingNumbBullets = true;
+            ((Rifle) item).setVisible(false);
         }
         if (item instanceof Crystal) {
 //            item = (Crystal) item;
             PowerBar.sp += 10;
             clink2.play();
+            ((Crystal) item).setVisible(false);
         }
-        if (item instanceof JetPack)
+        if (item instanceof JetPack) {
             use_jetPack = true;
+            ((JetPack) item).setVisible(false);
+        }
         items.add(item);
         TRIGGER.play();
     }
