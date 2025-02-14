@@ -171,4 +171,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void beenHit(){
 
     }
+
+    public void setUserData(Body body){
+        bodyData.userData = "" + body.getUserData();
+    }
 }

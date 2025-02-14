@@ -1,6 +1,7 @@
 package com.mygdx.game.items;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,11 @@ public class Cartridge implements Item{
 //    public static String stringNumbBullets = "";
 
     public static final int MAX_ROUNDS = 20, MAX_ROUNDS2 = 30;
+
     @Getter @Setter
     private int accumulated = 0;
+
+
 //    public static String usingRifle = "";
 //    public static boolean showingNumBullets;
 
@@ -71,6 +75,11 @@ public class Cartridge implements Item{
     public void update() {
         for (Bullet b : bulletsLeft)
             b.update();
+    }
+
+    @Override
+    public void setUserData(Body body) {
+
     }
 
     @Override

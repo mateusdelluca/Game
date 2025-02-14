@@ -128,8 +128,8 @@ public class Boy extends Objeto {
                 }
             }
         }
-        for (Item item : items)
-            item.render(s);
+//        for (Item item : items)
+//            item.render(s);
     }
 
     public void update(){
@@ -314,7 +314,7 @@ public class Boy extends Objeto {
                 if (!rifle.isReloading() && !rifle.isButtonReloadingPressed()) {
                     rifle.setButtonReloadingPressed(true);
                     rifle.setReloading(true);
-
+                    rifle.reloading();
                 }
             }
         }
