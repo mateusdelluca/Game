@@ -21,6 +21,9 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
+import lombok.Getter;
+import lombok.Setter;
+
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
@@ -43,6 +46,8 @@ public class Level extends State implements ContactListener, Serializable {
     private HashMap<String, Objeto> items2 = new HashMap<>();
     private transient BitmapFont font;
     public Boy boy;
+    @Getter
+    @Setter
     private Jack jack;
     protected PowerBar powerBar;
 
@@ -85,8 +90,6 @@ public class Level extends State implements ContactListener, Serializable {
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
 
-        world.setContactListener(this);
-
     }
 
     public Level() {
@@ -121,10 +124,11 @@ public class Level extends State implements ContactListener, Serializable {
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
-        //TODO: colocar nomes de hashmap e userdata de body de monsters1 em cada monster1 para que funcione o
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
+        items2.put(Rifle.class.getSimpleName(), jack.getRifle());
+
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
             if (index < 5) {
                 posX = 320 + (100 * index);
@@ -141,7 +145,7 @@ public class Level extends State implements ContactListener, Serializable {
                 posX = 520 + (100 * (index - 10));
                 posY = 6000 - 2300;
             }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
             items2.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
         }
 
@@ -280,10 +284,7 @@ public class Level extends State implements ContactListener, Serializable {
             return;
         if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
             return;
-        if (loaded){
-            loaded = false;
-            return;
-        }
+
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
 
@@ -291,9 +292,11 @@ public class Level extends State implements ContactListener, Serializable {
             return;
 
 
+//        System.out.println(body1.getUserData() + " " + body2.getUserData());
+
+
         for (Item item : items.values()) {
-            if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy")) ||
-                (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy"))) {
+            if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy"))){
                 boy.equip_Item(item);
 
                 if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
@@ -304,6 +307,10 @@ public class Level extends State implements ContactListener, Serializable {
                     body2.setUserData("null");
                     item.setUserData(body2);
                 }
+            } else{
+                if (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy")){
+                    boy.equip_Item(item);
+                }
             }
         }
 
@@ -312,8 +319,8 @@ public class Level extends State implements ContactListener, Serializable {
                 body2.getUserData().toString().equals(o.getBodyData().userData))
                 || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
                 body1.getUserData().toString().equals(o.getBodyData().userData))) {
-                if (body1.getFixtureList().get(0).isSensor() ||
-                    body2.getFixtureList().get(0).isSensor())
+                if ((body1.getFixtureList().get(0).isSensor() && body1.getUserData().toString().equals("Bullet"))|| (
+                    body2.getFixtureList().get(0).isSensor() && body2.getUserData().toString().equals("Bullet")))
                     return;
                 if (body1.getUserData().toString().equals("Bullet")) {
                     body1.setUserData("null");
@@ -391,7 +398,37 @@ public class Level extends State implements ContactListener, Serializable {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
 
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
+        for (Objeto o : objetos) {
+            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+                body2.getUserData().toString().equals(o.getBodyData().userData))
+                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+                body1.getUserData().toString().equals(o.getBodyData().userData))) {
+                if (body1.getFixtureList().get(0).isSensor() ||
+                    body2.getFixtureList().get(0).isSensor())
+                    return;
+                if (body1.getUserData().toString().equals("Bullet")) {
+                    body1.setUserData("null");
+                } else {
+                    if (body2.getUserData().toString().equals("Bullet")) {
+                        body2.setUserData("null");
+                    }
+                }
+                o.beenHit();
+            }
+        }
     }
 
     protected void collisions() {
@@ -436,7 +473,8 @@ public class Level extends State implements ContactListener, Serializable {
 //        }
         for (Objeto o : objetos) {
             for (Body body : bodiesToDestroy) {
-
+                body.setTransform(-10_500, -15_320, 0);
+//                world.destroyBody(body);
             }
             bodiesToDestroy.clear();
         }

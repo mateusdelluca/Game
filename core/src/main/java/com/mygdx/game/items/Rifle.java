@@ -48,10 +48,10 @@ public class Rifle extends Objeto implements Item, Serializable {
         super.width = WIDTH * MULTIPLY;
         super.height = HEIGHT * MULTIPLY;
         this.position = position;
-
+        super.visible = true;
         body = createBody(new Vector2(width/2f, height/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, body.getAngle());
-        body.setUserData(getClass().getSimpleName());
+        body.setUserData(this.toString());
 
         for (int index = 0; index < 2; index++){
             numCartridges.add(new Cartridge());
@@ -76,7 +76,7 @@ public class Rifle extends Objeto implements Item, Serializable {
         rifle.setOriginCenter();
         rifle.rotate(1f);
         rifle.setPosition(position.x, position.y);
-        if (body.getUserData().toString().equals(this.toString()) && visible) {
+        if (body.getUserData().toString().equals(this.toString())) {
             rifle.draw(s);
         }
         if (showingNumbBullets) {

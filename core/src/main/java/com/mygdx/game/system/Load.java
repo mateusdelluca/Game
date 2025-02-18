@@ -16,6 +16,7 @@ import com.mygdx.game.items.Rifle;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.levels.Level;
+import com.mygdx.game.sfx.Sounds;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,15 +44,19 @@ public class Load{
         try {
             loaded = true;
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
-            for (Objeto objeto : objetos) {
-                world.destroyBody(objeto.getBody());
+            for (int i = 0; i < objetos.size(); i++) {
+                world.destroyBody(objetos.get(i).getBody());
+                if (objetos.get(i) instanceof Jack)
+                    objetos.remove(i);
             }
             currentLevel.boy.setViewport(viewport);
             currentLevel = (Level) ois.readObject();
             ois.close();
             world = new World(new Vector2(0,-10), true);
+            currentLevel.setJack(new Jack(new Vector2(currentLevel.getJack().getBodyData().position)));
+            objetos.add(currentLevel.getJack());
             currentLevel.init();
-            world.setContactListener(currentLevel);
+
             currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
             currentLevel.boy.setViewport(viewport);
             currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
@@ -59,22 +64,19 @@ public class Load{
                 currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
             else
                 currentLevel.boy.animations = Animations.valueOf("BOY_IDLE");
-//            for (Objeto objeto : objetos) {
-//                if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
-//                    || objeto instanceof Portal)
-//                    objeto.loadBody(BodyDef.BodyType.StaticBody, true);
-////                    if (objeto instanceof Monster1)
-////                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
-//                if (objeto instanceof Jack)
-//                    objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
-//            }
             StateManager.setState(StateManager.States.LEVEL);
+            if (Sounds.PAUSE_SONG.isPlaying())
+                Sounds.PAUSE_SONG.stop();
+            if (!Sounds.LEVEL1.isPlaying())
+                Sounds.LEVEL1.play();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
+        } catch(NullPointerException e){
+            e.printStackTrace();
         }
     }
 

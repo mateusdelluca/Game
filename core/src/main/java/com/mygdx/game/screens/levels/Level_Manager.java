@@ -4,9 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
@@ -24,7 +22,7 @@ import com.mygdx.game.screens.Tile;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Level_Manager extends State {
+public class Level_Manager extends State implements ContactListener {
 
     private Level level1;
     public static Level currentLevel;
@@ -45,6 +43,7 @@ public class Level_Manager extends State {
 
     public Level_Manager() {
         level1 = new Level();
+        world.setContactListener(this);
 //        level2 = new Level2(app);
 //        level3 = new Level3(app);
         changeLevel("Level3");
@@ -54,6 +53,7 @@ public class Level_Manager extends State {
         currentLevel = returnLevel(levelName);
         Images.tile = new Tile(levelName + "/" + levelName + ".tmx");
         assert currentLevel != null;
+
 //        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
 //        Gdx.input.setInputProcessor(this);
 //        app.setScreen(currentLevel);
@@ -90,6 +90,10 @@ public class Level_Manager extends State {
     public void render() {
         if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
             currentLevel.render();
+        if (loaded) {
+            world.setContactListener(this);
+            loaded = false;
+        }
     }
 
     @Override
@@ -115,15 +119,15 @@ public class Level_Manager extends State {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.P) {
-            try {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.dat"));
-                oos.writeObject(currentLevel);
-                oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        if (keycode == Input.Keys.P) {
+//            try {
+//                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.dat"));
+//                oos.writeObject(currentLevel);
+//                oos.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 //        if (keycode == Input.Keys.M) {
 //            try {
 //                loaded = true;
@@ -232,6 +236,26 @@ public class Level_Manager extends State {
 //        file.writeString(jsonString, false); // false para sobrescrever o arquivo
 
 
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        currentLevel.beginContact(contact);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        currentLevel.endContact(contact);
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold manifold) {
+        currentLevel.preSolve(contact, manifold);
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+        currentLevel.postSolve(contact, contactImpulse);
     }
 //
 //    @Override

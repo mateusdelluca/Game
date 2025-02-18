@@ -12,11 +12,20 @@ public class Crystal extends Objeto implements Item{
 
     private Vector2 position;
     public static final float WIDTH = 40, HEIGHT = 80;
+    private int index;
     public Crystal(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
+    }
+
+    public Crystal(Vector2 position, int index){
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
+        body.setTransform(position, 0);
+        this.index = index;
+        body.setUserData(this);
     }
 
     @Override
@@ -34,7 +43,7 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + index;
     }
 
     @Override
@@ -50,5 +59,9 @@ public class Crystal extends Objeto implements Item{
     @Override
     public void update() {
         super.update();
+    }
+    @Override
+    public void setVisible(boolean b){
+        visible = b;
     }
 }

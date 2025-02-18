@@ -143,12 +143,14 @@ public abstract class Objeto implements ObjetoFields, Serializable{
        return new Rectangle(body.getPosition().x - width/2f, body.getPosition().y - height/2f, width, height);
     }
 
-    public abstract String toString();
+    public String toString(){
+        return getClass().getSimpleName();
+    }
 
     public void loadBody(BodyDef.BodyType type, boolean isSensor){
         body = bodyData.convertDataToBody(type, isSensor);
         body.setUserData(this.toString());
-        System.out.println(this);
+//        System.out.println(this);
     }
 
     public Objeto objeto(){
@@ -158,13 +160,16 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void update(){
         if (!isVisible() && body != null) {
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
+//            world.destroyBody(body);
         }
     }
 
     public void fixBullet(Bullet bullet){
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 0.1f){
+        if (timer > 0.2f){
+            if (!bullet.getBody().getFixtureList().isEmpty())
             bullet.getBody().getFixtureList().get(0).setSensor(false);
+            timer = 0f;
         }
     }
 

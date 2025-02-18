@@ -472,9 +472,10 @@ public class Boy extends Objeto {
             ((Rifle) item).setVisible(false);
         }
         if (item instanceof Crystal) {
-//            item = (Crystal) item;
+            item = (Crystal) item;
             PowerBar.sp += 10;
             clink2.play();
+//            System.out.println(item);
             ((Crystal) item).setVisible(false);
         }
         if (item instanceof JetPack) {

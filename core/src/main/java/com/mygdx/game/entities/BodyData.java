@@ -11,7 +11,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.world;
 public class BodyData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    public float angle;
+    public float angle, rotation;
     public Vector2 position, linearVelocity;
     public String userData;
     public Vector2 dimensions;
@@ -25,6 +25,7 @@ public class BodyData implements Serializable {
         this.dimensions = dimensions;
         this.width = width;
         this.height = height;
+        this.rotation = body.getTransform().getRotation();
     }
 
     public Body convertDataToBody(BodyDef.BodyType bodyType, boolean isSensor) {
@@ -40,6 +41,7 @@ public class BodyData implements Serializable {
         Body body = world.createBody(bodyDef);
         body.setTransform(position, angle);
         body.setLinearVelocity(linearVelocity);
+        body.getTransform().setRotation(rotation);
         body.setUserData(userData);
         body.setActive(true);
         body.createFixture(fixtureDef);

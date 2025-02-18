@@ -30,6 +30,7 @@ public class Jack extends Objeto {
     public int HP = 5;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
+    @Getter
     private Rifle rifle = new Rifle(new Vector2(-10000, -10000));
     private float deltaTime2;
 
@@ -46,16 +47,13 @@ public class Jack extends Objeto {
         super.update();
         if (HP > 0) {
             sprite.flip(flip, false);
-            if (body == null)
-                loadBody(BodyDef.BodyType.DynamicBody, false);
             deltaTime += Gdx.graphics.getDeltaTime();
             rifle.update();
             if (!rifle.isReloading()) {
-
                 if (deltaTime > 4f) {
-                    Bullet bullet = new Bullet(new Vector2(!flip ? getBody().getPosition().x +
-                        WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-                        getBody().getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
+                    Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
+                        WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
+                        body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
                     rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                     deltaTime = 0f;
                     SHOTGUN.play();
@@ -77,13 +75,17 @@ public class Jack extends Objeto {
     }
 
     public void render(SpriteBatch s){
+        if (HP <= 0)
+            visible = false;
         if (rifle == null)
             rifle = new Rifle(new Vector2(-10_000, -20_000));
-        if (body == null)
+        if (body == null) {
             loadBody(BodyDef.BodyType.DynamicBody, false);
+            timer = 0f;
+        }
         if (sprite == null)
             sprite = new Sprite(Images.jack);
-        if (visible && HP > 0) {
+        if (visible) {
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
                 if (timer < 2f) {

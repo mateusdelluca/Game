@@ -57,8 +57,9 @@ public class Cartridge implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        for (Bullet b : bulletsToDraw)
+        for (Bullet b : bulletsToDraw) {
             b.render(s);
+        }
     }
 
     @Override
@@ -79,6 +80,11 @@ public class Cartridge implements Item{
 
     @Override
     public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setVisible(boolean b) {
 
     }
 

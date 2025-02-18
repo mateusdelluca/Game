@@ -48,22 +48,28 @@ public class Bullet extends Objeto implements Item {
     @Override
     public void update(){
         super.update();
-        if (Math.abs(body.getLinearVelocity().x) < 30f) {
+        if (Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 1f) {
             visible = false;
             body.setUserData("null");
+//            body = null;
         }
-//        if (body == null || body.getFixtureList().size == 0)
-//            return;
+        if (body == null || body.getFixtureList().size == 0)
+            return;
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 0.05f)
+        if (timer > 0.1f) {
             body.getFixtureList().get(0).setSensor(false);
+            timer = 0f;
+        }
     }
 
     public void render(SpriteBatch spriteBatch){
+
+//        if (body == null || body.getFixtureList().size == 0)
+//            return;
         if (body == null) {
             body = bodyData.convertDataToBody(BodyDef.BodyType.DynamicBody, false);
+            visible = true;
         }
-        update();
         Sprite sprite = new Sprite(Images.bullet);
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setOriginCenter();
@@ -73,11 +79,11 @@ public class Bullet extends Objeto implements Item {
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
 
         if (visible) {
-            sprite.draw(spriteBatch);
             fixBullet(this);
+            sprite.draw(spriteBatch);
         } else{
             body.setTransform(-10_000, -10_000, 0);
-        }
+        }update();
     }
 
     @Override
