@@ -42,7 +42,7 @@ public class Bullet extends Objeto implements Item {
             this.isFacingLeft = true;
         else
             body.setTransform(position, (float) Math.toRadians(degrees));
-        bodyData = new BodyData(body, size, WIDTH, HEIGHT);
+        bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
     }
 
     @Override

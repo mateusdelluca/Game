@@ -16,6 +16,19 @@ public class BodyData implements Serializable {
     public String userData;
     public Vector2 dimensions;
     public float width, height;
+    public float density;
+
+    public BodyData(Body body, Vector2 dimensions, float width, float height, float density) {
+        this.position = body.getPosition();
+        this.angle = body.getAngle();
+        this.linearVelocity = body.getLinearVelocity();
+        this.userData = "" + body.getUserData();
+        this.dimensions = dimensions;
+        this.width = width;
+        this.height = height;
+        this.rotation = body.getTransform().getRotation();
+        this.density = density;
+    }
 
     public BodyData(Body body, Vector2 dimensions, float width, float height) {
         this.position = body.getPosition();
@@ -26,6 +39,7 @@ public class BodyData implements Serializable {
         this.width = width;
         this.height = height;
         this.rotation = body.getTransform().getRotation();
+        this.density = 10f;
     }
 
     public Body convertDataToBody(BodyDef.BodyType bodyType, boolean isSensor) {
@@ -35,6 +49,7 @@ public class BodyData implements Serializable {
         bodyDef.angle = angle;
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.isSensor = isSensor;
+        fixtureDef.density = density;
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
         fixtureDef.shape = polygonShape;
