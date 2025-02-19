@@ -321,7 +321,10 @@ public class Level extends State implements ContactListener, Serializable {
                     !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
                     !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
                     !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
-                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack"))
+                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
+                    !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
+                    !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
+                    !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
                         boy.beenHit();
             if ((((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders") ||
                 body1.getUserData().toString().equals("Boy")) &&
@@ -340,7 +343,7 @@ public class Level extends State implements ContactListener, Serializable {
                     }
                 }
                 if (!(o instanceof Boy))
-                o.beenHit();
+                    o.beenHit();
             }
         }
 
@@ -379,14 +382,14 @@ public class Level extends State implements ContactListener, Serializable {
             return;
 
         for (Objeto o : objetos) {
-            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
-                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
-                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
-                    !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
-                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
-                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
-                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack"))
-                    boy.beenHit();
+//            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
+//                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
+//                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
+//                    !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
+//                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
+//                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
+//                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack"))
+//                    boy.beenHit();
             if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBodyData().userData))
                 || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
@@ -466,29 +469,7 @@ public class Level extends State implements ContactListener, Serializable {
             takeScreenshot();
             StateManager.setState(StateManager.States.PAUSE);
         }
-//        if (keycode == Input.Keys.P) {
-//            boy.setBodyData(new BodyData(boy.getBody(), (new Vector2(Boy.DIMENSIONS_FOR_SHAPE.x / 2f - 5, Boy.DIMENSIONS_FOR_SHAPE.y / 2f)), Boy.WIDTH, Boy.HEIGHT));
-//            bodiesToDestroy.add(boy.getBody());
-//            boy.getBody().setUserData("null");
-//            boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
-//
-//        }
 
-//        if (keycode == Input.Keys.M){
-//            try {
-//                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
-//                bodiesToDestroy.add(boy.getBody());
-////                boy = (Boy) ois.readObject();
-//                init();
-//                boy.loadBodyAndWorld(world, BodyDef.BodyType.DynamicBody, false);
-////                boy.setBody(boy.getBodyData().convertDataToBody(world, BodyDef.BodyType.DynamicBody, false));
-//                boy.setViewport(viewport);
-//            } catch (FileNotFoundException e) {
-//                throw new RuntimeException(e);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
         return false;
     }
 

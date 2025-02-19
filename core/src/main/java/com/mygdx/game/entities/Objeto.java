@@ -206,4 +206,9 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void setUserData(Body body){
         bodyData.userData = "" + body.getUserData();
     }
+
+    public void setUserData(String name){
+        bodyData.userData = name;
+        body.setUserData(name);
+    }
 }

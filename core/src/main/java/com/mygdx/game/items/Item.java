@@ -22,5 +22,9 @@ public interface Item extends Serializable {
 
     void setUserData(Body body);
 
+    void setUserData(String name);
+
+    BodyData getBodyData();
+
     void setVisible(boolean b);
 }

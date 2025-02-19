@@ -55,8 +55,6 @@ public class Boy extends Objeto {
     private float chargingSPTimer2;
     private float chargingSPTimer3;
     private boolean chargingSP;
-    @Setter @Getter
-    private ArrayList<Item> items = new ArrayList<Item>();
     @Getter
     private Rifle rifle;
 //    private JetPack jetPack;
@@ -481,7 +479,10 @@ public class Boy extends Objeto {
         }
         if (item instanceof Crystal) {
             item = (Crystal) item;
-            PowerBar.sp += 10;
+            if (((Crystal) item).getRand() > 0)
+                PowerBar.sp += 10;
+            else
+                PowerBar.hp += 10;
             clink2.play();
 //            System.out.println(item);
             ((Crystal) item).setVisible(false);
@@ -490,7 +491,7 @@ public class Boy extends Objeto {
             use_jetPack = true;
             ((JetPack) item).setVisible(false);
         }
-        items.add(item);
+        item.setUserData("null");
         TRIGGER.play();
     }
 

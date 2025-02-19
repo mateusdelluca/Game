@@ -12,9 +12,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.Gdx;
+
 public class Images implements Serializable {
     public static Texture[] saves = new Texture[6];
     public static Texture box;
@@ -26,7 +25,7 @@ public class Images implements Serializable {
     public static Sprite mountains4;
 
     public static Sprite backGround2;
-    public static Texture crystal, crystal3;
+    public static Texture crystal, crystal_red;
     public static Texture bullet;
     public static Texture splashScreen;
     public static Animator portal, fire, fan, fan2;
@@ -91,7 +90,7 @@ public class Images implements Serializable {
         saber = new Texture(Gdx.files.internal("Saber.png"));
         s1 = new Sprite(saber);
         crystal = new Texture(Gdx.files.internal("objects/Crystal.png"));
-        crystal3 = new Texture("objects/Crystal3_red.png");
+        crystal_red = new Texture("objects/Crystal3_red.png");
         bullet = new Texture("objects/Bullet.png");
         splashScreen = new Texture(Gdx.files.internal("background/SplashScreen 5.png"));
         portal = new Animator(23, 10, 25, 857, 873, "objects/Portal_Spritesheet.png");

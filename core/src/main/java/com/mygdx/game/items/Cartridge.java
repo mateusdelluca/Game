@@ -3,6 +3,7 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,18 +18,10 @@ public class Cartridge implements Item{
     @Getter @Setter
     private ArrayList<Bullet> bulletsToDraw = new ArrayList<>();  //just to draw the bullets
 
-
-
-//    public static String stringNumbBullets = "";
-
     public static final int MAX_ROUNDS = 20, MAX_ROUNDS2 = 30;
 
     @Getter @Setter
     private int accumulated = 0;
-
-
-//    public static String usingRifle = "";
-//    public static boolean showingNumBullets;
 
     public Cartridge(){
         bulletsLeft = init(MAX_ROUNDS);
@@ -81,6 +74,16 @@ public class Cartridge implements Item{
     @Override
     public void setUserData(Body body) {
 
+    }
+
+    @Override
+    public void setUserData(String name) {
+        
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
     }
 
     @Override
