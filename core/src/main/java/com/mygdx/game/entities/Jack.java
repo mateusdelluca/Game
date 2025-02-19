@@ -27,7 +27,7 @@ public class Jack extends Objeto {
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
-    public int HP = 5;
+    public int HP = 3;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
     @Getter
@@ -50,7 +50,7 @@ public class Jack extends Objeto {
             deltaTime += Gdx.graphics.getDeltaTime();
             rifle.update();
             if (!rifle.isReloading()) {
-                if (deltaTime > 4f) {
+                if (deltaTime > 5f) {
                     Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
                         WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
                         body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
@@ -62,7 +62,7 @@ public class Jack extends Objeto {
             if (rifle.isReloading()) {
                 sprite = new Sprite(Images.jack_reloading);
                 deltaTime2 += Gdx.graphics.getDeltaTime();
-                if (deltaTime2 > 0.4f) {
+                if (deltaTime2 > 0.6f) {
                     deltaTime2 = 0f;
                     rifle.setReloading(false);
                 }
@@ -92,7 +92,7 @@ public class Jack extends Objeto {
                     alpha = new Random().nextFloat(1f);
                     sprite.setColor(1f, 1f, 1f, alpha);
                 }
-                if (timer > 2f) {
+                if (timer > 1f) {
                     beenHit = false;
                     timer = 0f;
                     alpha = 1f;

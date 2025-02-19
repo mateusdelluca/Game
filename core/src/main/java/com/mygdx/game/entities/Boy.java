@@ -425,6 +425,14 @@ public class Boy extends Objeto {
                     animations = Animations.BOY_SABER;
                     break;
                 }
+                case 2:{
+                    shooting = false;
+                    beenHit = false;
+                    saber_taken = false;
+                    animations = Animations.BOY_IDLE;
+                    Rifle.showingNumbBullets = false;
+                    break;
+                }
                 default:{
                     saber_taken = false;
                     if (rifle != null) {

@@ -315,10 +315,19 @@ public class Level extends State implements ContactListener, Serializable {
         }
 
         for (Objeto o : objetos) {
-            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
+                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
+                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
+                    !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
+                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects")
+                    && !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects"))
+                        boy.beenHit();
+            if ((((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders") ||
+                body1.getUserData().toString().equals("Boy")) &&
                 body2.getUserData().toString().equals(o.getBodyData().userData))
-                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
-                body1.getUserData().toString().equals(o.getBodyData().userData))) {
+                || (((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) ||
+                body2.getUserData().toString().equals("Boy")) &&
+                body1.getUserData().toString().equals(o.getBodyData().userData)))) {
                 if ((body1.getFixtureList().get(0).isSensor() && body1.getUserData().toString().equals("Bullet"))|| (
                     body2.getFixtureList().get(0).isSensor() && body2.getUserData().toString().equals("Bullet")))
                     return;
@@ -329,53 +338,10 @@ public class Level extends State implements ContactListener, Serializable {
                         body2.setUserData("null");
                     }
                 }
+                if (!(o instanceof Boy))
                 o.beenHit();
             }
-//            if ( && body2.getUserData().toString().equals(o.getBodyData().userData)) {
-//                o.beenHit();
-//            } else {
-//                if ( && body1.getUserData().toString().equals(o.getBodyData().userData)) {
-//                    o.beenHit();
-//                }
-//            }
         }
-
-
-
-//        for (Monster1 m1 : monsters1.values()) {
-//            if (m1.getBody() == null)
-//                continue;
-//            if (body1.getUserData().toString().equals(m1.toString()) && body2.getUserData().toString().equals("Boy")
-//                || body2.getUserData().toString().equals(m1.toString()) && body1.getUserData().toString().equals("Boy")) {
-//                beenHit();
-//            }
-//            if (body1.getUserData().equals("Thorns_Colliders") && body2.getUserData().toString().equals(m1.getBody().getUserData())) {
-//                beenHit(m1, body1);
-//            } else {
-//                if (body2.getUserData().equals("Thorns_Colliders") && body1.getUserData().toString().equals(m1.getBody().getUserData())) {
-//                    beenHit(m1, body2);
-//                }
-//            }
-
-//            if ((body1.getUserData().toString().equals("Bullet") &&
-//                body2.getUserData().toString().equals(m1.toString()))
-//                    || body2.getUserData().toString().equals("Bullet") &&
-//                        body1.getUserData().toString().equals(m1.toString())) {
-//                if (body1.getUserData().toString().equals("Bullet")) {
-//                    beenHit(m1, body1);
-//                    body1.setUserData("null");
-//                    body1.setGravityScale(0.1f);
-//                    body1.setLinearVelocity(0,0);
-//                } else {
-//                    if (body2.getUserData().toString().equals("Bullet")) {
-//                        beenHit(m1, body2);
-//                        body2.setUserData("null");
-//                        body2.setGravityScale(0.1f);
-//                        body2.setLinearVelocity(0,0);
-//                    }
-//                }
-//            }
-//        }
 
         if (body1.getUserData().toString().equals("null")) {
             bodiesToDestroy.add(body1);
@@ -435,7 +401,7 @@ public class Level extends State implements ContactListener, Serializable {
         for (Monster1 monster1 : monsters1.values()) {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
                 monster1.getBody().setLinearVelocity(0, 0);
-                if (boy.animations.name().equals("BOY_SABER")) {
+                if (boy.animations.name().equals("BOY_SABER") && boy.frameCounter() > 0f) {
                     monster1.animations = Animations.MONSTER1_SPLIT;
                     monster1.setSplit(true);
                     for (Fixture f : monster1.getBody().getFixtureList()) {
@@ -449,32 +415,21 @@ public class Level extends State implements ContactListener, Serializable {
                 }
                 monster1.getBody().setFixedRotation(true);
             } else
-//            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-////                boyBeenHit(monster1);
-//            }
+            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+                boy.beenHit();
+            }
                 if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
                     monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
                     monster1.animations = Animations.MONSTER1_FLICKERING;
                 }
 
-//            if (boy.getBodyBounds().overlaps(monster1.getBodyBounds()) && !monster1.isSplit()) {
-//                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x, boy.getBody().getLinearVelocity().y + 20f);
-//                monster1.animations = Animations.MONSTER1_FLICKERING;
-//                boyBeenHit();
-//            }
-//            for (Rectangle rect : verticalRectsThorns) {
-//                if (boy.getBodyBounds().overlaps(rect)) {
-//                    boyBeenHit();
-//                }
-//            }
         }
-//        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-//            jack.setBeenHit(true);
-//        }
+        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+            jack.beenHit();
+        }
         for (Objeto o : objetos) {
             for (Body body : bodiesToDestroy) {
                 body.setTransform(-10_500, -15_320, 0);
-//                world.destroyBody(body);
             }
             bodiesToDestroy.clear();
         }
