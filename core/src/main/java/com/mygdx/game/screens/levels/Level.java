@@ -19,6 +19,7 @@ import com.mygdx.game.items.fans.Fan2;
 import com.mygdx.game.items.fans.Fans;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.Tile;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -53,7 +54,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     protected ArrayList<Fans> fans = new ArrayList<>();
 
-    protected HashMap<String, Monster1> monsters1 = new HashMap<>();
+    public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
 
     public void init(){
@@ -179,7 +180,7 @@ public class Level extends State implements ContactListener, Serializable {
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        if (!StateManager.oldState.equals("PAUSE"))
+//        if (!StateManager.oldState.equals("PAUSE"))
             update();
 
 
@@ -196,7 +197,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     @Override
     public void pause() {
-
+        renderObjects();
     }
 
     @Override
@@ -248,15 +249,9 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 5; i++) {
             world.step(1/60f, 7, 7);
             camera.update();
-//            world.step(60, 7, 7);
-//            camera.update();
         }
-
         collisions();
-
-
         updateObjects();
-
     }
 
     public void updateObjects(){
@@ -290,10 +285,6 @@ public class Level extends State implements ContactListener, Serializable {
 
         if (body1 == null || body2 == null)
             return;
-
-
-//        System.out.println(body1.getUserData() + " " + body2.getUserData());
-
 
         for (Item item : items.values()) {
             if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy"))){

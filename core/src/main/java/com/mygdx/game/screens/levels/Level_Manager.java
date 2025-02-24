@@ -17,6 +17,7 @@ import com.mygdx.game.items.Portal;
 import com.mygdx.game.items.Rifle;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.Tile;
 
 import java.io.*;
@@ -217,7 +218,8 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public void update() {
-        currentLevel.update();
+        if (!PausePage.pause)
+            currentLevel.update();
     }
 
     public void write() {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.screens.PausePage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -72,10 +73,12 @@ public class Rifle extends Objeto implements Item, Serializable {
         }
         else
             position = body.getPosition();
-        rifle.setSize(width, height);
-        rifle.setOriginCenter();
-        rifle.rotate(1f);
-        rifle.setPosition(position.x, position.y);
+        if (!PausePage.pause) {
+            rifle.setSize(width, height);
+            rifle.setOriginCenter();
+            rifle.rotate(1f);
+            rifle.setPosition(position.x, position.y);
+        }
         if (body.getUserData().toString().equals(this.toString())) {
             rifle.draw(s);
         }

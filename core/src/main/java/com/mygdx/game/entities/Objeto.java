@@ -49,16 +49,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     }
 
-//    public Objeto(World world, Vector2 position){
-//        this.width = width;
-//        this.height = height;
-//        this.world = world;
-//        visible = true;
-//        if (body != null) {
-//            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
-//        }
-//    }
-
     public Objeto(){
     }
 
@@ -122,12 +112,14 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);
         body.setActive(true);
+        body.setFixedRotation(true);
         body.createFixture(fixtureDef);
         body.setUserData(this.toString());
         if (this instanceof Boy)
             bodyData = new BodyData(body, dimensions, width, height);
         else
             bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
+        polygonShape.dispose();
         return body;
     }
 
@@ -148,12 +140,14 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         Body body = world.createBody(bodyDef);
 //        body.createFixture(fixtureDef).setUserData(this);
         body.setActive(true);
+        body.setFixedRotation(true);
         body.createFixture(fixtureDef);
         body.setUserData(this.toString());
         if (this instanceof Boy)
             bodyData = new BodyData(body, dimensions, width, height);
         else
             bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
+        polygonShape.dispose();
         return body;
     }
 

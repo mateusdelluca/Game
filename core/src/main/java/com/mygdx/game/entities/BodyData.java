@@ -55,6 +55,8 @@ public class BodyData implements Serializable {
         fixtureDef.shape = polygonShape;
         Body body = world.createBody(bodyDef);
         body.setTransform(position, angle);
+        if (!userData.equals("Bullet"))
+            body.setFixedRotation(true);
         body.setLinearVelocity(linearVelocity);
         body.getTransform().setRotation(rotation);
         body.setUserData(userData);

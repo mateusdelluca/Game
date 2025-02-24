@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.PausePage;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -238,12 +239,14 @@ public class Animator{
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
         Sprite s = null;
-        if (!useOnlyLastFrame) {
+        if (!useOnlyLastFrame && !PausePage.pause) {
             s = new Sprite(animation.getKeyFrame(stateTime, looping));
-        } if (useOnlyLastFrame){
-            s = new Sprite(lastFrame());
+        } else{
+            if (useOnlyLastFrame || PausePage.pause){
+                s = new Sprite(lastFrame());
+            }
         }
-        if (looping && ani_finished())
+        if (looping && ani_finished() && !PausePage.pause)
             stateTime = 0f;
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();

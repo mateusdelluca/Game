@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,6 +15,9 @@ import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
+import com.mygdx.game.system.ScreenshotHelper;
+
+import static com.mygdx.game.system.ScreenshotHelper.sprite;
 
 public class PausePage extends State {
 
@@ -45,6 +49,8 @@ public class PausePage extends State {
     private Camera camera = new OrthographicCamera(WIDTH, HEIGHT);
     private Viewport viewport;
 
+    public static boolean pause;
+
     public PausePage(){
         for(int index = EXIT; index <= RETURN; ++index) {
             this.x[index] = 850;
@@ -68,6 +74,7 @@ public class PausePage extends State {
 
 
     public void update(){
+        pause = true;
         camera.update();
         int counter = 0;
         for(int index = EXIT; index <= RETURN; ++index) {
@@ -90,14 +97,18 @@ public class PausePage extends State {
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);// Clear screen
 //        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 
-        if (StateManager.oldState.equals("LEVEL"))
-            StateManager.States.valueOf(StateManager.oldState).render();
+
 
         update();
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        StateManager.oldState.render();
-        spriteBatch.begin();
+        spriteBatch.begin();if (StateManager.oldState.equals("LEVEL") || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")) {
+            PausePage.pause = true;
+//            StateManager.States.LEVEL.render();
+            if (sprite != null)
+                sprite.draw(spriteBatch);
+        }
         spriteBatch.setColor(1f, 1f, 1f, 0.5f);
         spriteBatch.draw(Images.pauseBox, 765, 250, BOX_WIDTH, BOX_HEIGHT);
         spriteBatch.setColor(1f, 1f, 1f, 1f);
@@ -151,6 +162,7 @@ public class PausePage extends State {
 //                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                 Sounds.LEVEL1.play();
             }
+            pause = false;
         }
         return false;
     }
@@ -175,6 +187,7 @@ public class PausePage extends State {
 //                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                     Sounds.LEVEL1.play();
                 }
+                pause = false;
                 break;
             }
             case SAVEGAME:{

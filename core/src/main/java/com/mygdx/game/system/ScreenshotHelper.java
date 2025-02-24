@@ -12,10 +12,13 @@ import static com.mygdx.game.screens.SavePage.PRINTSCREEN;
 
 public class ScreenshotHelper {
     public static Pixmap printscreen;
+    public static Sprite sprite;
     public static void takeScreenshot() {
         Pixmap pixmap = Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //            PixmapIO.writePNG(Gdx.files.external("mypixmap.png"), pixmap, Deflater.DEFAULT_COMPRESSION, true);
         printscreen = pixmap;
+        sprite = new Sprite(new Texture(ScreenshotHelper.printscreen));
+        sprite.flip(false,true);
         sprites[PRINTSCREEN] = new Sprite(new Texture(printscreen));
         sprites[PRINTSCREEN].flip(false, true);
         sprites[PRINTSCREEN].setSize(248, 166);
