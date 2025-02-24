@@ -89,6 +89,7 @@ public class Monster1 extends Objeto implements Serializable {
                     if (!soundRunning) {
                         Sounds.MONSTER_HURT.play();
                         soundRunning = true;
+                        animations = Animations.MONSTER1_FLICKERING;
                     }
                     if (flickering_time >= 1.0f) {
                         flickering_time = 0f;
