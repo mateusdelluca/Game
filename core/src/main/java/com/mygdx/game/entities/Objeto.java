@@ -32,7 +32,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected Rectangle rect;
     private float alpha = 1.0f;
     @Getter @Setter
-    private boolean beenHit;
+    protected boolean beenHit;
     @Getter @Setter
     private float  deltaTime;
     @Getter @Setter

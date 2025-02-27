@@ -118,13 +118,13 @@ public class Level extends State implements ContactListener, Serializable {
 
         monsters1.clear();
 
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 320), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3200, 6000 - 1080), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720), Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880), Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 320),     Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3200, 6000 - 1080),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
@@ -306,6 +306,7 @@ public class Level extends State implements ContactListener, Serializable {
         }
 
         for (Objeto o : objetos) {
+
             if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
                 if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
                     !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
@@ -317,12 +318,32 @@ public class Level extends State implements ContactListener, Serializable {
                     !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
                     !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
                         boy.beenHit();
-            if ((((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders") ||
-                body1.getUserData().toString().equals("Boy")) &&
+
+
+            if ((((
+
+                body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders") ||
+                body1.getUserData().toString().equals("Boy"))
+
+                &&
+
                 body2.getUserData().toString().equals(o.getBodyData().userData))
-                || (((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) ||
-                body2.getUserData().toString().equals("Boy")) &&
-                body1.getUserData().toString().equals(o.getBodyData().userData)))) {
+
+                ||
+
+                (((
+
+                body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) ||
+                body2.getUserData().toString().equals("Boy"))
+
+                &&
+
+                body1.getUserData().toString().equals(o.getBodyData().userData))))
+
+            {
+                if (!(o instanceof Boy) && !(o instanceof Jack))
+                    o.beenHit();
+
                 if ((body1.getFixtureList().get(0).isSensor() && body1.getUserData().toString().equals("Bullet"))|| (
                     body2.getFixtureList().get(0).isSensor() && body2.getUserData().toString().equals("Bullet")))
                     return;
@@ -333,7 +354,7 @@ public class Level extends State implements ContactListener, Serializable {
                         body2.setUserData("null");
                     }
                 }
-                if (!(o instanceof Boy))
+                if ((o instanceof Boy) || (o instanceof Jack))
                     o.beenHit();
             }
         }

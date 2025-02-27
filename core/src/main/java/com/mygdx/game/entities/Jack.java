@@ -88,7 +88,7 @@ public class Jack extends Objeto {
         if (visible) {
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
-                if (timer < 2f) {
+                if (timer < 1.1f) {
                     alpha = new Random().nextFloat(1f);
                     sprite.setColor(1f, 1f, 1f, alpha);
                 }

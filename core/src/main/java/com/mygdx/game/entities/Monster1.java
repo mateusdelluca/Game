@@ -1,6 +1,5 @@
 package com.mygdx.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -9,23 +8,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
-import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+import java.util.Date;
 
 public class Monster1 extends Objeto implements Serializable {
 
     public static final float WIDTH = 94, HEIGHT = 128;
     public static float BOX_WIDTH = 78f, BOX_HEIGHT = 118f;
     public Animations animations = Animations.MONSTER1_WALKING;
-    private boolean usingOnlyLastFrame, looping = true, facingRight;
+    private boolean usingOnlyLastFrame, noLooping, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
-    private float flickering_time;
+    private float flickering_deltaTime;
     @Setter @Getter
     private float HP = 5;
     @Setter
@@ -34,6 +34,8 @@ public class Monster1 extends Objeto implements Serializable {
     private int id;
     private boolean soundRunning;
     private String nameAnimation;
+    private boolean left;
+    private long lastTime, deltaTime, initialTime;
 
     public Monster1(Vector2 position, String userData){
         super(WIDTH, HEIGHT);
@@ -45,7 +47,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingRight));
+            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(spriteBatch);
         }
@@ -66,12 +68,8 @@ public class Monster1 extends Objeto implements Serializable {
                 }
             }
             nameAnimation = animations.name();
-            if (HP <= 0) {
-                animations = Animations.MONSTER1_SPLIT;
-                split = true;
-            }
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
-                looping = false;
+                noLooping = true;
                 for (Fixture f : getBody().getFixtureList()) {
                     f.setSensor(true);
                 }
@@ -89,23 +87,24 @@ public class Monster1 extends Objeto implements Serializable {
                     if (!soundRunning) {
                         Sounds.MONSTER_HURT.play();
                         soundRunning = true;
-                        animations = Animations.MONSTER1_FLICKERING;
+                        initialTime = System.nanoTime();
                     }
-                    if (flickering_time >= 1.0f) {
-                        flickering_time = 0f;
+                    lastTime = System.nanoTime();
+                    deltaTime = (lastTime - initialTime)/1_000_000_000;
+                      if (deltaTime > 1) {
+                          initialTime = System.nanoTime();
+//                        flickering_deltaTime = 0f;
                         body.setLinearVelocity(0, 0);
-                        setBeenHit(false);
                         animations = Animations.MONSTER1_WALKING;
                         soundRunning = false;
                         Sounds.MONSTER_HURT.stop();
                     }
-                    if (HP <= 0) {
-                        animations = Animations.MONSTER1_SPLIT;
-                        split = true;
-                    }
-                    flickering_time += Gdx.graphics.getDeltaTime();
                 }
             }
+        }
+        if (HP <= 0) {
+            animations = Animations.MONSTER1_SPLIT;
+            split = true;
         }
     }
 
@@ -149,11 +148,14 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void beenHit() {
-        if (getBody() != null) {
+        if (body == null)
+            loadBody(BodyDef.BodyType.DynamicBody, false);
+        if (body != null) {
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
             animations = Animations.MONSTER1_FLICKERING;
             Sounds.MONSTER_HURT.play();
             setHP(getHP() - 1);
+            setBeenHit(true);
         }
     }
 }

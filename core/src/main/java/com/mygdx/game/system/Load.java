@@ -47,7 +47,6 @@ public class Load{
             currentLevel.init();
              for (Monster1 m : currentLevel.monsters1.values()) {
                  m.loadBody(BodyDef.BodyType.DynamicBody, false);
-//                    m.animations = Animations.MONSTER1_FLICKERING;
              }
             currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
             currentLevel.boy.setViewport(viewport);
