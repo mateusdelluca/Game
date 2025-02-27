@@ -34,6 +34,7 @@ import java.util.Random;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
+import static com.mygdx.game.system.ScreenshotHelper.sprite;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Level extends State implements ContactListener, Serializable {
@@ -50,6 +51,9 @@ public class Level extends State implements ContactListener, Serializable {
     @Getter
     @Setter
     private Jack jack;
+    @Setter
+    @Getter
+    private Girl girl;
     protected PowerBar powerBar;
 
     protected ArrayList<Fans> fans = new ArrayList<>();
@@ -116,6 +120,8 @@ public class Level extends State implements ContactListener, Serializable {
 
         jack = new Jack(new Vector2(500, 6000 - 680f));
 
+        girl = new Girl(new Vector2(300, 6000 - 700f));
+
         monsters1.clear();
 
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 320),     Monster1.class.getSimpleName() + monsters1.size()));
@@ -129,6 +135,7 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         items2.put(Rifle.class.getSimpleName(), jack.getRifle());
+        items2.put(Rifle.class.getSimpleName(), girl.getRifle());
 
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
             if (index < 5) {
@@ -161,6 +168,7 @@ public class Level extends State implements ContactListener, Serializable {
         objetos.addAll(items2.values());
         objetos.add(boy);
         objetos.add(jack);
+        objetos.add(girl);
         objetos.addAll(monsters1.values());
 
 
@@ -234,6 +242,7 @@ public class Level extends State implements ContactListener, Serializable {
             monster1.render(spriteBatch);
         }
         jack.render(spriteBatch);
+        girl.render(spriteBatch);
 //        Rifle rifle = (Rifle) items.get("Rifle");
 //        rifle.getLeftSideBullets().render(spriteBatch);
         for (Item item : items.values())
@@ -341,7 +350,7 @@ public class Level extends State implements ContactListener, Serializable {
                 body1.getUserData().toString().equals(o.getBodyData().userData))))
 
             {
-                if (!(o instanceof Boy) && !(o instanceof Jack))
+                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
                     o.beenHit();
 
                 if ((body1.getFixtureList().get(0).isSensor() && body1.getUserData().toString().equals("Bullet"))|| (
@@ -354,7 +363,7 @@ public class Level extends State implements ContactListener, Serializable {
                         body2.setUserData("null");
                     }
                 }
-                if ((o instanceof Boy) || (o instanceof Jack))
+                if ((o instanceof Boy) || (o instanceof Jack) || (o instanceof Girl) )
                     o.beenHit();
             }
         }

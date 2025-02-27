@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.items.Bullet;
+import com.mygdx.game.items.Rifle;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
 public class Girl extends Objeto{
@@ -24,10 +27,13 @@ public class Girl extends Objeto{
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
-    Sprite sprite = new Sprite(Images.girl);
+    transient Sprite sprite = new Sprite(Images.girl);
     public int HP = 5;
     private float timer, deltaTime;
     private boolean isRunning;
+    @Getter @Setter
+    private Rifle rifle = new Rifle(new Vector2(-10_000f, -5_000));
+    private float deltaTime2;
 
     public Girl(Vector2 position){
         super(WIDTH, HEIGHT);
@@ -38,49 +44,71 @@ public class Girl extends Objeto{
     }
 
     public void update(){
-        deltaTime += Gdx.graphics.getDeltaTime();
-        if (deltaTime > 2f){
-//            bullets.add(new Bullet(world, new Vector2(!flip ? getBody().getPosition().x +
-//                WIDTH / 2f : getBody().getPosition().x - WIDTH / 2f,
-//                getBody().getPosition().y + HEIGHT / 2f), !flip, (float) Math.PI)); //TODO fazer renderizar bullets
-            deltaTime = 0f;
-            SHOTGUN.play();
+        super.update();
+        if (HP > 0) {
+            deltaTime += Gdx.graphics.getDeltaTime();
+            if (deltaTime > 2f) {
+                if (!rifle.isReloading()) {
+                    if (deltaTime > 5f) {
+                        Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
+                            WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
+                            body.getPosition().y + HEIGHT / 2f), !flip, flip ? (float) Math.PI : 0f, true);
+                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                        deltaTime = 0f;
+                        SHOTGUN.play();
+                    }
+                }
+            }
+            if (isRunning) {
+                Sounds.GIRL_HURT.play();
+                isRunning = false;
+            }
+            if (rifle.isReloading()) {
+                deltaTime2 += Gdx.graphics.getDeltaTime();
+                if (deltaTime2 > 0.6f) {
+                    deltaTime2 = 0f;
+                    rifle.setReloading(false);
+                }
+            }
+            rifle.updateItem(world);
         }
-        if (isRunning) {
-            Sounds.GIRL_HURT.play();
-            isRunning = false;
-        }
+    if (HP <= 0)
+        visible = false;
     }
 
     public void render(SpriteBatch s){
-        if (body.getPosition().y > 0 && HP > 0) {
-        update();
-        if (beenHit) {
-            timer += Gdx.graphics.getDeltaTime();
-            if (timer < 0.05f)
-                isRunning = true;
-            if (timer < 1.5f) {
-                alpha = new Random().nextFloat(1f);
-                sprite.setColor(1f,1f,1f,alpha);
-//                    sprite.setColor(1f,1f,1f,alpha);
-            }
-            if (timer > 1.5f) {
-                timer = 0f;
-//                    deltaTime = 0f;
-                alpha = 1f;
-                isRunning = false;
-                beenHit = false;
-                HP--;
-            }
-
-            sprite.setAlpha(alpha);
-//                deltaTime += Gdx.graphics.getDeltaTime();
+        if (HP <= 0)
+            visible = false;
+        if (rifle == null)
+            rifle = new Rifle(new Vector2(-10_000, -20_000));
+        if (body == null) {
+            loadBody(BodyDef.BodyType.DynamicBody, false);
+            timer = 0f;
         }
+        if (sprite == null)
+            sprite = new Sprite(Images.girl);
+        if (visible) {
+            if (beenHit) {
+                timer += Gdx.graphics.getDeltaTime();
+                if (timer < 1.1f) {
+                    alpha = new Random().nextFloat(1f);
+                    sprite.setColor(1f, 1f, 1f, alpha);
+                }
+                if (timer > 1f) {
+                    beenHit = false;
+                    timer = 0f;
+                    alpha = 1f;
+                    HP--;
+                }
+                if (timer <= 0.05f) {
+                    Sounds.GIRL_HURT.play();
+                }
+                sprite.setAlpha(alpha);
+            }
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
-        } else{
-            body.setTransform(0,0,0);
+            rifle.render(s);
         }
     }
 
@@ -92,6 +120,10 @@ public class Girl extends Objeto{
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+    @Override
+    public void beenHit(){
+        beenHit = true;
     }
 
 }
