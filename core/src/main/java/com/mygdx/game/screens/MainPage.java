@@ -52,6 +52,8 @@ public class MainPage extends State {
     private Viewport viewport;
     private Sound shot;
 
+    public static boolean newGame;
+
     public MainPage(){
         for(int index = EXIT; index <= NEWGAME; ++index) {
             this.x[index] = (1920/2) - 200;
@@ -180,6 +182,7 @@ public class MainPage extends State {
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
                 StateManager.setState(StateManager.States.LEVEL);
+                newGame = true;
                 break;
             }
             case LOADGAME:{

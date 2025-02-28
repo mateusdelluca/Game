@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import static com.mygdx.game.screens.MainPage.newGame;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Load{
@@ -34,15 +35,17 @@ public class Load{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
             for (int i = 0; i < objetos.size(); i++) {
                 world.destroyBody(objetos.get(i).getBody());
-                if (objetos.get(i) instanceof Jack || objetos.get(i) instanceof Monster1)
+                if (!newGame) {
                     objetos.remove(i);
+                    newGame = true;
+                }
             }
             currentLevel.boy.setViewport(viewport);
             currentLevel = (Level) ois.readObject();
             ois.close();
             world = new World(new Vector2(0,-10), true);
-            currentLevel.setJack(new Jack(new Vector2(currentLevel.getJack().getBodyData().position)));
-            objetos.add(currentLevel.getJack());
+//            currentLevel.setJack(new Jack(new Vector2(currentLevel.getJack().getBodyData().position)));
+//            objetos.add(currentLevel.getJack());
             objetos.addAll(currentLevel.monsters1.values());
             currentLevel.init();
              for (Monster1 m : currentLevel.monsters1.values()) {

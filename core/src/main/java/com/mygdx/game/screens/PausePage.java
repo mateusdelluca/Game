@@ -163,6 +163,7 @@ public class PausePage extends State {
                 Sounds.LEVEL1.play();
             }
             pause = false;
+
         }
         return false;
     }
@@ -200,6 +201,7 @@ public class PausePage extends State {
             }
             case EXIT: {
                 StateManager.setState(StateManager.States.MAIN_MENU);
+                MainPage.newGame = false;
                 break;
             }
         }
