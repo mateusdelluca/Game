@@ -32,9 +32,10 @@ public class Load{
     public Load(int index){
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
-            for (int i = 0; i < objetos.size(); i++) {
-                world.destroyBody(objetos.get(i).getBody());
-            }
+            if (!loaded)
+                for (int i = 0; i < objetos.size(); i++) {
+                    world.destroyBody(objetos.get(i).getBody());
+                }
             if (!newGame && !loaded) {
                 objetos.clear();
                 loaded = true;

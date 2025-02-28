@@ -46,7 +46,6 @@ public class Jack extends Objeto {
     public void update(){
         super.update();
         if (HP > 0 && visible) {
-            sprite.flip(flip, false);
             deltaTime += Gdx.graphics.getDeltaTime();
             rifle.update();
             if (!rifle.isReloading()) {

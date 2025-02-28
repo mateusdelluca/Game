@@ -85,8 +85,10 @@ public class Girl extends Objeto{
             loadBody(BodyDef.BodyType.DynamicBody, false);
             timer = 0f;
         }
-        if (sprite == null)
+        if (sprite == null) {
             sprite = new Sprite(Images.girl);
+            sprite.flip(!flip, false);
+        }
         if (visible) {
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
