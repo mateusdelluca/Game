@@ -31,14 +31,13 @@ public class Load{
 
     public Load(int index){
         try {
-            loaded = true;
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("saves/Save" + index + ".dat"));
             for (int i = 0; i < objetos.size(); i++) {
                 world.destroyBody(objetos.get(i).getBody());
-                if (!newGame) {
-                    objetos.remove(i);
-                    newGame = true;
-                }
+            }
+            if (!newGame && !loaded) {
+                objetos.clear();
+                loaded = true;
             }
             currentLevel.boy.setViewport(viewport);
             currentLevel = (Level) ois.readObject();
@@ -47,6 +46,8 @@ public class Load{
 //            currentLevel.setJack(new Jack(new Vector2(currentLevel.getJack().getBodyData().position)));
 //            objetos.add(currentLevel.getJack());
             objetos.addAll(currentLevel.monsters1.values());
+            objetos.add(currentLevel.getGirl());
+            objetos.add(currentLevel.getJack());
             currentLevel.init();
              for (Monster1 m : currentLevel.monsters1.values()) {
                  m.loadBody(BodyDef.BodyType.DynamicBody, false);

@@ -36,7 +36,7 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        if (body == null)
+        if (body == null && visible)
             loadBody(BodyDef.BodyType.StaticBody, true);
         if (visible)
             if (rand > 0)

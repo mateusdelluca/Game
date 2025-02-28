@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 
@@ -202,6 +203,7 @@ public class PausePage extends State {
             case EXIT: {
                 StateManager.setState(StateManager.States.MAIN_MENU);
                 MainPage.newGame = false;
+                Level_Manager.loaded = false;
                 break;
             }
         }
