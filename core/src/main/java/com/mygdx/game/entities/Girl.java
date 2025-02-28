@@ -23,7 +23,7 @@ public class Girl extends Objeto{
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.girl.getWidth()/DIVISOR, HEIGHT = Images.girl.getHeight()/DIVISOR;
     @Getter @Setter
-    private boolean flip = true;
+    private boolean flip;
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
@@ -40,7 +40,7 @@ public class Girl extends Objeto{
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
-        sprite.flip(flip, false);
+        sprite.flip(!flip, false);
     }
 
     public void update(){

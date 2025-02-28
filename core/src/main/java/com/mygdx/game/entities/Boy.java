@@ -57,9 +57,7 @@ public class Boy extends Objeto {
     private boolean chargingSP;
     @Getter
     private Rifle rifle;
-//    private JetPack jetPack;
-    private Vector2 bodyPosition;
-    private boolean buttonReloadingPressed;
+    private Vector2 bodyPosition;;
 
     public static String nameOfAnimation;
 

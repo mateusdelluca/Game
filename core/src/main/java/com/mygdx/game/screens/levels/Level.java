@@ -350,12 +350,13 @@ public class Level extends State implements ContactListener, Serializable {
                 body1.getUserData().toString().equals(o.getBodyData().userData))))
 
             {
-                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
-                    o.beenHit();
+//                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
+
 
                 if ((body1.getFixtureList().get(0).isSensor() && body1.getUserData().toString().equals("Bullet"))|| (
                     body2.getFixtureList().get(0).isSensor() && body2.getUserData().toString().equals("Bullet")))
                     return;
+                o.beenHit();
                 if (body1.getUserData().toString().equals("Bullet")) {
                     body1.setUserData("null");
                 } else {
@@ -363,8 +364,8 @@ public class Level extends State implements ContactListener, Serializable {
                         body2.setUserData("null");
                     }
                 }
-                if ((o instanceof Boy) || (o instanceof Jack) || (o instanceof Girl) )
-                    o.beenHit();
+//                if ((o instanceof Boy) || (o instanceof Jack) || (o instanceof Girl) )
+//                    o.beenHit();
             }
         }
 
