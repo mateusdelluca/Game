@@ -45,7 +45,7 @@ public class Jack extends Objeto {
 
     public void update(){
         super.update();
-        if (HP > 0) {
+        if (HP > 0 && visible) {
             sprite.flip(flip, false);
             deltaTime += Gdx.graphics.getDeltaTime();
             rifle.update();
@@ -79,7 +79,7 @@ public class Jack extends Objeto {
             visible = false;
         if (rifle == null)
             rifle = new Rifle(new Vector2(-10_000, -20_000));
-        if (body == null) {
+        if (body == null && visible) {
             loadBody(BodyDef.BodyType.DynamicBody, false);
             timer = 0f;
         }
@@ -123,7 +123,7 @@ public class Jack extends Objeto {
     }
 
     public Rectangle getBodyBounds() {
-        if (HP <= 0)
+        if (HP <= 0 || body == null)
             return new Rectangle();
         return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
     }

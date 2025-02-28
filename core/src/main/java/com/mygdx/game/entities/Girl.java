@@ -45,7 +45,7 @@ public class Girl extends Objeto{
 
     public void update(){
         super.update();
-        if (HP > 0) {
+        if (HP > 0 && visible) {
             deltaTime += Gdx.graphics.getDeltaTime();
             if (deltaTime > 2f) {
                 if (!rifle.isReloading()) {
@@ -81,7 +81,7 @@ public class Girl extends Objeto{
             visible = false;
         if (rifle == null)
             rifle = new Rifle(new Vector2(-10_000, -20_000));
-        if (body == null) {
+        if (body == null && visible) {
             loadBody(BodyDef.BodyType.DynamicBody, false);
             timer = 0f;
         }

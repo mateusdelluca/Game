@@ -38,7 +38,7 @@ public class Crystal extends Objeto implements Item{
     public void render(SpriteBatch s) {
         if (body == null)
             loadBody(BodyDef.BodyType.StaticBody, true);
-        if (!body.getUserData().equals("null") && visible)
+        if (visible)
             if (rand > 0)
                 s.draw(Images.crystal, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
             else
