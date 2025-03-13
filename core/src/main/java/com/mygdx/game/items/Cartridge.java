@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.screens.levels.Level_Manager.objetos;
 import static com.mygdx.game.sfx.Sounds.GUNSHOT;
 
 public class Cartridge implements Item{
@@ -17,6 +18,8 @@ public class Cartridge implements Item{
     private ArrayList<Bullet> bulletsLeft = new ArrayList<>(); //just to count
     @Getter @Setter
     private ArrayList<Bullet> bulletsToDraw = new ArrayList<>();  //just to draw the bullets
+
+    public static ArrayList<Bullet> bullets = new ArrayList<>();
 
     public static final int MAX_ROUNDS = 20, MAX_ROUNDS2 = 30;
 
@@ -44,6 +47,7 @@ public class Cartridge implements Item{
                 if (accumulated < MAX_ROUNDS)
                     accumulated++;
                 GUNSHOT.play();
+                bullets.add(bullet);
             }
         }
     }
@@ -78,7 +82,7 @@ public class Cartridge implements Item{
 
     @Override
     public void setUserData(String name) {
-        
+
     }
 
     @Override

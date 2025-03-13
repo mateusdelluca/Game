@@ -37,13 +37,14 @@ public class Load{
                     world.destroyBody(objetos.get(i).getBody());
                 }
             if (!newGame && !loaded) {
-                objetos.clear();
+//                objetos.clear();
                 loaded = true;
             }
-            currentLevel.boy.setViewport(viewport);
             currentLevel = (Level) ois.readObject();
-            ois.close();
+            currentLevel.boy.setViewport(viewport);
+            objetos.add(currentLevel.boy);
             world = new World(new Vector2(0,-10), true);
+
 //            currentLevel.setJack(new Jack(new Vector2(currentLevel.getJack().getBodyData().position)));
 //            objetos.add(currentLevel.getJack());
             objetos.addAll(currentLevel.monsters1.values());
@@ -59,7 +60,10 @@ public class Load{
             if (currentLevel.boy.getRifle() != null)
                 currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
             else
+            if (currentLevel.boy.animations.name() != null)
                 currentLevel.boy.animations = Animations.valueOf("BOY_IDLE");
+            world.setContactListener(currentLevel);
+            ois.close();
             StateManager.setState(StateManager.States.PAUSE);
             if (Sounds.PAUSE_SONG.isPlaying())
                 Sounds.PAUSE_SONG.stop();

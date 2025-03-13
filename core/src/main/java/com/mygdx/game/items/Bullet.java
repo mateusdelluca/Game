@@ -48,7 +48,7 @@ public class Bullet extends Objeto implements Item {
     @Override
     public void update(){
         super.update();
-        if (Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 1f) {
+        if (Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 10f) {
             visible = false;
             body.setUserData("null");
 //            body = null;
@@ -56,10 +56,10 @@ public class Bullet extends Objeto implements Item {
         if (body == null || body.getFixtureList().size == 0)
             return;
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 0.1f) {
+        if (timer < 0.2f) {
+            body.getFixtureList().get(0).setSensor(true);
+        } else
             body.getFixtureList().get(0).setSensor(false);
-            timer = 0f;
-        }
     }
 
     public void render(SpriteBatch spriteBatch){
