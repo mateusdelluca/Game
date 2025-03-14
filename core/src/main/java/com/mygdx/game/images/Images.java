@@ -1,6 +1,7 @@
 package com.mygdx.game.images;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,8 +30,7 @@ public class Images implements Serializable {
     public static Texture bullet;
     public static Texture splashScreen;
     public static Animator portal, fire, fan, fan2;
-    public static Texture hp, hp2;
-    public static Texture sp, sp2;
+    public static Sprite hp, sp, bar;
     public static Texture pauseBox;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
@@ -94,10 +94,11 @@ public class Images implements Serializable {
         bullet = new Texture("objects/Bullet.png");
         splashScreen = new Texture(Gdx.files.internal("background/SplashScreen 5.png"));
         portal = new Animator(23, 10, 25, 857, 873, "objects/Portal_Spritesheet.png");
-        hp = new Texture(Gdx.files.internal("HP_Bar.png"));
-        hp2 = new Texture(Gdx.files.internal("HP_Bar2.png"));
-        sp = new Texture(Gdx.files.internal("SP_Bar.png"));
-        sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
+        bar = new Sprite(new Texture(Gdx.files.internal("boy/Bar.png")));
+        hp = new Sprite(new Texture(Gdx.files.internal("boy/HP.png")));
+//        hp2 = new Texture(Gdx.files.internal("HP_Bar2.png"));
+        sp = new Sprite(new Texture(Gdx.files.internal("boy/SP.png")));
+//        sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
         try {
             for (int i = 0; i < saves.length; i++) {
@@ -139,6 +140,8 @@ public class Images implements Serializable {
             e.printStackTrace();
         }
         pixMapBox = new Pixmap(248, 166, Pixmap.Format.RGBA8888);
+        pixMapBox.setColor(Color.WHITE);
+        pixMapBox.fill();
         spriteBatch = new SpriteBatch();
     }
 

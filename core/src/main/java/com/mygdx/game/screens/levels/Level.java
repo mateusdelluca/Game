@@ -218,7 +218,6 @@ public class Level extends State implements ContactListener, Serializable {
     public void dispose() {
         spriteBatch.dispose();
         world.dispose();
-        powerBar.dispose();
         box2DDebugRenderer.dispose();
     }
 
@@ -336,7 +335,7 @@ public class Level extends State implements ContactListener, Serializable {
 
                 if ((((
 
-                    body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders") ||
+                    body1.getUserData().equals("Thorns_Colliders") ||
                         body1.getUserData().toString().equals("Boy"))
 
                     &&
@@ -347,7 +346,7 @@ public class Level extends State implements ContactListener, Serializable {
 
                     (((
 
-                        body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) ||
+                        body2.getUserData().equals("Thorns_Colliders")) ||
                         body2.getUserData().toString().equals("Boy"))
 
                         &&
@@ -387,7 +386,6 @@ public class Level extends State implements ContactListener, Serializable {
                     objeto.beenHit();
                 }
             }
-
         }
 
         if (body1.getUserData().toString().equals("null")) {
