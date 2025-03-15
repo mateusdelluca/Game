@@ -26,6 +26,7 @@ public class ItemToBeDrawn {
     public static final int WIDTH = 75, HEIGHT = 80;
     public static ArrayList<Rectangle> rectangles = new ArrayList<>();
 
+    @Getter @Setter
     private String name;
     @Getter @Setter
     private boolean equipped = true;

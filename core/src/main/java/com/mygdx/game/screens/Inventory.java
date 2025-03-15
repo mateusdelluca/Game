@@ -59,7 +59,7 @@ public class Inventory extends State {
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
         for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn)
-            itemToBeDrawn.render(spriteBatch, "Saber");
+            itemToBeDrawn.render(spriteBatch, itemToBeDrawn.getName());
         spriteBatch.end();
     }
 
