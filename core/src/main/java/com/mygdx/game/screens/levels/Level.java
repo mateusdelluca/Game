@@ -17,6 +17,7 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
 import com.mygdx.game.items.fans.Fan2;
 import com.mygdx.game.items.fans.Fans;
+import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
@@ -26,6 +27,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import static com.mygdx.game.items.Cartridge.bullets;
+import static com.mygdx.game.screens.Inventory.addItemToInventory;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
@@ -312,6 +314,8 @@ public class Level extends State implements ContactListener, Serializable {
             } else{
                 if (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy")){
                     boy.equip_Item(item);
+                    if (!item.toString().contains("Crystal"))
+                        addItemToInventory(new ItemToBeDrawn(item.toString()));
                 }
             }
         }

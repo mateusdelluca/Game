@@ -27,4 +27,6 @@ public interface Item extends Serializable {
     BodyData getBodyData();
 
     void setVisible(boolean b);
+
+    String toString();
 }

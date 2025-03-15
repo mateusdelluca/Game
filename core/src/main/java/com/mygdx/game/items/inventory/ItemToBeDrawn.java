@@ -30,9 +30,9 @@ public class ItemToBeDrawn {
     @Getter @Setter
     private boolean equipped;
 
-    public ItemToBeDrawn(){
+    public ItemToBeDrawn(String name){
 //        name = getClass().getSimpleName();
-        name = "Saber";
+        this.name = "" + name;
         if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
             if (index_x % 4 == 0 && index_x != 0){
                 index_x = 0;

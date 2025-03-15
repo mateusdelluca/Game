@@ -22,12 +22,12 @@ public class Saber extends Objeto implements Item, Serializable {
     }
 
     public void render(SpriteBatch s, Sprite sprite){
-
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setOriginCenter();
         sprite.rotate(1f);
-        sprite.draw(s);
+        if (visible)
+            sprite.draw(s);
     }
 
 
