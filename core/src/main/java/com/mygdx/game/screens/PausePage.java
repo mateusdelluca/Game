@@ -104,7 +104,9 @@ public class PausePage extends State {
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        StateManager.oldState.render();
-        spriteBatch.begin();if (StateManager.oldState.equals("LEVEL") || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")) {
+        spriteBatch.begin();
+        if (StateManager.oldState.equals("LEVEL") || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")
+            || StateManager.oldState.equals("INVENTORY")) {
             PausePage.pause = true;
 //            StateManager.States.LEVEL.render();
             if (sprite != null)
@@ -115,7 +117,6 @@ public class PausePage extends State {
         spriteBatch.setColor(1f, 1f, 1f, 1f);
 
         for(int index = EXIT; index <= RETURN; ++index) {
-
             font.setColor(Color.BLACK);
             font.draw(spriteBatch, this.options[index], this.x[index] + 2, this.y[index] + 2);
             font.setColor(Color.WHITE);

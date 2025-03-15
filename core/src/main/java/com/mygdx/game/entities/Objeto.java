@@ -15,6 +15,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Random;
 
+import static com.mygdx.game.screens.levels.Level_Manager.PPM;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -52,49 +53,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public Objeto(){
     }
 
-    protected Body createBody(){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.active = true;
-//        bodyDef.position.set(0,0);
-        bodyDef.fixedRotation = true;
-        PolygonShape polygonShape = new PolygonShape();
-//         Adicione formas (fixtures) ao corpo para representar sua geometria
-        polygonShape.setAsBox(width/2f, height/2f, new Vector2(width/2f, height/2f), 0);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
-        fixtureDef.density = 100f;
-        fixtureDef.restitution = 0.1f;
-        Body body = world.createBody(bodyDef);
-//        body.createFixture(fixtureDef).setUserData(this);
-        body.setActive(true);
-        body.createFixture(fixtureDef);
-        bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
-        return body;
-    }
-
-//    protected Body createBody(Vector2 position, boolean isSensor){
-//        BodyDef bodyDef = new BodyDef();
-//        bodyDef.type = BodyDef.BodyType.DynamicBody;
-//        bodyDef.active = true;
-////        bodyDef.position.set(0,0);
-//        bodyDef.fixedRotation = true;
-//        PolygonShape polygonShape = new PolygonShape();
-////         Adicione formas (fixtures) ao corpo para representar sua geometria
-//        polygonShape.setAsBox(width/2f, height/2f, new Vector2(width/2f, height/2f), 0);
-//        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.shape = polygonShape;
-//        fixtureDef.density = 100f;
-//        fixtureDef.restitution = 0.1f;
-//        fixtureDef.isSensor = isSensor;
-//        Body body = world.createBody(bodyDef);
-////        body.createFixture(fixtureDef).setUserData(this);
-//        body.setActive(true);
-//        body.createFixture(fixtureDef);
-//        bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
-//        return body;
-//    }
-
     protected Body createBody(Vector2 dimensions, BodyDef.BodyType bodyType, boolean isSensor){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
@@ -107,34 +65,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 10f;
-//        fixtureDef.restitution = 0.1f;
-        fixtureDef.isSensor = isSensor;
-        Body body = world.createBody(bodyDef);
-//        body.createFixture(fixtureDef).setUserData(this);
-        body.setActive(true);
-        body.setFixedRotation(true);
-        body.createFixture(fixtureDef);
-        body.setUserData(this.toString());
-        if (this instanceof Boy)
-            bodyData = new BodyData(body, dimensions, width, height);
-        else
-            bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
-        polygonShape.dispose();
-        return body;
-    }
-
-    protected Body createBody(Vector2 dimensions, BodyDef.BodyType bodyType, boolean isSensor, float density){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = bodyType;
-        bodyDef.active = true;
-        bodyDef.position.set(0,0);
-        bodyDef.fixedRotation = true;
-        PolygonShape polygonShape = new PolygonShape();
-//         Adicione formas (fixtures) ao corpo para representar sua geometria
-        polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
-        fixtureDef.density = density;
 //        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);
@@ -188,7 +118,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         timer += Gdx.graphics.getDeltaTime();
         if (timer > 0.2f){
             if (!bullet.getBody().getFixtureList().isEmpty())
-            bullet.getBody().getFixtureList().get(0).setSensor(false);
+                bullet.getBody().getFixtureList().get(0).setSensor(false);
             timer = 0f;
         }
     }
@@ -204,5 +134,9 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void setUserData(String name){
         bodyData.userData = name;
         body.setUserData(name);
+    }
+
+    public Vector2 getPosition(Vector2 position){
+        return new Vector2(position.x * PPM, position.y * PPM);
     }
 }

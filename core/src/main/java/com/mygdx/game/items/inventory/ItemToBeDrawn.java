@@ -32,7 +32,7 @@ public class ItemToBeDrawn {
 
     public ItemToBeDrawn(){
 //        name = getClass().getSimpleName();
-        name = "Rifle";
+        name = "Saber";
         if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
             if (index_x % 4 == 0 && index_x != 0){
                 index_x = 0;
@@ -55,12 +55,6 @@ public class ItemToBeDrawn {
         }
         Images.getItemDraw(name).setPosition(position.x,position.y);
         Images.getItemDraw(name).draw(spriteBatch);
-    }
-
-    public ItemToBeDrawn getItemByName(String name){
-          if (this.name.equals(name))
-            return this;
-        return null;
     }
 
     @Override

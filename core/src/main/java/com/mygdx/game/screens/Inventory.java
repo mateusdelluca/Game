@@ -16,17 +16,15 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.ITEMS_LIMIT;
 public class Inventory extends State {
 
     public static ArrayList<ItemToBeDrawn> itemsToBeDrawn = new ArrayList<>();
-
     private float mouseX, mouseY;
-
     private Rectangle close_button = new Rectangle(1435f,720f,50,50);
     private boolean click;
     private Integer index = -1;
 
     public Inventory(){
-        for (int i = 0; i < 20; i++) {
-            addItemToInventory(new ItemToBeDrawn());
-        }
+//        for (int i = 0; i < 20; i++) {
+//            addItemToInventory(new ItemToBeDrawn());
+//        }
     }
 
     private SpriteBatch spriteBatch = new SpriteBatch();
@@ -100,13 +98,13 @@ public class Inventory extends State {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT){
+        if (button == Input.Buttons.LEFT) {
             if (close_button.contains(mouseX, mouseY))
                 StateManager.setState(StateManager.States.PAUSE);
-        }
-        if (pointer >= 0 && index >= 0 && button == Input.Buttons.LEFT) {
-            click = !click;
-            itemsToBeDrawn.get(index).setEquipped(click);
+            if (index >= 0) {
+                click = !click;
+                itemsToBeDrawn.get(index).setEquipped(click);
+            }
         }
         return false;
     }
@@ -130,7 +128,6 @@ public class Inventory extends State {
     public boolean mouseMoved(int i, int i1) {
         mouseX = Gdx.input.getX();
         mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        System.out.println("x: " + mouseX + " y: " +  mouseY);
         return false;
     }
 

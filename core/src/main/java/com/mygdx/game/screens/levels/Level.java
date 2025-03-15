@@ -49,11 +49,9 @@ public class Level extends State implements ContactListener, Serializable {
     private HashMap<String, Objeto> items2 = new HashMap<>();
     private transient BitmapFont font;
     public Boy boy;
-    @Getter
-    @Setter
+    @Getter @Setter
     private Jack jack;
-    @Setter
-    @Getter
+    @Setter @Getter
     private Girl girl;
     protected PowerBar powerBar;
 
@@ -159,10 +157,12 @@ public class Level extends State implements ContactListener, Serializable {
         }
 
         items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
+        items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.get("Portal").updateItem();
 
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
+        items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 
 

@@ -40,13 +40,12 @@ public class Level_Manager extends State implements ContactListener {
     public static Viewport viewport;
     public static OrthographicCamera camera;
 
+    public static float PPM = 100f;
     public static boolean loaded;
 
     public Level_Manager() {
         level1 = new Level();
         world.setContactListener(this);
-//        level2 = new Level2(app);
-//        level3 = new Level3(app);
         changeLevel("Level3");
     }
 
@@ -54,10 +53,6 @@ public class Level_Manager extends State implements ContactListener {
         currentLevel = returnLevel(levelName);
         Images.tile = new Tile(levelName + "/" + levelName + ".tmx");
         assert currentLevel != null;
-
-//        currentLevel.getTile().createBodies(currentLevel.staticObjects, currentLevel.world, false, "Rects");
-//        Gdx.input.setInputProcessor(this);
-//        app.setScreen(currentLevel);
     }
 
     public Level returnLevel(String level) {
@@ -120,50 +115,6 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public boolean keyDown(int keycode) {
-//        if (keycode == Input.Keys.P) {
-//            try {
-//                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("test.dat"));
-//                oos.writeObject(currentLevel);
-//                oos.close();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        if (keycode == Input.Keys.M) {
-//            try {
-//                loaded = true;
-//
-//                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("test.dat"));
-//                for (Objeto objeto : objetos) {
-//                    objeto.getBody().setUserData("null");
-//                    bodiesToDestroy.add(objeto.getBody());
-//                    world.destroyBody(objeto.getBody());
-//                }
-//                currentLevel.boy.setViewport(viewport);
-//                currentLevel = (Level) ois.readObject();
-//                ois.close();
-//                world = new World(new Vector2(0,-10), true);
-//                currentLevel.init();
-//                world.setContactListener(currentLevel);
-//                currentLevel.boy.loadBody(BodyDef.BodyType.DynamicBody, false);
-//                currentLevel.boy.setViewport(viewport);
-//                currentLevel.boy.getViewport().update(Level.WIDTH, Level.HEIGHT);
-//                currentLevel.boy.animations = Animations.valueOf(Boy.nameOfAnimation);
-//                for (Objeto objeto : objetos) {
-//                    if (objeto instanceof Crystal || objeto instanceof Rifle || objeto instanceof JetPack
-//                        || objeto instanceof Portal)
-//                        objeto.loadBody(BodyDef.BodyType.StaticBody, true);
-////                    if (objeto instanceof Monster1)
-////                        objeto.loadBody(BodyDef.BodyType.DynamicBody, false);
-//                }
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } catch (ClassNotFoundException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
         currentLevel.keyDown(keycode);
         return false;
     }
@@ -222,24 +173,6 @@ public class Level_Manager extends State implements ContactListener {
             currentLevel.update();
     }
 
-    public void write() {
-//        Json json = new Json();
-//        json.toJson();
-//        json.writeObjectStart();
-//        json.writeValue(bodiesData);
-//        json.writeValue(this);
-//        json.writeObjectEnd();
-
-
-//        Json json = new Json();
-//        String jsonString = json.toJson(this);
-//
-//        FileHandle file = Gdx.files.local("data.json");
-//        file.writeString(jsonString, false); // false para sobrescrever o arquivo
-
-
-    }
-
     @Override
     public void beginContact(Contact contact) {
         currentLevel.beginContact(contact);
@@ -259,9 +192,4 @@ public class Level_Manager extends State implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
         currentLevel.postSolve(contact, contactImpulse);
     }
-//
-//    @Override
-//    public void read(Json json, JsonValue jsonData) {
-//
-//    }
 }
