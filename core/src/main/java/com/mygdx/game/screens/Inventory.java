@@ -1,8 +1,10 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.State;
@@ -17,10 +19,13 @@ public class Inventory extends State {
 
 
     private Rectangle mouseRectangle = new Rectangle(0, 0, 3, 9);
-    public static ArrayList<ItemToBeDrawn> itemToBeDrawns = new ArrayList<>();
+    public static ArrayList<ItemToBeDrawn> itemsToBeDrawn = new ArrayList<>();
+
+    private OrthographicCamera camera = new OrthographicCamera(1920,1080);
 
     public Inventory(){
-//        items.add(new com.mygdx.game.inventory.Item());
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
         for (int i = 0; i < 20; i++)
             new ItemToBeDrawn();
     }
@@ -29,12 +34,18 @@ public class Inventory extends State {
 
     @Override
     public void update() {
-
+        for (int i = 0; i < ItemToBeDrawn.rectangles.size(); i++) {
+            if (ItemToBeDrawn.rectangles.get(i).overlaps(mouseRectangle)) {
+                itemsToBeDrawn.get(i).setEquipped(true);
+            } else{
+                itemsToBeDrawn.get(i).setEquipped(false);
+            }
+        }
     }
 
     public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
-        if (itemToBeDrawns.size() < ITEMS_LIMIT)
-            itemToBeDrawns.add(itemToBeDrawn);
+        if (itemsToBeDrawn.size() < ITEMS_LIMIT)
+            itemsToBeDrawn.add(itemToBeDrawn);
     }
 
     @Override
@@ -49,10 +60,11 @@ public class Inventory extends State {
 
     @Override
     public void render() {
+        update();
         spriteBatch.begin();
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
-        for (ItemToBeDrawn itemToBeDrawn : itemToBeDrawns)
+        for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn)
             itemToBeDrawn.render(spriteBatch, Images.getItemDraw("Rifle"));
         spriteBatch.end();
     }
@@ -113,6 +125,9 @@ public class Inventory extends State {
     @Override
     public boolean mouseMoved(int i, int i1) {
         System.out.println("x:" + i + " y:" + i1);
+        Vector3 worldVect3 = new Vector3(i,i1, 0f);
+        camera.unproject(worldVect3);
+        mouseRectangle.setPosition(worldVect3.x, worldVect3.y);
         return false;
     }
 

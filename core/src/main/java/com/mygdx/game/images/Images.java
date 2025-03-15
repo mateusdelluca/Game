@@ -35,7 +35,7 @@ public class Images implements Serializable {
     public static Sprite hp, sp, bar;
     public static Texture pauseBox;
 
-    public static Sprite inventory, saber_inventory, rifle_inventory;
+    public static Sprite inventory, saber_inventory, rifle_inventory, equipped_inventory;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
@@ -129,8 +129,10 @@ public class Images implements Serializable {
 
         saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
         rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));
+        equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
+        itemsDraw.put("Equipped", equipped_inventory);
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
             for (int k = 0; k < 6; k++) {
