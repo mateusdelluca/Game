@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -33,7 +35,7 @@ public class Images implements Serializable {
     public static Sprite hp, sp, bar;
     public static Texture pauseBox;
 
-    public static Sprite inventory, saber_inventory;
+    public static Sprite inventory, saber_inventory, rifle_inventory;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
@@ -55,6 +57,8 @@ public class Images implements Serializable {
     public static Sprite[] sprites = new Sprite[8];
 
     public static Pixmap pixMapBox;
+
+    public static HashMap<String, Sprite> itemsDraw = new HashMap<>();
 
     public Images() {
         box = new Texture(Gdx.files.internal("saves/Box.png"));
@@ -124,6 +128,9 @@ public class Images implements Serializable {
         spriteJetPack = Images.jetPack;
 
         saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
+        rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));
+        itemsDraw.put("Saber", saber_inventory);
+        itemsDraw.put("Rifle", rifle_inventory);
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
             for (int k = 0; k < 6; k++) {
@@ -255,6 +262,8 @@ public class Images implements Serializable {
 //
 //
 
-
+    public static Sprite getItemDraw(String name){
+        return itemsDraw.get(name);
+    }
 
 }

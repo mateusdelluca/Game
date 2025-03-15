@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.Inventory;
 
-public class Item{
+public class ItemToBeDrawn {
 
 
     private SpriteBatch spriteBatch = new SpriteBatch();
@@ -23,9 +23,9 @@ public class Item{
 
     private String name;
 
-    public Item(){
+    public ItemToBeDrawn(){
         name = getClass().getSimpleName();
-        if (Inventory.items.size() < ITEMS_LIMIT) {
+        if (Inventory.itemToBeDrawns.size() < ITEMS_LIMIT) {
             if (index_x % 4 == 0 && index_x != 0){
                 index_x = 0;
                 index_y++;
@@ -47,7 +47,7 @@ public class Item{
         image.draw(spriteBatch);
     }
 
-    public Item getItemByName(String name){
+    public ItemToBeDrawn getItemByName(String name){
           if (this.name.equals(name))
             return this;
         return null;

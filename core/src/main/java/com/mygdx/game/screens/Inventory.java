@@ -1,31 +1,28 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.items.Item;
+import com.mygdx.game.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
 import java.util.ArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
-import static com.mygdx.game.inventory.Item.ITEMS_LIMIT;
-import static com.mygdx.game.manager.StateManager.oldState;
+import static com.mygdx.game.inventory.ItemToBeDrawn.ITEMS_LIMIT;
 
 public class Inventory extends State {
 
 
     private Rectangle mouseRectangle = new Rectangle(0, 0, 3, 9);
-    public static ArrayList<com.mygdx.game.inventory.Item> items = new ArrayList<>();
+    public static ArrayList<ItemToBeDrawn> itemToBeDrawns = new ArrayList<>();
 
     public Inventory(){
 //        items.add(new com.mygdx.game.inventory.Item());
         for (int i = 0; i < 20; i++)
-            new com.mygdx.game.inventory.Item();
+            new ItemToBeDrawn();
     }
 
     private SpriteBatch spriteBatch = new SpriteBatch();
@@ -35,9 +32,9 @@ public class Inventory extends State {
 
     }
 
-    public static void addItemToInventory(com.mygdx.game.inventory.Item item){
-        if (items.size() < ITEMS_LIMIT)
-            items.add(item);
+    public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
+        if (itemToBeDrawns.size() < ITEMS_LIMIT)
+            itemToBeDrawns.add(itemToBeDrawn);
     }
 
     @Override
@@ -55,8 +52,8 @@ public class Inventory extends State {
         spriteBatch.begin();
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
-        for (com.mygdx.game.inventory.Item item : items)
-            item.render(spriteBatch, Images.saber_inventory);
+        for (ItemToBeDrawn itemToBeDrawn : itemToBeDrawns)
+            itemToBeDrawn.render(spriteBatch, Images.getItemDraw("Rifle"));
         spriteBatch.end();
     }
 
