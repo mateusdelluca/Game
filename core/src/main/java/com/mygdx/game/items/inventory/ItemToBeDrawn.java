@@ -1,6 +1,5 @@
-package com.mygdx.game.inventory;
+package com.mygdx.game.items.inventory;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -29,10 +28,11 @@ public class ItemToBeDrawn {
     @Getter @Setter
     private String name;
     @Getter @Setter
-    private boolean equipped = true;
+    private boolean equipped;
 
     public ItemToBeDrawn(){
-        name = getClass().getSimpleName();
+//        name = getClass().getSimpleName();
+        name = "Rifle";
         if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
             if (index_x % 4 == 0 && index_x != 0){
                 index_x = 0;
@@ -50,7 +50,7 @@ public class ItemToBeDrawn {
         if (equipped) {
             Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
             equip.setSize(67,74);
-            equip.setPosition(position.x + 2f, position.y + 11f);
+            equip.setPosition(position.x + 2f, position.y + 12f);
             equip.draw(spriteBatch);
         }
         Images.getItemDraw(name).setPosition(position.x,position.y);
