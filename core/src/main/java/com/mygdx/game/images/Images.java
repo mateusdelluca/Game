@@ -32,6 +32,8 @@ public class Images implements Serializable {
     public static Animator portal, fire, fan, fan2;
     public static Sprite hp, sp, bar;
     public static Texture pauseBox;
+
+    public static Sprite inventory, saber_inventory;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
@@ -121,6 +123,8 @@ public class Images implements Serializable {
         aim = new Sprite(Images.shoot);
         spriteJetPack = Images.jetPack;
 
+        saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
+        inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
             for (int k = 0; k < 6; k++) {
                 FileHandle file = Gdx.files.local("saves/Save" + k + ".png"); // Caminho do arquivo de entrada

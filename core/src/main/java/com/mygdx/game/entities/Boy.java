@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
+import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -313,6 +314,9 @@ public class Boy extends Objeto {
                     rifle.reloading();
                 }
             }
+        }
+        if (keycode == Input.Keys.I){
+            StateManager.setState(StateManager.States.INVENTORY);
         }
         if (keycode == Input.Keys.T) {
             use_jetPack = !use_jetPack;

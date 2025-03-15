@@ -20,7 +20,7 @@ public class StateManager extends Game {
          PAUSE(new PausePage()),
          SAVE(new SavePage()),
          LEVEL(new Level_Manager()),
-
+         INVENTORY(new Inventory()),
          GAME_OVER(new GameOver());
 
          @Getter @Setter
