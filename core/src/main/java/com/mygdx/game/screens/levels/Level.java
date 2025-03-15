@@ -314,16 +314,13 @@ public class Level extends State implements ContactListener, Serializable {
             } else{
                 if (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy")){
                     boy.equip_Item(item);
-                    if (!item.toString().contains("Crystal"))
+                    if (!item.toString().contains("Crystal") && !item.toString().contains("Portal"))
                         addItemToInventory(new ItemToBeDrawn(item.toString()));
                 }
             }
         }
 
-
-
         for (Objeto o : objetos) {
-
                 if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
                     if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
                         !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
@@ -333,6 +330,7 @@ public class Level extends State implements ContactListener, Serializable {
                         !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
                         !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
                         !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
+                        !body1.getUserData().toString().equals("Saber") && !body2.getUserData().toString().equals("Saber") &&
                         !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
                         boy.beenHit();
 
@@ -513,7 +511,9 @@ public class Level extends State implements ContactListener, Serializable {
             takeScreenshot();
             StateManager.setState(StateManager.States.PAUSE);
         }
-
+        if (keycode == Input.Keys.S){
+            items.put(NinjaStar.class.getSimpleName() + new Random().nextInt(1000), new NinjaStar(new Vector2(100,6000 - 300), boy.isFacingLeft(), 0));
+        }
         return false;
     }
 

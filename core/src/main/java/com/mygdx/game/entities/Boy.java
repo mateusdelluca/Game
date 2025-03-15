@@ -29,6 +29,7 @@ public class Boy extends Objeto {
     public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
+    @Getter @Setter
     private boolean isFacingLeft;
     private float punchingAnimationTimer;
     public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
@@ -315,6 +316,7 @@ public class Boy extends Objeto {
                 }
             }
         }
+
         if (keycode == Input.Keys.I){
             StateManager.setState(StateManager.States.INVENTORY);
         }

@@ -25,6 +25,7 @@ public class Inventory extends State {
 //        for (int i = 0; i < 20; i++) {
 //            addItemToInventory(new ItemToBeDrawn());
 //        }
+        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
     }
 
     private SpriteBatch spriteBatch = new SpriteBatch();
@@ -99,8 +100,10 @@ public class Inventory extends State {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            if (close_button.contains(mouseX, mouseY))
+            if (close_button.contains(mouseX, mouseY)) {
                 StateManager.setState(StateManager.States.PAUSE);
+
+            }
             if (index >= 0) {
                 click = !click;
                 itemsToBeDrawn.get(index).setEquipped(click);

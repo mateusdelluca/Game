@@ -136,7 +136,4 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         body.setUserData(name);
     }
 
-    public Vector2 getPosition(Vector2 position){
-        return new Vector2(position.x * PPM, position.y * PPM);
-    }
 }

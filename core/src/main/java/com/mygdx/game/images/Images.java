@@ -25,6 +25,7 @@ public class Images implements Serializable {
     public static Texture save_page;
     public static Sprite saber;
     public static Sprite s1, rifle, jetPack;
+    public static Texture ninjaStar;
     public static Sprite mountains4;
 
     public static Sprite backGround2;
@@ -35,7 +36,7 @@ public class Images implements Serializable {
     public static Sprite hp, sp, bar;
     public static Texture pauseBox;
 
-    public static Sprite inventory, saber_inventory, rifle_inventory, equipped_inventory;
+    public static Sprite inventory, saber_inventory, rifle_inventory, jetPack_inventory, ninjaStar_inventory, equipped_inventory;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
@@ -103,14 +104,19 @@ public class Images implements Serializable {
         jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
         aim = new Sprite(Images.shoot);
         spriteJetPack = Images.jetPack;
-
+        ninjaStar = new Texture(Gdx.files.internal("objects/NinjaStar.png"));
         saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
         rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));
+        ninjaStar_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaStar_75x85.png")));
+        jetPack_inventory = new Sprite(new Texture(Gdx.files.internal("items/JetPack_75x85.png")));
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         equipped_inventory.setSize(67,74);
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
+        itemsDraw.put("JetPack", jetPack_inventory);
+        itemsDraw.put("NinjaStar", ninjaStar_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
+
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
             for (int k = 0; k < 6; k++) {
