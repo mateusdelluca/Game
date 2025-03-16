@@ -47,7 +47,7 @@ public class Level extends State implements ContactListener, Serializable {
     protected transient Background background;
     protected transient Box2DDebugRenderer box2DDebugRenderer;
 
-    private HashMap<String, Item> items = new HashMap<>();
+    public static HashMap<String, Item> items = new HashMap<>();
     private HashMap<String, Objeto> items2 = new HashMap<>();
     private transient BitmapFont font;
     public Boy boy;
@@ -119,13 +119,13 @@ public class Level extends State implements ContactListener, Serializable {
 
         boy = new Boy(new Vector2(10, 5700), viewport);
 
-        jack = new Jack(new Vector2(500, 6000 - 680f));
+        jack = new Jack(new Vector2(5000, 6000 - 680f));
 
-        girl = new Girl(new Vector2(300, 6000 - 700f));
+        girl = new Girl(new Vector2(3000, 6000 - 700f));
 
         monsters1.clear();
 
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 320),     Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3200, 6000 - 1080),   Monster1.class.getSimpleName() + monsters1.size()));
@@ -510,9 +510,6 @@ public class Level extends State implements ContactListener, Serializable {
         if (keycode == Input.Keys.ESCAPE){
             takeScreenshot();
             StateManager.setState(StateManager.States.PAUSE);
-        }
-        if (keycode == Input.Keys.S){
-            items.put(NinjaStar.class.getSimpleName() + new Random().nextInt(1000), new NinjaStar(new Vector2(100,6000 - 300), boy.isFacingLeft(), 0));
         }
         return false;
     }

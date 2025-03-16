@@ -17,13 +17,14 @@ public class NinjaStar extends Objeto implements Item, Serializable {
 float degrees = 1f;
     public static final float VELOCITY = 50f;
     public static final float WIDTH = Images.ninjaStar.getWidth()/3f, HEIGHT = Images.ninjaStar.getHeight()/3f;
-    public NinjaStar(Vector2 position, boolean isFacingLeft, float radians){
+    public NinjaStar(Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){
         super(WIDTH, HEIGHT);
-        body = createBody(new Vector2(WIDTH/2, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
+        body = createBody(new Vector2(WIDTH/2, HEIGHT/2f), BodyDef.BodyType.DynamicBody, isSensor);
         body.setTransform(position, 0);
-        //TODO: fazer o movimento da estrela de ninja como o movimento das bullets de rifle
-        body.setLinearVelocity(VELOCITY, 0f);
+        body.setLinearVelocity(VELOCITY * (float) Math.cos(radians), VELOCITY * (float) Math.sin(radians));
+//        body.setLinearVelocity(VELOCITY, 0);
         body.setGravityScale(0.2f);
+        visible = true;
     }
 
 

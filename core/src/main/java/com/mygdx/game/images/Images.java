@@ -59,6 +59,8 @@ public class Images implements Serializable {
 
     public static Pixmap pixMapBox;
 
+    public static Sprite throwNinjaStar1, throwNinjaStar2;
+
     public static HashMap<String, Sprite> itemsDraw = new HashMap<>();
 
     public Images() {
@@ -84,6 +86,8 @@ public class Images implements Serializable {
         sp = new Sprite(new Texture(Gdx.files.internal("boy/SP.png")));
 //        sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
+        throwNinjaStar1 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar.png")));
+        throwNinjaStar2 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar2.png")));
         try {
             for (int i = 0; i < saves.length; i++) {
 //                saves[i] = new Texture(Gdx.files.local("saves/Save" + i + ".png"));
