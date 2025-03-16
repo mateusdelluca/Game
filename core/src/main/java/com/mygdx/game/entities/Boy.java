@@ -452,7 +452,7 @@ public class Boy extends Objeto {
                     items.put(NinjaStar.class.getSimpleName() + indexNinja++, new NinjaStar(new Vector2(!isFacingLeft ? ((getBody().getPosition().x +
                         WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                         getBody().getPosition().y + HEIGHT / 2f),
-                        isFacingLeft, radians, false));
+                        radians, false));
                 } else {
                     if (!shooting && !beenHit && !saber_taken && !throwing) { //punches
                         punchingAnimationTimer = 0f;

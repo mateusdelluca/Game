@@ -14,10 +14,10 @@ import java.io.Serializable;
 
 public class NinjaStar extends Objeto implements Item, Serializable {
 
-float degrees = 1f;
+    private float degrees;
     public static final float VELOCITY = 50f;
     public static final float WIDTH = Images.ninjaStar.getWidth()/3f, HEIGHT = Images.ninjaStar.getHeight()/3f;
-    public NinjaStar(Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){
+    public NinjaStar(Vector2 position, float radians, boolean isSensor){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2, HEIGHT/2f), BodyDef.BodyType.DynamicBody, isSensor);
         body.setTransform(position, 0);
@@ -26,7 +26,6 @@ float degrees = 1f;
         body.setGravityScale(0.2f);
         visible = true;
     }
-
 
     public void render(SpriteBatch s, Sprite sprite){
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
