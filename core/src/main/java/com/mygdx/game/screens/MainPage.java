@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
 public class MainPage extends State {
@@ -181,6 +182,8 @@ public class MainPage extends State {
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
+                if (newGame)
+                    StateManager.States.LEVEL.setState(new Level_Manager());
                 StateManager.setState(StateManager.States.LEVEL);
                 newGame = true;
                 break;

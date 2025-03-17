@@ -99,7 +99,6 @@ public class Level extends State implements ContactListener, Serializable {
     }
 
     public Level() {
-
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
 
@@ -108,10 +107,6 @@ public class Level extends State implements ContactListener, Serializable {
         camera.update();
         viewport = new ScreenViewport(camera);
         viewport.update(Level.WIDTH, Level.HEIGHT);
-
-
-
-
 
         init();
 
@@ -167,18 +162,11 @@ public class Level extends State implements ContactListener, Serializable {
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 
-
         objetos.addAll(items2.values());
         objetos.add(boy);
         objetos.add(jack);
         objetos.add(girl);
         objetos.addAll(monsters1.values());
-
-
-
-
-
-
 
     }
 
@@ -300,23 +288,20 @@ public class Level extends State implements ContactListener, Serializable {
             return;
 
         for (Item item : items.values()) {
-            if ((body1.getUserData().toString().equals(item.toString()) && body2.getUserData().toString().equals("Boy"))){
+//            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
+            if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
+            || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")){
                 boy.equip_Item(item);
+                return;
 
-                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
-                    body1.setUserData("null");
-                    item.setUserData(body1);
-                }
-                else if (!item.toString().equals("Portal") && body2.getUserData().equals(item.toString())) {
-                    body2.setUserData("null");
-                    item.setUserData(body2);
-                }
-            } else{
-                if (body2.getUserData().toString().equals(item.toString()) && body1.getUserData().toString().equals("Boy")){
-                    boy.equip_Item(item);
-                    if (!item.toString().contains("Crystal") && !item.toString().contains("Portal"))
-                        addItemToInventory(new ItemToBeDrawn(item.toString()));
-                }
+//                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
+//                    body1.setUserData("null");
+//                    item.setUserData(body1);
+//                }
+//                else if (!item.toString().equals("Portal") && body2.getUserData().equals(item.toString())) {
+//                    body2.setUserData("null");
+//                    item.setUserData(body2);
+//                }
             }
         }
 
@@ -325,6 +310,7 @@ public class Level extends State implements ContactListener, Serializable {
                     if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
                         !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
                         !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
+                        !body1.getUserData().toString().contains("NinjaStar") && !body2.getUserData().toString().contains("NinjaStar") &&
                         !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
                         !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
                         !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
@@ -357,7 +343,7 @@ public class Level extends State implements ContactListener, Serializable {
 //                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
 
 
-                    if (!(body1.getFixtureList().get(0).isSensor()) &&
+                    if (!body1.getFixtureList().get(0).isSensor() &&
                         !body2.getFixtureList().get(0).isSensor())
                         o.beenHit();
 //                if (body1.getUserData().toString().equals("Bullet")) {
@@ -390,12 +376,12 @@ public class Level extends State implements ContactListener, Serializable {
             }
         }
 
-        if (body1.getUserData().toString().equals("null")) {
-            bodiesToDestroy.add(body1);
-        }
-        if (body2.getUserData().toString().equals("null")) {
-            bodiesToDestroy.add(body2);
-        }
+//        if (body1.getUserData().toString().equals("null")) {
+//            bodiesToDestroy.add(body1);
+//        }
+//        if (body2.getUserData().toString().equals("null")) {
+//            bodiesToDestroy.add(body2);
+//        }
 
     }
 

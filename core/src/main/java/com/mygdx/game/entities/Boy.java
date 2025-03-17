@@ -13,7 +13,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
+import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.Inventory;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.screens.Inventory.addItemToInventory;
 import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.sfx.Sounds.*;
 
@@ -68,8 +71,7 @@ public class Boy extends Objeto {
     private boolean thrown;
     private int indexNinja;
     private float throwTimer;
-
-
+    private ItemToBeDrawn ninjaStar = new ItemToBeDrawn("NinjaStar");
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
@@ -546,7 +548,6 @@ public class Boy extends Objeto {
             return;
         if (item instanceof Rifle) {
             rifle = (Rifle) item;
-            Rifle.showingNumbBullets = true;
             ((Rifle) item).setVisible(false);
         }
         if (item instanceof Crystal) {
@@ -557,12 +558,23 @@ public class Boy extends Objeto {
             clink2.play();
 //            System.out.println(item);
             item.setVisible(false);
+            return;
         }
         if (item instanceof JetPack) {
             use_jetPack = true;
             ((JetPack) item).setVisible(false);
         }
-        item.setUserData("null");
+        if (item instanceof NinjaStar){
+            item.setVisible(false);
+            if (!Inventory.itemsToBeDrawn.contains(ninjaStar))
+                addItemToInventory(ninjaStar);
+            return;
+        }
+        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
+        if (!Inventory.itemsToBeDrawn.contains(itemToBeDrawn))
+            addItemToInventory(itemToBeDrawn);
+//        System.out.println(item);
+        item.setVisible(false);
         TRIGGER.play();
     }
 
