@@ -130,17 +130,19 @@ public class ItemToBeDrawn implements Item {
     }
 
     public void equip(){
-        if (click >= 2) {
-            for (int index = 0; index < ITEMS_LIMIT; index++) {
-                if (contains[index]) {
-                    equipped = !equipped;
-                    if (name.equals("Rifle"))
-                        Rifle.showingNumbBullets = equipped;
-                }
-            }
+        if (click < 2)
+            click++;
+        else
             click = 0;
+        for (int index = 0; index < rectangles2.size(); index++) {
+            if (contains[index] && click >= 2) {
+                equipped = !equipped;
+                if (name.equals("Rifle"))
+                    Rifle.showingNumbBullets = equipped;
+                click = 0;
+            }
         }
-        click++;
+
     }
 
 }
