@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.BodyData;
+import com.mygdx.game.entities.Boy;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.Rifle;
@@ -19,8 +20,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
-import static com.mygdx.game.screens.Inventory.mouseX;
-import static com.mygdx.game.screens.Inventory.mouseY;
+import static com.mygdx.game.screens.Inventory.*;
 
 public class ItemToBeDrawn implements Item {
 
@@ -42,6 +42,8 @@ public class ItemToBeDrawn implements Item {
     private String name;
     @Getter @Setter
     private boolean equipped;
+    @Getter
+    private int index;
 
     public ItemToBeDrawn(String name){
 //        name = getClass().getSimpleName();
@@ -51,6 +53,7 @@ public class ItemToBeDrawn implements Item {
                 index_x = 0;
                 index_y++;
             }
+            index = index_x;
             position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x++)), INITIAL_Y - ((HEIGHT + 4) * index_y));
             positions.add(position);
 //            Vector3 positionRect = new Vector3(position.x, position.y, 0f);
@@ -58,26 +61,32 @@ public class ItemToBeDrawn implements Item {
         }
     }
 
-    public void render(SpriteBatch spriteBatch, String name){
-        update();
+    public void render(SpriteBatch spriteBatch, String name) {
+
+        Sprite item = Images.getItemDraw(name);
         if (equipped) {
             Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
-            equip.setSize(67,74);
+            equip.setSize(67, 74);
             equip.setPosition(position.x + 2f, position.y + 12f);
             equip.draw(spriteBatch);
         }
         if (position != null) {
-            Images.getItemDraw(name).setPosition(position.x, position.y);
-            Images.getItemDraw(name).draw(spriteBatch);
+            item.setPosition(position.x, position.y);
+            item.draw(spriteBatch);
         }
-        if (!rectangles2.contains(Images.getItemDraw(name).getBoundingRectangle()))
-            rectangles2.add(Images.getItemDraw(name).getBoundingRectangle());
+        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
+            || rectangles2.isEmpty()) && index < 20){
+            Rectangle rectangle = Images.getItemDraw(name).getBoundingRectangle();
+        if (!rectangles2.contains(rectangle))
+            rectangles2.add(rectangle);
+    }
+        update();
     }
 
 
     @Override
     public void render(SpriteBatch s) {
-
+        render(s, name);
     }
 
     @Override
@@ -92,7 +101,7 @@ public class ItemToBeDrawn implements Item {
 
     @Override
     public void update() {
-        for (int index = 0; index < rectangles2.size(); index++) {
+        for (int index = 0; index < Math.min(rectangles2.size(), ITEMS_LIMIT); index++) {
             if (rectangles2.get(index).contains(mouseX, mouseY)) {
                 contains[index] = true;
             } else {
@@ -137,12 +146,19 @@ public class ItemToBeDrawn implements Item {
         for (int index = 0; index < rectangles2.size(); index++) {
             if (contains[index] && click >= 2) {
                 equipped = !equipped;
-                if (name.equals("Rifle"))
+                if (name.equals("Rifle")) {
                     Rifle.showingNumbBullets = equipped;
+                    Boy.degrees = 0f;
+                }
+                if (name.equals("NinjaStar")) {
+                    Boy.degrees = 0f;
+                    Boy.throwing = true;
+                    Rifle.showingNumbBullets = false;
+                }
                 click = 0;
             }
         }
-
     }
+
 
 }

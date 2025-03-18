@@ -44,7 +44,7 @@ public class Boy extends Objeto {
     @Setter @Getter
     private boolean beenHit;
     private boolean shooting;
-    private float imgX, imgY, degrees, radians;
+    public static float imgX, imgY, degrees, radians;
     private float dx, dy;
     private int secondJump;
     private float saberTime;
@@ -67,7 +67,7 @@ public class Boy extends Objeto {
     private Vector2 bodyPosition;;
 
     public static String nameOfAnimation;
-    private boolean throwing = true;
+    public static boolean throwing;
     private boolean thrown;
     private int indexNinja;
     private float throwTimer;
@@ -136,13 +136,13 @@ public class Boy extends Objeto {
                 if (isMoving()) //when he is moving and didn't active the jetpack
                     legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
                 legs.setPosition(body.getPosition().x, body.getPosition().y);
-                if (Math.abs(degrees) > 90f) {
+                if (Math.abs(degrees) > 100f) {
                     throwNinjaStar1.setFlip(true, false);
                     throwNinjaStar2.setFlip(true, false);
                     legs.setFlip(true, false);
                     jetPackSprite.setFlip(true, false);
                     setFacingLeft(true);
-                } else {
+                } if (Math.abs(degrees) < 100f) {
                     throwNinjaStar1.setFlip(false, false);
                     throwNinjaStar2.setFlip(false, false);
                     legs.setFlip(false, false);
@@ -571,9 +571,8 @@ public class Boy extends Objeto {
             return;
         }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
-        if (!Inventory.itemsToBeDrawn.contains(itemToBeDrawn))
-            addItemToInventory(itemToBeDrawn);
-//        System.out.println(item);
+        addItemToInventory(itemToBeDrawn);
+        System.out.println(item);
         item.setVisible(false);
         TRIGGER.play();
     }

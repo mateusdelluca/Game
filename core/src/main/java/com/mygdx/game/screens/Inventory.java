@@ -20,13 +20,13 @@ public class Inventory extends State {
     public static float mouseX, mouseY;
     private Rectangle close_button = new Rectangle(1435f,720f,50,50);
 
-    private ArrayList<Vector2> positionsToFill = new ArrayList<>();
+    public static ArrayList<Vector2> positionsToFill = new ArrayList<>();
 
     public Inventory(){
 //        for (int i = 0; i < 20; i++) {
 //            addItemToInventory(new ItemToBeDrawn());
 //        }
-//        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
+        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
         fillRects();
     }
 
@@ -46,11 +46,19 @@ public class Inventory extends State {
     }
 
     public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
+       boolean add[] = new boolean[20];
+        if (itemsToBeDrawn.isEmpty())
+            itemsToBeDrawn.add(itemToBeDrawn);
         if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
-            if (!itemsToBeDrawn.contains(itemToBeDrawn)) {
-                itemsToBeDrawn.add(itemToBeDrawn);
+            for (ItemToBeDrawn itemToBeDrawn2 : itemsToBeDrawn) {
+                if (!itemToBeDrawn2.getName().equals(itemToBeDrawn.getName())) {
+                   add[itemToBeDrawn.getIndex()] = true;
+                }
             }
         }
+        for (int i = 0; i < itemsToBeDrawn.size(); i++)
+            if (add[i])
+                itemsToBeDrawn.add(itemToBeDrawn);
     }
 
     @Override
@@ -70,7 +78,7 @@ public class Inventory extends State {
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
         for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn) {
-            itemToBeDrawn.render(spriteBatch, itemToBeDrawn.getName());
+            itemToBeDrawn.render(spriteBatch);
         }
         spriteBatch.end();
     }
