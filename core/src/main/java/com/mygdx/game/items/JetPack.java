@@ -24,6 +24,8 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
+        if (!visible)
+            body.setTransform(10000,  10000, 0);
         if (body == null)
             body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
         if (visible) {
@@ -31,9 +33,6 @@ public class JetPack extends Objeto implements Item{
             spriteJetPack.setPosition(body.getPosition().x, body.getPosition().y);
             spriteJetPack.setRotation(angle++);
             spriteJetPack.draw(s);
-        }
-        else{
-            body.setTransform(-1000, - 1000, 0);
         }
     }
 

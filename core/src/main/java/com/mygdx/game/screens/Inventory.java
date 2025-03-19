@@ -39,7 +39,7 @@ public class Inventory extends State {
                 if (i == j)
                     continue;
                 if (itemsToBeDrawn.get(i).getName().equals(itemsToBeDrawn.get(j).getName())){
-                    itemsToBeDrawn.set(index_x, itemsToBeDrawn.get(j));
+                    itemsToBeDrawn.set(index_x - 1, itemsToBeDrawn.get(j));
                 }
             }
         }

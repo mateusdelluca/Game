@@ -54,8 +54,8 @@ public class Boy extends Objeto {
     private float worldY;
     @Getter @Setter
     private transient Viewport viewport;
-    @Getter @Setter
-    private boolean use_jetPack;
+
+    public static boolean use_jetPack;
 
     private Vector2 jetPackPosition;
     private float chargingSPTimer;
@@ -560,12 +560,11 @@ public class Boy extends Objeto {
             return;
         }
         if (item instanceof JetPack) {
-            use_jetPack = true;
+//            use_jetPack = true;
             ((JetPack) item).setVisible(false);
         }
         if (item instanceof NinjaStar){
             item.setVisible(false);
-            item.getBody().setTransform(1_100, 10_000, 0f);
         }
 
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());

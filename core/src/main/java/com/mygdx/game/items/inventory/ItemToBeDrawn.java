@@ -151,7 +151,12 @@ public class ItemToBeDrawn implements Item {
                     Boy.throwing = equipped;
                     Rifle.showingNumbBullets = false;
                 } else{
-                    Boy.nameOfAnimation = "BOY_IDLE";
+                    if (name.equals("JetPack"))
+                        Boy.use_jetPack = equipped;
+                    else{
+                        Boy.nameOfAnimation = "BOY_IDLE";
+                    }
+
                 }
             }
             click = 0;
