@@ -292,7 +292,6 @@ public class Level extends State implements ContactListener, Serializable {
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")){
                 boy.equip_Item(item);
-                return;
 
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
