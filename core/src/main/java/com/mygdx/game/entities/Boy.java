@@ -64,7 +64,7 @@ public class Boy extends Objeto {
     private boolean chargingSP;
     @Getter
     private Rifle rifle;
-    private Vector2 bodyPosition;;
+    private Vector2 bodyPosition;
 
     public static String nameOfAnimation;
     public static boolean throwing;
