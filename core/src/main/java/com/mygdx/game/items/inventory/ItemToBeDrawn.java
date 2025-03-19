@@ -54,8 +54,9 @@ public class ItemToBeDrawn implements Item {
                 index_y++;
             }
             index = index_x;
-            position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x++)), INITIAL_Y - ((HEIGHT + 4) * index_y));
+            position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x)), INITIAL_Y - ((HEIGHT + 4) * index_y));
             positions.add(position);
+            index_x++;
 //            Vector3 positionRect = new Vector3(position.x, position.y, 0f);
 //            rectangles.add(new Rectangle(positionRect.x, positionRect.y, WIDTH, HEIGHT));
         }

@@ -71,7 +71,6 @@ public class Boy extends Objeto {
     private boolean thrown;
     private int indexNinja;
     private float throwTimer;
-    private ItemToBeDrawn ninjaStar = new ItemToBeDrawn("NinjaStar");
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
@@ -566,9 +565,6 @@ public class Boy extends Objeto {
         }
         if (item instanceof NinjaStar){
             item.setVisible(false);
-            if (!Inventory.itemsToBeDrawn.contains(ninjaStar))
-                addItemToInventory(ninjaStar);
-            return;
         }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
         addItemToInventory(itemToBeDrawn);
