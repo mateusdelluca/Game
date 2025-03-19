@@ -565,7 +565,9 @@ public class Boy extends Objeto {
         }
         if (item instanceof NinjaStar){
             item.setVisible(false);
+            item.getBody().setTransform(1_100, 10_000, 0f);
         }
+
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
         addItemToInventory(itemToBeDrawn);
         System.out.println(item);

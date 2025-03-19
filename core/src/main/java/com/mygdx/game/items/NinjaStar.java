@@ -59,6 +59,8 @@ public class NinjaStar extends Objeto implements Item, Serializable {
 
     @Override
     public void render(SpriteBatch s) {
+        if (!visible)
+            body2.setTransform(10_000,1_000, 0f);
         if (visible && Math.abs(body.getLinearVelocity().x) > 1f)
             render(s, new Sprite((Images.ninjaStar)));
         if (visible && Math.abs(body.getLinearVelocity().x) < 1f) {
