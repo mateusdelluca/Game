@@ -547,7 +547,7 @@ public class Boy extends Objeto {
         if (item instanceof Portal)
             return;
         if (item instanceof Rifle) {
-            rifle = (Rifle) item;
+            rifle = (Rifle) items.get(item.toString());
             ((Rifle) item).setVisible(false);
         }
         if (item instanceof Crystal) {

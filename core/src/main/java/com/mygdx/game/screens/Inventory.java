@@ -26,7 +26,7 @@ public class Inventory extends State {
 //        for (int i = 0; i < 20; i++) {
 //            addItemToInventory(new ItemToBeDrawn());
 //        }
-        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
+//        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
         fillRects();
     }
 
@@ -56,9 +56,8 @@ public class Inventory extends State {
                 }
             }
         }
-        for (int i = 0; i < itemsToBeDrawn.size(); i++)
-            if (add[i])
-                itemsToBeDrawn.add(itemToBeDrawn);
+        if (add[itemToBeDrawn.getIndex()])
+            itemsToBeDrawn.add(itemToBeDrawn);
     }
 
     @Override

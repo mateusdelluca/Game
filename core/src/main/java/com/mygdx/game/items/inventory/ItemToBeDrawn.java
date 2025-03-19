@@ -102,11 +102,11 @@ public class ItemToBeDrawn implements Item {
     @Override
     public void update() {
 //        for (int index = 0; index < Math.min(rectangles2.size(), ITEMS_LIMIT); index++) {
-        if (!rectangles2.isEmpty())
-            if (rectangles2.get(index - 1).contains(mouseX, mouseY)) {
-                    contains[index - 1] = true;
+        if (!rectangles2.isEmpty() && rectangles2.size() > index)
+            if (rectangles2.get(index).contains(mouseX, mouseY)) {
+                    contains[index] = true;
                 } else {
-                    contains[index - 1] = false;
+                    contains[index] = false;
                 }
     //        }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
