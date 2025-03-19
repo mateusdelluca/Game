@@ -47,8 +47,10 @@ public class Inventory extends State {
 
     public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
        boolean add[] = new boolean[20];
-        if (itemsToBeDrawn.isEmpty())
+        if (itemsToBeDrawn.isEmpty()) {
             itemsToBeDrawn.add(itemToBeDrawn);
+            return;
+        }
         if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
             for (ItemToBeDrawn itemToBeDrawn2 : itemsToBeDrawn) {
                 if (!itemToBeDrawn2.getName().equals(itemToBeDrawn.getName())) {
@@ -94,7 +96,7 @@ public class Inventory extends State {
 
     @Override
     public void dispose() {
-
+        spriteBatch.dispose();
     }
 
     @Override

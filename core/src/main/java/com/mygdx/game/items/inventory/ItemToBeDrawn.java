@@ -61,8 +61,8 @@ public class ItemToBeDrawn implements Item {
         }
     }
 
-    public void render(SpriteBatch spriteBatch, String name) {
-
+    @Override
+    public void render(SpriteBatch spriteBatch) {
         Sprite item = Images.getItemDraw(name);
         if (equipped) {
             Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
@@ -81,12 +81,6 @@ public class ItemToBeDrawn implements Item {
             rectangles2.add(rectangle);
     }
         update();
-    }
-
-
-    @Override
-    public void render(SpriteBatch s) {
-        render(s, name);
     }
 
     @Override
@@ -144,26 +138,23 @@ public class ItemToBeDrawn implements Item {
             click++;
         else
             click = 0;
-        for (int index = 0; index < rectangles2.size(); index++) {
-            if (contains[index] && click >= 2) {
-                equipped = !equipped;
-                if (name.equals("Rifle")) {
-                    Boy.throwing = false;
-                    Rifle.showingNumbBullets = equipped;
+        if (contains[index] && click >= 2) {
+            equipped = !equipped;
+            if (name.equals("Rifle")) {
+                Boy.throwing = false;
+                Rifle.showingNumbBullets = equipped;
+                Boy.degrees = 0f;
+            } else {
+                if (name.equals("NinjaStar")) {
                     Boy.degrees = 0f;
-                } else {
-                    if (name.equals("NinjaStar")) {
-                        Boy.degrees = 0f;
-                        Boy.throwing = equipped;
-                        Rifle.showingNumbBullets = false;
-                    } else{
-                        Boy.nameOfAnimation = "BOY_IDLE";
-                    }
+                    Boy.throwing = equipped;
+                    Rifle.showingNumbBullets = false;
+                } else{
+                    Boy.nameOfAnimation = "BOY_IDLE";
                 }
-                click = 0;
             }
+            click = 0;
         }
     }
-
 
 }
