@@ -35,12 +35,12 @@ public class ItemToBeDrawn implements Item {
     public static ArrayList<Rectangle> rectangles2 = new ArrayList<>();
     private int click;
 
-    private boolean contains[] = new boolean[ITEMS_LIMIT];
+    public static boolean[] contains = new boolean[ITEMS_LIMIT];
 
     @Getter @Setter
     private String name;
-    @Getter @Setter
-    private boolean equipped;
+
+    public static boolean[] equipped = new boolean[ITEMS_LIMIT];
     @Getter
     private int index;
 
@@ -64,7 +64,7 @@ public class ItemToBeDrawn implements Item {
     @Override
     public void render(SpriteBatch spriteBatch) {
         Sprite item = Images.getItemDraw(name);
-        if (equipped) {
+        if (equipped[index]) {
             Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
             equip.setSize(67, 74);
             equip.setPosition(position.x + 2f, position.y + 12f);
@@ -102,7 +102,7 @@ public class ItemToBeDrawn implements Item {
                 } else {
                     contains[index] = false;
                 }
-    //        }
+//        System.out.println(contains[index]);
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             equip();
         }
@@ -139,24 +139,24 @@ public class ItemToBeDrawn implements Item {
         else
             click = 0;
         if (contains[index] && click >= 2) {
-            equipped = !equipped;
+            equipped[index] = !equipped[index];
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
-                Rifle.showingNumbBullets = equipped;
+                Rifle.showingNumbBullets = equipped[index];
                 Boy.degrees = 0f;
                 Boy.saber_taken = false;
             } else {
                 if (name.equals("NinjaStar")) {
                     Boy.degrees = 0f;
-                    Boy.throwing = equipped;
+                    Boy.throwing = equipped[index];
                     Rifle.showingNumbBullets = false;
                     Boy.saber_taken = false;
                 } else{
                     if (name.equals("JetPack"))
-                        Boy.use_jetPack = equipped;
+                        Boy.use_jetPack = equipped[index];
                     else{
                         if(name.equals("Saber")){
-                           Boy.saber_taken = equipped;
+                           Boy.saber_taken = equipped[index];
                            Boy.throwing = false;
                            Rifle.showingNumbBullets = false;
                         } else{
@@ -171,15 +171,18 @@ public class ItemToBeDrawn implements Item {
             }
             click = 0;
         }
-        unequipped();
+//        unequipped();
     }
 
-    private void unequipped(){
-        for (int i = (rectangles2.size() - 1); i >= 0; i--){
-            if (i == index)
-                continue;
-            itemsToBeDrawn.get(i).setEquipped(false);
-        }
-    }
+//    private void unequipped(){
+//        for (int i = (rectangles2.size() - 1); i >= 0; i--){
+//            if (i == index) {
+//                equipped[index] =
+//                continue;
+//            }
+//            System.out.println(i);
+//            equipped[index] = false;
+//        }
+//    }
 
 }
