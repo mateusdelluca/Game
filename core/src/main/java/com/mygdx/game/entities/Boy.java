@@ -48,7 +48,7 @@ public class Boy extends Objeto {
     private float dx, dy;
     private int secondJump;
     private float saberTime;
-    private boolean saber_taken, hit;
+    private boolean hit;
     private int counterWeaponTaken;
     private float worldX;
     private float worldY;
@@ -67,7 +67,7 @@ public class Boy extends Objeto {
     private Vector2 bodyPosition;
 
     public static String nameOfAnimation;
-    public static boolean throwing;
+    public static boolean throwing, saber_taken;
     private boolean thrown;
     private int indexNinja;
     private float throwTimer;

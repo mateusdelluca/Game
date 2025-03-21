@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.BodyData;
@@ -145,21 +144,41 @@ public class ItemToBeDrawn implements Item {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped;
                 Boy.degrees = 0f;
+                Boy.saber_taken = false;
             } else {
                 if (name.equals("NinjaStar")) {
                     Boy.degrees = 0f;
                     Boy.throwing = equipped;
                     Rifle.showingNumbBullets = false;
+                    Boy.saber_taken = false;
                 } else{
                     if (name.equals("JetPack"))
                         Boy.use_jetPack = equipped;
                     else{
-                        Boy.nameOfAnimation = "BOY_IDLE";
+                        if(name.equals("Saber")){
+                           Boy.saber_taken = equipped;
+                           Boy.throwing = false;
+                           Rifle.showingNumbBullets = false;
+                        } else{
+                            Boy.throwing = false;
+                            Rifle.showingNumbBullets = false;
+                            Boy.saber_taken = false;
+                            Boy.nameOfAnimation = "BOY_IDLE";
+                        }
                     }
 
                 }
             }
             click = 0;
+        }
+        unequipped();
+    }
+
+    private void unequipped(){
+        for (int i = (rectangles2.size() - 1); i >= 0; i--){
+            if (i == index)
+                continue;
+            itemsToBeDrawn.get(i).setEquipped(false);
         }
     }
 
