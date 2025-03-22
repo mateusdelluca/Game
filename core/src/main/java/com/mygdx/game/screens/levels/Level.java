@@ -61,6 +61,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
+    Block block;
 
     public void init(){
         Box2D.init();
@@ -161,6 +162,9 @@ public class Level extends State implements ContactListener, Serializable {
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+        block = new Block(new Vector2(200, 6000 - 300));
+
+        objetos.add(block);
 
         objetos.addAll(items2.values());
         objetos.add(boy);
@@ -222,6 +226,7 @@ public class Level extends State implements ContactListener, Serializable {
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
         tile.render(camera);
+
 //        for (Bullet bullet : bullets)
 //            bullet.render(spriteBatch);
 //        for (Objeto objeto : objetos) {
@@ -239,7 +244,7 @@ public class Level extends State implements ContactListener, Serializable {
             item.render(spriteBatch);
         for (Fans fan : fans)
             fan.render(spriteBatch);
-        boy.render(spriteBatch);
+        boy.render(spriteBatch);block.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
     }
@@ -316,35 +321,40 @@ public class Level extends State implements ContactListener, Serializable {
                         !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
                         !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
                         !body1.getUserData().toString().equals("Saber") && !body2.getUserData().toString().equals("Saber") &&
+                        !body1.getUserData().toString().equals("Block") && !body2.getUserData().toString().equals("Block") &&
                         !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
                         boy.beenHit();
 
 
-                if ((((
-
-                    body1.getUserData().equals("Thorns_Colliders") ||
-                        body1.getUserData().toString().equals("Boy"))
-
-                    &&
-
-                    body2.getUserData().toString().equals(o.getBodyData().userData))
-
-                    ||
-
-                    (((
-
-                        body2.getUserData().equals("Thorns_Colliders")) ||
-                        body2.getUserData().toString().equals("Boy"))
-
-                        &&
-
-                        body1.getUserData().toString().equals(o.getBodyData().userData)))) {
+//                if ((((
+//
+//                    body1.getUserData().equals("Thorns_Colliders") ||
+//                        body1.getUserData().toString().equals("Boy"))
+//
+//                    &&
+//
+//                    body2.getUserData().toString().equals(o.getBodyData().userData))
+//
+//                    ||
+//
+//                    (((
+//
+//                        body2.getUserData().equals("Thorns_Colliders")) ||
+//                        body2.getUserData().toString().equals("Boy"))
+//
+//                        &&
+//
+//                        body1.getUserData().toString().equals(o.getBodyData().userData)))) {
 //                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
 
 
-                    if (!body1.getFixtureList().get(0).isSensor() &&
-                        !body2.getFixtureList().get(0).isSensor())
-                        o.beenHit();
+        if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+            body2.getUserData().toString().equals(o.getBodyData().userData))
+            || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+            body1.getUserData().toString().equals(o.getBodyData().userData))) {
+            if (!body1.getFixtureList().get(0).isSensor() &&
+                !body2.getFixtureList().get(0).isSensor())
+                o.beenHit();
 //                if (body1.getUserData().toString().equals("Bullet")) {
 //                    body1.setUserData("null");
 //                } else {

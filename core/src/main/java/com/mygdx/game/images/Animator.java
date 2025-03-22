@@ -24,6 +24,7 @@ public class Animator{
     public Texture spriteSheet;
     public Sprite sprite[];
     public Sprite spriteInverse[];
+    @Getter
     public float stateTime = 0f; // A variable for tracking elapsed time for the animation
     private TextureRegion[] frames;
     public int totalFrames;
@@ -102,23 +103,23 @@ public class Animator{
     }
 
 
-        private Texture paint(Pixmap pixmap, Color color){
-            try {
-                for (int i = 0; i < pixmap.getWidth(); i++) {
-                    for (int j = 0; j < pixmap.getHeight(); j++) {
-                        int pixel = pixmap.getPixel(i, j);
-                        if ((pixel & 0x000000FF) != 0) {
-                            pixmap.setColor(color);
-                        pixmap.drawPixel(i,j, Color.rgba8888(color.r, color.g, color.b, color.a));
-                        }
+    private Texture paint(Pixmap pixmap, Color color){
+        try {
+            for (int i = 0; i < pixmap.getWidth(); i++) {
+                for (int j = 0; j < pixmap.getHeight(); j++) {
+                    int pixel = pixmap.getPixel(i, j);
+                    if ((pixel & 0x000000FF) != 0) {
+                        pixmap.setColor(color);
+                    pixmap.drawPixel(i,j, Color.rgba8888(color.r, color.g, color.b, color.a));
                     }
                 }
-                return new Texture(pixmap);
-            } catch(GdxRuntimeException e){
-
             }
-            return null;
+            return new Texture(pixmap);
+        } catch(GdxRuntimeException e){
+
         }
+        return null;
+    }
 
     private Texture paint(Pixmap pixmap){
         try {
@@ -174,6 +175,14 @@ public class Animator{
 //            sprite[index] = new Sprite(animation.getKeyFrame(stateTime * 1.01F));
 //        }
 
+    }
+
+    public void setFrameCounter(int frame){
+        setStateTime(timeToFrame(frame));
+    }
+
+    public void setStateTime(float time){
+       stateTime = time;
     }
 
     public float timeToFrame(int frame){
@@ -263,6 +272,16 @@ public class Animator{
         return s;
     }
 
+    public TextureRegion currentSpriteFrame(boolean onlyFirstFrame){
+        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+        // Get current frame of animation for the current stateTime
+        Sprite s = null;
+        if (!PausePage.pause) {
+            s = new Sprite(animation.getKeyFrame(onlyFirstFrame ? 0f : stateTime, !onlyFirstFrame));
+        }
+        return s;
+    }
+
     public TextureRegion currentSpriteFrame(boolean useOnlyLastFrame, boolean looping){
         stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
@@ -306,6 +325,10 @@ public class Animator{
             return s;
         }
         return s;
+    }
+
+    public float frameCounter(){
+        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
     }
 
     public TextureRegion lastFrame(){
@@ -361,5 +384,9 @@ public class Animator{
 
     public Color getColor() {
         return color;
+    }
+
+    public float getAnimationDuration(){
+        return animation.getAnimationDuration();
     }
 }

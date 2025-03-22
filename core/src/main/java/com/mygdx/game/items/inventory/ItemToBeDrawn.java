@@ -140,6 +140,7 @@ public class ItemToBeDrawn implements Item {
             click = 0;
         if (contains[index] && click >= 2) {
             equipped[index] = !equipped[index];
+//            unequipped();
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];
@@ -177,11 +178,11 @@ public class ItemToBeDrawn implements Item {
 //    private void unequipped(){
 //        for (int i = (rectangles2.size() - 1); i >= 0; i--){
 //            if (i == index) {
-//                equipped[index] =
+//                equipped[index] = !equipped[index];
 //                continue;
 //            }
 //            System.out.println(i);
-//            equipped[index] = false;
+//            equipped[index] = !equipped[index];
 //        }
 //    }
 

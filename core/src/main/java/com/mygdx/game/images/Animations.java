@@ -8,6 +8,9 @@ import java.io.Serializable;
 public enum Animations implements Serializable {
 
 
+
+    MINI_BLOCK(new Animator(7,7,7,500,500,"block/Block_tr.png")),
+
     //boy
     BOY_DEAD(new Animator(1,1,1,128,128,"boy/Dead.png")),
     BOY_RELOADING(new Animator(3,3,1,128,128, "boy/Reloading.png")),
@@ -24,6 +27,9 @@ public enum Animations implements Serializable {
     MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),
     MONSTER1_FLICKERING(new Animator(4,4,6,94,128, "monster/Flickering.png")),
     MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png"));
+
+
+
 
     @Getter
     public Animator animator;
