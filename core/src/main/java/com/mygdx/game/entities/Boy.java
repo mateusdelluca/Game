@@ -99,12 +99,11 @@ public class Boy extends Objeto {
                 anim.setPosition(body.getPosition().x, body.getPosition().y);
                 anim.draw(s);
             } else {
+                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
+                if (isMoving()) //when he is moving and didn't active the jetpack
+                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
+                legs.setPosition(body.getPosition().x, body.getPosition().y);
                 if (shooting) {    //when actives the gun and shooting and he is not moving and he has not been hit
-                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-                    if (isMoving()) //when he is moving and didn't active the jetpack
-                        legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
-                    legs.setPosition(body.getPosition().x, body.getPosition().y);
-
                     //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
                     top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), isFacingLeft));
@@ -131,10 +130,7 @@ public class Boy extends Objeto {
                 }
             }
             if (throwing && !shooting && !beenHit && !saber_taken) {
-                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-                if (isMoving()) //when he is moving and didn't active the jetpack
-                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
-                legs.setPosition(body.getPosition().x, body.getPosition().y);
+
                 if (Math.abs(degrees) > 100f) {
                     throwNinjaStar1.setFlip(true, false);
                     throwNinjaStar2.setFlip(true, false);
