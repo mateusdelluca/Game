@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,7 +18,7 @@ public class Block extends Objeto{
     private Animations animations = Animations.MINI_BLOCK;
 
     @Getter @Setter
-    private boolean onlyFirstFrame = true;
+    private boolean onlyFirstFrame = true, destroyed;
     public final float DURATION_ANIMATION_IN_SECONDS = animations.animator.getAnimationDuration();
 
     public Block(Vector2 position){
@@ -37,7 +38,9 @@ public class Block extends Objeto{
             sprite.setPosition(body.getPosition().x - 203f/2f, body.getPosition().y - 177f/2f);
             sprite.draw(s);
         }
-//        visible = !(animations.getAnimator().ani_finished());
+        visible = !(animations.animator.getStateTime() >= animations.animator.getAnimation().getAnimationDuration());
+        if (destroyed)
+            animations.animator.setStateTime(animations.animator.getStateTime() + Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -53,5 +56,6 @@ public class Block extends Objeto{
     @Override
     public void beenHit(){
         onlyFirstFrame = false;
+        destroyed = true;
     }
 }

@@ -273,11 +273,9 @@ public class Animator{
     }
 
     public TextureRegion currentSpriteFrame(boolean onlyFirstFrame){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        // Get current frame of animation for the current stateTime
         Sprite s = null;
         if (!PausePage.pause) {
-            s = new Sprite(animation.getKeyFrame(onlyFirstFrame ? 0f : stateTime, !onlyFirstFrame));
+            s = new Sprite(animation.getKeyFrame(onlyFirstFrame ? 0f : stateTime, false));
         }
         return s;
     }
