@@ -473,52 +473,52 @@ public class Boy extends Objeto {
             }
         }
         if (button == Input.Buttons.RIGHT) {
-            counterWeaponTaken++;
-            switch(counterWeaponTaken){
-                case 1:{
-                    Rifle.showingNumbBullets = false;
-                    shooting = false;
-                    throwing = false;
-                    saber_taken = true;
-                    animations = Animations.BOY_SABER;
-                    break;
-                }
-                case 2:{
-                    shooting = false;
-                    beenHit = false;
-                    saber_taken = false;
-                    animations = Animations.BOY_IDLE;
-                    Rifle.showingNumbBullets = false;
-                    break;
-                }
-                case 3:{
-                    shooting = false;
-                    beenHit = false;
-                    saber_taken = false;
-                    throwing = true;
-                    Rifle.showingNumbBullets = false;
-                    break;
-                }
-                default:{
-                    saber_taken = false;
-                    throwing = false;
-                    if (rifle != null) {
-                        Rifle.showingNumbBullets = true;
-                        shooting = true;
-                        counterWeaponTaken = 0;
-                        animations = Animations.BOY_RELOADING;
-                        degrees = 0;
-                        radians = 0;
-                        beenHit = false;
-                        break;
-                    }
-                    Rifle.showingNumbBullets = false;
-                    shooting = false;
-                    animations = Animations.BOY_IDLE;
-                    counterWeaponTaken = 0;
-                    break;
-                }
-            }
+//            counterWeaponTaken++;
+//            switch(counterWeaponTaken){
+//                case 1:{
+//                    Rifle.showingNumbBullets = false;
+//                    shooting = false;
+//                    throwing = false;
+//                    saber_taken = true;
+//                    animations = Animations.BOY_SABER;
+//                    break;
+//                }
+//                case 2:{
+//                    shooting = false;
+//                    beenHit = false;
+//                    saber_taken = false;
+//                    animations = Animations.BOY_IDLE;
+//                    Rifle.showingNumbBullets = false;
+//                    break;
+//                }
+//                case 3:{
+//                    shooting = false;
+//                    beenHit = false;
+//                    saber_taken = false;
+//                    throwing = true;
+//                    Rifle.showingNumbBullets = false;
+//                    break;
+//                }
+//                default:{
+//                    saber_taken = false;
+//                    throwing = false;
+//                    if (rifle != null) {
+//                        Rifle.showingNumbBullets = true;
+//                        shooting = true;
+//                        counterWeaponTaken = 0;
+//                        animations = Animations.BOY_RELOADING;
+//                        degrees = 0;
+//                        radians = 0;
+//                        beenHit = false;
+//                        break;
+//                    }
+//                    Rifle.showingNumbBullets = false;
+//                    shooting = false;
+//                    animations = Animations.BOY_IDLE;
+//                    counterWeaponTaken = 0;
+//                    break;
+//                }
+//            }
         }
     }
 

@@ -272,10 +272,10 @@ public class Animator{
         return s;
     }
 
-    public TextureRegion currentSpriteFrame(boolean onlyFirstFrame){
+    public TextureRegion currentSpriteFrame(boolean onlyFirstFrame, float stateTime){
         Sprite s = null;
         if (!PausePage.pause) {
-            s = new Sprite(animation.getKeyFrame(onlyFirstFrame ? 0f : stateTime, false));
+            s = new Sprite(animation.getKeyFrame(stateTime, false));
         }
         return s;
     }

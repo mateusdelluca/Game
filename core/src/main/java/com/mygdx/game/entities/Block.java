@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.images.Animations;
-import com.mygdx.game.images.Images;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Random;
+
+import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class Block extends Objeto{
 
@@ -17,31 +20,49 @@ public class Block extends Objeto{
 
     private Animations animations = Animations.MINI_BLOCK;
 
+    public static int index;
+
     @Getter @Setter
     private boolean onlyFirstFrame = true, destroyed;
-    public final float DURATION_ANIMATION_IN_SECONDS = animations.animator.getAnimationDuration();
+    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f;
+
+    private boolean visible0;
+    private float stateTime;
 
     public Block(Vector2 position){
+        visible0 = true;
         body = createBody(new Vector2(115f/4f, 150/4f), BodyDef.BodyType.StaticBody, false);
         body.setTransform(position, 0);
-        visible = true;
+        body.setUserData(this.toString());
+        index++;
     }
 
     @Override
     public void render(SpriteBatch s) {
-        if (visible) {
+        if (this.visible0) {
 //            System.out.println(animations.animator.getAnimationDuration());
-            System.out.println(animations.animator.getAnimation().getKeyFrame(animations.animator.getStateTime()).getU2());
-            Sprite sprite = new Sprite(animations.getAnimator().currentSpriteFrame(onlyFirstFrame));
+//            System.out.println(animations.animator.getAnimation().getKeyFrame(stateTime).getU2());
+            Sprite sprite = new Sprite(animations.getAnimator().currentSpriteFrame(onlyFirstFrame, stateTime));
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setOriginCenter();
             sprite.setPosition(body.getPosition().x - 203f/2f, body.getPosition().y - 177f/2f);
             sprite.draw(s);
         }
-        visible = !(animations.animator.getStateTime() >= animations.animator.getAnimation().getAnimationDuration());
+//        animations.getAnimator().setStateTime(stateTime);
+        this.visible0 = !(stateTime >= DURATION_ANIMATION_IN_SECONDS);
         if (destroyed)
-            animations.animator.setStateTime(animations.animator.getStateTime() + Gdx.graphics.getDeltaTime());
+            stateTime += Gdx.graphics.getDeltaTime();
     }
+
+    @Override
+    public void update(){
+        if (!this.visible0 && body != null) {
+            body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
+            world.destroyBody(body);
+            body = null;
+        }
+    }
+
 
     @Override
     public void renderShape(ShapeRenderer s) {
@@ -50,7 +71,7 @@ public class Block extends Objeto{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + index;
     }
 
     @Override
