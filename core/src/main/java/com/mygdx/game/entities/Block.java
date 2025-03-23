@@ -24,8 +24,7 @@ public class Block extends Objeto{
 
     @Getter @Setter
     private boolean onlyFirstFrame = true, destroyed;
-    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f;
-
+    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f/2f;
     private boolean visible0;
     private float stateTime;
 
