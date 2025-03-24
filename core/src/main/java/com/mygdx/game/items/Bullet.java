@@ -77,7 +77,7 @@ public class Bullet extends Objeto implements Item {
         sprite.flip(isFacingLeft, false);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
-        sprite.getBoundingRectangle();
+//        sprite.getBoundingRectangle(); TODO: usar rectangle da imagem de bullet para avaliar quando a bala colide ou não
         if (visible) {
             fixBullet(this);
             sprite.draw(spriteBatch);
