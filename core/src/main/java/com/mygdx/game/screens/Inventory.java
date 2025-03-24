@@ -10,13 +10,14 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.*;
 
 public class Inventory extends State {
 
-    public static ArrayList<ItemToBeDrawn> itemsToBeDrawn = new ArrayList<>();
+    public static CopyOnWriteArrayList<ItemToBeDrawn> itemsToBeDrawn = new CopyOnWriteArrayList<>();
     public static float mouseX, mouseY;
     private Rectangle close_button = new Rectangle(1435f,720f,50,50);
 
@@ -55,13 +56,13 @@ public class Inventory extends State {
             for (ItemToBeDrawn itemToBeDrawn2 : itemsToBeDrawn) {
                 if (!itemToBeDrawn2.getName().equals(itemToBeDrawn.getName())) {
                    add[itemToBeDrawn.getIndex()] = true;
-
+                    itemsToBeDrawn.add(itemToBeDrawn);
                 }
             }
         }
-        for (int i = 0; i < index_x; i++)
-            if (add[i])
-                itemsToBeDrawn.add(itemToBeDrawn);
+//        for (int i = 0; i < index_x; i++)
+//            if (add[i])
+
     }
 
     @Override
@@ -175,7 +176,7 @@ public class Inventory extends State {
             }
             Vector2 position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x)), INITIAL_Y - ((HEIGHT + 9) * index_y));
             positionsToFill.add(position);
-
+            Rectangle rectangle;
         }
     }
 }

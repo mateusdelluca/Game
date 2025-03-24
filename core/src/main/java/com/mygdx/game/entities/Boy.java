@@ -15,13 +15,9 @@ import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.Inventory;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.Inventory.addItemToInventory;
@@ -43,7 +39,7 @@ public class Boy extends Objeto {
     private float flickering_time;
     @Setter @Getter
     private boolean beenHit;
-    private boolean shooting;
+    public static boolean shooting;
     public static float imgX, imgY, degrees, radians;
     private float dx, dy;
     private int secondJump;
@@ -538,7 +534,7 @@ public class Boy extends Objeto {
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, DIMENSIONS_FOR_SHAPE.x, DIMENSIONS_FOR_SHAPE.y);
     }
 
-    public void equip_Item(Item item){
+    public void takeItem(Item item){
         if (item instanceof Portal)
             return;
         if (item instanceof Rifle) {

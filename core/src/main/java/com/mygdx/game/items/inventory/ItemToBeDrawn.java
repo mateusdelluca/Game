@@ -148,6 +148,7 @@ public class ItemToBeDrawn implements Item {
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];
+                Boy.shooting = equipped[index];
                 Boy.degrees = 0f;
                 Boy.saber_taken = false;
             } else {

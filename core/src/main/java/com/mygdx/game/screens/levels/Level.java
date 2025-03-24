@@ -17,27 +17,20 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
 import com.mygdx.game.items.fans.Fan2;
 import com.mygdx.game.items.fans.Fans;
-import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.Tile;
-import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.mygdx.game.items.Cartridge.bullets;
-import static com.mygdx.game.screens.Inventory.addItemToInventory;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
-import static com.mygdx.game.system.ScreenshotHelper.sprite;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Level extends State implements ContactListener, Serializable {
@@ -303,7 +296,7 @@ public class Level extends State implements ContactListener, Serializable {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")){
-                boy.equip_Item(item);
+                boy.takeItem(item);
 
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");

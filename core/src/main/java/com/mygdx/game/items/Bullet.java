@@ -56,7 +56,7 @@ public class Bullet extends Objeto implements Item {
         if (body == null || body.getFixtureList().size == 0)
             return;
         timer += Gdx.graphics.getDeltaTime();
-        if (timer < 0.2f) {
+        if (timer < 0.01f) {
             body.getFixtureList().get(0).setSensor(true);
         } else
             body.getFixtureList().get(0).setSensor(false);
@@ -77,7 +77,7 @@ public class Bullet extends Objeto implements Item {
         sprite.flip(isFacingLeft, false);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
-
+        sprite.getBoundingRectangle();
         if (visible) {
             fixBullet(this);
             sprite.draw(spriteBatch);
