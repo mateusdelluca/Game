@@ -44,9 +44,13 @@ public class ItemToBeDrawn implements Item {
     @Getter
     private int index;
 
+    public static String equip = "";
+
     public ItemToBeDrawn(String name){
 //        name = getClass().getSimpleName();
         this.name = name;
+        if (name.equals(equip))
+            return;
         if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
             if (index_x % 4 == 0 && index_x != 0){
                 index_x = 0;
@@ -175,15 +179,14 @@ public class ItemToBeDrawn implements Item {
 //        unequipped();
     }
 
-//    private void unequipped(){
-//        for (int i = (rectangles2.size() - 1); i >= 0; i--){
-//            if (i == index) {
-//                equipped[index] = !equipped[index];
-//                continue;
-//            }
-//            System.out.println(i);
-//            equipped[index] = !equipped[index];
-//        }
-//    }
+    private void unequipped(){
+        for (int i = (rectangles2.size() - 1); i >= 0; i--){
+            if (i == index && contains[index]) {
+                continue;
+            }
+            System.out.println(i);
+            equipped[index] = false;
+        }
+    }
 
 }

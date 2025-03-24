@@ -564,6 +564,7 @@ public class Boy extends Objeto {
         }
 
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
+        ItemToBeDrawn.equip = item.toString();
         addItemToInventory(itemToBeDrawn);
         System.out.println(item);
         item.setVisible(false);

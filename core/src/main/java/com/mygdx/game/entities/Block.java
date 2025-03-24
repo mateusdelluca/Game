@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.images.Animations;
@@ -24,7 +25,7 @@ public class Block extends Objeto{
 
     @Getter @Setter
     private boolean onlyFirstFrame = true, destroyed;
-    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f/2f;
+    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f/4f;
     private boolean visible0;
     private float stateTime;
 
@@ -77,5 +78,11 @@ public class Block extends Objeto{
     public void beenHit(){
         onlyFirstFrame = false;
         destroyed = true;
+    }
+
+    public Rectangle getRectangle(){
+        Sprite sprite = new Sprite(animations.animator.getFrame(0));
+        sprite.setSize(115, 150);
+        return sprite.getBoundingRectangle();
     }
 }

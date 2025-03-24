@@ -46,7 +46,7 @@ public class Inventory extends State {
     }
 
     public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
-       boolean add[] = new boolean[20];
+       boolean add[] = new boolean[ITEMS_LIMIT];
         if (itemsToBeDrawn.isEmpty()) {
             itemsToBeDrawn.add(itemToBeDrawn);
             return;
@@ -55,11 +55,13 @@ public class Inventory extends State {
             for (ItemToBeDrawn itemToBeDrawn2 : itemsToBeDrawn) {
                 if (!itemToBeDrawn2.getName().equals(itemToBeDrawn.getName())) {
                    add[itemToBeDrawn.getIndex()] = true;
+
                 }
             }
         }
-        if (add[itemToBeDrawn.getIndex()])
-            itemsToBeDrawn.add(itemToBeDrawn);
+        for (int i = 0; i < index_x; i++)
+            if (add[i])
+                itemsToBeDrawn.add(itemToBeDrawn);
     }
 
     @Override

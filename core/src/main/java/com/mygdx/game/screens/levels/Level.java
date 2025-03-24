@@ -469,7 +469,8 @@ public class Level extends State implements ContactListener, Serializable {
 //                        body2.setUserData("null");
 //                    }
 //                }
-                 o.beenHit();
+                 if (!(o instanceof Boy))
+                    o.beenHit();
             }
         }
     }
@@ -501,6 +502,9 @@ public class Level extends State implements ContactListener, Serializable {
                 }
 
         }
+        for (Block block : blocks)
+            if (boy.getBodyBounds().overlaps(block.getRectangle()))
+                block.beenHit();
         if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
             jack.beenHit();
         }
