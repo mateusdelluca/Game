@@ -31,7 +31,7 @@ public class Block extends Objeto{
 
     public Block(Vector2 position){
         visible0 = true;
-        body = createBody(new Vector2(115f/4f, 150/4f), BodyDef.BodyType.StaticBody, false);
+        body = createBody(new Vector2(115f/4f, 150/4f), BodyDef.BodyType.StaticBody, false, 0.01f);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
         index++;

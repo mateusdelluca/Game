@@ -321,7 +321,7 @@ public class Level extends State implements ContactListener, Serializable {
                     !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
                     !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
                     !body1.getUserData().toString().equals("Saber") && !body2.getUserData().toString().equals("Saber") &&
-                    !body1.getUserData().toString().equals("Block") && !body2.getUserData().toString().equals("Block") &&
+                    !body1.getUserData().toString().contains("Block") && !body2.getUserData().toString().contains("Block") &&
                     !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
                     boy.beenHit();
 
@@ -370,10 +370,12 @@ public class Level extends State implements ContactListener, Serializable {
 
         }
         for (int i = 0; i < blocks.size(); i++) {
-            if ((body1.getUserData().toString().equals("Bullet") &&
+            if (((body1.getUserData().toString().equals("Bullet") &&
                 body2.getUserData().toString().equals("Block" + i))
                 || (body2.getUserData().toString().equals("Bullet") &&
-                body1.getUserData().toString().equals("Block" + i))) {
+                body1.getUserData().toString().equals("Block" + i)))
+                || ((body1.getUserData().toString().equals("Block" + i)) && body2.getUserData().equals("Boy"))
+            || (body2.getUserData().toString().equals("Block" + i)) && body1.getUserData().equals("Boy")){
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor()) {
                     blocks.get(i).beenHit();

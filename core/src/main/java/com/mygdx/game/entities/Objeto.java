@@ -81,6 +81,34 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         return body;
     }
 
+    protected Body createBody(Vector2 dimensions, BodyDef.BodyType bodyType, boolean isSensor, float friction){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.active = true;
+        bodyDef.position.set(0,0);
+        bodyDef.fixedRotation = true;
+        PolygonShape polygonShape = new PolygonShape();
+//         Adicione formas (fixtures) ao corpo para representar sua geometria
+        polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        fixtureDef.density = 10f;
+        fixtureDef.friction = friction;
+        fixtureDef.isSensor = isSensor;
+        Body body = world.createBody(bodyDef);
+//        body.createFixture(fixtureDef).setUserData(this);
+        body.setActive(true);
+        body.setFixedRotation(true);
+        body.createFixture(fixtureDef);
+        body.setUserData(this.toString());
+        if (this instanceof Boy)
+            bodyData = new BodyData(body, dimensions, width, height);
+        else
+            bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
+        polygonShape.dispose();
+        return body;
+    }
+
     public abstract void render(SpriteBatch s);
 
     public abstract void renderShape(ShapeRenderer s);
