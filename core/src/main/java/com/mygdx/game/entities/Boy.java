@@ -190,7 +190,7 @@ public class Boy extends Objeto {
                 chargingSPTimer3 = 0;
             }
         }
-        if (PowerBar.sp <= 0f){
+        if (PowerBar.sp <= 30f){
             chargingSP = true;
         }
         if (chargingSP) {

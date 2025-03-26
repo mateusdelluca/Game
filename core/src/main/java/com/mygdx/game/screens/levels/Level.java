@@ -123,7 +123,7 @@ public class Level extends State implements ContactListener, Serializable {
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
 
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(440, 6000 - 350)));
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         items2.put(Rifle.class.getSimpleName(), jack.getRifle());
         items2.put(Rifle.class.getSimpleName(), girl.getRifle());
@@ -157,8 +157,17 @@ public class Level extends State implements ContactListener, Serializable {
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 
-        for (int i = 0; i < 10; i++)
-            blocks.add(new Block(new Vector2(200 + i * 50, 6000 - 300)));
+        for (int i = 0; i < 5; i++)
+            blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
+
+        for (int i = 0; i < 5; i++)
+            blocks.add(new Block(new Vector2(850 + i * 50, 4050)));
+
+        for (int i = 0; i < 30; i++)
+            blocks.add(new Block(new Vector2(3330 + (i * 50), 4810)));
+
+        for (int i = 0; i < 40; i++)
+            blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
 //        objetos.addAll(blocks);
 
@@ -418,7 +427,26 @@ public class Level extends State implements ContactListener, Serializable {
 
     @Override
     public void endContact(Contact contact) {
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
 
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        for (Objeto o : objetos) {
+            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+                body2.getUserData().toString().equals(o.getBodyData().userData))
+                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+                body1.getUserData().toString().equals(o.getBodyData().userData))) {
+                if (!body1.getFixtureList().get(0).isSensor() &&
+                    !body2.getFixtureList().get(0).isSensor())
+                    o.beenHit();
+            }
+        }
     }
 
     @Override

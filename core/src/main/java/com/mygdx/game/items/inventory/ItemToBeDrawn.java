@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.mygdx.game.screens.Inventory.*;
 
@@ -28,6 +29,8 @@ public class ItemToBeDrawn implements Item {
     public static final Integer INITIAL_X = 420, INITIAL_Y = 740;
     @Getter
     private Vector2 position = new Vector2();
+
+    public static HashMap<String, Integer> indice = new HashMap<String, Integer>();
 
     @Getter
     public static ArrayList<Vector2> positions = new ArrayList<>();
@@ -57,6 +60,7 @@ public class ItemToBeDrawn implements Item {
                 index_y++;
             }
             index = index_x;
+            indice.put(name, index);
             position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x)), INITIAL_Y - ((HEIGHT + 4) * index_y));
             positions.add(position);
             index_x++;
@@ -71,11 +75,11 @@ public class ItemToBeDrawn implements Item {
         if (equipped[index]) {
             Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
             equip.setSize(67, 74);
-            equip.setPosition(position.x + 2f, position.y + 12f);
+            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
             equip.draw(spriteBatch);
         }
         if (position != null) {
-            item.setPosition(position.x, position.y);
+            item.setPosition(positionsToFill.get(indice.get(name)).x, positionsToFill.get(indice.get(name)).y);
             item.draw(spriteBatch);
         }
         if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
@@ -144,7 +148,6 @@ public class ItemToBeDrawn implements Item {
             click = 0;
         if (contains[index] && click >= 2) {
             equipped[index] = !equipped[index];
-//            unequipped();
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];
@@ -157,6 +160,7 @@ public class ItemToBeDrawn implements Item {
                     Boy.throwing = equipped[index];
                     Rifle.showingNumbBullets = false;
                     Boy.saber_taken = false;
+                    Boy.shooting = false;
                 } else{
                     if (name.equals("JetPack"))
                         Boy.use_jetPack = equipped[index];
@@ -166,10 +170,11 @@ public class ItemToBeDrawn implements Item {
                            Boy.throwing = false;
                            Rifle.showingNumbBullets = false;
                         } else{
-                            Boy.throwing = false;
-                            Rifle.showingNumbBullets = false;
-                            Boy.saber_taken = false;
-                            Boy.nameOfAnimation = "BOY_IDLE";
+//                            Boy.throwing = false;
+//                            Rifle.showingNumbBullets = false;
+//                            Boy.shooting = false;
+//                            Boy.saber_taken = false;
+//                            Boy.nameOfAnimation = "BOY_IDLE";
                         }
                     }
 
@@ -180,14 +185,5 @@ public class ItemToBeDrawn implements Item {
 //        unequipped();
     }
 
-    private void unequipped(){
-        for (int i = (rectangles2.size() - 1); i >= 0; i--){
-            if (i == index && contains[index]) {
-                continue;
-            }
-            System.out.println(i);
-            equipped[index] = false;
-        }
-    }
 
 }

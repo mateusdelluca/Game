@@ -25,13 +25,13 @@ public class Block extends Objeto{
 
     @Getter @Setter
     private boolean onlyFirstFrame = true, destroyed;
-    public final float DURATION_ANIMATION_IN_SECONDS = 1.0f/4f;
+    public final float DURATION_ANIMATION_IN_SECONDS = 0.5f;
     private boolean visible0;
     private float stateTime;
 
     public Block(Vector2 position){
         visible0 = true;
-        body = createBody(new Vector2(115f/4f, 150/4f), BodyDef.BodyType.StaticBody, false, 0.01f);
+        body = createBody(new Vector2(115f/4f, 150/4f), BodyDef.BodyType.StaticBody, false, 0.0f);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
         index++;
