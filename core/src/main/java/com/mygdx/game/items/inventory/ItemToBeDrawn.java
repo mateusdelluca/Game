@@ -75,12 +75,12 @@ public class ItemToBeDrawn implements Item {
     @Override
     public void render(SpriteBatch spriteBatch) {
         Sprite item = Images.getItemDraw(name);
-        if (equipped[index]) {
-            Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
-            equip.setSize(67, 74);
-            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
-            equip.draw(spriteBatch);
-        }
+//        if (equipped[index]) {
+//            Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
+//            equip.setSize(67, 74);
+//            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
+//            equip.draw(spriteBatch);
+//        }
         if (position != null) {
             item.setPosition(positionsToFill.get(indice.get(name)).x, positionsToFill.get(indice.get(name)).y);
             item.draw(spriteBatch);
@@ -200,6 +200,16 @@ public class ItemToBeDrawn implements Item {
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
+    }
+
+    public boolean contains() {
+    if (!rectangles2.isEmpty() && rectangles2.size() > index)
+        if (rectangles2.get(index).contains(mouseX, mouseY)) {
+            return true;
+        } else {
+            return false;
+        }
+    return false;
     }
 
 }

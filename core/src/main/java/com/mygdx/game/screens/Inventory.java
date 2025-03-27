@@ -14,6 +14,7 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
@@ -203,11 +204,12 @@ public class Inventory extends State {
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(new Color(1,0,0,105/255f));
-        int i = 0;
-        for (Rectangle r : rectangles)
-            sr.rect(r.x + (2.5f * i), r.y, WIDTH2 + 2.5f, HEIGHT2);
+        for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn) {
+            int i = itemToBeDrawn.getIndex();
+            if (ItemToBeDrawn.equipped[i])
+               sr.rect(rectangles.get(i).x + 5f, rectangles.get(i).y + 5f, WIDTH2 - 5f, HEIGHT2);
+        }
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-
     }
 }
