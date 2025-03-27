@@ -63,6 +63,8 @@ public class Images implements Serializable {
 
     public static HashMap<String, Sprite> itemsDraw = new HashMap<>();
 
+    public static Sprite spaceItem;
+
     public Images() {
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
@@ -114,6 +116,7 @@ public class Images implements Serializable {
         ninjaStar_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaStar_75x85.png")));
         jetPack_inventory = new Sprite(new Texture(Gdx.files.internal("items/JetPack_75x85.png")));
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
+        spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
         equipped_inventory.setSize(67,74);
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("Rifle", rifle_inventory);

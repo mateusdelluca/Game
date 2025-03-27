@@ -2,8 +2,11 @@ package com.mygdx.game.items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -185,5 +188,18 @@ public class ItemToBeDrawn implements Item {
 //        unequipped();
     }
 
+
+    public void render(ShapeRenderer sr){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        sr.setColor(new Color(1,0,0,105/255f));
+        for (Rectangle r : rectangles)
+            sr.rect(r.x, r.y, WIDTH2, HEIGHT2);
+        sr.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+    }
 
 }
