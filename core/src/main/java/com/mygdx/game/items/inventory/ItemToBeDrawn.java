@@ -2,11 +2,8 @@ package com.mygdx.game.items.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,12 +13,10 @@ import com.mygdx.game.entities.Boy;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.Rifle;
-import com.mygdx.game.screens.Inventory;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.mygdx.game.screens.Inventory.*;
 
@@ -32,8 +27,6 @@ public class ItemToBeDrawn implements Item {
     public static final Integer INITIAL_X = 420, INITIAL_Y = 740;
     @Getter
     private Vector2 position = new Vector2();
-
-    public static HashMap<String, Integer> indice = new HashMap<String, Integer>();
 
     @Getter
     public static ArrayList<Vector2> positions = new ArrayList<>();
@@ -55,21 +48,27 @@ public class ItemToBeDrawn implements Item {
     public ItemToBeDrawn(String name){
 //        name = getClass().getSimpleName();
         this.name = name;
-        if (name.equals(equip))
-            return;
-        if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
-            if (index_x % 4 == 0 && index_x != 0){
-                index_x = 0;
-                index_y++;
-            }
-            index = index_x;
-            indice.put(name, index);
-            position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x)), INITIAL_Y - ((HEIGHT + 4) * index_y));
-            positions.add(position);
-            index_x++;
+        addItemToInventory(this);
+        System.out.println(name);
+        this.index = itemsToBeDrawn.size();
+        treeMap_Items.put(name, this);
+
+//        if (name.equals(equip))
+//            return;
+//        if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
+//            if (index_x % 4 == 0 && index_x != 0){
+//                index_x = 0;
+//                index_y++;
+//            }
+//
+//            position = new Vector2(INITIAL_X + ((WIDTH + 6) * (index_x)), INITIAL_Y - ((HEIGHT + 4) * index_y));
+//            positions.add(position);
+//            index_x++;
+//            index2 = itemsToBeDrawn.isEmpty() ? 0 : itemsToBeDrawn.size() - 1;
+//            index = index2;
 //            Vector3 positionRect = new Vector3(position.x, position.y, 0f);
 //            rectangles.add(new Rectangle(positionRect.x, positionRect.y, WIDTH, HEIGHT));
-        }
+//        }
     }
 
     @Override
@@ -81,8 +80,8 @@ public class ItemToBeDrawn implements Item {
 //            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
 //            equip.draw(spriteBatch);
 //        }
-        if (!positionsToFill.isEmpty()) {
-            item.setPosition(positionsToFill.get(indice.get(name)).x, positionsToFill.get(indice.get(name)).y);
+        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
+            item.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
             item.draw(spriteBatch);
         }
 //        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
@@ -107,12 +106,7 @@ public class ItemToBeDrawn implements Item {
     @Override
     public void update() {
 //        for (int index = 0; index < Math.min(rectangles2.size(), ITEMS_LIMIT); index++) {
-        if (!rectangles.isEmpty())
-            if (rectangles.get(index).contains(mouseX, mouseY)) {
-                    contains[index] = true;
-                } else {
-                    contains[index] = false;
-                }
+        contains[index] = contains();
 //        System.out.println(contains[index]);
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             click++;

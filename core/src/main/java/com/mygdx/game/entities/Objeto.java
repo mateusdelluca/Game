@@ -109,6 +109,14 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         return body;
     }
 
+    public void mass(float mass, Vector2 center, float inertia){
+        MassData massData = new MassData();
+        massData.mass = mass;
+        massData.center.set(center);
+        massData.I = inertia;
+        body.setMassData(massData);
+    }
+
     public abstract void render(SpriteBatch s);
 
     public abstract void renderShape(ShapeRenderer s);
@@ -144,7 +152,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void fixBullet(Bullet bullet){
         timer += Gdx.graphics.getDeltaTime();
-        if (timer > 0.2f){
+        if (timer > 0.1f){
             if (!bullet.getBody().getFixtureList().isEmpty())
                 bullet.getBody().getFixtureList().get(0).setSensor(false);
             timer = 0f;

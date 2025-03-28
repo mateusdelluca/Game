@@ -18,9 +18,13 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Contract;
+import java.util.Iterator;
+
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.Inventory.addItemToInventory;
+import static com.mygdx.game.screens.Inventory.itemsToBeDrawn;
 import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.sfx.Sounds.*;
 
@@ -76,6 +80,7 @@ public class Boy extends Objeto {
         bodyData.userData = "" + body.getUserData();
         this.viewport = viewport;
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
+        mass(1.0f, new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), 1.0f);
     }
 
     @Override
@@ -534,12 +539,14 @@ public class Boy extends Objeto {
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, DIMENSIONS_FOR_SHAPE.x, DIMENSIONS_FOR_SHAPE.y);
     }
 
+    @Contract
     public void takeItem(Item item){
         if (item instanceof Portal)
             return;
         if (item instanceof Rifle) {
             rifle = (Rifle) items.get(item.toString());
             ((Rifle) item).setVisible(false);
+//            body.applyForce(new Vector2(1_000_000_000f, 1_000_000_000f), body.getPosition(), true);
         }
         if (item instanceof Crystal) {
             if (((Crystal) item).getRand() > 0)
@@ -558,11 +565,8 @@ public class Boy extends Objeto {
         if (item instanceof NinjaStar){
             item.setVisible(false);
         }
-
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
-        ItemToBeDrawn.equip = item.toString();
-        addItemToInventory(itemToBeDrawn);
-        System.out.println(item);
+
         item.setVisible(false);
         TRIGGER.play();
     }

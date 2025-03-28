@@ -12,10 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.files.FileHandle;
+import java.util.TreeMap;
 
 public class Images implements Serializable {
     public static Texture[] saves = new Texture[6];
@@ -61,7 +61,7 @@ public class Images implements Serializable {
 
     public static Sprite throwNinjaStar1, throwNinjaStar2;
 
-    public static HashMap<String, Sprite> itemsDraw = new HashMap<>();
+    public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
 
     public static Sprite spaceItem;
 

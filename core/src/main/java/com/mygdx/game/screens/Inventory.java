@@ -15,6 +15,7 @@ import com.mygdx.game.manager.StateManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
@@ -24,6 +25,10 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.*;
 public class Inventory extends State {
 
     public static CopyOnWriteArrayList<ItemToBeDrawn> itemsToBeDrawn = new CopyOnWriteArrayList<>();
+
+    public static TreeMap<String, ItemToBeDrawn> treeMap_Items = new TreeMap<>();
+
+
     public static float mouseX, mouseY;
     private Rectangle close_button = new Rectangle(1435f,720f,50,50);
 
@@ -50,34 +55,34 @@ public class Inventory extends State {
 
     @Override
     public void update() {
-        for (int i = 0; i < itemsToBeDrawn.size(); i++){
-            for (int j = itemsToBeDrawn.size() - 1; j >= 0; j--){
-                if (i == j)
-                    continue;
-                if (itemsToBeDrawn.get(i).getName().equals(itemsToBeDrawn.get(j).getName())){
-                    itemsToBeDrawn.set(index_x - 1, itemsToBeDrawn.get(j));
-                }
-            }
-        }
+//        for (int i = 0; i < itemsToBeDrawn.size(); i++){
+//            for (int j = itemsToBeDrawn.size() - 1; j >= 0; j--){
+//                if (i == j)
+//                    continue;
+//                if (itemsToBeDrawn.get(i).getName().equals(itemsToBeDrawn.get(j).getName())){
+//                    itemsToBeDrawn.set(j, itemsToBeDrawn.get(j));
+//                }
+//            }
+//        }
     }
 
-    public static void addItemToInventory(ItemToBeDrawn itemToBeDrawn){
-       boolean add[] = new boolean[ITEMS_LIMIT];
-        if (itemsToBeDrawn.isEmpty()) {
-            itemsToBeDrawn.add(itemToBeDrawn);
+    public static void addItemToInventory(ItemToBeDrawn i1){
+       ItemToBeDrawn itemFirst = null;
+       if (itemsToBeDrawn.isEmpty()) {
+           itemFirst = i1;
+            itemsToBeDrawn.add(itemFirst);
             return;
         }
         if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
-            for (ItemToBeDrawn itemToBeDrawn2 : itemsToBeDrawn) {
-                if (!itemToBeDrawn2.getName().equals(itemToBeDrawn.getName())) {
-                   add[itemToBeDrawn.getIndex()] = true;
-                    itemsToBeDrawn.add(itemToBeDrawn);
+            for (ItemToBeDrawn i2 : itemsToBeDrawn) {
+                if(i2 == i1) {
+                    continue;
                 }
+                itemsToBeDrawn.add(i1);
+                treeMap_Items.put(i1.getName(), i1);
+                System.out.println(treeMap_Items.get(i1.getName()));
             }
         }
-//        for (int i = 0; i < index_x; i++)
-//            if (add[i])
-
     }
 
     @Override
@@ -98,7 +103,7 @@ public class Inventory extends State {
         inventory.draw(spriteBatch);
         for (Vector2 vec2 : positionsToFill)
             spriteBatch.draw(Images.spaceItem, vec2.x, vec2.y);
-        for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn) {
+        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
             itemToBeDrawn.render(spriteBatch);
         }
         spriteBatch.end();
@@ -193,8 +198,8 @@ public class Inventory extends State {
                 index_Y++;
             }
             Vector2 position = new Vector2(INITIAL_X + ((WIDTH) * (index_X++)), INITIAL_Y - ((HEIGHT) * index_Y));
-            positionsToFill.add(position);
-            rectangles.add(i, new Rectangle(position.x, position.y, WIDTH, HEIGHT));
+            positionsToFill.add(i, position);
+            rectangles.add(i, new Rectangle(positionsToFill.get(i).x, positionsToFill.get(i).y, WIDTH, HEIGHT));
         }
     }
 
@@ -204,7 +209,7 @@ public class Inventory extends State {
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(new Color(0,1,0,105/255f));
-        for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn) {
+        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
             int i = itemToBeDrawn.getIndex();
             if (ItemToBeDrawn.equipped[i])
                sr.rect(rectangles.get(i).x + 5f, rectangles.get(i).y + 5f, WIDTH2 - 5f, HEIGHT2);

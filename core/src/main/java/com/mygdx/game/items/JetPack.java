@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 
 import static com.mygdx.game.images.Images.spriteJetPack;
+import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class JetPack extends Objeto implements Item{
 
@@ -24,10 +25,8 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        if (!visible)
-            body.setTransform(10000,  10000, 0);
-        if (body == null)
-            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
+//        if (body == null)
+//            body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
         if (visible) {
             spriteJetPack.setOrigin(WIDTH/2f, HEIGHT/2f);
             spriteJetPack.setPosition(body.getPosition().x, body.getPosition().y);
@@ -48,7 +47,11 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void update() {
-
+        if (!visible && body.getUserData().equals(this)) {
+            body.setTransform(10_000, 10_000, 0);
+            body.setUserData("null");
+            world.destroyBody(body);
+        }
     }
 
     @Override
