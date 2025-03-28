@@ -50,9 +50,8 @@ public class ItemToBeDrawn implements Item {
         this.name = name;
         addItemToInventory(this);
         System.out.println(name);
-        this.index = itemsToBeDrawn.size();
         treeMap_Items.put(name, this);
-
+        this.index = treeMap_Items.size();
 //        if (name.equals(equip))
 //            return;
 //        if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {

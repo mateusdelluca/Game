@@ -41,7 +41,7 @@ public class Inventory extends State {
 
     public static ArrayList<Rectangle> rectangles = new ArrayList<>();
 
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     public Inventory(){
 //        for (int i = 0; i < 20; i++) {
 //            addItemToInventory(new ItemToBeDrawn());
@@ -51,7 +51,7 @@ public class Inventory extends State {
         shapeRenderer = new ShapeRenderer();
     }
 
-    private SpriteBatch spriteBatch = new SpriteBatch();
+    private final SpriteBatch spriteBatch = new SpriteBatch();
 
     @Override
     public void update() {
@@ -103,7 +103,7 @@ public class Inventory extends State {
         inventory.draw(spriteBatch);
         for (Vector2 vec2 : positionsToFill)
             spriteBatch.draw(Images.spaceItem, vec2.x, vec2.y);
-        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
+        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.values()) {
             itemToBeDrawn.render(spriteBatch);
         }
         spriteBatch.end();
