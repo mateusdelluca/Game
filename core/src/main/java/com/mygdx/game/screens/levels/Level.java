@@ -364,7 +364,8 @@ public class Level extends State implements ContactListener, Serializable {
                 body1.getUserData().toString().equals(o.getBodyData().userData))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor())
-                    o.beenHit();
+                    if (!(o.getBody().getUserData().equals("BulletBoy")))
+                        o.beenHit();
 //                if (body1.getUserData().toString().equals("Bullet")) {
 //                    body1.setUserData("null");
 //                } else {
@@ -400,22 +401,22 @@ public class Level extends State implements ContactListener, Serializable {
             }
         }
 
-        Body bullet1 = contact.getFixtureA().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
-        Body bullet2 = contact.getFixtureB().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
-
-
-        for (Objeto objeto : objetos) {
-            if (bullet1 != null) {
-                if (objeto.getBodyData().equals(body2.getUserData())) {
-                    objeto.beenHit();
-                }
-            }
-            if (bullet2 != null) {
-                if (objeto.getBodyData().equals(body1.getUserData())) {
-                    objeto.beenHit();
-                }
-            }
-        }
+//        Body bullet1 = contact.getFixtureA().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
+//        Body bullet2 = contact.getFixtureB().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
+//
+//
+//        for (Objeto objeto : objetos) {
+//            if (bullet1 != null) {
+//                if (objeto.getBodyData().equals(body2.getUserData())) {
+//                    objeto.beenHit();
+//                }
+//            }
+//            if (bullet2 != null) {
+//                if (objeto.getBodyData().equals(body1.getUserData())) {
+//                    objeto.beenHit();
+//                }
+//            }
+//        }
 
 //        if (body1.getUserData().toString().equals("null")) {
 //            bodiesToDestroy.add(body1);
@@ -444,7 +445,8 @@ public class Level extends State implements ContactListener, Serializable {
                 body1.getUserData().toString().equals(o.getBodyData().userData))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor())
-                    o.beenHit();
+                    if (!(o.getBody().getUserData().equals("BulletBoy")))
+                        o.beenHit();
             }
         }
     }

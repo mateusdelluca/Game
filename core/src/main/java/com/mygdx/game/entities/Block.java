@@ -48,7 +48,7 @@ public class Block extends Objeto{
             sprite.setPosition(body.getPosition().x - 203f/2f, body.getPosition().y - 177f/2f);
             sprite.draw(s);
         }
-//        animations.getAnimator().setStateTime(stateTime);
+        animations.getAnimator().setStateTime(stateTime);
         this.visible0 = !(stateTime >= DURATION_ANIMATION_IN_SECONDS);
         if (destroyed)
             stateTime += Gdx.graphics.getDeltaTime();

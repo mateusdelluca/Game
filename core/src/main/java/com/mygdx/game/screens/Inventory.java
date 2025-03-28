@@ -148,9 +148,9 @@ public class Inventory extends State {
 //            for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn.values()){
 //                itemToBeDrawn.touchDown(screenX, screenY, pointer, button);
 //            }
-//            for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn.values()){
+//            for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn){
 //                for (Vector2 pos : positionsToFill)
-//                    itemToBeDrawn.setEquipped(itemToBeDrawn.getPosition().equals(pos) || rectangles2.contains(new Rectangle(mouseX, mouseY, 3, 9)));
+//                    equipped[itemToBeDrawn.getIndex()] = (itemToBeDrawn.getPosition().equals(pos) || rectangles2.contains(new Rectangle(mouseX, mouseY, 3, 9)));
 //            }
         }
         return false;
@@ -203,7 +203,7 @@ public class Inventory extends State {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(new Color(1,0,0,105/255f));
+        sr.setColor(new Color(0,1,0,105/255f));
         for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn) {
             int i = itemToBeDrawn.getIndex();
             if (ItemToBeDrawn.equipped[i])

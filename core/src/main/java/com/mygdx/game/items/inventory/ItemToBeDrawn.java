@@ -81,16 +81,16 @@ public class ItemToBeDrawn implements Item {
 //            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
 //            equip.draw(spriteBatch);
 //        }
-        if (position != null) {
+        if (!positionsToFill.isEmpty()) {
             item.setPosition(positionsToFill.get(indice.get(name)).x, positionsToFill.get(indice.get(name)).y);
             item.draw(spriteBatch);
         }
-        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
-            || rectangles2.isEmpty()) && index < 20){
-            Rectangle rectangle = Images.getItemDraw(name).getBoundingRectangle();
-        if (!rectangles2.contains(rectangle))
-            rectangles2.add(rectangle);
-    }
+//        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
+//            || rectangles2.isEmpty()) && index < 20){
+//            Rectangle rectangle = Images.getItemDraw(name).getBoundingRectangle();
+//        if (!rectangles2.contains(rectangle))
+//            rectangles2.add(rectangle);
+//    }
         update();
     }
 
@@ -107,15 +107,17 @@ public class ItemToBeDrawn implements Item {
     @Override
     public void update() {
 //        for (int index = 0; index < Math.min(rectangles2.size(), ITEMS_LIMIT); index++) {
-        if (!rectangles2.isEmpty() && rectangles2.size() > index)
-            if (rectangles2.get(index).contains(mouseX, mouseY)) {
+        if (!rectangles.isEmpty())
+            if (rectangles.get(index).contains(mouseX, mouseY)) {
                     contains[index] = true;
                 } else {
                     contains[index] = false;
                 }
 //        System.out.println(contains[index]);
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            click++;
             equip();
+            System.out.println(click);
         }
     }
 
@@ -145,12 +147,9 @@ public class ItemToBeDrawn implements Item {
     }
 
     public void equip(){
-        if (click < 2)
-            click++;
-        else
-            click = 0;
         if (contains[index] && click >= 2) {
             equipped[index] = !equipped[index];
+            System.out.println(equipped[index]);
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];
@@ -189,22 +188,22 @@ public class ItemToBeDrawn implements Item {
     }
 
 
-    public void render(ShapeRenderer sr){
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(new Color(1,0,0,105/255f));
-        for (Rectangle r : rectangles)
-            sr.rect(r.x, r.y, WIDTH2, HEIGHT2);
-        sr.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-    }
+//    public void render(ShapeRenderer sr){
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//        sr.begin(ShapeRenderer.ShapeType.Filled);
+//        sr.setColor(new Color(1,0,0,105/255f));
+//        for (Rectangle r : rectangles)
+//            sr.rect(r.x, r.y, WIDTH2, HEIGHT2);
+//        sr.end();
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
+//
+//    }
 
     public boolean contains() {
-    if (!rectangles2.isEmpty() && rectangles2.size() > index)
-        if (rectangles2.get(index).contains(mouseX, mouseY)) {
+    if (!rectangles.isEmpty() && rectangles.size() > index)
+        if (rectangles.get(index).contains(mouseX, mouseY)) {
             return true;
         } else {
             return false;

@@ -434,7 +434,7 @@ public class Boy extends Objeto {
                             new Vector2(!isFacingLeft ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x),
                             (getBody().getPosition().y + HEIGHT / 2f)),
-                            isFacingLeft, radians, true);
+                            isFacingLeft, radians, true, this.toString());
                         rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                     }
                 }
