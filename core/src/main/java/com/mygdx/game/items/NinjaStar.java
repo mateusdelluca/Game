@@ -26,8 +26,11 @@ public class NinjaStar extends Objeto implements Item, Serializable {
     public static int index;
     private Body body2;
 
-    public NinjaStar(){
-
+    public NinjaStar(Vector2 position, boolean isSensor){
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
+        body2 = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
+        body.setTransform(position, 0);
+        visible = true;
     }
 
     public NinjaStar(Vector2 position, float radians, boolean isSensor){
@@ -68,7 +71,7 @@ public class NinjaStar extends Objeto implements Item, Serializable {
                 width *= multiply;
                 height *= multiply;
                 multiply2 = true;
-                items.put("NinjaStar" + index++, this);
+//                items.put("NinjaStar" + index++, this);
                 body2.setTransform(body.getPosition().x, body.getPosition().y, body.getAngle());
                 body.setTransform(10000,10000, 0);
                 body.setGravityScale(0f);

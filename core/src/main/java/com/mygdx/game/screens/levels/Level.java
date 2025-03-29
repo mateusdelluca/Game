@@ -28,6 +28,8 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
@@ -41,8 +43,6 @@ public class Level extends State implements ContactListener, Serializable {
     protected transient Box2DDebugRenderer box2DDebugRenderer;
 
     public static HashMap<String, Item> items = new HashMap<>();
-    private HashMap<String, Objeto> items2 = new HashMap<>();
-    private transient BitmapFont font;
     public Boy boy;
     @Getter @Setter
     private Jack jack;
@@ -54,7 +54,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
-    private ArrayList<Block> blocks = new ArrayList<>();
+    private final ArrayList<Block> blocks = new ArrayList<>();
 
 
     public void init(){
@@ -75,7 +75,7 @@ public class Level extends State implements ContactListener, Serializable {
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
 
         Texture t = new Texture(Gdx.files.internal("Font2.png"));
-        font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        BitmapFont font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.2f);
 
@@ -124,6 +124,7 @@ public class Level extends State implements ContactListener, Serializable {
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
+        HashMap<String, Objeto> items2 = new HashMap<>();
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         items2.put(Rifle.class.getSimpleName(), jack.getRifle());
         items2.put(Rifle.class.getSimpleName(), girl.getRifle());
@@ -152,11 +153,12 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.get("Portal").updateItem();
+        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
 
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-
+        items2.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 6000 - 400), true));
         for (int i = 0; i < 5; i++)
             blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 
@@ -166,7 +168,7 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 30; i++)
             blocks.add(new Block(new Vector2(3330 + (i * 50), 4810)));
 
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < 38; i++)
             blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
 //        objetos.addAll(blocks);
