@@ -83,10 +83,11 @@ public class Bullet extends Objeto implements Item {
         timer += Gdx.graphics.getDeltaTime();
         if (timer < 0.01f) {
             body.getFixtureList().get(0).setSensor(true);
-            body.setUserData("null");
-        } else
+//            body.setUserData("null");
+        } else {
             body.getFixtureList().get(0).setSensor(false);
-            body.setUserData(this);
+//            body.setUserData(this);
+        }
     }
 
     public void render(SpriteBatch spriteBatch){
