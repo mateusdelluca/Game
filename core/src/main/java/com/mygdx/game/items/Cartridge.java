@@ -3,13 +3,12 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entities.BodyData;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 
-import static com.mygdx.game.screens.levels.Level_Manager.objetos;
 import static com.mygdx.game.sfx.Sounds.GUNSHOT;
 
 public class Cartridge implements Item{

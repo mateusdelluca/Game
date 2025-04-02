@@ -1,12 +1,8 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.images;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Json.Serializable;
-import com.badlogic.gdx.utils.JsonValue;
-import com.mygdx.game.images.Images;
-
 
 
 public class Background{
@@ -49,5 +45,5 @@ public class Background{
     public void dispose(){
         spriteBatch.dispose();
     }
-    
+
 }

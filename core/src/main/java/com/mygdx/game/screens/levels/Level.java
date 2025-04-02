@@ -2,16 +2,19 @@ package com.mygdx.game.screens.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.images.Background;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
@@ -28,8 +31,6 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
@@ -56,6 +57,9 @@ public class Level extends State implements ContactListener, Serializable {
 
     private final ArrayList<Block> blocks = new ArrayList<>();
 
+    private NinjaRope ninjaRope;
+
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     public void init(){
         Box2D.init();
@@ -108,6 +112,8 @@ public class Level extends State implements ContactListener, Serializable {
         powerBar = new PowerBar();
 
         boy = new Boy(new Vector2(10, 5700), viewport);
+
+        ninjaRope = new NinjaRope(boy.getBody());
 
         jack = new Jack(new Vector2(5000, 6000 - 680f));
 
@@ -165,10 +171,10 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 5; i++)
             blocks.add(new Block(new Vector2(850 + i * 50, 4050)));
 
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 28; i++)
             blocks.add(new Block(new Vector2(3330 + (i * 50), 4810)));
 
-        for (int i = 0; i < 38; i++)
+        for (int i = 0; i < 27; i++)
             blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
 //        objetos.addAll(blocks);
@@ -183,8 +189,8 @@ public class Level extends State implements ContactListener, Serializable {
 
     @Override
     public void render(){
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
-//        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 
 
 
@@ -202,7 +208,17 @@ public class Level extends State implements ContactListener, Serializable {
         camera.update();
         viewport.update(Level.WIDTH, Level.HEIGHT);
         renderObjects();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+//        camera.update();
+
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.begin();
+//        boy.renderShape(shapeRenderer);
+        ninjaRope.render(shapeRenderer, boy.getBodyBounds());
+        shapeRenderer.end();
+
         box2DDebugRenderer.render(world, camera.combined);
+
     }
 
     @Override
@@ -224,12 +240,6 @@ public class Level extends State implements ContactListener, Serializable {
 
 
     public void renderObjects(){
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.setAutoShapeType(true);
-//        shapeRenderer.begin();
-//        boy.renderShape(shapeRenderer);
-//        shapeRenderer.end();
-
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
         tile.render(camera);
@@ -255,7 +265,11 @@ public class Level extends State implements ContactListener, Serializable {
         for (Block block : blocks)
             block.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
+        ninjaRope.render(spriteBatch);
         spriteBatch.end();
+
+
+
     }
 
     public void update(){
@@ -276,6 +290,7 @@ public class Level extends State implements ContactListener, Serializable {
             objeto.update();
         }
         items.get("Rifle").update();
+//        ninjaRope.update(0f);
         for (Monster1 monster1 : monsters1.values()){
             monster1.update(boy);
         }
@@ -581,6 +596,7 @@ public class Level extends State implements ContactListener, Serializable {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boy.touchDown(screenX, screenY, pointer, button);
+        ninjaRope.justTouched(button);
         return false;
     }
 
@@ -602,6 +618,7 @@ public class Level extends State implements ContactListener, Serializable {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         boy.mouseMoved(screenX, screenY);
+        ninjaRope.mouseMoved(screenX, screenY);
         return false;
     }
 

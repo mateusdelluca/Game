@@ -428,6 +428,7 @@ public class Boy extends Objeto {
         viewport.unproject(worldCoordinates);
         worldX = worldCoordinates.x;
         worldY = worldCoordinates.y;
+
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
