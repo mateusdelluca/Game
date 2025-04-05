@@ -93,7 +93,7 @@ public class Level extends State implements ContactListener, Serializable {
 
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
-        box2DDebugRenderer = new Box2DDebugRenderer(true, false, false, false, false, true);
+        box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
     }
 
@@ -159,12 +159,12 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.get("Portal").updateItem();
-        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
+//        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
 
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-        items2.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 6000 - 400), true));
+//        items2.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 6000 - 400), true));
         for (int i = 0; i < 5; i++)
             blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 
