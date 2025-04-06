@@ -33,7 +33,7 @@ public class NinjaRope extends Objeto implements Item{
     private Vector2 endPoint;
     public static boolean isActive;
 
-    private float length = 100f;
+    private float length = 200f;
 
     private Vector2 mousePos = new Vector2();
 
@@ -54,18 +54,17 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     private void createAnchor(){
-        if (joint != null)
-            world.destroyJoint(joint);
-        if (anchorBody != null)
-            world.destroyBody(anchorBody);
-//    // Criação do Ponto de Ancoragem
+//      // Criação do Ponto de Ancoragem
 //        anchorBody2 = circle(new Vector2(400f,6000 - 400f), 10);
-        anchorBody = box(new Vector2(mousePos), new Vector2(20,20), BodyDef.BodyType.StaticBody, true);
-    // Criação do RopeJoint
-        DistanceJointDef distanceJointDef = new DistanceJointDef();
-        distanceJointDef.initialize(playerBody, anchorBody, playerBody.getPosition(), anchorBody.getPosition());
-        distanceJointDef.length = length;
-        joint = world.createJoint(distanceJointDef);
+        if (isActive) {
+
+            anchorBody = box(new Vector2(mousePos), new Vector2(20, 20), BodyDef.BodyType.StaticBody, true);
+            // Criação do RopeJoint
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            distanceJointDef.initialize(playerBody, anchorBody, playerBody.getPosition(), anchorBody.getPosition());
+            distanceJointDef.length = length;
+            joint = world.createJoint(distanceJointDef);
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -131,8 +130,7 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void touchDown(int button){
-        if (isActive)
-            justTouched(button);
+        justTouched(button);
     }
 
     public void angle(){
@@ -143,14 +141,19 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void justTouched(int button) {
-        if (button == (Input.Buttons.LEFT)) {
-            Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            viewport.unproject(mousePos1); // Desprojetar a posição do mouse
-            worldX = mousePos1.x;
-            worldY = mousePos1.y;
-            mousePos = new Vector2(mousePos1.x, mousePos1.y);
-            activateRope(mousePos);
+        if (button == (Input.Buttons.RIGHT)) {
+            deactivate();
+        } else{
+            if (button == (Input.Buttons.LEFT)) {
+                Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                viewport.unproject(mousePos1); // Desprojetar a posição do mouse
+                worldX = mousePos1.x;
+                worldY = mousePos1.y;
+                mousePos = new Vector2(mousePos1.x, mousePos1.y);
+                activateRope(mousePos);
+            }
         }
+
     }
 
     public void activateRope(Vector2 target) {
@@ -158,14 +161,24 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void activate(Vector2 target) {
-        angle();
-//        playerBody.setLinearVelocity((float) (target.x * Math.cos(radians)), (float) Math.abs(target.y * Math.sin(target.y)));
-        this.isActive = true;
-        createAnchor();
+        if (!isActive) {
+            angle();
+            isActive = true;
+            createAnchor();
+        }
     }
 
     public void deactivate() {
-        isActive = false;
+        if (isActive) {
+            if (joint.isActive() || joint != null) {
+                System.out.println(joint);
+                world.destroyJoint(joint);
+                System.out.println(joint);
+            }
+            if (anchorBody != null)
+                world.destroyBody(anchorBody);
+            isActive = false;
+        }
     }
 
     public void render(ShapeRenderer shapeRenderer, Rectangle rect){

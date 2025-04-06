@@ -19,6 +19,7 @@ public class Builder{
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
+        body.setActive(true);
         return body;
     }
 
@@ -34,6 +35,7 @@ public class Builder{
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
+        body.setActive(true);
         return body;
     }
 
@@ -50,6 +52,7 @@ public class Builder{
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
+        body.setActive(true);
         return body;
     }
 
@@ -65,6 +68,7 @@ public class Builder{
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
+        body.setActive(true);
         return body;
     }
 
@@ -80,6 +84,7 @@ public class Builder{
         Body body = world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
+        body.setActive(true);
         return body;
     }
 
