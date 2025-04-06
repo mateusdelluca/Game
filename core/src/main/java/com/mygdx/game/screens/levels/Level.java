@@ -130,6 +130,8 @@ public class Level extends State implements ContactListener, Serializable {
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
+
+
         HashMap<String, Objeto> items2 = new HashMap<>();
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         items2.put(Rifle.class.getSimpleName(), jack.getRifle());
@@ -158,12 +160,14 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 450)));
         items.get("Portal").updateItem();
 //        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
 
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+        items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
 //        items2.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 6000 - 400), true));
         for (int i = 0; i < 5; i++)
             blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
@@ -341,6 +345,7 @@ public class Level extends State implements ContactListener, Serializable {
                     !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
                     !body1.getUserData().toString().contains("BulletBoy") && !body2.getUserData().toString().contains("BulletBoy") &&
                     !body1.getUserData().toString().contains("NinjaStar") && !body2.getUserData().toString().contains("NinjaStar") &&
+                    !body1.getUserData().toString().contains("NinjaRope") && !body2.getUserData().toString().contains("NinjaRope") &&
                     !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
                     !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
                     !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
@@ -375,6 +380,8 @@ public class Level extends State implements ContactListener, Serializable {
 
         }
         for (Objeto o : objetos) {
+            if (o instanceof NinjaRope)
+                continue;
             if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBodyData().userData))
                 || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
@@ -456,6 +463,8 @@ public class Level extends State implements ContactListener, Serializable {
         Body body2 = contact.getFixtureB().getBody();
 
         for (Objeto o : objetos) {
+            if (o instanceof NinjaRope)
+                continue;
             if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBodyData().userData))
                 || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&

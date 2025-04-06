@@ -566,6 +566,9 @@ public class Boy extends Objeto {
         if (item instanceof NinjaStar){
             item.setVisible(false);
         }
+        if (item instanceof NinjaRope){
+            item.setVisible(false);
+        }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
 
         item.setVisible(false);

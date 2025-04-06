@@ -3,6 +3,7 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,21 +12,26 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.mygdx.game.Bodies.Builder;
+import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.Bodies.Builder.box;
 import static com.mygdx.game.Bodies.Builder.circle;
+import static com.mygdx.game.images.Images.ninjaRope_inventory;
 import static com.mygdx.game.images.Images.shoot;
 import static com.mygdx.game.screens.levels.Level_Manager.viewport;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
-public class NinjaRope {
+public class NinjaRope extends Objeto implements Item{
 
     private Body anchorBody, anchorBody2;
     private float worldX, worldY;
     private float degrees, radians;
     private Vector2 endPoint;
-    private boolean isActive;
+    public static boolean isActive;
 
     private float length = 100f;
 
@@ -35,8 +41,16 @@ public class NinjaRope {
 
     private Joint joint;
 
+
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
+    }
+
+    public NinjaRope(Vector2 position){
+        super(75f, 85f);
+        body = createBody(new Vector2(75/2f,85/2f), BodyDef.BodyType.StaticBody, true);
+        body.setTransform(position, 0);
+        body.setUserData(this.toString());
     }
 
     private void createAnchor(){
@@ -46,7 +60,7 @@ public class NinjaRope {
             world.destroyBody(anchorBody);
 //    // Criação do Ponto de Ancoragem
 //        anchorBody2 = circle(new Vector2(400f,6000 - 400f), 10);
-        anchorBody = box(new Vector2(mousePos), new Vector2(20,20), BodyDef.BodyType.StaticBody);
+        anchorBody = box(new Vector2(mousePos), new Vector2(20,20), BodyDef.BodyType.StaticBody, true);
     // Criação do RopeJoint
         DistanceJointDef distanceJointDef = new DistanceJointDef();
         distanceJointDef.initialize(playerBody, anchorBody, playerBody.getPosition(), anchorBody.getPosition());
@@ -55,12 +69,57 @@ public class NinjaRope {
     }
 
     public void render(SpriteBatch batch) {
-//        if (!isActive) {
-        // Renderiza a corda
-//            batch.draw(...); // Desenhe a corda entre startPoint e endPoint
+        if (body != null) {
+            Sprite sprite = new Sprite(ninjaRope_inventory);
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.setOriginCenter();
+            sprite.rotate(1f);
+            if (visible)
+                sprite.draw(batch);
+        }
+        if (isActive) {
+            batch.draw(shoot, worldX - 13, worldY - 9);
+        }
+    }
 
-        batch.draw(shoot, worldX - 13, worldY - 9);
-//        }
+    @Override
+    public void renderShape(ShapeRenderer s) {
+
+    }
+
+    @Override
+    public void updateItem() {
+
+    }
+
+    @Override
+    public void updateItem(World world) {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        visible = b;
     }
 
     public void mouseMoved(int screenX, int screenY){
@@ -72,7 +131,8 @@ public class NinjaRope {
     }
 
     public void touchDown(int button){
-        justTouched(button);
+        if (isActive)
+            justTouched(button);
     }
 
     public void angle(){
@@ -115,4 +175,9 @@ public class NinjaRope {
         shapeRenderer.line(playerBody.getWorldCenter().x + 50, playerBody.getWorldCenter().y, anchorPos.x, anchorPos.y);
     }
 
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

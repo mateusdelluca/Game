@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.system.BodyData;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.images.Images;
@@ -150,6 +151,7 @@ public class ItemToBeDrawn implements Item {
                 Boy.shooting = equipped[index];
                 Boy.degrees = 0f;
                 Boy.saber_taken = false;
+                NinjaRope.isActive = false;
             } else {
                 if (name.equals("NinjaStar")) {
                     Boy.degrees = 0f;
@@ -157,6 +159,7 @@ public class ItemToBeDrawn implements Item {
                     Rifle.showingNumbBullets = false;
                     Boy.saber_taken = false;
                     Boy.shooting = false;
+                    NinjaRope.isActive = false;
                 } else{
                     if (name.equals("JetPack"))
                         Boy.use_jetPack = equipped[index];
@@ -165,12 +168,18 @@ public class ItemToBeDrawn implements Item {
                            Boy.saber_taken = equipped[index];
                            Boy.throwing = false;
                            Rifle.showingNumbBullets = false;
+                           NinjaRope.isActive = false;
                         } else{
-//                            Boy.throwing = false;
-//                            Rifle.showingNumbBullets = false;
-//                            Boy.shooting = false;
-//                            Boy.saber_taken = false;
-//                            Boy.nameOfAnimation = "BOY_IDLE";
+                            if(name.equals("NinjaRope")){
+                                NinjaRope.isActive = true;
+                            } else{
+                                NinjaRope.isActive = false;
+//                              Boy.throwing = false;
+//                              Rifle.showingNumbBullets = false;
+    //                            Boy.shooting = false;
+//                              Boy.saber_taken = false;
+//                              Boy.nameOfAnimation = "BOY_IDLE";
+                            }
                         }
                     }
 
