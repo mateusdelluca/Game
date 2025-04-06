@@ -161,6 +161,7 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void activate(Vector2 target) {
+        deactivate();
         if (!isActive) {
             angle();
             isActive = true;
@@ -170,12 +171,12 @@ public class NinjaRope extends Objeto implements Item{
 
     public void deactivate() {
         if (isActive) {
-            if (joint.isActive() || joint != null) {
+            if (joint.isActive() && joint != null) {
                 System.out.println(joint);
                 world.destroyJoint(joint);
                 System.out.println(joint);
             }
-            if (anchorBody != null)
+            if (anchorBody != null && anchorBody.isActive())
                 world.destroyBody(anchorBody);
             isActive = false;
         }
