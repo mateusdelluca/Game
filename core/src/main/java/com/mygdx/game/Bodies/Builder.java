@@ -56,6 +56,24 @@ public class Builder{
         return body;
     }
 
+    public static Body box(Vector2 position, Vector2 dimensions, BodyDef.BodyType type, boolean sensor, String userData){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.active = true;
+        bodyDef.type = type;
+        bodyDef.position.set(new Vector2(0,0));
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = sensor;
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(dimensions.x, dimensions.y, new Vector2(dimensions.x/2f, dimensions.y/2f), 0f);
+        fixtureDef.shape = box;
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setTransform(position, 0);
+        body.setUserData(userData);
+        body.setActive(true);
+        return body;
+    }
+
     public static Body circle(Vector2 position, int radius){
         BodyDef bodyDef = new BodyDef();
         bodyDef.active = true;

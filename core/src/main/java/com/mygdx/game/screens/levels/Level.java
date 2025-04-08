@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -293,6 +296,7 @@ public class Level extends State implements ContactListener, Serializable {
                 continue;
             objeto.update();
         }
+        ninjaRope.update();
         items.get("Rifle").update();
 //        ninjaRope.update(0f);
         for (Monster1 monster1 : monsters1.values()){
@@ -317,10 +321,12 @@ public class Level extends State implements ContactListener, Serializable {
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
 
-
-
         if (body1 == null || body2 == null)
             return;
+
+        ninjaRope.beginContact(contact);
+
+
 
         for (Item item : items.values()) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
@@ -462,6 +468,8 @@ public class Level extends State implements ContactListener, Serializable {
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
 
+        ninjaRope.beginContact(contact);
+
         for (Objeto o : objetos) {
             if (o instanceof NinjaRope)
                 continue;
@@ -496,6 +504,9 @@ public class Level extends State implements ContactListener, Serializable {
 
         if (body1 == null || body2 == null)
             return;
+
+        ninjaRope.beginContact(contact);
+
 
         for (Objeto o : objetos) {
 //            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
@@ -567,8 +578,21 @@ public class Level extends State implements ContactListener, Serializable {
         }
     }
 
+    public static boolean contains(MapObjects mapObjects, Rectangle rectangle){
+        for (MapObject mapObject : mapObjects){
+            if ((((RectangleMapObject) mapObject).getRectangle().contains(rectangle))){
+               return true;
+            }
+        } return false;
+    }
 
-
+    public static boolean contains(MapObjects mapObjects, Vector2 point){
+        for (MapObject mapObject : mapObjects){
+            if ((((RectangleMapObject) mapObject).getRectangle().contains(point))){
+                return true;
+            }
+        } return false;
+    }
 
     @Override
     public void create() {

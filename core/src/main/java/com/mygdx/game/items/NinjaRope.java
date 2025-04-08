@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Joint;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.mygdx.game.Bodies.Builder;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.images.Images;
+import com.mygdx.game.screens.levels.Level;
 import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.Bodies.Builder.box;
@@ -31,7 +30,7 @@ public class NinjaRope extends Objeto implements Item{
     private float worldX, worldY;
     private float degrees, radians;
     private Vector2 endPoint;
-    public static boolean isActive;
+    public static boolean isActive, jointBodies;
 
     private float length = 200f;
 
@@ -41,6 +40,8 @@ public class NinjaRope extends Objeto implements Item{
 
     private Joint joint;
 
+    Sprite[] rope = new Sprite[200];
+    private boolean created;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -53,33 +54,9 @@ public class NinjaRope extends Objeto implements Item{
         body.setUserData(this.toString());
     }
 
-    private void createAnchor(){
-//      // Criação do Ponto de Ancoragem
-//        anchorBody2 = circle(new Vector2(400f,6000 - 400f), 10);
-        if (isActive) {
 
-            anchorBody = box(new Vector2(mousePos), new Vector2(20, 20), BodyDef.BodyType.StaticBody, true);
-            // Criação do RopeJoint
-            DistanceJointDef distanceJointDef = new DistanceJointDef();
-            distanceJointDef.initialize(playerBody, anchorBody, playerBody.getPosition(), anchorBody.getPosition());
-            distanceJointDef.length = length;
-            joint = world.createJoint(distanceJointDef);
-        }
-    }
 
-    public void render(SpriteBatch batch) {
-        if (body != null) {
-            Sprite sprite = new Sprite(ninjaRope_inventory);
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
-            sprite.setOriginCenter();
-            sprite.rotate(1f);
-            if (visible)
-                sprite.draw(batch);
-        }
-        if (isActive) {
-            batch.draw(shoot, worldX - 13, worldY - 9);
-        }
-    }
+
 
     @Override
     public void renderShape(ShapeRenderer s) {
@@ -150,10 +127,30 @@ public class NinjaRope extends Objeto implements Item{
                 worldX = mousePos1.x;
                 worldY = mousePos1.y;
                 mousePos = new Vector2(mousePos1.x, mousePos1.y);
+                anchorBody = box(new Vector2(mousePos), new Vector2(5, 5), BodyDef.BodyType.StaticBody, true, "Rope");
                 activateRope(mousePos);
             }
         }
 
+    }
+    private void createAnchor(){
+        if (anchorBody == null || playerBody == null)
+            return;
+        if (isActive) {
+            if (anchorBody.isActive()){
+                if (Level.contains(Images.staticObjects, anchorBody.getWorldCenter())){
+                    jointBodies = true;
+            }
+        }
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            distanceJointDef.initialize(playerBody, anchorBody, playerBody.getWorldCenter(), anchorBody.getWorldCenter());
+            distanceJointDef.length = length;
+            if (jointBodies) {
+                joint = world.createJoint(distanceJointDef);
+                created = true;
+                jointBodies = false;
+            }
+        }
     }
 
     public void activateRope(Vector2 target) {
@@ -161,37 +158,78 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void activate(Vector2 target) {
-        deactivate();
+        if (created)
+            deactivate();
         if (!isActive) {
-            angle();
             isActive = true;
             createAnchor();
         }
+        if (!created)
+            isActive = false;
     }
 
     public void deactivate() {
-        if (isActive) {
-            if (joint.isActive() && joint != null) {
-                System.out.println(joint);
-                world.destroyJoint(joint);
-                System.out.println(joint);
-            }
-            if (anchorBody != null && anchorBody.isActive())
-                world.destroyBody(anchorBody);
-            isActive = false;
-        }
+       if (isActive) {
+           if (joint != null && joint.isActive() && created) {
+               System.out.println(joint);
+               world.destroyJoint(joint);
+               System.out.println(joint);
+           }
+//           if (anchorBody != null && anchorBody.isActive() && created)
+//               world.destroyBody(anchorBody);
+           isActive = false;
+           created = false;
+       }
     }
 
     public void render(ShapeRenderer shapeRenderer, Rectangle rect){
         shapeRenderer.setColor(Color.RED);
         Vector2 playerPos = playerBody.getPosition();
         Vector2 anchorPos = mousePos;
-        shapeRenderer.line(playerBody.getWorldCenter().x + 50, playerBody.getWorldCenter().y, anchorPos.x, anchorPos.y);
+//        shapeRenderer.line(playerBody.getWorldCenter().x + 50, playerBody.getWorldCenter().y, anchorPos.x, anchorPos.y);
     }
 
+    public void render(SpriteBatch batch) {
+        if (body != null) {
+            Sprite sprite = new Sprite(ninjaRope_inventory);
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            sprite.setOriginCenter();
+            sprite.rotate(1f);
 
+            if (visible) {
+                sprite.draw(batch);
+
+
+            }
+
+        }
+        if (isActive) {
+            batch.draw(shoot, worldX - 13, worldY - 9);
+        }
+        if (playerBody != null){
+            for (int i = (int) playerBody.getWorldCenter().x; i < mousePos.x && i < 200; i++) {
+                rope[i] = (Images.rope);
+                rope[i].setPosition(playerBody.getWorldCenter().x + (80f * i) - 20f,
+                    playerBody.getWorldCenter().y + (20f * 1));
+                rope[i].setSize(80f, 20f);
+    //            rope[i].setRotation(45f);
+                rope[i].draw(batch);
+            }
+        }
+    }
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public void beginContact(Contact contact) {
+
+//        Body body1 = contact.getFixtureA().getBody();
+//        Body body2 = contact.getFixtureB().getBody();
+//
+//        if (body1 == null || body2 == null)
+//            return;
+
+
     }
 }
