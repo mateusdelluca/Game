@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.mygdx.game.Bodies.Builder;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.levels.Level;
@@ -42,6 +41,12 @@ public class NinjaRope extends Objeto implements Item{
 
     Sprite[] rope = new Sprite[200];
     private boolean created;
+    private Body bodyA, bodyB;
+    private boolean bodiesJoint;
+    private boolean touched;
+    private boolean init;
+    private Joint jointAB;
+    private boolean jointABactive;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -52,7 +57,10 @@ public class NinjaRope extends Objeto implements Item{
         body = createBody(new Vector2(75/2f,85/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
+
+
     }
+
 
 
 
@@ -75,7 +83,24 @@ public class NinjaRope extends Objeto implements Item{
 
     @Override
     public void update() {
+        if (!init) {
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            bodyA = box(new Vector2(playerBody.getWorldCenter().x + 300, playerBody.getWorldCenter().y + 50), new Vector2(1, 10), BodyDef.BodyType.DynamicBody, false, "bodyA");
+            bodyB = box(new Vector2(bodyA.getWorldCenter().x, bodyA.getWorldCenter().y + 100), new Vector2(1, 10), BodyDef.BodyType.StaticBody);
+            distanceJointDef.initialize(bodyA, bodyB, bodyA.getWorldCenter(), bodyB.getWorldCenter());
+            distanceJointDef.length = 100f;
+            world.createJoint(distanceJointDef);
+            init = true;
+        }
 
+
+        if (bodiesJoint) {
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            distanceJointDef.initialize(bodyA, playerBody, bodyA.getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
+            distanceJointDef.length = 1f;
+            jointAB = world.createJoint(distanceJointDef);
+            bodiesJoint = false;
+        }
     }
 
     @Override
@@ -142,13 +167,14 @@ public class NinjaRope extends Objeto implements Item{
                     jointBodies = true;
             }
         }
-            DistanceJointDef distanceJointDef = new DistanceJointDef();
-            distanceJointDef.initialize(playerBody, anchorBody, playerBody.getWorldCenter(), anchorBody.getWorldCenter());
-            distanceJointDef.length = length;
-            if (jointBodies) {
-                joint = world.createJoint(distanceJointDef);
-                created = true;
-                jointBodies = false;
+
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.initialize(playerBody, anchorBody, playerBody.getWorldCenter(), anchorBody.getWorldCenter());
+        distanceJointDef.length = length;
+        if (jointBodies) {
+            joint = world.createJoint(distanceJointDef);
+            created = true;
+            jointBodies = false;
             }
         }
     }
@@ -173,6 +199,10 @@ public class NinjaRope extends Objeto implements Item{
            if (joint != null && joint.isActive() && created) {
                System.out.println(joint);
                world.destroyJoint(joint);
+               if (jointAB != null && jointAB.isActive() && !jointABactive) {
+                   world.destroyJoint(jointAB);
+                   jointABactive = true;
+               }
                System.out.println(joint);
            }
 //           if (anchorBody != null && anchorBody.isActive() && created)
@@ -198,8 +228,6 @@ public class NinjaRope extends Objeto implements Item{
 
             if (visible) {
                 sprite.draw(batch);
-
-
             }
 
         }
@@ -224,12 +252,20 @@ public class NinjaRope extends Objeto implements Item{
 
     public void beginContact(Contact contact) {
 
-//        Body body1 = contact.getFixtureA().getBody();
-//        Body body2 = contact.getFixtureB().getBody();
-//
-//        if (body1 == null || body2 == null)
-//            return;
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
 
+        if (body1 == null || body2 == null)
+            return;
+
+
+        if (bodyA != null && playerBody != null && !bodiesJoint && !touched){
+            if ((body1.getUserData().equals(bodyA.getUserData()) && body2.getUserData().equals("Boy"))
+                || (body2.getUserData().equals(bodyA.getUserData()) && body1.getUserData().equals("Boy"))){
+                touched = true;
+                bodiesJoint = true;
+            }
+        }
 
     }
 }

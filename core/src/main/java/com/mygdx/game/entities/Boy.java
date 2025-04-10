@@ -71,6 +71,7 @@ public class Boy extends Objeto {
     private boolean thrown;
     private int indexNinja;
     private float throwTimer;
+    public static boolean ropeShoot;
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
@@ -95,7 +96,7 @@ public class Boy extends Objeto {
             flickering.setPosition(body.getPosition().x, body.getPosition().y);
             flickering.draw(s);
         } else {
-            if ((!shooting && !throwing) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
+            if ((!shooting && !throwing && !ropeShoot) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
                 Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
                 anim.setPosition(body.getPosition().x, body.getPosition().y);
                 anim.draw(s);
@@ -131,7 +132,6 @@ public class Boy extends Objeto {
                 }
             }
             if (throwing && !shooting && !beenHit && !saber_taken) {
-
                 if (Math.abs(degrees) > 100f) {
                     throwNinjaStar1.setFlip(true, false);
                     throwNinjaStar2.setFlip(true, false);
@@ -153,6 +153,29 @@ public class Boy extends Objeto {
             if (thrown) {
                 throwNinjaStar2.setPosition(body.getPosition().x, body.getPosition().y);
                 throwNinjaStar2.draw(s);
+            }
+            if (ropeShoot){
+                if (isMoving()) //when he is moving and didn't active the jetpack
+                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
+                legs.setPosition(body.getPosition().x, body.getPosition().y);
+                ninjaRope_shoot.setOriginCenter();
+                ninjaRope_shoot.setRotation(degrees);
+                ninjaRope_shoot.setPosition(bodyPosition.x, bodyPosition.y);
+                if (Math.abs(degrees) > 100f) {
+                    ninjaRope_shoot.setRotation(-Math.abs(180f - degrees));
+                    ninjaRope_shoot.setFlip(true, false);
+                    legs.setFlip(true, false);
+                    jetPackSprite.setFlip(true, false);
+                    setFacingLeft(true);
+                } if (Math.abs(degrees) < 100f) {
+                    ninjaRope_shoot.setFlip(false, false);
+                    legs.setFlip(false, false);
+                    jetPackSprite.setFlip(false, false);
+                    setFacingLeft(false);
+                }
+                legs.draw(s);
+                ninjaRope_shoot.draw(s);
+//                s.draw(shoot, worldX - 13, worldY - 9);
             }
         }
     }
@@ -224,7 +247,7 @@ public class Boy extends Objeto {
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
             radians = (float) Math.atan2(dy, dx);
         }
-        if (throwing){
+        if (throwing || ropeShoot){
             float dx = worldX - Math.abs(bodyPosition.x + 64 + (!isFacingLeft ? 50 : -50));
             float dy = worldY - Math.abs(bodyPosition.y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
