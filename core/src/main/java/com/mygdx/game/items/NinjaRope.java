@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.levels.Level;
@@ -42,11 +43,12 @@ public class NinjaRope extends Objeto implements Item{
     Sprite[] rope = new Sprite[200];
     private boolean created;
     private Body bodyA, bodyB;
-    private boolean bodiesJoint;
+    private boolean jointPlayerToBodyA;
     private boolean touched;
     private boolean init;
     private Joint jointAB;
     private boolean jointABactive;
+    private Array<Joint> joints = new Array<>();
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -94,13 +96,32 @@ public class NinjaRope extends Objeto implements Item{
         }
 
 
-        if (bodiesJoint) {
+        if (jointPlayerToBodyA) {
             DistanceJointDef distanceJointDef = new DistanceJointDef();
             distanceJointDef.initialize(bodyA, playerBody, bodyA.getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
             distanceJointDef.length = 1f;
             jointAB = world.createJoint(distanceJointDef);
-            bodiesJoint = false;
+            jointAB.setUserData("joint");
+            joints.add(jointAB);
+            jointPlayerToBodyA = false;
         }
+
+        for (Joint joint1 : joints){
+            destroyJoint(joint1);
+        }
+    }
+
+    public void destroyJoint(Joint joint){
+        if (joint != null && joint.isActive() && spaceOrClicked() && joint.getUserData() != null && !joint.getUserData().toString().equals("null")){
+            joint.setUserData("null");
+            joints.removeValue(joint, false);
+            world.destroyJoint(joint);
+        }
+    }
+
+    private boolean spaceOrClicked(){
+        return Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+            || Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
     }
 
     @Override
@@ -173,6 +194,8 @@ public class NinjaRope extends Objeto implements Item{
         distanceJointDef.length = length;
         if (jointBodies) {
             joint = world.createJoint(distanceJointDef);
+            joint.setUserData("joint");
+            joints.add(joint);
             created = true;
             jointBodies = false;
             }
@@ -259,11 +282,11 @@ public class NinjaRope extends Objeto implements Item{
             return;
 
 
-        if (bodyA != null && playerBody != null && !bodiesJoint && !touched){
+        if (bodyA != null && playerBody != null && !jointPlayerToBodyA && !touched){
             if ((body1.getUserData().equals(bodyA.getUserData()) && body2.getUserData().equals("Boy"))
                 || (body2.getUserData().equals(bodyA.getUserData()) && body1.getUserData().equals("Boy"))){
                 touched = true;
-                bodiesJoint = true;
+                jointPlayerToBodyA = true;
             }
         }
 
