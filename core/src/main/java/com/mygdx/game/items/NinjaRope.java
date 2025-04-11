@@ -114,8 +114,8 @@ public class NinjaRope extends Objeto implements Item{
     public void destroyJoint(Joint joint){
         if (joint != null && joint.isActive() && spaceOrClicked() && joint.getUserData() != null && !joint.getUserData().toString().equals("null")){
             joint.setUserData("null");
-            joints.removeValue(joint, false);
-            world.destroyJoint(joint);
+            joints.removeValue(joint, true);
+//            world.destroyJoint(joint);
         }
     }
 

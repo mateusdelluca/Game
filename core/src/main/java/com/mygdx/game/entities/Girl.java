@@ -60,7 +60,7 @@ public class Girl extends Objeto{
                 }
             }
             if (isRunning) {
-                Sounds.GIRL_HURT.play();
+//                Sounds.GIRL_HURT.play();
                 isRunning = false;
             }
             if (rifle.isReloading()) {
@@ -103,7 +103,7 @@ public class Girl extends Objeto{
                     HP--;
                 }
                 if (timer <= 0.05f) {
-                    Sounds.GIRL_HURT.play();
+//                    Sounds.GIRL_HURT.play();
                 }
                 sprite.setAlpha(alpha);
             }
