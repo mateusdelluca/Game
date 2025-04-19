@@ -52,6 +52,7 @@ public class NinjaRope extends Objeto implements Item{
     private Joint[] jointAB = new Joint[LIMIT];
     private boolean[] jointABactive = new boolean[LIMIT];
     private Array<Joint> joints = new Array<>();
+    private boolean created2;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -107,23 +108,24 @@ public class NinjaRope extends Objeto implements Item{
         }
 
             destroyJoint(joints);
-
     }
 
     public void destroyJoint(Array<Joint> joints1){
         for (Joint joint : joints1){
-            if (joint != null && joint.isActive() && spacePressedOrMouseButtonClicked() && joint.getUserData() != null && !joint.getUserData().toString().equals("inactive")) {
-                joint.setUserData("inactive");
-                joints.removeValue(joint, true);
-                world.getJoints(joints1);
-                if (joint.getCollideConnected())
+            if (joint != null && joint.isActive() && spacePressedOrMouseButtonClicked() && joint.getUserData() != null) {
+//                joint.setUserData("inactive");
+
+//                world.getJoints(joints1);
+                if (joint.getCollideConnected()) {
+                    joints.removeValue(joint, true);
                     world.destroyJoint(joint);
+                }
             }
         }
     }
 
     private boolean spacePressedOrMouseButtonClicked(){
-        return Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+        return Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)
             || Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
     }
 
@@ -171,6 +173,7 @@ public class NinjaRope extends Objeto implements Item{
             deactivate();
         } else{
             if (button == (Input.Buttons.LEFT)) {
+                deactivate();
                 Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 viewport.unproject(mousePos1); // Desprojetar a posição do mouse
                 worldX = mousePos1.x;
@@ -185,30 +188,21 @@ public class NinjaRope extends Objeto implements Item{
     private void createAnchor() {
         if (anchorBody == null || playerBody == null)
             return;
-        int index2 = 0;
-        for (int index = 0; index < LIMIT; index++) {
-            if (isActive[index]) {
-                if (anchorBody.isActive()) {
-                    if (Level.contains(Images.staticObjects, anchorBody.getWorldCenter())) {
-                        jointBodies[index] = true;
-                        index2 = index;
-                        break;
-                    }
-                }
+
+        if (anchorBody.isActive()) {
+            if (Level.contains(Images.staticObjects, anchorBody.getWorldCenter())) {
+               if (joint != null && created2) {
+                   world.destroyJoint(joint);
+                   created2 = false;
+               }
+               DistanceJointDef distanceJointDef = new DistanceJointDef();
+               distanceJointDef.initialize(playerBody, anchorBody, playerBody.getWorldCenter(), anchorBody.getWorldCenter());
+               distanceJointDef.length = length;
+               joint = world.createJoint(distanceJointDef);
+               joint.setUserData("joint");
+               created2 = true;
             }
-            if (jointBodies[index2]) {
-                if (!joints.isEmpty())
-                    world.destroyJoint(joints.get(index2));
-                DistanceJointDef distanceJointDef = new DistanceJointDef();
-                distanceJointDef.initialize(playerBody, anchorBody, playerBody.getWorldCenter(), anchorBody.getWorldCenter());
-                distanceJointDef.length = length;
-                joint = world.createJoint(distanceJointDef);
-                joint.setUserData("joint");
-                joints.add(joint);
-                created[index] = true;
-                jointBodies[index] = false;
-            }
-         }
+        }
     }
 
     public void activateRope(Vector2 target) {
@@ -216,41 +210,23 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void activate(Vector2 target) {
-        for (int index = 0; index < LIMIT; index++) {
-            if (created[index])
-                deactivate();
-            if (!isActive[index]) {
-                isActive[index] = true;
-                createAnchor();
-            }
-            if (!created[index])
-                isActive[index] = false;
-        }
+        deactivate();
+        createAnchor();
     }
 
     public void deactivate() {
        for (int index = 0; index < LIMIT; index++) {
            if (isActive[index]) {
-            if (joint != null && joint.isActive() && created[index]) {
-               System.out.println(joint);
-               world.destroyJoint(joint);
-
                if (jointAB[index] != null && jointAB[index].isActive() && !jointABactive[index]) {
                    world.destroyJoint(jointAB[index]);
                    jointABactive[index] = true;
                }
            }
-           System.out.println(joint);
            created[index] = false;
            isActive[index] = false;
         }
-       }
-//           if (anchorBody != null && anchorBody.isActive() && created)
-//               world.destroyBody(anchorBody);
-
-
-
     }
+
 
     public void render(ShapeRenderer shapeRenderer, Rectangle rect){
         shapeRenderer.setColor(Color.RED);
