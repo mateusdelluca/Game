@@ -151,7 +151,7 @@ public class ItemToBeDrawn implements Item {
                 Boy.shooting = equipped[index];
                 Boy.degrees = 0f;
                 Boy.saber_taken = false;
-                NinjaRope.isActive = false;
+//                NinjaRope.isActive = false;
                 Boy.ropeShoot = false;
             } else {
                 if (name.equals("NinjaStar")) {
@@ -160,7 +160,7 @@ public class ItemToBeDrawn implements Item {
                     Rifle.showingNumbBullets = false;
                     Boy.saber_taken = false;
                     Boy.shooting = false;
-                    NinjaRope.isActive = false;
+//                    NinjaRope.isActive = false;
                     Boy.ropeShoot = false;
                 } else{
                     if (name.equals("JetPack"))
@@ -170,14 +170,14 @@ public class ItemToBeDrawn implements Item {
                            Boy.saber_taken = equipped[index];
                            Boy.throwing = false;
                            Rifle.showingNumbBullets = false;
-                           NinjaRope.isActive = false;
+//                           NinjaRope.isActive = false;
                             Boy.ropeShoot = false;
                         } else{
                             if(name.equals("NinjaRope")){
-                                NinjaRope.isActive = true;
+//                                NinjaRope.isActive = true;
                                 Boy.ropeShoot = true;
                             } else{
-                                NinjaRope.isActive = false;
+//                                NinjaRope.isActive = false;
                                 Boy.ropeShoot = false;
 //                              Boy.throwing = false;
 //                              Rifle.showingNumbBullets = false;
