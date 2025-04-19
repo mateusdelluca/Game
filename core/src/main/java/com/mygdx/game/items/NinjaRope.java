@@ -169,21 +169,22 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void justTouched(int button) {
-        if (button == (Input.Buttons.RIGHT)) {
-            deactivate();
-        } else{
-            if (button == (Input.Buttons.LEFT)) {
+        if (isActive2) {
+            if (button == (Input.Buttons.RIGHT)) {
                 deactivate();
-                Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                viewport.unproject(mousePos1); // Desprojetar a posição do mouse
-                worldX = mousePos1.x;
-                worldY = mousePos1.y;
-                mousePos = new Vector2(mousePos1.x, mousePos1.y);
-                anchorBody = box(new Vector2(mousePos), new Vector2(5, 5), BodyDef.BodyType.StaticBody, true, "Rope");
-                activateRope(mousePos);
+            } else {
+                if (button == (Input.Buttons.LEFT)) {
+                    deactivate();
+                    Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    viewport.unproject(mousePos1); // Desprojetar a posição do mouse
+                    worldX = mousePos1.x;
+                    worldY = mousePos1.y;
+                    mousePos = new Vector2(mousePos1.x, mousePos1.y);
+                    anchorBody = box(new Vector2(mousePos), new Vector2(5, 5), BodyDef.BodyType.StaticBody, true, "Rope");
+                    activateRope(mousePos);
+                }
             }
         }
-
     }
     private void createAnchor() {
         if (anchorBody == null || playerBody == null)
