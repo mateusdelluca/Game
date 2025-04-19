@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.levels.Level;
@@ -47,12 +46,13 @@ public class NinjaRope extends Objeto implements Item{
 
     private Body[] bodyA = new Body[LIMIT], bodyB = new Body[LIMIT];
     private boolean[] jointPlayerToBodyA = new boolean[LIMIT];
-    private boolean touched;
+    private boolean[] touched = new boolean[LIMIT];
     private boolean init;
-    private Joint[] jointAB = new Joint[LIMIT];
-    private boolean[] jointABactive = new boolean[LIMIT];
-    private Array<Joint> joints = new Array<>();
+    private Joint[] jointsBodiesAB = new Joint[LIMIT];
+    private Joint[] jointsAB = new Joint[LIMIT];
+    private Joint[] joints = new Joint[LIMIT];
     private boolean created2;
+    private boolean mouseButtonLeft, mouseButtonRight;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -87,46 +87,47 @@ public class NinjaRope extends Objeto implements Item{
                 DistanceJointDef distanceJointDef = new DistanceJointDef();
                 bodyA[index] = box(new Vector2(playerBody.getWorldCenter().x + 300 + (50 * index), playerBody.getWorldCenter().y + 50), new Vector2(1, 10), BodyDef.BodyType.DynamicBody, false, "bodyA");
                 bodyB[index] = box(new Vector2(bodyA[index].getWorldCenter().x, bodyA[index].getWorldCenter().y + 100), new Vector2(1, 10), BodyDef.BodyType.StaticBody);
+                bodyA[index].setUserData("joint");
+                bodyB[index].setUserData("joint");
                 distanceJointDef.initialize(bodyA[index], bodyB[index], bodyA[index].getWorldCenter(), bodyB[index].getWorldCenter());
                 distanceJointDef.length = 100f;
-                world.createJoint(distanceJointDef);
+                jointsBodiesAB[index] = world.createJoint(distanceJointDef);
+                jointsBodiesAB[index].setUserData("joint");
                 init = true;
             }
         }
-
 
         for (int index = 0; index < LIMIT; index++) {
             if (jointPlayerToBodyA[index]) {
                 DistanceJointDef distanceJointDef = new DistanceJointDef();
                 distanceJointDef.initialize(bodyA[index], playerBody, bodyA[index].getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
                 distanceJointDef.length = 1f;
-                jointAB[index] = world.createJoint(distanceJointDef);
-                jointAB[index].setUserData("joint");
-                joints.add(jointAB[index]);
+                jointsAB[index] = world.createJoint(distanceJointDef);
+                jointsAB[index].setUserData("joint");
+                joints[index] = jointsAB[index];
                 jointPlayerToBodyA[index] = false;
             }
         }
-
-            destroyJoint(joints);
+//        destroyJoint(jointsAB);
     }
 
-    public void destroyJoint(Array<Joint> joints1){
-        for (Joint joint : joints1){
-            if (joint != null && joint.isActive() && spacePressedOrMouseButtonClicked() && joint.getUserData() != null) {
-//                joint.setUserData("inactive");
-
-//                world.getJoints(joints1);
-                if (joint.getCollideConnected()) {
-                    joints.removeValue(joint, true);
-                    world.destroyJoint(joint);
+    public void destroyJoint(Joint... joints1){
+        if (spacePressedOrMouseButtonClicked()) {
+            for (int index = 0; index < joints1.length; index++) {
+                if (joints1[index] != null) {
+                    if (jointPlayerToBodyA[index]) {
+                        world.destroyJoint(joints1[index]);
+                        jointsAB[index] = null;
+                        jointPlayerToBodyA[index] = false;
+                        break;
+                    }
                 }
             }
         }
     }
 
     private boolean spacePressedOrMouseButtonClicked(){
-        return Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-            || Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
+        return mouseButtonRight || mouseButtonLeft;
     }
 
     @Override
@@ -170,10 +171,13 @@ public class NinjaRope extends Objeto implements Item{
 
     public void justTouched(int button) {
         if (isActive2) {
+            System.out.println(Input.Buttons.RIGHT);
             if (button == (Input.Buttons.RIGHT)) {
                 deactivate();
+                mouseButtonRight = !mouseButtonRight;
             } else {
                 if (button == (Input.Buttons.LEFT)) {
+                    mouseButtonLeft = !mouseButtonLeft;
                     deactivate();
                     Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                     viewport.unproject(mousePos1); // Desprojetar a posição do mouse
@@ -217,15 +221,11 @@ public class NinjaRope extends Objeto implements Item{
 
     public void deactivate() {
        for (int index = 0; index < LIMIT; index++) {
-           if (isActive[index]) {
-               if (jointAB[index] != null && jointAB[index].isActive() && !jointABactive[index]) {
-                   world.destroyJoint(jointAB[index]);
-                   jointABactive[index] = true;
-               }
+           if (jointsAB[index] != null) {
+               world.destroyJoint(jointsAB[index]);
+               jointsAB[index] = null;
            }
-           created[index] = false;
-           isActive[index] = false;
-        }
+       }
     }
 
 
@@ -278,10 +278,10 @@ public class NinjaRope extends Objeto implements Item{
             return;
 
         for (int index = 0; index < LIMIT; index++) {
-            if (bodyA[index] != null && playerBody != null && !jointPlayerToBodyA[index] && !touched) {
+            if (bodyA[index] != null && playerBody != null && !jointPlayerToBodyA[index] && !touched[index]) {
                 if ((body1.getUserData().equals(bodyA[index].getUserData()) && body2.getUserData().equals("Boy"))
                     || (body2.getUserData().equals(bodyA[index].getUserData()) && body1.getUserData().equals("Boy"))) {
-                    touched = true;
+                    touched[index] = true;
                     jointPlayerToBodyA[index] = true;
                 }
             }
