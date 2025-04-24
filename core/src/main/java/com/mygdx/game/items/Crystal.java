@@ -36,13 +36,15 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
-        if (body == null && visible)
-            loadBody(BodyDef.BodyType.StaticBody, true);
         if (visible) {
+            if (body == null)
+                loadBody(BodyDef.BodyType.StaticBody, true);
             if (rand > 0)
                 s.draw(Images.crystal, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
             else
                 s.draw(Images.crystal_red, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
+        } else{
+            body.setTransform(new Vector2(10_000, 10_000), 0);
         }
     }
 
@@ -69,9 +71,5 @@ public class Crystal extends Objeto implements Item{
     @Override
     public void update() {
         super.update();
-    }
-    @Override
-    public void setVisible(boolean b){
-        visible = b;
     }
 }

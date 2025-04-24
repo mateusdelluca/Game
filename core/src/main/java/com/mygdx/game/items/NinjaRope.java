@@ -33,7 +33,7 @@ public class NinjaRope extends Objeto implements Item{
     public static boolean isActive2;
     public static boolean[] isActive = new boolean[LIMIT], jointBodies = new boolean[LIMIT];
 
-    private float length = 200f;
+    private float length = 100f;
 
     private Vector2 mousePos = new Vector2();
 
@@ -49,10 +49,12 @@ public class NinjaRope extends Objeto implements Item{
     private boolean[] touched = new boolean[LIMIT];
     private boolean init;
     private Joint[] jointsBodiesAB = new Joint[LIMIT];
-    private Joint[] jointsAB = new Joint[LIMIT];
+    private Joint[] jointsAtoPlayer = new Joint[LIMIT];
     private Joint[] joints = new Joint[LIMIT];
     private boolean created2;
-    private boolean mouseButtonLeft, mouseButtonRight;
+    private int index;
+    private boolean hasBeenCreated;
+    private boolean touched2;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -85,49 +87,37 @@ public class NinjaRope extends Objeto implements Item{
         if (!init) {
             for (int index = 0; index < LIMIT; index++) {
                 DistanceJointDef distanceJointDef = new DistanceJointDef();
-                bodyA[index] = box(new Vector2(playerBody.getWorldCenter().x + 300 + (50 * index), playerBody.getWorldCenter().y + 50), new Vector2(1, 10), BodyDef.BodyType.DynamicBody, false, "bodyA");
+                bodyA[index] = box(new Vector2(playerBody.getWorldCenter().x + 300 + (250 * index), playerBody.getWorldCenter().y + 50), new Vector2(1, 10), BodyDef.BodyType.DynamicBody, false, "bodyA");
                 bodyB[index] = box(new Vector2(bodyA[index].getWorldCenter().x, bodyA[index].getWorldCenter().y + 100), new Vector2(1, 10), BodyDef.BodyType.StaticBody);
-                bodyA[index].setUserData("joint");
-                bodyB[index].setUserData("joint");
+                bodyA[index].setUserData(bodyA[index]);
+//                bodyB[index].setUserData(bodyB[index]);
                 distanceJointDef.initialize(bodyA[index], bodyB[index], bodyA[index].getWorldCenter(), bodyB[index].getWorldCenter());
                 distanceJointDef.length = 100f;
+
                 jointsBodiesAB[index] = world.createJoint(distanceJointDef);
                 jointsBodiesAB[index].setUserData("joint");
                 init = true;
             }
         }
 
-        for (int index = 0; index < LIMIT; index++) {
-            if (jointPlayerToBodyA[index]) {
-                DistanceJointDef distanceJointDef = new DistanceJointDef();
-                distanceJointDef.initialize(bodyA[index], playerBody, bodyA[index].getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
-                distanceJointDef.length = 1f;
-                jointsAB[index] = world.createJoint(distanceJointDef);
-                jointsAB[index].setUserData("joint");
-                joints[index] = jointsAB[index];
-                jointPlayerToBodyA[index] = false;
-            }
-        }
-//        destroyJoint(jointsAB);
-    }
+        timer += Gdx.graphics.getDeltaTime();
 
-    public void destroyJoint(Joint... joints1){
-        if (spacePressedOrMouseButtonClicked()) {
-            for (int index = 0; index < joints1.length; index++) {
-                if (joints1[index] != null) {
-                    if (jointPlayerToBodyA[index]) {
-                        world.destroyJoint(joints1[index]);
-                        jointsAB[index] = null;
-                        jointPlayerToBodyA[index] = false;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+        if (timer > 1.5f)
+            hasBeenCreated = false;
 
-    private boolean spacePressedOrMouseButtonClicked(){
-        return mouseButtonRight || mouseButtonLeft;
+        if (touched[index]) {
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            distanceJointDef.initialize(bodyA[index], playerBody, bodyA[index].getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
+            distanceJointDef.length = 1f;
+            if (!hasBeenCreated) {
+                jointsAtoPlayer[index] = world.createJoint(distanceJointDef);
+//            jointPlayerToBodyA[index] = true;
+                hasBeenCreated = true;
+            }
+//        jointsAtoPlayer[index].setUserData(jointsAtoPlayer[index]);
+//                if (jointsAtoPlayer[index].getCollideConnected() == null)
+        }
+
     }
 
     @Override
@@ -169,31 +159,10 @@ public class NinjaRope extends Objeto implements Item{
         radians = (float) Math.atan2(dy, dx);
     }
 
-    public void justTouched(int button) {
-        if (isActive2) {
-            System.out.println(Input.Buttons.RIGHT);
-            if (button == (Input.Buttons.RIGHT)) {
-                deactivate();
-                mouseButtonRight = !mouseButtonRight;
-            } else {
-                if (button == (Input.Buttons.LEFT)) {
-                    mouseButtonLeft = !mouseButtonLeft;
-                    deactivate();
-                    Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                    viewport.unproject(mousePos1); // Desprojetar a posição do mouse
-                    worldX = mousePos1.x;
-                    worldY = mousePos1.y;
-                    mousePos = new Vector2(mousePos1.x, mousePos1.y);
-                    anchorBody = box(new Vector2(mousePos), new Vector2(5, 5), BodyDef.BodyType.StaticBody, true, "Rope");
-                    activateRope(mousePos);
-                }
-            }
-        }
-    }
+
     private void createAnchor() {
         if (anchorBody == null || playerBody == null)
             return;
-
         if (anchorBody.isActive()) {
             if (Level.contains(Images.staticObjects, anchorBody.getWorldCenter())) {
                if (joint != null && created2) {
@@ -215,16 +184,37 @@ public class NinjaRope extends Objeto implements Item{
     }
 
     public void activate(Vector2 target) {
-        deactivate();
+//        deactivate();
         createAnchor();
     }
 
+    public void justTouched(int button) {
+        if (button == (Input.Buttons.RIGHT)) {
+            deactivate();
+            System.out.println("pressionou botão direito do mouse");
+        }
+        if (isActive2) {
+            if (button == (Input.Buttons.LEFT)) {
+                deactivate();
+                Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                viewport.unproject(mousePos1); // Desprojetar a posição do mouse
+                worldX = mousePos1.x;
+                worldY = mousePos1.y;
+                mousePos = new Vector2(mousePos1.x, mousePos1.y);
+                anchorBody = box(new Vector2(mousePos), new Vector2(5, 5), BodyDef.BodyType.StaticBody, true, "Rope");
+                activateRope(mousePos);
+            }
+        }
+    }
     public void deactivate() {
        for (int index = 0; index < LIMIT; index++) {
-           if (jointsAB[index] != null) {
-               world.destroyJoint(jointsAB[index]);
-               jointsAB[index] = null;
-           }
+           if (jointsAtoPlayer[index] != null && this.index == index) {
+               world.destroyJoint(jointsAtoPlayer[this.index]);
+               touched[index] = false;}
+       }
+       if (joint != null && joint.isActive()) {
+           world.destroyJoint(joint);
+           joint = null;
        }
     }
 
@@ -278,11 +268,16 @@ public class NinjaRope extends Objeto implements Item{
             return;
 
         for (int index = 0; index < LIMIT; index++) {
-            if (bodyA[index] != null && playerBody != null && !jointPlayerToBodyA[index] && !touched[index]) {
+            if (bodyA[index] != null && playerBody != null) {
                 if ((body1.getUserData().equals(bodyA[index].getUserData()) && body2.getUserData().equals("Boy"))
                     || (body2.getUserData().equals(bodyA[index].getUserData()) && body1.getUserData().equals("Boy"))) {
-                    touched[index] = true;
-                    jointPlayerToBodyA[index] = true;
+                    if (!hasBeenCreated) {
+                        touched[index] = true;
+                        this.index = index;
+                        timer = 0f;
+                        break;
+                    }
+
                 }
             }
         }

@@ -324,7 +324,7 @@ public class Level extends State implements ContactListener, Serializable {
         if (body1 == null || body2 == null)
             return;
 
-        ninjaRope.beginContact(contact);
+
 
 
 
@@ -506,8 +506,6 @@ public class Level extends State implements ContactListener, Serializable {
 
         if (body1 == null || body2 == null)
             return;
-
-        ninjaRope.beginContact(contact);
 
 
         for (Objeto o : objetos) {
