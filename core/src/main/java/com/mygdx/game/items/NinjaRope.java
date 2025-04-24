@@ -53,7 +53,7 @@ public class NinjaRope extends Objeto implements Item{
     private Joint[] joints = new Joint[LIMIT];
     private boolean created2;
     private int index;
-    private boolean hasBeenCreated;
+    private boolean jointHasBeenCreated;
     private boolean touched2;
 
     public NinjaRope(Body playerBody){
@@ -102,17 +102,19 @@ public class NinjaRope extends Objeto implements Item{
 
         timer += Gdx.graphics.getDeltaTime();
 
-        if (timer > 1.5f)
-            hasBeenCreated = false;
+        if (timer > 0.5f && playerBody.getLinearVelocity().x == 0f) {
+            jointHasBeenCreated = false;
+            timer = 0f;
+        }
 
         if (touched[index]) {
             DistanceJointDef distanceJointDef = new DistanceJointDef();
             distanceJointDef.initialize(bodyA[index], playerBody, bodyA[index].getWorldCenter(), new Vector2(playerBody.getWorldCenter().x + 32, playerBody.getWorldCenter().y + 64));
             distanceJointDef.length = 1f;
-            if (!hasBeenCreated) {
+            if (!jointHasBeenCreated) {
                 jointsAtoPlayer[index] = world.createJoint(distanceJointDef);
 //            jointPlayerToBodyA[index] = true;
-                hasBeenCreated = true;
+                jointHasBeenCreated = true;
             }
 //        jointsAtoPlayer[index].setUserData(jointsAtoPlayer[index]);
 //                if (jointsAtoPlayer[index].getCollideConnected() == null)
@@ -209,8 +211,11 @@ public class NinjaRope extends Objeto implements Item{
     public void deactivate() {
        for (int index = 0; index < LIMIT; index++) {
            if (jointsAtoPlayer[index] != null && this.index == index) {
-               world.destroyJoint(jointsAtoPlayer[this.index]);
-               touched[index] = false;}
+               if (jointsAtoPlayer[this.index].isActive())
+                    world.destroyJoint(jointsAtoPlayer[this.index]);
+               touched[this.index] = false;
+               timer = 0f;
+           }
        }
        if (joint != null && joint.isActive()) {
            world.destroyJoint(joint);
@@ -271,9 +276,9 @@ public class NinjaRope extends Objeto implements Item{
             if (bodyA[index] != null && playerBody != null) {
                 if ((body1.getUserData().equals(bodyA[index].getUserData()) && body2.getUserData().equals("Boy"))
                     || (body2.getUserData().equals(bodyA[index].getUserData()) && body1.getUserData().equals("Boy"))) {
-                    if (!hasBeenCreated) {
-                        touched[index] = true;
+                    if (!jointHasBeenCreated) {
                         this.index = index;
+                        touched[this.index] = true;
                         timer = 0f;
                         break;
                     }

@@ -345,24 +345,24 @@ public class Level extends State implements ContactListener, Serializable {
             }
         }
 
-        for (Objeto o : objetos) {
-            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
-                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
-                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
-                    !body1.getUserData().toString().contains("BulletBoy") && !body2.getUserData().toString().contains("BulletBoy") &&
-                    !body1.getUserData().toString().contains("NinjaStar") && !body2.getUserData().toString().contains("NinjaStar") &&
-                    !body1.getUserData().toString().contains("NinjaRope") && !body2.getUserData().toString().contains("NinjaRope") &&
-                    !body1.getUserData().toString().contains("Rope") && !body2.getUserData().toString().contains("Rope") &&
-                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
-                    !body1.getUserData().toString().contains("joint") && !body2.getUserData().toString().contains("joint") &&
-                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
-                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
-                    !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
-                    !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
-                    !body1.getUserData().toString().equals("Saber") && !body2.getUserData().toString().equals("Saber") &&
-                    !body1.getUserData().toString().contains("Block") && !body2.getUserData().toString().contains("Block") &&
-                    !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
-                    boy.beenHit();
+//        for (Objeto o : objetos) {
+//            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
+//                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
+//                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
+//                    !body1.getUserData().toString().contains("BulletBoy") && !body2.getUserData().toString().contains("BulletBoy") &&
+//                    !body1.getUserData().toString().contains("NinjaStar") && !body2.getUserData().toString().contains("NinjaStar") &&
+//                    !body1.getUserData().toString().contains("NinjaRope") && !body2.getUserData().toString().contains("NinjaRope") &&
+//                    !body1.getUserData().toString().contains("Rope") && !body2.getUserData().toString().contains("Rope") &&
+//                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
+//                    !body1.getUserData().toString().contains("joint") && !body2.getUserData().toString().contains("joint") &&
+//                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
+//                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack") &&
+//                    !body1.getUserData().toString().equals("Fan") && !body2.getUserData().toString().equals("Fan") &&
+//                    !body1.getUserData().toString().equals("Fan2") && !body2.getUserData().toString().equals("Fan2") &&
+//                    !body1.getUserData().toString().equals("Saber") && !body2.getUserData().toString().equals("Saber") &&
+//                    !body1.getUserData().toString().contains("Block") && !body2.getUserData().toString().contains("Block") &&
+//                    !body1.getUserData().toString().equals("null") && !body2.getUserData().toString().equals("null"))
+//                    boy.beenHit();
 
 
 //                if ((((
@@ -386,7 +386,7 @@ public class Level extends State implements ContactListener, Serializable {
 //                        body1.getUserData().toString().equals(o.getBodyData().userData)))) {
 //                if (!(o instanceof Boy) && !(o instanceof Jack) && !(o instanceof Girl))
 
-        }
+//        }
         for (Objeto o : objetos) {
             if (o instanceof NinjaRope)
                 continue;
