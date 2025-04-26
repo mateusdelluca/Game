@@ -64,6 +64,8 @@ public class Level extends State implements ContactListener, Serializable {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
+    private Stand stand;
+
     public void init(){
         Box2D.init();
         float w = Gdx.graphics.getWidth();
@@ -184,6 +186,8 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 27; i++)
             blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
+        stand = new Stand(boy.getBody());
+
 //        objetos.addAll(blocks);
 
         objetos.addAll(items2.values());
@@ -273,9 +277,8 @@ public class Level extends State implements ContactListener, Serializable {
             block.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         ninjaRope.render(spriteBatch);
+        stand.render(spriteBatch);
         spriteBatch.end();
-
-
 
     }
 

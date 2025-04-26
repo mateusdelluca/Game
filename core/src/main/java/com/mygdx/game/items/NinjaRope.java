@@ -84,25 +84,27 @@ public class NinjaRope extends Objeto implements Item{
 
     @Override
     public void update() {
-        if (!init) {
-            for (int index = 0; index < LIMIT; index++) {
-                DistanceJointDef distanceJointDef = new DistanceJointDef();
-                bodyA[index] = box(new Vector2(playerBody.getWorldCenter().x + 300 + (250 * index), playerBody.getWorldCenter().y + 50), new Vector2(1, 10), BodyDef.BodyType.DynamicBody, false, "bodyA");
-                bodyB[index] = box(new Vector2(bodyA[index].getWorldCenter().x, bodyA[index].getWorldCenter().y + 100), new Vector2(1, 10), BodyDef.BodyType.StaticBody);
-                bodyA[index].setUserData(bodyA[index]);
-//                bodyB[index].setUserData(bodyB[index]);
-                distanceJointDef.initialize(bodyA[index], bodyB[index], bodyA[index].getWorldCenter(), bodyB[index].getWorldCenter());
-                distanceJointDef.length = 100f;
-
-                jointsBodiesAB[index] = world.createJoint(distanceJointDef);
-                jointsBodiesAB[index].setUserData("joint");
-                init = true;
-            }
-        }
+//        if (!init) {
+//            for (int index = 0; index < LIMIT; index++) {
+//                DistanceJointDef distanceJointDef = new DistanceJointDef();
+//                bodyA[index] = box(new Vector2(playerBody.getWorldCenter().x + 300 + (250 * index), playerBody.getWorldCenter().y + 50), new Vector2(20, 20), BodyDef.BodyType.DynamicBody, false, "bodyA");
+//                bodyB[index] = box(new Vector2(bodyA[index].getWorldCenter().x, bodyA[index].getWorldCenter().y + 100), new Vector2(1, 10), BodyDef.BodyType.StaticBody);
+//                bodyA[index].setUserData(bodyA[index]);
+////                bodyB[index].setUserData(bodyB[index]);
+//                distanceJointDef.initialize(bodyA[index], bodyB[index], bodyA[index].getWorldCenter(), bodyB[index].getWorldCenter());
+//                distanceJointDef.length = 100f;
+//                distanceJointDef.collideConnected = true;
+//                distanceJointDef.dampingRatio = 0.05f;
+//                distanceJointDef.frequencyHz = 4.5f;
+//                jointsBodiesAB[index] = world.createJoint(distanceJointDef);
+//                jointsBodiesAB[index].setUserData("joint");
+//                init = true;
+//            }
+//        }
 
         timer += Gdx.graphics.getDeltaTime();
 
-        if (timer > 0.5f && playerBody.getLinearVelocity().x == 0f) {
+        if (timer > 0.1f && playerBody.getLinearVelocity().x == 0f) {
             jointHasBeenCreated = false;
             timer = 0f;
         }
@@ -210,7 +212,7 @@ public class NinjaRope extends Objeto implements Item{
     }
     public void deactivate() {
        for (int index = 0; index < LIMIT; index++) {
-           if (jointsAtoPlayer[index] != null && this.index == index) {
+           if (jointsAtoPlayer[index] != null && this.index == index && touched[this.index]) {
                if (jointsAtoPlayer[this.index].isActive())
                     world.destroyJoint(jointsAtoPlayer[this.index]);
                touched[this.index] = false;
