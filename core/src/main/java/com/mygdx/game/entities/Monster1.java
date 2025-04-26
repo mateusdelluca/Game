@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -27,7 +28,7 @@ public class Monster1 extends Objeto implements Serializable {
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_deltaTime;
     @Setter @Getter
-    private float HP = 5;
+    private float HP = 3;
     @Setter
     @Getter
     private boolean split;
@@ -88,16 +89,20 @@ public class Monster1 extends Objeto implements Serializable {
                         Sounds.MONSTER_HURT.play();
                         soundRunning = true;
                         initialTime = System.nanoTime();
+                        HP--;
                     }
-                    lastTime = System.nanoTime();
-                    deltaTime = (lastTime - initialTime)/1_000_000_000;
-                      if (deltaTime > 1) {
-                          initialTime = System.nanoTime();
+//                    lastTime = System.nanoTime();
+//                    deltaTime = (lastTime - initialTime)/1_000_000_000;
+                    timer += Gdx.graphics.getDeltaTime();
+                      if (timer >= 0.5f) {
+//                          initialTime = System.nanoTime();
 //                        flickering_deltaTime = 0f;
+                          timer = 0f;
                         body.setLinearVelocity(0, 0);
                         animations = Animations.MONSTER1_WALKING;
                         soundRunning = false;
-                        Sounds.MONSTER_HURT.stop();
+
+                        beenHit = false;
                     }
                 }
             }
@@ -148,14 +153,14 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void beenHit() {
-        if (body == null)
-            loadBody(BodyDef.BodyType.DynamicBody, false);
-        if (body != null) {
-            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
-            animations = Animations.MONSTER1_FLICKERING;
-            Sounds.MONSTER_HURT.play();
-            setHP(getHP() - 1);
-            setBeenHit(true);
+
+            if (body == null)
+                loadBody(BodyDef.BodyType.DynamicBody, false);
+            if (body != null) {
+                body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 4);
+                animations = Animations.MONSTER1_FLICKERING;
+                Sounds.MONSTER_HURT.play();
+                setBeenHit(true);
         }
     }
 }

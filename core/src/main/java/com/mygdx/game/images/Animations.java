@@ -25,7 +25,7 @@ public enum Animations implements Serializable {
     BOY_SHOOTING_AND_WALKING(new Animator(6,6, 5, 128, 128, "boy/Shooting3.png")),
     //monster
     MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),
-    MONSTER1_FLICKERING(new Animator(4,4,6,94,128, "monster/Flickering.png")),
+    MONSTER1_FLICKERING(new Animator(4,4,3,94,128, "monster/Flickering.png")),
     MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png"));
 
 

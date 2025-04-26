@@ -526,9 +526,9 @@ public class Level extends State implements ContactListener, Serializable {
 //                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
 //                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack"))
 //                    boy.beenHit();
-            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+            if (((body1.getUserData().toString().contains("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBody().getUserData()))
-                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+                || ((body2.getUserData().toString().contains("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
                 body1.getUserData().toString().equals(o.getBody().getUserData()))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor())
@@ -564,7 +564,7 @@ public class Level extends State implements ContactListener, Serializable {
                 }
                 monster1.getBody().setFixedRotation(true);
             } else
-            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING") && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
                 boy.beenHit();
             }
                 if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
