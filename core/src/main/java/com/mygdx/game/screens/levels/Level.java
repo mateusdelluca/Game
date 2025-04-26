@@ -186,7 +186,7 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 27; i++)
             blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
-        stand = new Stand(boy.getBody());
+        stand = new Stand();
 
 //        objetos.addAll(blocks);
 
@@ -194,6 +194,7 @@ public class Level extends State implements ContactListener, Serializable {
         objetos.add(boy);
         objetos.add(jack);
         objetos.add(girl);
+        objetos.add(stand);
         objetos.addAll(monsters1.values());
 
     }
@@ -487,6 +488,11 @@ public class Level extends State implements ContactListener, Serializable {
                     if (!(o.getBody().getUserData().equals("BulletBoy")))
                         o.beenHit();
             }
+        }
+
+        if (body1.getUserData().toString().equals("Stand") && body2.getUserData().toString().equals("Boy")
+        || (body2.getUserData().toString().equals("Stand") && body1.getUserData().toString().equals("Boy"))){
+            stand.beenHit();
         }
     }
 
