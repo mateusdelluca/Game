@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.JointDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.mygdx.game.system.BodyData;
 
+import java.util.Random;
+
 import static com.mygdx.game.Bodies.Builder.box;
 import static com.mygdx.game.images.Animations.MINI_BLOCK;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
@@ -25,17 +27,20 @@ public class Stand extends Objeto{
     private boolean visible0;
     private float stateTime;
 
+    public static int index;
+
     public static final float DURATION_ANIMATION_IN_SECONDS = 0.5f;
-    public Stand(){
+    public Stand(float x, float y){
         DistanceJointDef distanceJointDef = new DistanceJointDef();
-        bodyA = box(new Vector2(300f, 6000 - 200f), new Vector2(70, 20), BodyDef.BodyType.DynamicBody, false, this.toString());
-        bodyB = box(new Vector2(bodyA.getPosition().x + 100, bodyA.getWorldCenter().y + 100), new Vector2(50, 10), BodyDef.BodyType.StaticBody);
+        bodyA = box(new Vector2(x,y), new Vector2(70, 20), BodyDef.BodyType.DynamicBody, false, this.toString());
+        bodyB = box(new Vector2(bodyA.getPosition().x + 100, bodyA.getWorldCenter().y + 100), new Vector2(50, 10), BodyDef.BodyType.StaticBody, true);
         bodyA.setUserData(this.toString());
         distanceJointDef.initialize(bodyA, bodyB, bodyA.getPosition(), bodyB.getWorldCenter());
         distanceJointDef.length = 250f;
         distanceJointDef.collideConnected = true;
-        distanceJointDef.dampingRatio = 0.05f;
-        distanceJointDef.frequencyHz = 4.5f;
+        distanceJointDef.dampingRatio = new Random().nextFloat(0.9f);
+        distanceJointDef.frequencyHz = new Random().nextFloat(4.9f);
+        index++;
         jointBodiesAB = world.createJoint(distanceJointDef);
         jointBodiesAB.setUserData("joint");
         body = bodyA;
@@ -81,6 +86,6 @@ public class Stand extends Objeto{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + index;
     }
 }

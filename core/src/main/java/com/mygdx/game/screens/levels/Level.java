@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Animations;
@@ -64,7 +65,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    private Stand stand;
+    private ArrayList<Stand> stands = new ArrayList<>();
 
     public void init(){
         Box2D.init();
@@ -186,7 +187,10 @@ public class Level extends State implements ContactListener, Serializable {
         for (int i = 0; i < 27; i++)
             blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
 
-        stand = new Stand();
+
+        for (int i = 1; i < 7; i++) {
+            stands.add(new Stand(3000 + (200 * i), 6000 - 720));
+        }
 
 //        objetos.addAll(blocks);
 
@@ -194,7 +198,7 @@ public class Level extends State implements ContactListener, Serializable {
         objetos.add(boy);
         objetos.add(jack);
         objetos.add(girl);
-        objetos.add(stand);
+        objetos.addAll(stands);
         objetos.addAll(monsters1.values());
 
     }
@@ -278,7 +282,8 @@ public class Level extends State implements ContactListener, Serializable {
             block.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         ninjaRope.render(spriteBatch);
-        stand.render(spriteBatch);
+        for (Stand stand : stands)
+            stand.render(spriteBatch);
         spriteBatch.end();
 
     }
@@ -329,7 +334,7 @@ public class Level extends State implements ContactListener, Serializable {
             return;
 
 
-
+        boy.beginContact(contact);
 
 
         for (Item item : items.values()) {
@@ -490,9 +495,11 @@ public class Level extends State implements ContactListener, Serializable {
             }
         }
 
-        if (body1.getUserData().toString().equals("Stand") && body2.getUserData().toString().equals("Boy")
-        || (body2.getUserData().toString().equals("Stand") && body1.getUserData().toString().equals("Boy"))){
-            stand.beenHit();
+        for (Stand stand : stands) {
+            if (body1.getUserData().toString().equals(stand.getBody().getUserData()) && body2.getUserData().toString().equals("Boy")
+                || (body2.getUserData().toString().equals(stand.getBody().getUserData()) && body1.getUserData().toString().equals("Boy"))) {
+                stand.beenHit();
+            }
         }
     }
 

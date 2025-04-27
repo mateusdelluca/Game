@@ -18,10 +18,12 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.tools.ant.types.selectors.SelectSelector;
 import org.jetbrains.annotations.Contract;
 import java.util.Iterator;
 
 
+import static com.badlogic.gdx.Gdx.input;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.Inventory.addItemToInventory;
 import static com.mygdx.game.screens.Inventory.itemsToBeDrawn;
@@ -72,6 +74,8 @@ public class Boy extends Objeto {
     private int indexNinja;
     private float throwTimer;
     public static boolean ropeShoot;
+    private boolean onGround;
+
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
@@ -208,7 +212,7 @@ public class Boy extends Objeto {
     }
 
     private void fly() {
-        if (PowerBar.sp > 10 && Gdx.input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
+        if (PowerBar.sp > 10 && input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
         if (use_jetPack && PowerBar.sp > 0) {
@@ -422,11 +426,9 @@ public class Boy extends Objeto {
                     animations = Animations.BOY_JUMPING_FRONT;
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f || use_jetPack)
                     animations = Animations.BOY_JUMPING;
-//                if (secondJump < 2) {
-//                body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-                body.setLinearVelocity(body.getLinearVelocity().x, JUMP_VELOCITY);
-                if (!use_jetPack)
-                    secondJump++;
+
+//                body.setLinearVelocity(body.getLinearVelocity().x, JUMP_VELOCITY);
+
 //                }
                 JUMP.play();
             }
@@ -442,6 +444,15 @@ public class Boy extends Objeto {
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
             body.setGravityScale(0.4f);
+        }
+        if (keycode == Input.Keys.SPACE) {
+            if (!beenHit && secondJump < 1 && onGround) {
+                onGround = false;
+                if (!use_jetPack) {
+                    secondJump++;
+                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
+                }
+            }
         }
         System.out.println(body.getLinearVelocity().y);
     }
@@ -606,6 +617,32 @@ public class Boy extends Objeto {
             PowerBar.hp -= 10;
             setBeenHit(true);
             Sounds.HURT.play();
+        }
+    }
+
+    public void beginContact(Contact contact) {
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
+
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
+        if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Rects")
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Rects")) ||
+        (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Block")
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Block")) ||
+        (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Rects")
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Rects"))
+            || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Colliders")
+                || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Colliders"))){
+            onGround = true;
         }
     }
 }
