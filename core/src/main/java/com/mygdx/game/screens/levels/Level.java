@@ -166,7 +166,7 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 450)));
+        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
         items.get("Portal").updateItem();
 //        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
 
