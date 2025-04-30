@@ -38,6 +38,7 @@ import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
+import static com.mygdx.game.system.ScreenshotHelper.sprite;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Level extends State implements ContactListener, Serializable {
@@ -46,6 +47,8 @@ public class Level extends State implements ContactListener, Serializable {
 
     protected transient Background background;
     protected transient Box2DDebugRenderer box2DDebugRenderer;
+
+    public static HashMap<String, Objeto> items2 = new HashMap<>();
 
     public static HashMap<String, Item> items = new HashMap<>();
     public Boy boy;
@@ -66,6 +69,7 @@ public class Level extends State implements ContactListener, Serializable {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private ArrayList<Stand> stands = new ArrayList<>();
+    private NinjaStar ninjaStar;
 
     public void init(){
         Box2D.init();
@@ -138,7 +142,7 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
 
 
-        HashMap<String, Objeto> items2 = new HashMap<>();
+        items2 = new HashMap<>();
         items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
         items2.put(Rifle.class.getSimpleName(), jack.getRifle());
         items2.put(Rifle.class.getSimpleName(), girl.getRifle());
@@ -168,13 +172,12 @@ public class Level extends State implements ContactListener, Serializable {
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
         items.get("Portal").updateItem();
-//        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 400 - 2400),  true));
 
         items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //        items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
-//        items2.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(500, 6000 - 400), true));
+        ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
         for (int i = 0; i < 5; i++)
             blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 
@@ -284,6 +287,7 @@ public class Level extends State implements ContactListener, Serializable {
         ninjaRope.render(spriteBatch);
         for (Stand stand : stands)
             stand.render(spriteBatch);
+        ninjaStar.render(spriteBatch);
         spriteBatch.end();
 
     }
@@ -536,6 +540,8 @@ public class Level extends State implements ContactListener, Serializable {
             if (((body1.getUserData().toString().contains("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBody().getUserData()))
                 || ((body2.getUserData().toString().contains("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+                body1.getUserData().toString().equals(o.getBody().getUserData()))
+                || (body2.getUserData().toString().contains("NinjaStar") &&
                 body1.getUserData().toString().equals(o.getBody().getUserData()))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor())

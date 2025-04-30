@@ -26,8 +26,11 @@ public class NinjaStar extends Objeto implements Item, Serializable {
     public static int index;
     private Body body2;
 
-    public NinjaStar(Vector2 position, boolean isSensor){
-        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
+    private boolean thrown;
+
+    public NinjaStar(Vector2 position){
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, true);
         body2 = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         visible = true;
@@ -39,9 +42,9 @@ public class NinjaStar extends Objeto implements Item, Serializable {
         body2 = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setLinearVelocity(VELOCITY * (float) Math.cos(radians), VELOCITY * (float) Math.sin(radians));
-//        body.setLinearVelocity(VELOCITY, 0);
         body.setGravityScale(0.2f);
         visible = true;
+        thrown = true;
     }
 
     public void render(SpriteBatch s, Sprite sprite){
@@ -52,17 +55,9 @@ public class NinjaStar extends Objeto implements Item, Serializable {
         sprite.draw(s);
     }
 
-    public void render(SpriteBatch s, Sprite sprite, Body body){
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
-        sprite.setSize(width, height);
-        sprite.setOriginCenter();
-        sprite.setRotation(0f);
-        sprite.draw(s);
-    }
-
     @Override
     public void render(SpriteBatch s) {
-        if (!visible)
+        if (!visible && body.getLinearVelocity().x == 0f)
             body2.setTransform(10_000,1_000, 0f);
         if (visible && Math.abs(body.getLinearVelocity().x) > 1f)
             render(s, new Sprite((Images.ninjaStar)));
@@ -71,13 +66,19 @@ public class NinjaStar extends Objeto implements Item, Serializable {
                 width *= multiply;
                 height *= multiply;
                 multiply2 = true;
-//                items.put("NinjaStar" + index++, this);
+                if (!thrown)
+                    items.put("NinjaStar" + index++, this);
                 body2.setTransform(body.getPosition().x, body.getPosition().y, body.getAngle());
                 body.setTransform(10000,10000, 0);
                 body.setGravityScale(0f);
                 body2.setGravityScale(0f);
             }
-            render(s, new Sprite((Images.ninjaStar)), body2);
+            Sprite sprite = new Sprite(Images.ninjaStar);
+            sprite.setPosition(body2.getPosition().x, body2.getPosition().y);
+            sprite.setSize(width, height);
+            sprite.setOriginCenter();
+            sprite.setRotation(0f);
+            sprite.draw(s);
         }
     }
 
