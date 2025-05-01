@@ -71,6 +71,9 @@ public class Level extends State implements ContactListener, Serializable {
     private ArrayList<Stand> stands = new ArrayList<>();
     private NinjaStar ninjaStar;
 
+    private Array<Rope> ropes = new Array();
+    Rope rope;
+
     public void init(){
         Box2D.init();
         float w = Gdx.graphics.getWidth();
@@ -197,6 +200,17 @@ public class Level extends State implements ContactListener, Serializable {
 
 //        objetos.addAll(blocks);
 
+        rope = new Rope(new Vector2(300, 6000 - 400), false);
+        for (int i = 0; i < 5; i++){
+            ropes.add(new Rope(new Vector2(300f, 6000 - 400 + (i * Rope.HEIGHT)), false));
+            if (i == 0) {
+                rope.joint(ropes.get(i).getBodyA());
+                continue;
+            }
+            ropes.get(i).joint(ropes.get(i-1).getBodyA());
+        }
+
+
         objetos.addAll(items2.values());
         objetos.add(boy);
         objetos.add(jack);
@@ -288,6 +302,9 @@ public class Level extends State implements ContactListener, Serializable {
         for (Stand stand : stands)
             stand.render(spriteBatch);
         ninjaStar.render(spriteBatch);
+        rope.render(spriteBatch);
+        for (Rope rope : ropes)
+            rope.render(spriteBatch);
         spriteBatch.end();
 
     }
