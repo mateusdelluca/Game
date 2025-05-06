@@ -1,11 +1,11 @@
-package com.mygdx.game.Bodies;
+package com.mygdx.game.bodiesAndShapes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
-public class Builder{
+public class BodiesAndShapes {
 
     public static Body box(Vector2 position, Vector2 dimensions){
         BodyDef bodyDef = new BodyDef();
@@ -36,6 +36,27 @@ public class Builder{
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
         body.setActive(true);
+        body.setFixedRotation(false);
+        return body;
+    }
+
+    public static Body box(Vector2 position, Vector2 dimensions, BodyDef.BodyType type, boolean isSensor, float angle){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.active = true;
+        bodyDef.type = type;
+        bodyDef.position.set(new Vector2(0,0));
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = isSensor;
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(dimensions.x, dimensions.y, new Vector2(dimensions.x/2f, dimensions.y/2f), 0f);
+        fixtureDef.shape = box;
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setTransform(position, 0);
+        body.setActive(true);
+
+        body.setFixedRotation(false);
+        body.setTransform(position, (float) Math.toRadians(angle));
         return body;
     }
 

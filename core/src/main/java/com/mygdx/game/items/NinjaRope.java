@@ -16,12 +16,13 @@ import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.levels.Level;
 import com.mygdx.game.system.BodyData;
 
-import static com.mygdx.game.Bodies.Builder.box;
-import static com.mygdx.game.Bodies.Builder.circle;
+//import static com.mygdx.game.bodies.Builder.box;
+import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.ninjaRope_inventory;
 import static com.mygdx.game.images.Images.shoot;
 import static com.mygdx.game.screens.levels.Level_Manager.viewport;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
+
 
 public class NinjaRope extends Objeto implements Item{
 

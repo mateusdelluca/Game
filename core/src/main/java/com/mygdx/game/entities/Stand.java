@@ -1,5 +1,9 @@
 package com.mygdx.game.entities;
 
+import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
+import static com.mygdx.game.images.Animations.MINI_BLOCK;
+import static com.mygdx.game.screens.levels.Level_Manager.world;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,15 +12,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
-import com.badlogic.gdx.physics.box2d.JointDef;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.mygdx.game.system.BodyData;
 
 import java.util.Random;
 
-import static com.mygdx.game.Bodies.Builder.box;
-import static com.mygdx.game.images.Animations.MINI_BLOCK;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+
 
 public class Stand extends Objeto{
 
@@ -29,7 +30,7 @@ public class Stand extends Objeto{
 
     public static int index;
 
-    public static final float DURATION_ANIMATION_IN_SECONDS = 0.5f;
+    public static final float DURATION_ANIMATION_IN_SECONDS = 1.0f;
     public Stand(float x, float y){
         DistanceJointDef distanceJointDef = new DistanceJointDef();
         bodyA = box(new Vector2(x,y), new Vector2(70, 20), BodyDef.BodyType.DynamicBody, false, this.toString());

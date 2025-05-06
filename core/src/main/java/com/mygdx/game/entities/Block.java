@@ -45,7 +45,7 @@ public class Block extends Objeto{
             Sprite sprite = new Sprite(animations.getAnimator().currentSpriteFrame(onlyFirstFrame, stateTime));
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setOriginCenter();
-            sprite.setPosition(body.getPosition().x - 203f/2f, body.getPosition().y - 177f/2f);
+            sprite.setPosition(body.getPosition().x - 203f / 2f, body.getPosition().y - 177f / 2f);
             sprite.draw(s);
         }
         animations.getAnimator().setStateTime(stateTime);

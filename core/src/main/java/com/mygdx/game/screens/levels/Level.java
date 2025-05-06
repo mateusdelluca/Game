@@ -30,6 +30,7 @@ import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
@@ -38,7 +39,6 @@ import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
-import static com.mygdx.game.system.ScreenshotHelper.sprite;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Level extends State implements ContactListener, Serializable {
@@ -56,6 +56,8 @@ public class Level extends State implements ContactListener, Serializable {
     private Jack jack;
     @Setter @Getter
     private Girl girl;
+
+    private Mouse mouse;
     protected PowerBar powerBar;
 
     protected ArrayList<Fans> fans = new ArrayList<>();
@@ -73,6 +75,8 @@ public class Level extends State implements ContactListener, Serializable {
 
     private Array<Rope> ropes = new Array();
     Rope rope;
+
+
 
     public void init(){
         Box2D.init();
@@ -200,8 +204,8 @@ public class Level extends State implements ContactListener, Serializable {
 
 //        objetos.addAll(blocks);
 
-        rope = new Rope(new Vector2(300, 6000 - 400), false);
-        for (int i = 0; i < 5; i++){
+        rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
+        for (int i = 0; i < NUM_ROPES; i++){
             ropes.add(new Rope(new Vector2(300f, 6000 - 400 + (i * Rope.HEIGHT)), false));
             if (i == 0) {
                 rope.joint(ropes.get(i).getBodyA());
@@ -210,6 +214,7 @@ public class Level extends State implements ContactListener, Serializable {
             ropes.get(i).joint(ropes.get(i-1).getBodyA());
         }
 
+        mouse = new Mouse(boy.getBody().getPosition());
 
         objetos.addAll(items2.values());
         objetos.add(boy);
@@ -327,6 +332,9 @@ public class Level extends State implements ContactListener, Serializable {
             objeto.update();
         }
         ninjaRope.update();
+//        for (Rope rope : ropes)
+//            rope.update();
+//        rope.update();
         items.get("Rifle").update();
 //        ninjaRope.update(0f);
         for (Monster1 monster1 : monsters1.values()){
@@ -357,6 +365,9 @@ public class Level extends State implements ContactListener, Serializable {
 
         boy.beginContact(contact);
 
+//        for (Rope rope : ropes){
+            rope.beginContact(body1, body2);
+//        }
 
         for (Item item : items.values()) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
@@ -423,6 +434,9 @@ public class Level extends State implements ContactListener, Serializable {
             if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
                 body2.getUserData().toString().equals(o.getBodyData().userData))
                 || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+                body1.getUserData().toString().equals(o.getBodyData().userData))
+            || (body1.getUserData().toString().contains("NinjaStar") && body2.getUserData().toString().equals(o.getBodyData().userData))
+                || (body2.getUserData().toString().contains("NinjaStar") &&
                 body1.getUserData().toString().equals(o.getBodyData().userData))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
                     !body2.getFixtureList().get(0).isSensor())
@@ -501,6 +515,8 @@ public class Level extends State implements ContactListener, Serializable {
         Body body2 = contact.getFixtureB().getBody();
 
         ninjaRope.beginContact(contact);
+
+
 
         for (Objeto o : objetos) {
             if (o instanceof NinjaRope)
@@ -669,6 +685,7 @@ public class Level extends State implements ContactListener, Serializable {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         boy.touchDown(screenX, screenY, pointer, button);
         ninjaRope.justTouched(button);
+        mouse.touchDown(screenX, screenY, button);
         return false;
     }
 
@@ -691,6 +708,7 @@ public class Level extends State implements ContactListener, Serializable {
     public boolean mouseMoved(int screenX, int screenY) {
         boy.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
+//        mouse.mouseMoved(screenX, screenY);
         return false;
     }
 

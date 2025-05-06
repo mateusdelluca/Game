@@ -23,6 +23,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected transient Body body;
 //    protected PolygonShape polygonShape;
 //    protected FixtureDef fixtureDef;
+    @Getter @Setter
     protected float width, height;
     protected Vector2 dimensions;
     @Getter

@@ -6,43 +6,44 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.mygdx.game.Bodies.Builder;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.mygdx.game.entities.Mouse.clicked;
+import static com.mygdx.game.entities.Mouse.mouseBody;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.*;
 
 public class Rope extends Objeto {
 
 
     @Getter @Setter
     private Body bodyA;
-    @Getter @Setter
-    private Body bodyB;
 
     private Vector2 dimensions;
 
     private Sprite spriteA = new Sprite(Images.rope);
-    private Sprite spriteB = new Sprite(Images.rope);
     @Getter @Setter
     private DistanceJoint jointAB;
 
-    private Vector2 positionA, positionB;
+    private Vector2 positionA;
 
-    public static final float MULTIPLY = 2f;
+    public static final float MULTIPLY = 1f;
+    public static final int NUM_ROPES = 0;
 
     public static final float WIDTH = Images.rope.getWidth() * MULTIPLY, HEIGHT = Images.rope.getHeight() * MULTIPLY;
+    private boolean collide;
 
     public Rope(Vector2 positionA, boolean firstRope){
         super(WIDTH, HEIGHT);
         this.dimensions = new Vector2(WIDTH/2f, HEIGHT/2f);
         this.positionA = positionA;
-        bodyA = Builder.box(positionA, dimensions, firstRope ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody);
+        bodyA = box(positionA, dimensions, firstRope ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody, false, this.toString());
 //        positionB = new Vector2(this.positionA);
 //        positionB.add(new Vector2(0f,50f));
 //        bodyB = Builder.box(positionB, dimensions, BodyDef.BodyType.DynamicBody);
@@ -53,7 +54,9 @@ public class Rope extends Objeto {
 
     @Override
     public void update(){
-
+        if (collide && clicked) {
+            bodyA.setTransform(mouseBody.getPosition(), bodyA.getAngle());
+        }
     }
 
     @Override
@@ -76,9 +79,31 @@ public class Rope extends Objeto {
     }
 
     public void joint(Body bodyC){
-        DistanceJointDef distanceJointDef = new DistanceJointDef();
-        distanceJointDef.initialize(bodyA, bodyC, bodyA.getWorldCenter(), bodyC.getWorldCenter());
-        distanceJointDef.length = 30f;
-        world.createJoint(distanceJointDef);
+//        bodyA.setGravityScale(0f);
+//        bodyC.setGravityScale(0f);
+//        bodyA.setFixedRotation(false);
+//        bodyC.setFixedRotation(false);
+        RopeJointDef ropeJointDef = new RopeJointDef();
+        ropeJointDef.bodyA = bodyA;
+        ropeJointDef.bodyB = bodyC;
+        ropeJointDef.collideConnected = true;
+        ropeJointDef.maxLength = 50f;
+//        ropeJointDef.localAnchorA.set(0, -20);
+//        ropeJointDef.localAnchorB.set(0, 20);
+//        bodyA.getWorldCenter(), bodyC.getWorldCenter());
+//        ropeJointDef.length = 10f;
+        world.createJoint(ropeJointDef);
     }
+
+
+    public void beginContact(Body body1, Body body2){
+        if (body1.getUserData().toString().equals(bodyA.getUserData()) && body2.getUserData().toString().contains("Mouse")){
+            collide = true;
+        } else {
+            if (body2.getUserData().toString().equals(bodyA.getUserData()) && body1.getUserData().toString().contains("Mouse")) {
+                collide = true;
+            }
+        }
+    }
+
 }

@@ -17,7 +17,8 @@ import java.io.Serializable;
 
 public class Animator{
 
-    private int numColumns, numRows, numFrames, fps, width, height;    //rows and columns of the sprite sheet
+    private int numColumns, numRows, numFrames, width, height;    //rows and columns of the sprite sheet
+    private float fps;
     private String path;
     @Getter
     private Animation<TextureRegion> animation; // Must declare frame type (TextureRegion)
@@ -36,7 +37,7 @@ public class Animator{
     private float alphaComponent = 0f;
     private Color color = Color.RED;
 
-    public Animator(int numFrames, int numColumns, int fps, int width, int height, String path) {
+    public Animator(int numFrames, int numColumns, float fps, int width, int height, String path) {
         this.numFrames = numFrames;
         this.numColumns = numColumns;
         this.fps = fps;
@@ -55,7 +56,7 @@ public class Animator{
         createAnimation();
     }
 
-    public Animator(Color color, int numFrames, int numColumns, int fps, int width, int height, String path) {
+    public Animator(Color color, int numFrames, int numColumns, float fps, int width, int height, String path) {
         this.numFrames = numFrames;
         this.numColumns = numColumns;
         this.fps = fps;
@@ -79,7 +80,7 @@ public class Animator{
     }
 
 
-    public Animator(float alphaComponent, int numFrames, int numColumns, int fps, int width, int height, String path) {
+    public Animator(float alphaComponent, int numFrames, int numColumns, float fps, int width, int height, String path) {
         this.numFrames = numFrames;
         this.numColumns = numColumns;
         this.fps = fps;

@@ -9,7 +9,7 @@ public enum Animations implements Serializable {
 
 
 
-    MINI_BLOCK(new Animator(7,7,3,500,500,"block/Block_tr.png")),
+    MINI_BLOCK(new Animator(7,7,7f,500,500,"block/Block_tr.png")),
 
     //boy
     BOY_DEAD(new Animator(1,1,1,128,128,"boy/Dead.png")),
