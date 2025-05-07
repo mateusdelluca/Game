@@ -132,9 +132,9 @@ public class Level extends State implements ContactListener, Serializable {
 
         ninjaRope = new NinjaRope(boy.getBody());
 
-        jack = new Jack(new Vector2(5000, 6000 - 680f));
+        jack = new Jack(new Vector2(300, 6000 - 380f));
 
-        girl = new Girl(new Vector2(3000, 6000 - 700f));
+        girl = new Girl(new Vector2(4000, 6000 - 700f));
 
         monsters1.clear();
 
@@ -438,10 +438,10 @@ public class Level extends State implements ContactListener, Serializable {
             || (body1.getUserData().toString().contains("NinjaStar") && body2.getUserData().toString().equals(o.getBodyData().userData))
                 || (body2.getUserData().toString().contains("NinjaStar") &&
                 body1.getUserData().toString().equals(o.getBodyData().userData))) {
-                if (!body1.getFixtureList().get(0).isSensor() &&
-                    !body2.getFixtureList().get(0).isSensor())
-                    if (!(o.getBody().getUserData().equals("BulletBoy")))
-                        o.beenHit();
+//                if (!body1.getFixtureList().get(0).isSensor() &&
+//                    !body2.getFixtureList().get(0).isSensor())
+//                    if (!(o.getBody().getUserData().equals("BulletBoy")))
+                        o.beenHit(body1, body2);
 //                if (body1.getUserData().toString().equals("Bullet")) {
 //                    body1.setUserData("null");
 //                } else {
@@ -519,17 +519,17 @@ public class Level extends State implements ContactListener, Serializable {
 
 
         for (Objeto o : objetos) {
-            if (o instanceof NinjaRope)
-                continue;
-            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
-                body2.getUserData().toString().equals(o.getBodyData().userData))
-                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
-                body1.getUserData().toString().equals(o.getBodyData().userData))) {
-                if (!body1.getFixtureList().get(0).isSensor() &&
-                    !body2.getFixtureList().get(0).isSensor())
-                    if (!(o.getBody().getUserData().equals("BulletBoy")))
-                        o.beenHit();
-            }
+//            if (o instanceof NinjaRope)
+//                continue;
+//            if (((body1.getUserData().toString().equals("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
+//                body2.getUserData().toString().equals(o.getBodyData().userData))
+//                || ((body2.getUserData().toString().equals("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
+//                body1.getUserData().toString().equals(o.getBodyData().userData))) {
+//                if (!body1.getFixtureList().get(0).isSensor() &&
+//                    !body2.getFixtureList().get(0).isSensor())
+//                    if (!(o.getBody().getUserData().equals("BulletBoy")))
+//                        o.beenHit();
+//            }
         }
 
         for (Stand stand : stands) {
@@ -577,7 +577,7 @@ public class Level extends State implements ContactListener, Serializable {
                 || (body2.getUserData().toString().contains("NinjaStar") &&
                 body1.getUserData().toString().equals(o.getBody().getUserData()))) {
                 if (!body1.getFixtureList().get(0).isSensor() &&
-                    !body2.getFixtureList().get(0).isSensor())
+                    !body2.getFixtureList().get(0).isSensor()) {
 
 //                if (body1.getUserData().toString().equals("Bullet")) {
 //                    body1.setUserData("null");
@@ -586,8 +586,9 @@ public class Level extends State implements ContactListener, Serializable {
 //                        body2.setUserData("null");
 //                    }
 //                }
-                 if (!(o instanceof Boy))
-                    o.beenHit();
+//                 if (!(o instanceof Boy))
+//                    o.beenHit();
+                }
             }
         }
     }

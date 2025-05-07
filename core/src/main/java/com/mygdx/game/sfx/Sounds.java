@@ -25,6 +25,7 @@ public class Sounds implements Serializable{
 //    public static Audio GUN_SHOT = new Audio("src\\main\\res\\sounds\\gun-shot.wav");
 //    public static Audio JUMP = new Audio("sounds/Jump.wav");
 //    public static Audio CAMINHOSDEVIDRO = new Audio("sounds/Caminhos de Vidro.wav");
+    public static final Sound JACK_RELOADING = Gdx.audio.newSound(Gdx.files.internal("Jack/Jack_Reloading_Voice.mp3"));
     public static final Sound SABER = Gdx.audio.newSound(Gdx.files.internal("sounds/Saber.wav"));
     public static final Sound JUMP = Gdx.audio.newSound(Gdx.files.internal("sounds/Jump.wav"));
     public static final Sound HIYAH = Gdx.audio.newSound(Gdx.files.internal("sounds/HoYah.wav"));

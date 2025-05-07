@@ -38,6 +38,7 @@ public class Rifle extends Objeto implements Item, Serializable {
     public static boolean showingNumbBullets = false;
     private int rightSide;
     public static String stringNumbBullets = "";
+    @Getter
     private int total;
     private int angle;
     @Getter @Setter

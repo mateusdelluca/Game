@@ -17,6 +17,7 @@ import lombok.Setter;
 import java.util.Random;
 
 import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.sfx.Sounds.JACK_RELOADING;
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
 public class Jack extends Objeto {
@@ -27,7 +28,7 @@ public class Jack extends Objeto {
     private float alpha = 1.0f;
     @Getter @Setter
     private boolean beenHit;
-    public int HP = 3;
+    public int HP = 5;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
     @Getter
@@ -50,19 +51,20 @@ public class Jack extends Objeto {
             rifle.update();
             if (!rifle.isReloading()) {
                 if (deltaTime > 5f) {
-                    Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
-                        WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
-                        body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
-                    rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
-                    deltaTime = 0f;
-                    SHOTGUN.play();
+                    if (rifle.getTotal() > 0) {
+                        Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
+                            WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
+                            body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
+                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                        deltaTime = 0f;
+                        SHOTGUN.play();
+                    }
                 }
             }
-            if (rifle.isReloading()) {
-                sprite = new Sprite(Images.jack_reloading);
+            if (rifle.isReloading() && rifle.getTotal() > 0) {
                 deltaTime2 += Gdx.graphics.getDeltaTime();
                 if (deltaTime2 > 0.6f) {
-                    deltaTime2 = 0f;
+                    deltaTime2 = 0f;JACK_RELOADING.play();
                     rifle.setReloading(false);
                 }
             }
@@ -102,6 +104,10 @@ public class Jack extends Objeto {
                 }
                 sprite.setAlpha(alpha);
             }
+//            if (rifle.isReloading())
+//                sprite = new Sprite(Images.jack_reloading);
+//            else
+//                sprite = new Sprite(Images.jack);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
@@ -128,8 +134,8 @@ public class Jack extends Objeto {
     }
 
     @Override
-    public void beenHit(){
-        beenHit = true;
+    public void beenHit(Body body1, Body body2){
+        super.beenHit(body1, body2);
     }
 
 }
