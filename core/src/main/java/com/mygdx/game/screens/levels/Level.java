@@ -36,6 +36,9 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
@@ -75,7 +78,7 @@ public class Level extends State implements ContactListener, Serializable {
 
     private Array<Rope> ropes = new Array();
     Rope rope;
-
+    private boolean beenHit;
 
 
     public void init(){
@@ -598,11 +601,11 @@ public class Level extends State implements ContactListener, Serializable {
             if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
                 monster1.getBody().setLinearVelocity(0, 0);
                 if (boy.animations.name().equals("BOY_SABER") && boy.frameCounter() > 0f) {
-                    monster1.animations = Animations.MONSTER1_SPLIT;
-                    monster1.setSplit(true);
                     for (Fixture f : monster1.getBody().getFixtureList()) {
                         f.setSensor(true);
                     }
+                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.setSplit(true);
                     monster1.getBody().setGravityScale(0f);
                     monster1.getBody().setLinearVelocity(0f, 0f);
                 } else {
@@ -611,12 +614,23 @@ public class Level extends State implements ContactListener, Serializable {
                 }
                 monster1.getBody().setFixedRotation(true);
             } else
-            if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING") && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
-                boy.beenHit();
+                 if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) && !boy.animations.name().equals("BOY_PUNCHING") && !boy.actionRect().overlaps(monster1.getBodyBounds()) && !boy.animations.name().equals("BOY_SABER")) {
+                boy.getBody().setLinearVelocity(boy.getBody().getLinearVelocity().x + (monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? -15 : 15), boy.getBody().getLinearVelocity().y + 20f);
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        beenHit = false;
+                    }
+                }, 5000);
+                if (!beenHit) {
+                    boy.beenHit();
+                    beenHit = true;
+                }
             }
                 if (boy.actionRect().overlaps(monster1.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-                    monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
-                    monster1.animations = Animations.MONSTER1_FLICKERING;
+//                    monster1.getBody().setLinearVelocity(monster1.getBody().getLinearVelocity().x + monster1.getBody().getPosition().x > boy.getBody().getPosition().x ? 15 : -15, monster1.getBody().getLinearVelocity().y + 20f);
+//                    monster1.animations = Animations.MONSTER1_FLICKERING;
+                    monster1.beenHit();
                 }
 
         }

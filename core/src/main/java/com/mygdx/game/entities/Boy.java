@@ -75,6 +75,7 @@ public class Boy extends Objeto {
     private float throwTimer;
     public static boolean ropeShoot;
     private boolean onGround;
+    private float delta;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -151,12 +152,16 @@ public class Boy extends Objeto {
                 }
                 throwNinjaStar1.setPosition(body.getPosition().x, body.getPosition().y);
                 legs.draw(s);
-                throwNinjaStar1.draw(s);
+                if (!thrown)
+                    throwNinjaStar1.draw(s);
                 s.draw(shoot, worldX - 13, worldY - 9);
             }
             if (thrown) {
                 throwNinjaStar2.setPosition(body.getPosition().x, body.getPosition().y);
                 throwNinjaStar2.draw(s);
+                delta += Gdx.graphics.getDeltaTime();
+                if (delta > 100)
+                    thrown = false;
             }
             if (ropeShoot){
                 if (isMoving()) //when he is moving and didn't active the jetpack

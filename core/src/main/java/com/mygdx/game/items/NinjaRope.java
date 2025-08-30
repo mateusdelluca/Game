@@ -18,8 +18,7 @@ import com.mygdx.game.system.BodyData;
 
 //import static com.mygdx.game.bodies.Builder.box;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
-import static com.mygdx.game.images.Images.ninjaRope_inventory;
-import static com.mygdx.game.images.Images.shoot;
+import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.viewport;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
@@ -56,6 +55,7 @@ public class NinjaRope extends Objeto implements Item{
     private int index;
     private boolean jointHasBeenCreated;
     private boolean touched2;
+
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
@@ -236,7 +236,7 @@ public class NinjaRope extends Objeto implements Item{
 
     public void render(SpriteBatch batch) {
         if (body != null) {
-            Sprite sprite = new Sprite(ninjaRope_inventory);
+            Sprite sprite = new Sprite(ninjaRope);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.setOriginCenter();
             sprite.rotate(1f);

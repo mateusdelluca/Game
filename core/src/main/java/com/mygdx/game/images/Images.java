@@ -41,6 +41,7 @@ public class Images implements Serializable {
     public static Texture leaf;
     public static Sprite shooting1, shooting2, shoot;
     public static Sprite ninjaRope_shoot, rope;
+    public static Sprite ninjaRope;
     public static Sprite top;
     public static Sprite aim;
     public static Sprite legs;
@@ -120,14 +121,15 @@ public class Images implements Serializable {
         jetPack_inventory = new Sprite(new Texture(Gdx.files.internal("items/JetPack_75x85.png")));
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         ninjaRope_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85.png")));
+        ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
         spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
         equipped_inventory.setSize(67,74);
-        itemsDraw.put("Saber", saber_inventory);
-        itemsDraw.put("Rifle", rifle_inventory);
-        itemsDraw.put("JetPack", jetPack_inventory);
         itemsDraw.put("NinjaStar", ninjaStar_inventory);
-        itemsDraw.put("Equipped", equipped_inventory);
+        itemsDraw.put("Rifle", rifle_inventory);
+        itemsDraw.put("Saber", saber_inventory);
+        itemsDraw.put("JetPack", jetPack_inventory);
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
+        itemsDraw.put("Equipped", equipped_inventory);
 
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
