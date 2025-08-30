@@ -1,33 +1,24 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.entities.Boy;
-import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
-import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.items.Crystal;
-import com.mygdx.game.items.JetPack;
-import com.mygdx.game.items.Portal;
-import com.mygdx.game.items.Rifle;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.Tile;
 
-import java.io.*;
 import java.util.ArrayList;
 
 public class Level_Manager extends State implements ContactListener {
 
-    private Level level1;
+    private Level level1, level2, level3;
     public static Level currentLevel;
-    public static String currentLevelName = "Level3";
+    public static String currentLevelName = "Level1";
 
     public static ArrayList<Objeto> objetos = new ArrayList<>();
 
@@ -40,13 +31,17 @@ public class Level_Manager extends State implements ContactListener {
     public static Viewport viewport;
     public static OrthographicCamera camera;
 
-    public static float PPM = 100f;
+//    public static float PPM = 100f;
     public static boolean loaded;
 
     public Level_Manager() {
-        level1 = new Level();
-        world.setContactListener(this);
-        changeLevel("Level3");
+        try {
+            level1 = new Level1();
+            world.setContactListener(this);
+            changeLevel("Level1");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void changeLevel(String levelName) {
@@ -63,13 +58,14 @@ public class Level_Manager extends State implements ContactListener {
                 return level1;
             }
             case "Level2": {
-                currentLevelName = "Level2";
-                Images.staticObjects = Images.tile.loadMapObjects("Rects");
-                return level1;
+//                currentLevelName = "Level2";
+//                Images.staticObjects = Images.tile.loadMapObjects("Rects");
+//                return level2;
+                return null;
             }
             case "Level3": {
                 currentLevelName = "Level3";
-                return level1;
+                return level3;
             }
             default: {
                 return level1;

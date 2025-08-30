@@ -77,6 +77,8 @@ public class Load{
             throw new RuntimeException(e);
         } catch(NullPointerException e){
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

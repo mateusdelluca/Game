@@ -44,7 +44,7 @@ import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
-public class Level extends State implements ContactListener, Serializable {
+public abstract class Level extends State implements ContactListener, Serializable {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
@@ -81,43 +81,9 @@ public class Level extends State implements ContactListener, Serializable {
     private boolean beenHit;
 
 
-    public void init(){
-        Box2D.init();
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
 
-        background = new Background();
 
-        tile = new Tile("Level3/Level3.tmx");
-        staticObjects = tile.loadMapObjects("Rects");
-        tile.createBodies(staticObjects, world, false, "Rects");
-
-        thorns = tile.loadMapObjects("Thorns_Rects");
-        tile.createBodies(thorns, world, false, "Thorns_Rects");
-
-        MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
-        tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
-
-        Texture t = new Texture(Gdx.files.internal("Font2.png"));
-        BitmapFont font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
-        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        font.getData().scale(0.2f);
-
-        fans = new ArrayList<>();
-
-        fans.add(new Fan(new Vector2(1200 + 76, 6000 - 2400)));
-        fans.add(new Fan(new Vector2(1200 + 2*76, 6000 - 2400)));
-        fans.add(new Fan(new Vector2(1200, 6000 - 1640)));
-        fans.add(new Fan(new Vector2(1400, 6000 - 1120)));
-        fans.add(new Fan(new Vector2(1280, 6000 - 640)));
-
-        fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
-
-        box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-
-    }
-
-    public Level() {
+    public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
 
@@ -131,7 +97,8 @@ public class Level extends State implements ContactListener, Serializable {
 
         powerBar = new PowerBar();
 
-        boy = new Boy(new Vector2(10, 5700), viewport);
+        //boy = new Boy(new Vector2(10, 5700), viewport);
+        boy = new Boy(new Vector2(80, 400), viewport);
 
         ninjaRope = new NinjaRope(boy.getBody());
 
@@ -139,15 +106,7 @@ public class Level extends State implements ContactListener, Serializable {
 
         girl = new Girl(new Vector2(4000, 6000 - 700f));
 
-        monsters1.clear();
 
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3200, 6000 - 1080),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
 
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
 
@@ -225,6 +184,42 @@ public class Level extends State implements ContactListener, Serializable {
         objetos.add(girl);
         objetos.addAll(stands);
         objetos.addAll(monsters1.values());
+
+    }
+
+    public void init() {
+        Box2D.init();
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        background = new Background();
+
+        tile = new Tile("Level1/Level1.tmx");
+        staticObjects = tile.loadMapObjects("Rects");
+        tile.createBodies(staticObjects, world, false, "Rects");
+
+        thorns = tile.loadMapObjects("Thorns_Rects");
+        tile.createBodies(thorns, world, false, "Thorns_Rects");
+
+        MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
+        tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
+
+        Texture t = new Texture(Gdx.files.internal("Font2.png"));
+        BitmapFont font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        font.getData().scale(0.2f);
+
+        fans = new ArrayList<>();
+
+        fans.add(new Fan(new Vector2(1200 + 76, 6000 - 2400)));
+        fans.add(new Fan(new Vector2(1200 + 2*76, 6000 - 2400)));
+        fans.add(new Fan(new Vector2(1200, 6000 - 1640)));
+        fans.add(new Fan(new Vector2(1400, 6000 - 1120)));
+        fans.add(new Fan(new Vector2(1280, 6000 - 640)));
+
+        fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
+
+        box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
     }
 
