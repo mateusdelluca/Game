@@ -38,9 +38,8 @@ public class Level_Manager extends State implements ContactListener {
 
     public Level_Manager() {
         try {
-            level1 = new Level1();
-            world.setContactListener(this);
             changeLevel("Level1");
+            world.setContactListener(this);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -59,14 +58,16 @@ public class Level_Manager extends State implements ContactListener {
         switch (level) {
             case "Level1": {
                 currentLevelName = "Level1";
-                Images.staticObjects = Images.tile.loadMapObjects("Rects");
+//                Images.staticObjects = Images.tile.loadMapObjects("Rects");
+                if (level1 == null)
+                    return new Level1();
                 return level1;
             }
             case "Level2": {
-//                currentLevelName = "Level2";
+                currentLevelName = "Level2";
 //                Images.staticObjects = Images.tile.loadMapObjects("Rects");
 //                return level2;
-                return null;
+                return new Level2();
             }
             case "Level3": {
                 currentLevelName = "Level3";
@@ -170,6 +171,13 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public void update() {
+        if (currentLevel == null) {
+            try {
+                changeLevel("Level1");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         if (!PausePage.pause)
             currentLevel.update();
     }
