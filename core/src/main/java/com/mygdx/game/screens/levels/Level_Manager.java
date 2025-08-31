@@ -14,6 +14,8 @@ import com.mygdx.game.screens.Tile;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.images.Images.tile;
+
 public class Level_Manager extends State implements ContactListener {
 
     private Level level1, level2, level3;
@@ -45,12 +47,15 @@ public class Level_Manager extends State implements ContactListener {
     }
 
     public void changeLevel(String levelName) {
-        currentLevel = returnLevel(levelName);
-        Images.tile = new Tile(levelName + "/" + levelName + ".tmx");
+        try {
+            currentLevel = returnLevel(levelName);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         assert currentLevel != null;
     }
 
-    public Level returnLevel(String level) {
+    public Level returnLevel(String level) throws Exception {
         switch (level) {
             case "Level1": {
                 currentLevelName = "Level1";
@@ -65,7 +70,7 @@ public class Level_Manager extends State implements ContactListener {
             }
             case "Level3": {
                 currentLevelName = "Level3";
-                return level3;
+                return new Level3();
             }
             default: {
                 return level1;

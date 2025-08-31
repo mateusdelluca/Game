@@ -194,7 +194,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         background = new Background();
 
-        tile = new Tile("Level1/Level1.tmx");
+        tile = new Tile(getClass().getSimpleName() + "/" + getClass().getSimpleName() + ".tmx");
         staticObjects = tile.loadMapObjects("Rects");
         tile.createBodies(staticObjects, world, false, "Rects");
 
