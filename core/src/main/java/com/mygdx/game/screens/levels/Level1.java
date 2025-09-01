@@ -43,6 +43,8 @@ public class Level1 extends Level{
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
             camera.position.x = 970f;
+        if (camera.position.y < 1080f/2f)
+            camera.position.y = 1080f/2f;
         camera.update();
         viewport.update(Level.WIDTH, Level.HEIGHT);
 
