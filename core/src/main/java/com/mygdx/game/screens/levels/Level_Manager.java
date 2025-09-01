@@ -6,15 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.Objeto;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
-import com.mygdx.game.screens.Tile;
 
 import java.util.ArrayList;
-
-import static com.mygdx.game.images.Images.tile;
 
 public class Level_Manager extends State implements ContactListener {
 
@@ -200,5 +196,16 @@ public class Level_Manager extends State implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
         currentLevel.postSolve(contact, contactImpulse);
+    }
+
+    public static void reset() {
+        try {
+            currentLevel = new Level1();
+            currentLevelName = "Level1";
+//            world = new World(new Vector2(0, -10), true);
+            world.setContactListener(currentLevel);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
@@ -56,20 +57,20 @@ public abstract class Level extends State implements ContactListener, Serializab
     public static HashMap<String, Item> items = new HashMap<>();
     public Boy boy;
     @Getter @Setter
-    private Jack jack;
+    protected Jack jack;
     @Setter @Getter
-    private Girl girl;
+    protected Girl girl;
 
-    private Mouse mouse;
+    protected Mouse mouse;
     protected PowerBar powerBar;
 
     protected ArrayList<Fans> fans = new ArrayList<>();
 
     public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
-    private final ArrayList<Block> blocks = new ArrayList<>();
+    protected ArrayList<Block> blocks = new ArrayList<>();
 
-    private NinjaRope ninjaRope;
+    protected NinjaRope ninjaRope;
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -77,8 +78,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     private NinjaStar ninjaStar;
 
     private Array<Rope> ropes = new Array();
-    Rope rope;
-    private boolean beenHit;
+    public Rope rope;
+    protected boolean beenHit;
 
 
 
@@ -243,7 +244,11 @@ public abstract class Level extends State implements ContactListener, Serializab
             camera.position.x = 970f;
         camera.update();
         viewport.update(Level.WIDTH, Level.HEIGHT);
-        renderObjects();
+//        try {
+//            renderObjects();
+//        } catch (NullPointerException e) {
+//            System.out.println(e.getMessage());
+//        }
         shapeRenderer.setProjectionMatrix(camera.combined);
 //        camera.update();
 
@@ -309,7 +314,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         for (Rope rope : ropes)
             rope.render(spriteBatch);
         spriteBatch.end();
-
     }
 
     public void update(){
