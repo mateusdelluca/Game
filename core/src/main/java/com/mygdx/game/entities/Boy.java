@@ -74,6 +74,7 @@ public class Boy extends Objeto {
     private boolean onGround;
     private float delta;
     private boolean laser = true;
+    private int frame;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -190,8 +191,10 @@ public class Boy extends Objeto {
             } else {
                 if (laser) {
                     animations = Animations.BOY_WALKING;
-                    Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(0,
-                        false, facingLeft));
+                    if (!isMoving())
+                        animations.animator.setStateTime(0);
+                    Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false,
+                        true, facingLeft));
                     sprite.setPosition(bodyPosition.x, bodyPosition.y);
                     sprite.draw(spriteBatch);
                     flipAndRender(new Sprite(Animations.BOY_HEADSET.animator.currentSpriteFrame(false,
