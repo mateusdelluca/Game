@@ -217,6 +217,7 @@ public class Boy extends Objeto {
             jetPackSprite.setFlip(true, false);
             sprite.setFlip(true, false);
             facingLeft = true;
+            radians = (float) Math.toRadians(degrees);
         } else{
             if (degrees < 90f && degrees > 10f){
                 sprite.setRotation(degrees);
@@ -224,6 +225,7 @@ public class Boy extends Objeto {
 //                legs.setFlip(false, false);
                 jetPackSprite.setFlip(false, false);
                 facingLeft = false;
+                radians = (float) Math.toRadians(degrees);
             }
         }
 //        legs.draw(spriteBatch);
@@ -307,7 +309,7 @@ public class Boy extends Objeto {
                     float dx = worldX - Math.abs(bodyPosition.x + 64);
                     float dy = worldY - Math.abs(bodyPosition.y + 64);
                     degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-                    radians = (float) Math.atan2(dy, dx);
+//                    radians = (float) Math.atan2(dy, dx);
                 }
             }
         }
@@ -685,7 +687,7 @@ public class Boy extends Objeto {
 
     @Override
     public void beenHit(){
-        if (!isBeenHit()) {
+        if (animations != Animations.BOY_STRICKEN) {
             getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
             animations = Animations.BOY_STRICKEN;
             PowerBar.hp -= 10;
@@ -717,6 +719,12 @@ public class Boy extends Objeto {
             || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Colliders")
                 || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Colliders"))){
             onGround = true;
+        }
+
+        if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Colliders")
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Colliders"))){
+            beenHit();
+
         }
     }
 }
