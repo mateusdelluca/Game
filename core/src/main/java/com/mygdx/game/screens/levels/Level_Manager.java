@@ -202,7 +202,6 @@ public class Level_Manager extends State implements ContactListener {
         try {
             currentLevel = new Level1();
             currentLevelName = "Level1";
-//            world = new World(new Vector2(0, -10), false);
             world.setContactListener(currentLevel);
         } catch (Exception e) {
             throw new RuntimeException(e);
