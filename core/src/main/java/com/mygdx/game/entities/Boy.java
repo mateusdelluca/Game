@@ -18,16 +18,13 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tools.ant.types.selectors.SelectSelector;
 import org.jetbrains.annotations.Contract;
-import java.util.Iterator;
 
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.screens.Inventory.addItemToInventory;
-import static com.mygdx.game.screens.Inventory.itemsToBeDrawn;
 import static com.mygdx.game.screens.levels.Level.items;
+import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
 
 public class Boy extends Objeto {
@@ -37,7 +34,7 @@ public class Boy extends Objeto {
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     @Getter @Setter
-    private boolean isFacingLeft;
+    private boolean facingLeft;
     private float punchingAnimationTimer;
     public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
     public static final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
@@ -76,6 +73,7 @@ public class Boy extends Objeto {
     public static boolean ropeShoot;
     private boolean onGround;
     private float delta;
+    private boolean laser = true;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -90,30 +88,32 @@ public class Boy extends Objeto {
     }
 
     @Override
-    public void render(SpriteBatch s){
+    public void render(SpriteBatch spriteBatch){
         if (use_jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
-            jetPackSprite.draw(s);
+            jetPackSprite.draw(spriteBatch);
         }
         if (beenHit) { //when take a damage and stay flickering
             Sprite flickering = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
             flickering.setPosition(body.getPosition().x, body.getPosition().y);
-            flickering.draw(s);
+            flickering.draw(spriteBatch);
         } else {
-            if ((!shooting && !throwing && !ropeShoot) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
+            if ((!shooting && !throwing && !ropeShoot && !laser) || saber_taken) {  //when he is not shooting and even has been hit. Uses animations method to recognize physics of this sprite
                 Sprite anim = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
                 anim.setPosition(body.getPosition().x, body.getPosition().y);
-                anim.draw(s);
+                anim.draw(spriteBatch);
             } else {
-                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
-                if (isMoving()) //when he is moving and didn't active the jetpack
-                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
-                legs.setPosition(body.getPosition().x, body.getPosition().y);
+                if (!laser) {
+                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
+                    if (isMoving()) //when he is moving and didn't active the jetpack
+                        legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
+                    legs.setPosition(body.getPosition().x, body.getPosition().y);
+                }
                 if (shooting) {    //when actives the gun and shooting and he is not moving and he has not been hit
                     //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
-                    top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), isFacingLeft));
+                    top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), facingLeft));
                     top.setOriginCenter();
                     top.setRotation(degrees);
                     top.setPosition(bodyPosition.x, bodyPosition.y);
@@ -128,12 +128,12 @@ public class Boy extends Objeto {
                         jetPackSprite.flip(false, false);
                     }
 
-                    legs.draw(s);
+                    legs.draw(spriteBatch);
 //                    s.draw(top, body.getPosition().x, body.getPosition().y);
 //                    top.rotate(degrees);
-                    top.draw(s);
+                    top.draw(spriteBatch);
 //                    aim.setPosition(worldX - 13, worldY - 13);    //these negatives numbers are there to aim the center of mouse
-                    s.draw(shoot, worldX - 13, worldY - 9);
+                    spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 }
             }
             if (throwing && !shooting && !beenHit && !saber_taken) {
@@ -143,7 +143,8 @@ public class Boy extends Objeto {
                     legs.setFlip(true, false);
                     jetPackSprite.setFlip(true, false);
                     setFacingLeft(true);
-                } if (Math.abs(degrees) < 100f) {
+                }
+                if (Math.abs(degrees) < 100f) {
                     throwNinjaStar1.setFlip(false, false);
                     throwNinjaStar2.setFlip(false, false);
                     legs.setFlip(false, false);
@@ -151,21 +152,21 @@ public class Boy extends Objeto {
                     setFacingLeft(false);
                 }
                 throwNinjaStar1.setPosition(body.getPosition().x, body.getPosition().y);
-                legs.draw(s);
+                legs.draw(spriteBatch);
                 if (!thrown)
-                    throwNinjaStar1.draw(s);
-                s.draw(shoot, worldX - 13, worldY - 9);
+                    throwNinjaStar1.draw(spriteBatch);
+                spriteBatch.draw(shoot, worldX - 13, worldY - 9);
             }
             if (thrown) {
                 throwNinjaStar2.setPosition(body.getPosition().x, body.getPosition().y);
-                throwNinjaStar2.draw(s);
+                throwNinjaStar2.draw(spriteBatch);
                 delta += Gdx.graphics.getDeltaTime();
                 if (delta > 100)
                     thrown = false;
             }
-            if (ropeShoot){
+            if (ropeShoot) {
                 if (isMoving()) //when he is moving and didn't active the jetpack
-                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, isFacingLeft));
+                    legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
                 legs.setPosition(body.getPosition().x, body.getPosition().y);
                 ninjaRope_shoot.setOriginCenter();
                 ninjaRope_shoot.setRotation(degrees);
@@ -176,17 +177,57 @@ public class Boy extends Objeto {
                     legs.setFlip(true, false);
                     jetPackSprite.setFlip(true, false);
                     setFacingLeft(true);
-                } if (Math.abs(degrees) < 100f) {
+                }
+                if (Math.abs(degrees) < 100f) {
                     ninjaRope_shoot.setFlip(false, false);
                     legs.setFlip(false, false);
                     jetPackSprite.setFlip(false, false);
                     setFacingLeft(false);
                 }
-                legs.draw(s);
-                ninjaRope_shoot.draw(s);
+                legs.draw(spriteBatch);
+                ninjaRope_shoot.draw(spriteBatch);
 //                s.draw(shoot, worldX - 13, worldY - 9);
+            } else {
+                if (laser) {
+                    animations = Animations.BOY_WALKING;
+                    Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(0,
+                        false, facingLeft));
+                    sprite.setPosition(bodyPosition.x, bodyPosition.y);
+                    sprite.draw(spriteBatch);
+                    flipAndRender(new Sprite(Animations.BOY_HEADSET.animator.currentSpriteFrame(false,
+                        true, facingLeft)),
+                        new Vector2(bodyPosition.x + 45f, bodyPosition.y + 61f));
+                }
             }
         }
+    }
+
+    public void flipAndRender(Sprite sprite, Vector2 itemPosition){
+        spriteBatch.draw(shoot, worldX - 13, worldY - 9);
+//        legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
+//        if (isMoving()) //when he is moving and didn't active the jetpack
+//            legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
+//        legs.setPosition(body.getPosition().x, body.getPosition().y);
+        sprite.setOriginCenter();
+//
+        sprite.setPosition(itemPosition.x, itemPosition.y);
+        if (degrees > 91f && degrees < 181f) {
+            sprite.setRotation(-Math.abs(180 - Math.abs(degrees)));
+//            legs.setFlip(true, false);
+            jetPackSprite.setFlip(true, false);
+            sprite.setFlip(true, false);
+            facingLeft = true;
+        } else{
+            if (degrees < 90f && degrees > 10f){
+                sprite.setRotation(degrees);
+                sprite.setFlip(false, false);
+//                legs.setFlip(false, false);
+                jetPackSprite.setFlip(false, false);
+                facingLeft = false;
+            }
+        }
+//        legs.draw(spriteBatch);
+        sprite.draw(spriteBatch);
     }
 
     public void update(){
@@ -255,12 +296,20 @@ public class Boy extends Objeto {
             float dy = worldY - Math.abs(bodyPosition.y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
             radians = (float) Math.atan2(dy, dx);
-        }
-        if (throwing || ropeShoot){
-            float dx = worldX - Math.abs(bodyPosition.x + 64 + (!isFacingLeft ? 50 : -50));
-            float dy = worldY - Math.abs(bodyPosition.y + 64);
-            degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-            radians = (float) Math.atan2(dy, dx);
+        } else {
+            if (throwing || ropeShoot) {
+                float dx = worldX - Math.abs(bodyPosition.x + 64 + (!facingLeft ? 50 : -50));
+                float dy = worldY - Math.abs(bodyPosition.y + 64);
+                degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
+                radians = (float) Math.atan2(dy, dx);
+            } else{
+                if (laser){ //TODO boolean laser
+                    float dx = worldX - Math.abs(bodyPosition.x + 64);
+                    float dy = worldY - Math.abs(bodyPosition.y + 64);
+                    degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
+                    radians = (float) Math.atan2(dy, dx);
+                }
+            }
         }
     }
 
@@ -328,6 +377,12 @@ public class Boy extends Objeto {
                     } else {
                         if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
                         || animations == Animations.BOY_RELOADING || throwing) {
+                            if (laser){
+                                if (!isMoving()){
+                                    animations = Animations.BOY_WALKING;
+                                    animations.animator.setFrameCounter(0);
+                                }
+                            }
                         } else {
                             if (onGround() && !use_jetPack) {
                                 if (isMoving())
@@ -410,7 +465,7 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
             if (!shooting) {
-                if (!isFacingLeft) {
+                if (!facingLeft) {
 //                    degrees = 0f;
 //                    radians = 0f;
                 }
@@ -476,10 +531,10 @@ public class Boy extends Objeto {
                 if (!rifle.isReloading()) {
                     if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
                         Bullet bullet = new Bullet(
-                            new Vector2(!isFacingLeft ? (getBody().getPosition().x +
+                            new Vector2(!facingLeft ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x),
                             (getBody().getPosition().y + HEIGHT / 2f)),
-                            isFacingLeft, radians, true, this.toString());
+                            facingLeft, radians, true, this.toString());
                         rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                     }
                 }
@@ -487,7 +542,7 @@ public class Boy extends Objeto {
             else {
                 if (throwing && !shooting && !beenHit && !saber_taken) {
                     thrown = true;
-                    items.put(NinjaStar.class.getSimpleName() + indexNinja++, new NinjaStar(new Vector2(!isFacingLeft ? ((getBody().getPosition().x +
+                    items.put(NinjaStar.class.getSimpleName() + indexNinja++, new NinjaStar(new Vector2(!facingLeft ? ((getBody().getPosition().x +
                         WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
@@ -508,6 +563,20 @@ public class Boy extends Objeto {
                             animations = Animations.BOY_SABER;
                             setFrameCounter(0);
                             getBody().setLinearVelocity(!flip0 ? VELOCITY_X * 5 : -VELOCITY_X * 5, getBody().getLinearVelocity().y);
+                        } else{
+                            if (laser) {
+//                                if (!rifle.isReloading()) {
+//                                    if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                                        Laser laser = new Laser(
+                                            new Vector2(!facingLeft ? (getBody().getPosition().x +
+                                                WIDTH / 2f) : (getBody().getPosition().x),
+                                                (getBody().getPosition().y + HEIGHT / 2f)),
+                                            facingLeft, radians, this.toString());
+                                LASER_HEADSET.play();
+//                                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+//                                    }
+//                                }
+                            }
                         }
                     }
                 }
