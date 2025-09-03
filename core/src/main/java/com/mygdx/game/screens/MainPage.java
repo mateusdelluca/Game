@@ -25,6 +25,8 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
+import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
+
 public class MainPage extends State {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
@@ -198,7 +200,8 @@ public class MainPage extends State {
                 break;
             }
         }
-        shot.play();
+//        shot.play();
+        LASER_HEADSET.play();
         return false;
     }
 
