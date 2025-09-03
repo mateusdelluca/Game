@@ -1,5 +1,6 @@
 package com.mygdx.game.images;
 
+import com.badlogic.gdx.Gdx;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -23,6 +24,9 @@ public enum Animations implements Serializable {
     BOY_JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),
     BOY_PUNCHING(new Animator(3,3, 30, 128, 128, "boy/Punching2.png")),
     BOY_SHOOTING_AND_WALKING(new Animator(6,6, 5, 128, 128, "boy/Shooting3.png")),
+
+    BOY_HEADSET(new Animator(3,3,5,42, 50,"boy/Laser_HeadSet-Sheet3.png")),
+
     //monster
     MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),
     MONSTER1_FLICKERING(new Animator(4,4,3,94,128, "monster/Flickering.png")),

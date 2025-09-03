@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 public class Animator{
 
-    private int numColumns, numRows, numFrames, width, height;    //rows and columns of the sprite sheet
+    private int numColumns, numRows, numFrames, width, height;  //rows and columns of the sprite sheet
     private float fps;
     private String path;
     @Getter
@@ -158,6 +158,7 @@ public class Animator{
                 width, height);
         frames = new TextureRegion[numFrames];
 
+
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColumns; j++) {
                 if (totalFrames >= numFrames)
@@ -168,9 +169,10 @@ public class Animator{
                 frames[totalFrames++] = tmp[i][j];
             }
         }
+
         frameDuration = 1f/fps;
         // Initialize the Animation with the frame interval and array of frames
-        animation = new Animation<>(frameDuration, frames);
+        animation = new Animation<>(frameDuration, sprite);
 //        for (int index = 0; index < numFrames; index++) {
 //            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 //            sprite[index] = new Sprite(animation.getKeyFrame(stateTime * 1.01F));
@@ -272,6 +274,36 @@ public class Animator{
         }
         return s;
     }
+
+//    public TextureRegion currentSpriteFrame(boolean useOnlyLastFrame, boolean looping, boolean flip, float w, float h){
+//        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+//        // Get current frame of animation for the current stateTime
+//        Sprite s = null;
+//        if (!useOnlyLastFrame && !PausePage.pause) {
+//            s = new Sprite(animation.getKeyFrame(stateTime, looping));
+//        } else{
+//            if (useOnlyLastFrame || PausePage.pause){
+//                s = new Sprite(lastFrame());
+//            }
+//        }
+//        if (looping && ani_finished() && !PausePage.pause)
+//            stateTime = 0f;
+////        s.setColor(color);
+////        SpriteBatch s1 = new SpriteBatch();
+////        s1.begin();
+////        s.draw(s1);
+////        s1.end();
+////        s1.dispose();
+////        s.setRotation((float) Math.toDegrees(rotation));
+////        System.out.println(s.getRotation());
+//
+//        if (flip) {
+//            s.flip(true, false);
+//            return s;
+//        }
+//        return s;
+//    }
+
 
     public TextureRegion currentSpriteFrame(boolean onlyFirstFrame, float stateTime){
         Sprite s = null;

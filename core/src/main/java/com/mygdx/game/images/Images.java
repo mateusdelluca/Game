@@ -53,7 +53,7 @@ public class Images implements Serializable {
     public static BitmapFont font;
 
     public static Sprite spriteJetPack;
-    public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, false));
+    public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.animator.getFrame(0).getTexture());
 
     public SpriteBatch spriteBatch;
 
@@ -62,6 +62,8 @@ public class Images implements Serializable {
     public static Pixmap pixMapBox;
 
     public static Sprite throwNinjaStar1, throwNinjaStar2;
+
+    public static Sprite headset_laser;
 
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
 
@@ -92,6 +94,7 @@ public class Images implements Serializable {
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
         throwNinjaStar1 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar.png")));
         throwNinjaStar2 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar2.png")));
+
         try {
             for (int i = 0; i < saves.length; i++) {
 //                saves[i] = new Texture(Gdx.files.local("saves/Save" + i + ".png"));
@@ -111,7 +114,7 @@ public class Images implements Serializable {
         fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
         fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
         rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
-        jetPack = new Sprite(new Animator(1,1,1,128,128, "boy/JetPack.png").getFrame(0));
+        jetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack.png")));
         aim = new Sprite(Images.shoot);
         spriteJetPack = Images.jetPack;
         ninjaStar = new Texture(Gdx.files.internal("objects/NinjaStar.png"));
