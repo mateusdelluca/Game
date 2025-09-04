@@ -54,6 +54,7 @@ public class Images implements Serializable {
 
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.animator.getFrame(0).getTexture());
+    private final Sprite laser_inventory;
 
     public SpriteBatch spriteBatch;
 
@@ -124,6 +125,8 @@ public class Images implements Serializable {
         jetPack_inventory = new Sprite(new Texture(Gdx.files.internal("items/JetPack_75x85.png")));
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         ninjaRope_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85.png")));
+        laser_inventory = new Sprite(new Texture(Gdx.files.internal("items/Laser_Headset_75x85.png")));
+        headset_laser = laser_inventory;
         ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
         spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
         equipped_inventory.setSize(67,74);
@@ -132,6 +135,7 @@ public class Images implements Serializable {
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("JetPack", jetPack_inventory);
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
+        itemsDraw.put("Laser_Headset", laser_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
 
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));

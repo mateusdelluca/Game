@@ -74,7 +74,7 @@ public class Boy extends Objeto {
     public static boolean ropeShoot;
     private boolean onGround;
     private float delta;
-    private boolean laser;
+    public static boolean laser;
 
     private Array<Laser> laser_rail = new Array<>();
 
@@ -686,6 +686,9 @@ public class Boy extends Objeto {
             item.setVisible(false);
         }
         if (item instanceof NinjaRope){
+            item.setVisible(false);
+        }
+        if (item instanceof Laser_Headset) {
             item.setVisible(false);
         }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());

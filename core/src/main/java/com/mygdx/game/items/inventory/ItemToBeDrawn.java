@@ -176,14 +176,18 @@ public class ItemToBeDrawn implements Item {
                             if(name.equals("NinjaRope")){
                                 NinjaRope.isActive2 = equipped[index];
                                 Boy.ropeShoot = equipped[index];
-                            } else{
-                                NinjaRope.isActive2 = false;
-                                Boy.ropeShoot = false;
+                            } else {
+                                if (name.equals("Laser_Headset")) {
+                                    Boy.laser = equipped[index];
+                                } else {
+                                    NinjaRope.isActive2 = false;
+                                    Boy.ropeShoot = false;
 //                              Boy.throwing = false;
 //                              Rifle.showingNumbBullets = false;
-    //                            Boy.shooting = false;
+                                    //                            Boy.shooting = false;
 //                              Boy.saber_taken = false;
 //                              Boy.nameOfAnimation = "BOY_IDLE";
+                                }
                             }
                         }
                     }

@@ -8,6 +8,7 @@ import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Crystal;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.Laser_Headset;
 import com.mygdx.game.items.Rifle;
 
 import static com.mygdx.game.images.Images.tile;
@@ -32,8 +33,10 @@ public class Level1 extends Level{
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(400, 500)));
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(400, 400)));
+        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(200, 400)));
         items.get("Rifle").updateItem();
+        items.get("Laser_Headset").updateItem();
         objetos.add(boy);
         objetos.addAll(monsters1.values());
     }
