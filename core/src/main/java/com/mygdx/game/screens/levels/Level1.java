@@ -8,6 +8,7 @@ import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Crystal;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.Rifle;
 
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
@@ -31,7 +32,8 @@ public class Level1 extends Level{
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(400, 500)));
+        items.get("Rifle").updateItem();
         objetos.add(boy);
         objetos.addAll(monsters1.values());
     }
