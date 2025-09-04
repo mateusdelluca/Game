@@ -74,8 +74,7 @@ public class Boy extends Objeto {
     public static boolean ropeShoot;
     private boolean onGround;
     private float delta;
-    private boolean laser = true;
-    private int frame;
+    private boolean laser;
 
     private Array<Laser> laser_rail = new Array<>();
 
@@ -510,7 +509,7 @@ public class Boy extends Objeto {
 
     public void keyUp(int keycode){
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
-            body.setLinearVelocity((Math.abs(body.getLinearVelocity().x) - VELOCITY_X) * (Math.abs(body.getLinearVelocity().x) / (0.1f + body.getLinearVelocity().x)),
+            body.setLinearVelocity(0f,
                 body.getLinearVelocity().y);
             if (!beenHit && !shooting && !use_jetPack)
                 animations = Animations.BOY_IDLE;
@@ -527,7 +526,7 @@ public class Boy extends Objeto {
                 }
             }
         }
-        System.out.println(body.getLinearVelocity().y);
+//        System.out.println(body.getLinearVelocity().y);
     }
 
     public void mouseMoved(int screenX, int screenY){

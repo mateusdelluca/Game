@@ -9,21 +9,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.images.Monster1_Sprites;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.util.Date;
 
 public class Monster1 extends Objeto implements Serializable {
 
     public static final float WIDTH = 94, HEIGHT = 128;
     public static float BOX_WIDTH = 78f, BOX_HEIGHT = 118f;
-    public Animations animations = Animations.MONSTER1_WALKING;
+//    public Animations animations = Animations.MONSTER1_WALKING;
     private boolean usingOnlyLastFrame, noLooping, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_deltaTime;
@@ -38,6 +35,8 @@ public class Monster1 extends Objeto implements Serializable {
     private boolean left;
     private long lastTime, deltaTime, initialTime;
 
+    public Monster1_Sprites animations = new Monster1_Sprites();
+
     public Monster1(Vector2 position, String userData){
         super(WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
@@ -48,7 +47,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     public void render(SpriteBatch spriteBatch){
         if (visible){
-            Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
+            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(spriteBatch);
         }
@@ -68,7 +67,7 @@ public class Monster1 extends Objeto implements Serializable {
                     }
                 }
             }
-            nameAnimation = animations.name();
+            nameAnimation = animations.nameOfAnimation;
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
                 noLooping = true;
                 for (Fixture f : getBody().getFixtureList()) {
@@ -84,7 +83,7 @@ public class Monster1 extends Objeto implements Serializable {
                     }
                 }, 1);
             } else {
-                if (nameAnimation.equals("MONSTER1_FLICKERING")) {
+                if (animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
                     if (!soundRunning) {
                         Sounds.MONSTER_HURT.play();
                         soundRunning = true;
@@ -99,7 +98,7 @@ public class Monster1 extends Objeto implements Serializable {
 //                        flickering_deltaTime = 0f;
                           timer = 0f;
                         body.setLinearVelocity(0, 0);
-                        animations = Animations.MONSTER1_WALKING;
+                        animations.changeAnimation("MONSTER1_WALKING");
                         soundRunning = false;
 
                         beenHit = false;
@@ -108,7 +107,7 @@ public class Monster1 extends Objeto implements Serializable {
             }
         }
         if (HP <= 0) {
-            animations = Animations.MONSTER1_SPLIT;
+            animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
         }
     }
@@ -130,11 +129,11 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     public void setStateTime(float time){
-        animations.animator.stateTime = time;
+        animations.currentAnimation.stateTime = time;
     }
 
     public void setFrameCounter(int frame){
-        setStateTime(animations.animator.timeToFrame(frame));
+        setStateTime(animations.currentAnimation.timeToFrame(frame));
     }
 
     @Override
@@ -153,14 +152,13 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void beenHit() {
-
-            if (body == null)
-                loadBody(BodyDef.BodyType.DynamicBody, false);
-            if (body != null) {
-                body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 4);
-                animations = Animations.MONSTER1_FLICKERING;
-                Sounds.MONSTER_HURT.play();
-                setBeenHit(true);
+        if (body == null)
+            loadBody(BodyDef.BodyType.DynamicBody, false);
+        if (body != null && !animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
+            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 4);
+            animations.changeAnimation("MONSTER1_FLICKERING");
+            Sounds.MONSTER_HURT.play();
+            setBeenHit(true);
         }
     }
 }

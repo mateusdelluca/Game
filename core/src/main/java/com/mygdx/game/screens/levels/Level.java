@@ -603,13 +603,13 @@ public abstract class Level extends State implements ContactListener, Serializab
                     for (Fixture f : monster1.getBody().getFixtureList()) {
                         f.setSensor(true);
                     }
-                    monster1.animations = Animations.MONSTER1_SPLIT;
+                    monster1.animations.changeAnimation("MONSTER1_SPLIT");
                     monster1.setSplit(true);
                     monster1.getBody().setGravityScale(0f);
                     monster1.getBody().setLinearVelocity(0f, 0f);
                 } else {
                     if (!monster1.isSplit())
-                        monster1.animations = Animations.MONSTER1_FLICKERING;
+                        monster1.animations.changeAnimation("MONSTER1_FLICKERING");
                 }
                 monster1.getBody().setFixedRotation(true);
             } else
