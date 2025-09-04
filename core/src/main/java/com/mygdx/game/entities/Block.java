@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.images.Animations;
+import com.mygdx.game.images.Blocks_Sprites;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,7 @@ public class Block extends Objeto{
 
     public static final float WIDTH = 200f, HEIGHT = 200f;
 
-    private Animations animations = Animations.MINI_BLOCK;
+    private Blocks_Sprites animations = new Blocks_Sprites();
 
     public static int index;
 
@@ -42,13 +43,13 @@ public class Block extends Objeto{
         if (this.visible0) {
 //            System.out.println(animations.animator.getAnimationDuration());
 //            System.out.println(animations.animator.getAnimation().getKeyFrame(stateTime).getU2());
-            Sprite sprite = new Sprite(animations.getAnimator().currentSpriteFrame(onlyFirstFrame, stateTime));
+            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame(onlyFirstFrame, stateTime));
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setOriginCenter();
             sprite.setPosition(body.getPosition().x - 203f / 2f, body.getPosition().y - 177f / 2f);
             sprite.draw(s);
         }
-        animations.getAnimator().setStateTime(stateTime);
+        animations.currentAnimation.setStateTime(stateTime);
         this.visible0 = !(stateTime >= DURATION_ANIMATION_IN_SECONDS);
         if (destroyed)
             stateTime += Gdx.graphics.getDeltaTime();
@@ -81,7 +82,7 @@ public class Block extends Objeto{
     }
 
     public Rectangle getRectangle(){
-        Sprite sprite = new Sprite(animations.animator.getFrame(0));
+        Sprite sprite = new Sprite(animations.currentAnimation.getFrame(0));
         sprite.setSize(115, 150);
         return sprite.getBoundingRectangle();
     }
