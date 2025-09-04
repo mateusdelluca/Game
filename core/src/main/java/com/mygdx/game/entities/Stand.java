@@ -1,7 +1,6 @@
 package com.mygdx.game.entities;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
-import static com.mygdx.game.images.Animations.MINI_BLOCK;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 import com.badlogic.gdx.Gdx;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.mygdx.game.images.Blocks_Sprites;
 import com.mygdx.game.system.BodyData;
 
 import java.util.Random;
@@ -29,6 +29,8 @@ public class Stand extends Objeto{
     private float stateTime;
 
     public static int index;
+
+    public Blocks_Sprites block = new Blocks_Sprites();
 
     public static final float DURATION_ANIMATION_IN_SECONDS = 1.0f;
     public Stand(float x, float y){
@@ -63,13 +65,13 @@ public class Stand extends Objeto{
     @Override
     public void render(SpriteBatch s) {
         if (visible0) {
-            Sprite sprite = new Sprite(MINI_BLOCK.animator.currentSpriteFrame(onlyFirstFrame, stateTime));
+            Sprite sprite = new Sprite(block.currentAnimation.currentSpriteFrame(onlyFirstFrame, stateTime));
             sprite.setSize(600, 150);
             sprite.setOriginCenter();
             sprite.setPosition(bodyA.getPosition().x + 320f - 600f, bodyA.getPosition().y - 70);
             sprite.draw(s);
         }
-        MINI_BLOCK.getAnimator().setStateTime(stateTime);
+        block.currentAnimation.setStateTime(stateTime);
         this.visible0 = stateTime < DURATION_ANIMATION_IN_SECONDS;
         if (destroyed) {
             if (stateTime == 0f)

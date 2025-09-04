@@ -2,8 +2,7 @@ package com.mygdx.game.images;
 
 public class Blocks_Sprites {
 
-    public Animator mini_block = new Animator(7,7,7f,500,500,"block/Block_tr.png");
-
+    private final Animator mini_block = new Animator(7,7,7f,500,500,"block/Block_tr.png");
 
     public Animator currentAnimation = mini_block;
 
