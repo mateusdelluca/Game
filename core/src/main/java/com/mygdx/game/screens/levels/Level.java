@@ -74,10 +74,10 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    private ArrayList<Stand> stands = new ArrayList<>();
-    private NinjaStar ninjaStar;
+    protected ArrayList<Stand> stands = new ArrayList<>();
+    protected NinjaStar ninjaStar;
 
-    private Array<Rope> ropes = new Array();
+    protected Array<Rope> ropes = new Array();
     public Rope rope;
     protected boolean beenHit;
 
@@ -103,88 +103,17 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         ninjaRope = new NinjaRope(boy.getBody());
 
-        jack = new Jack(new Vector2(300, 6000 - 380f));
-
-        girl = new Girl(new Vector2(4000, 6000 - 700f));
 
 
 
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
 
 
-        items2 = new HashMap<>();
-        items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
-        items2.put(Rifle.class.getSimpleName(), jack.getRifle());
-        items2.put(Rifle.class.getSimpleName(), girl.getRifle());
-
-        for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
-            if (index < 5) {
-                posX = 320 + (100 * index);
-            }
-            if (index >= 5) {
-                posY = 6000 - 240 - (150 * index);
-                posX = 320 + 3 * 200;
-            }
-            if ((index >= 8 && index <= 11)) {
-                posX = 320 + (100 * (index - 5));
-                posY = 6000 - 2000;
-            }
-            if ((index >= 12 && index <= 15)) {
-                posX = 520 + (100 * (index - 10));
-                posY = 6000 - 2300;
-            }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
-            items2.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
-        }
-
-        items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
-        items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
-        items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
-        items.get("Portal").updateItem();
-
-        items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
-        items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
-        items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //        items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
-        ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
-        for (int i = 0; i < 5; i++)
-            blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 
-        for (int i = 0; i < 5; i++)
-            blocks.add(new Block(new Vector2(850 + i * 50, 4050)));
-
-        for (int i = 0; i < 28; i++)
-            blocks.add(new Block(new Vector2(3330 + (i * 50), 4810)));
-
-        for (int i = 0; i < 27; i++)
-            blocks.add(new Block(new Vector2(4200 + (i * 50), 4050)));
-
-
-        for (int i = 1; i < 7; i++) {
-            stands.add(new Stand(3000 + (200 * i), 6000 - 720));
-        }
-
-//        objetos.addAll(blocks);
-
-        rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
-        for (int i = 0; i < NUM_ROPES; i++){
-            ropes.add(new Rope(new Vector2(300f, 6000 - 400 + (i * Rope.HEIGHT)), false));
-            if (i == 0) {
-                rope.joint(ropes.get(i).getBodyA());
-                continue;
-            }
-            ropes.get(i).joint(ropes.get(i-1).getBodyA());
-        }
 
         mouse = new Mouse(boy.getBody().getPosition());
 
-        objetos.addAll(items2.values());
-        objetos.add(boy);
-        objetos.add(jack);
-        objetos.add(girl);
-        objetos.addAll(stands);
-        objetos.addAll(monsters1.values());
+
 
     }
 
@@ -333,20 +262,14 @@ public abstract class Level extends State implements ContactListener, Serializab
                 continue;
             objeto.update();
         }
-        ninjaRope.update();
-//        for (Rope rope : ropes)
-//            rope.update();
-//        rope.update();
-        items.get("Rifle").update();
-//        ninjaRope.update(0f);
+
         for (Monster1 monster1 : monsters1.values()){
             monster1.update(boy);
         }
         for (Block block : blocks)
             block.update();
         boy.update();
-        for (Fans fan : fans)
-            fan.update2(boy.getBody(), Boy.BOX_WIDTH);
+
     }
 
     @Override
@@ -368,6 +291,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         boy.beginContact(contact);
 
 //        for (Rope rope : ropes){
+        if (rope != null)
             rope.beginContact(body1, body2);
 //        }
 
@@ -376,7 +300,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")){
                 boy.takeItem(item);
-
+                item.setVisible(false);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
 //                    item.setUserData(body1);
@@ -633,12 +557,12 @@ public abstract class Level extends State implements ContactListener, Serializab
                 }
 
         }
-        for (Block block : blocks)
-            if (boy.getBodyBounds().overlaps(block.getRectangle()))
-                block.beenHit();
-        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
-            jack.beenHit();
-        }
+//        for (Block block : blocks)
+//            if (boy.getBodyBounds().overlaps(block.getRectangle()))
+//                block.beenHit();
+//        if (boy.actionRect().overlaps(jack.getBodyBounds()) && boy.animations.name().equals("BOY_PUNCHING")) {
+//            jack.beenHit();
+//        }
         for (Objeto o : objetos) {
             for (Body body : bodiesToDestroy) {
                 body.setTransform(-10_500, -15_320, 0);

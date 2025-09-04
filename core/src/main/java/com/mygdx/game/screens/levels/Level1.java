@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.entities.Monster1;
+import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.items.Crystal;
+import com.mygdx.game.items.Item;
 
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
@@ -22,6 +25,15 @@ public class Level1 extends Level{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1850, 500),   Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size()));
+
+        items.clear();
+        for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
+            posX = 320 + (100 * index);
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+        }
+
+        objetos.add(boy);
+        objetos.addAll(monsters1.values());
     }
 
     @Override
@@ -35,7 +47,7 @@ public class Level1 extends Level{
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals("PAUSE"))
-        super.update();
+        update();
 
 
         camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y + 200f, 0);
@@ -52,15 +64,25 @@ public class Level1 extends Level{
         spriteBatch.begin();
         background.render(getClass().getSimpleName());
         tile.render(camera);
-        jack.render(spriteBatch);
-        boy.render(spriteBatch);
-
-        for (Monster1 monster1 : monsters1.values()){
-            monster1.render(spriteBatch);
-        }
+//        jack.render(spriteBatch);
+//        boy.render(spriteBatch);
+        for (Item item : items.values())
+            item.render(spriteBatch);
+        for (Objeto objeto : objetos)
+            objeto.render(spriteBatch);
+//        for (Monster1 monster1 : monsters1.values()){
+//            monster1.render(spriteBatch);
+//        }
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 
         box2DDebugRenderer.render(world, camera.combined);
+    }
+
+    @Override
+    public void update(){
+        super.update();
+        for (Item item : items.values())
+            item.update();
     }
 }
