@@ -14,7 +14,7 @@ import com.mygdx.game.system.BodyData;
 public class Laser extends Objeto {
 
 
-    public static final float WIDTH = Images.hp.getWidth(), HEIGHT = Images.hp.getHeight();
+    public static final float WIDTH = Images.hp.getWidth()/5f, HEIGHT = Images.hp.getHeight()/2f;
     public static final float VELOCITY = 300f;
 
     private boolean isFacingLeft;
@@ -35,13 +35,13 @@ public class Laser extends Objeto {
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
         body.setTransform(position, radians);
-        body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
+        body.setLinearVelocity(VELOCITY * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
         body.setUserData(this + user);
-        if (degrees > 90f)
-            this.isFacingLeft = true;
-        else
-            body.setTransform(position, (float) Math.toRadians(degrees));
+//        if (degrees > 90f)
+//            this.isFacingLeft = true;
+//        else
+//            body.setTransform(position, radians);
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
     }
 

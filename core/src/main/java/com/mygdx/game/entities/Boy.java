@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
@@ -75,6 +76,8 @@ public class Boy extends Objeto {
     private float delta;
     private boolean laser = true;
     private int frame;
+
+    private Array<Laser> laser_rail = new Array<>();
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -190,6 +193,7 @@ public class Boy extends Objeto {
 //                s.draw(shoot, worldX - 13, worldY - 9);
             } else {
                 if (laser) {
+
                     animations = Animations.BOY_WALKING;
                     if (!isMoving())
                         animations.animator.setStateTime(0);
@@ -202,6 +206,10 @@ public class Boy extends Objeto {
                         new Vector2(bodyPosition.x + 45f, bodyPosition.y + 61f));
                 }
             }
+        }
+        if (!laser_rail.isEmpty()) {
+            for (Laser laser : laser_rail)
+                laser.render(spriteBatch);
         }
     }
 
@@ -220,15 +228,15 @@ public class Boy extends Objeto {
             jetPackSprite.setFlip(true, false);
             sprite.setFlip(true, false);
             facingLeft = true;
-            radians = (float) Math.toRadians(degrees);
+//            radians = (float) Math.toRadians(degrees);
         } else{
-            if (degrees < 90f && degrees > 10f){
+            if (degrees < 90f && degrees >= 0f){
                 sprite.setRotation(degrees);
                 sprite.setFlip(false, false);
 //                legs.setFlip(false, false);
                 jetPackSprite.setFlip(false, false);
                 facingLeft = false;
-                radians = (float) Math.toRadians(degrees);
+//                radians = (float) Math.toRadians(degrees);
             }
         }
 //        legs.draw(spriteBatch);
@@ -308,11 +316,11 @@ public class Boy extends Objeto {
                 degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
                 radians = (float) Math.atan2(dy, dx);
             } else{
-                if (laser){ //TODO boolean laser
+                if (laser){ //TODO float radians
                     float dx = worldX - Math.abs(bodyPosition.x + 64);
-                    float dy = worldY - Math.abs(bodyPosition.y + 64);
+                    float dy = worldY - Math.abs(bodyPosition.y + 80);
                     degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-//                    radians = (float) Math.atan2(dy, dx);
+                    radians = (float) Math.atan2(dy, dx);
                 }
             }
         }
@@ -545,14 +553,14 @@ public class Boy extends Objeto {
                 }
             }
             else {
-                if (throwing && !shooting && !beenHit && !saber_taken) {
+                if (throwing && !shooting && !beenHit && !saber_taken && !laser) {
                     thrown = true;
                     items.put(NinjaStar.class.getSimpleName() + indexNinja++, new NinjaStar(new Vector2(!facingLeft ? ((getBody().getPosition().x +
                         WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
                 } else {
-                    if (!shooting && !beenHit && !saber_taken && !throwing) { //punches
+                    if (!shooting && !beenHit && !saber_taken && !laser) { //punches
                         punchingAnimationTimer = 0f;
                         animations = Animations.BOY_PUNCHING;
                         JUMP.play();
@@ -568,20 +576,19 @@ public class Boy extends Objeto {
                             animations = Animations.BOY_SABER;
                             setFrameCounter(0);
                             getBody().setLinearVelocity(!flip0 ? VELOCITY_X * 5 : -VELOCITY_X * 5, getBody().getLinearVelocity().y);
-                        } else{
+                        }
                             if (laser) {
 //                                if (!rifle.isReloading()) {
 //                                    if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
-                                        Laser laser = new Laser(
+                                        laser_rail.add(new Laser(
                                             new Vector2(!facingLeft ? (getBody().getPosition().x +
                                                 WIDTH / 2f) : (getBody().getPosition().x),
                                                 (getBody().getPosition().y + HEIGHT / 2f)),
-                                            facingLeft, radians, this.toString());
+                                            radians > Math.PI/2f, radians, this.toString()));
                                 LASER_HEADSET.play();
 //                                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
 //                                    }
 //                                }
-                            }
                         }
                     }
                 }
