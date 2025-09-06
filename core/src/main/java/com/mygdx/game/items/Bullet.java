@@ -37,7 +37,7 @@ public class Bullet extends Objeto implements Item {
         body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
 //        body.setFixedRotation(true);
-        body.setUserData(this + user);
+        body.setUserData(this + " " + user);
         if (degrees > 90f)
             this.isFacingLeft = true;
         else

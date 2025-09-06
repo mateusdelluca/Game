@@ -733,8 +733,8 @@ public class Boy extends Objeto {
             onGround = true;
         }
 
-        if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Colliders")
-            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Colliders"))){
+        if ((body1.equals(body) && body2.getUserData().toString().contains("Thorns")
+            || body2.equals(body) && body1.getUserData().toString().contains("Thorns"))){
             beenHit();
 
         }
