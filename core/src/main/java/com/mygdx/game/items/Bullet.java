@@ -77,6 +77,8 @@ public class Bullet extends Objeto implements Item {
             visible = false;
             body.setUserData("null");
 //            body = null;
+        } else{
+            body.setUserData(bodyData.userData);
         }
         if (body == null || body.getFixtureList().size == 0)
             return;

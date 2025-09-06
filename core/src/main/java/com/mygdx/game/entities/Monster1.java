@@ -168,5 +168,9 @@ public class Monster1 extends Objeto implements Serializable {
         || bodyB.equals(body) && bodyA.getUserData().toString().equals("Laser Boy")){
             beenHit();
         }
+        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("BulletBoy")
+            || bodyB.equals(body) && bodyA.getUserData().toString().equals("BulletBoy")){
+            beenHit();
+        }
     }
 }

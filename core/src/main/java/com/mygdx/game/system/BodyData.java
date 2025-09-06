@@ -22,7 +22,7 @@ public class BodyData implements Serializable {
         this.position = body.getPosition();
         this.angle = body.getAngle();
         this.linearVelocity = body.getLinearVelocity();
-        this.userData = "" + body.getUserData();
+        this.userData = body.getUserData().toString();
         this.dimensions = dimensions;
         this.width = width;
         this.height = height;
@@ -34,7 +34,7 @@ public class BodyData implements Serializable {
         this.position = body.getPosition();
         this.angle = body.getAngle();
         this.linearVelocity = body.getLinearVelocity();
-        this.userData = "" + body.getUserData();
+        this.userData = body.getUserData().toString();
         this.dimensions = dimensions;
         this.width = width;
         this.height = height;
