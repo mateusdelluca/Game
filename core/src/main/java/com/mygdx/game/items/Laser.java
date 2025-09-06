@@ -37,7 +37,7 @@ public class Laser extends Objeto {
         body.setTransform(position, radians);
         body.setLinearVelocity(VELOCITY * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
-        body.setUserData(this + user);
+        body.setUserData(this + " " + user);
 //        if (degrees > 90f)
 //            this.isFacingLeft = true;
 //        else

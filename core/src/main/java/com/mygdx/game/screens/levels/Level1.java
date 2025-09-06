@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Crystal;
@@ -33,8 +35,8 @@ public class Level1 extends Level{
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(400, 400)));
-        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(200, 400)));
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(500, 400)));
+        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
         objetos.add(boy);
@@ -89,5 +91,29 @@ public class Level1 extends Level{
         super.update();
         for (Item item : items.values())
             item.update();
+    }
+
+
+    @Override
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
+
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
+
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
+
+        for (Monster1 m : monsters1.values()){
+            m.beginContact(body1, body2);
+        }
     }
 }

@@ -161,4 +161,12 @@ public class Monster1 extends Objeto implements Serializable {
             setBeenHit(true);
         }
     }
+
+
+    public void beginContact(Body bodyA, Body bodyB){
+        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Laser Boy")
+        || bodyB.equals(body) && bodyA.getUserData().toString().equals("Laser Boy")){
+            beenHit();
+        }
+    }
 }

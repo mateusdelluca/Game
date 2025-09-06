@@ -1,5 +1,6 @@
 package com.mygdx.game.items;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +25,7 @@ public class Laser_Headset extends Objeto implements Item{
     public static final float WIDTH = 75f, HEIGHT = 85f;
 
     private Vector2 position;
-
+    private Sprite sprite = new Sprite(headset_laser);
     public Laser_Headset(Vector2 position){
         super(WIDTH,HEIGHT);
         this.position = position;
@@ -37,15 +38,16 @@ public class Laser_Headset extends Objeto implements Item{
     @Override
     public void render(SpriteBatch s) {
         if (visible) {
+
             if (!PausePage.pause) {
-                headset_laser.setSize(width, height);
-                headset_laser.setOriginCenter();
-                headset_laser.rotate(1f);
-                headset_laser.setPosition(position.x, position.y);
+                sprite.setSize(width, height);
+                sprite.setOriginCenter();
+                sprite.rotate(1f);
+                sprite.setPosition(position.x, position.y);
             }
-        if (body.getUserData().toString().equals(this.toString())) {
-            headset_laser.draw(s);
-        }
+            if (body.getUserData().toString().equals(this.toString())) {
+                sprite.draw(s);
+            }
         }
     }
 

@@ -113,7 +113,7 @@ public class Boy extends Objeto {
                         legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
                     legs.setPosition(body.getPosition().x, body.getPosition().y);
                 }
-                if (shooting) {    //when actives the gun and shooting and he is not moving and he has not been hit
+                if (shooting && !laser) {    //when actives the gun and shooting and he is not moving and he has not been hit
                     //BOY SPRITE TOP
 //            Sprite top = new Sprite(Images.shooting1); !Cartridge.reloading
                     top = new Sprite(Animations.BOY_RELOADING.animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), facingLeft));
