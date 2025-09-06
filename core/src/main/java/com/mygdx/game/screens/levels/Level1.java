@@ -39,6 +39,7 @@ public class Level1 extends Level{
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
+        objetos.clear();
         objetos.add(boy);
         objetos.addAll(monsters1.values());
     }

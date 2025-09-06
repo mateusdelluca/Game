@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.Random;
 
 import static com.mygdx.game.screens.levels.Level_Manager.world;
@@ -182,5 +183,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         bodyData.userData = name;
         body.setUserData(name);
     }
+
 
 }
