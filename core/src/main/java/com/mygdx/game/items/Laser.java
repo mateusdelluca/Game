@@ -20,6 +20,7 @@ public class Laser extends Objeto {
     private boolean isFacingLeft;
     private float degrees, radians;
     private float timer;
+    private float alpha = 1f;
 
     public Laser(){
     }
@@ -72,10 +73,14 @@ public class Laser extends Objeto {
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         if (visible) {
+            alpha -= 0.01f;
+            alpha = Math.max(alpha, 0.2f);
+            sprite.setAlpha(alpha);
+            if (alpha <= 0.2f)
+                body.setTransform(-10_000, -10_000, 0);
             sprite.draw(spriteBatch);
-        } else{
-            body.setTransform(-10_000, -10_000, 0);
-        }update();
+        }
+        update();
     }
 
     @Override
