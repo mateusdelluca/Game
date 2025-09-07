@@ -184,10 +184,12 @@ public class MainPage extends State {
                 if (!Sounds.LEVEL1.isPlaying())
                     Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
-                if (newGame)
-                    Level_Manager.reset();
-                newGame = true;
+                new Level_Manager();
                 StateManager.setState(StateManager.States.LEVEL);
+                StateManager.oldState = StateManager.States.MAIN_MENU.name();
+
+
+
                 dispose();
                 break;
             }

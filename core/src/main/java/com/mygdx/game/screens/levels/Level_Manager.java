@@ -16,7 +16,7 @@ public class Level_Manager extends State implements ContactListener {
 
     private Level level1, level2, level3;
     public static Level currentLevel;
-    public static String currentLevelName = "Level1";
+    public static String currentLevelName = "Level1", oldLevel;
 
     public static ArrayList<Objeto> objetos = new ArrayList<>();
 
@@ -33,55 +33,50 @@ public class Level_Manager extends State implements ContactListener {
     public static boolean loaded;
 
     public Level_Manager() {
-        try {
-            changeLevel("Level1");
-            world.setContactListener(this);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+        world.setContactListener(this);
     }
 
-    public void changeLevel(String levelName) {
+    public void changeLevel() {
         try {
-            currentLevel = returnLevel(levelName);
+            if (!currentLevelName.equals(oldLevel))
+                currentLevel = returnLevel();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         assert currentLevel != null;
+
     }
 
-    public Level returnLevel(String level) throws Exception {
-        switch (level) {
+    public Level returnLevel() throws Exception {
+        oldLevel = currentLevelName;
+        switch (currentLevelName) {
             case "Level1": {
-                currentLevelName = "Level1";
 //                Images.staticObjects = Images.tile.loadMapObjects("Rects");
-                if (level1 == null)
-                    return new Level1();
-                return level1;
+                return new Level1();
             }
             case "Level2": {
-                currentLevelName = "Level2";
 //                Images.staticObjects = Images.tile.loadMapObjects("Rects");
 //                return level2;
                 return new Level2();
             }
             case "Level3": {
-                currentLevelName = "Level3";
                 return new Level3();
             }
             default: {
                 return level1;
             }
         }
+
     }
 
     @Override
     public void create() {
-
+        reset();
     }
 
     @Override
     public void render() {
+        changeLevel();
         if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
             currentLevel.render();
         if (loaded) {
@@ -167,14 +162,7 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public void update() {
-        if (currentLevel == null) {
-            try {
-                changeLevel("Level1");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (!PausePage.pause)
+        if (!PausePage.pause && currentLevel != null)
             currentLevel.update();
     }
 
@@ -198,11 +186,14 @@ public class Level_Manager extends State implements ContactListener {
         currentLevel.postSolve(contact, contactImpulse);
     }
 
-    public static void reset() {
+    public void reset() {
         try {
             currentLevel = new Level1();
             currentLevelName = "Level1";
-            world.setContactListener(currentLevel);
+            oldLevel = currentLevelName;
+            spriteBatch = new SpriteBatch();
+            world = new World(new Vector2(0, -10), true);
+            world.setContactListener(this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -16,6 +16,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+import static com.mygdx.game.screens.levels.Level_Manager.world;
+
 public class Monster1 extends Objeto implements Serializable {
 
     public static final float WIDTH = 94, HEIGHT = 128;
@@ -36,12 +38,13 @@ public class Monster1 extends Objeto implements Serializable {
     private long lastTime, deltaTime, initialTime;
 
     public Monster1_Sprites animations = new Monster1_Sprites();
-
-    public Monster1(Vector2 position, String userData){
+    private Boy boy;
+    public Monster1(Vector2 position, String userData, Boy boy){
         super(WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
+        this.boy = boy;
     }
 
 
@@ -53,8 +56,11 @@ public class Monster1 extends Objeto implements Serializable {
         }
     }
 
-    public void update(Boy boy){
-        update();
+    @Override
+    public void update(){
+        super.update();
+        if (body == null)
+            loadBody(BodyDef.BodyType.DynamicBody, false);
         if (boy != null && boy.getBody() != null && body != null) {
             if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
                 if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
@@ -137,13 +143,6 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     @Override
-    public void update(){
-        super.update();
-        if (body == null)
-            loadBody(BodyDef.BodyType.DynamicBody, false);
-    }
-
-    @Override
     public void loadBody(BodyDef.BodyType type, boolean isSensor){
         body = bodyData.convertDataToBody(type, isSensor);
         body.setUserData(this.toString());
@@ -174,7 +173,10 @@ public class Monster1 extends Objeto implements Serializable {
         }
         if ((bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy"))
             || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
-            beenHit();
+            if (boy.animations.name().equals("BOY_PUNCHING")) {
+                beenHit();
+                world.clearForces();
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
@@ -77,6 +78,7 @@ public class Boy extends Objeto {
     public static boolean laser;
 
     private Array<Laser> laser_rail = new Array<>();
+    private Body punch_box;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -382,9 +384,15 @@ public class Boy extends Objeto {
                 } else {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-                        if (punchingAnimationTimer >= 2f) {
+                        if (punch_box == null) {
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 50 : body.getPosition().x - 100, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
+                            punch_box.setUserData(this.toString());
+                        }
+                        if (punchingAnimationTimer >= 1f) {
                             animations = Animations.BOY_IDLE;
                             punchingAnimationTimer = 0f;
+                            punch_box.setTransform(new Vector2(-2000, -2000), 0);
+                            punch_box = null;
                         }
                     } else {
                         if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
@@ -737,6 +745,12 @@ public class Boy extends Objeto {
             || body2.equals(body) && body1.getUserData().toString().contains("Thorns"))){
             beenHit();
 
+        }
+
+        if ((body1.equals(body) && body2.getUserData().toString().contains("Monster1"))
+            || (body2.equals(body) && body1.getUserData().toString().contains("Monster1"))){
+            if (!animations.name().equals("BOY_PUNCHING"))
+                beenHit();
         }
     }
 }

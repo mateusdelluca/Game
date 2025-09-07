@@ -20,6 +20,7 @@ public class BodiesAndShapes {
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
         body.setActive(true);
+        body.setAwake(true);
         return body;
     }
 
@@ -37,6 +38,7 @@ public class BodiesAndShapes {
         body.setTransform(position, 0);
         body.setActive(true);
         body.setFixedRotation(false);
+        body.setAwake(true);
         return body;
     }
 
@@ -57,6 +59,7 @@ public class BodiesAndShapes {
 
         body.setFixedRotation(false);
         body.setTransform(position, (float) Math.toRadians(angle));
+        body.setAwake(true);
         return body;
     }
 
@@ -74,6 +77,7 @@ public class BodiesAndShapes {
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
         body.setActive(true);
+        body.setAwake(true);
         return body;
     }
 
@@ -92,6 +96,7 @@ public class BodiesAndShapes {
         body.setTransform(position, 0);
         body.setUserData(userData);
         body.setActive(true);
+        body.setAwake(true);
         return body;
     }
 
@@ -108,6 +113,7 @@ public class BodiesAndShapes {
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
         body.setActive(true);
+        body.setAwake(true);
         return body;
     }
 
@@ -124,6 +130,7 @@ public class BodiesAndShapes {
         body.createFixture(fixtureDef);
         body.setTransform(position, 0);
         body.setActive(true);
+        body.setAwake(true);
         return body;
     }
 

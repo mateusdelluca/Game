@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Crystal;
@@ -22,13 +23,13 @@ public class Level1 extends Level{
         super();
         monsters1.clear();
 
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1600, 400),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1850, 500),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size()));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1600, 400),   Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1850, 500),   Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size(), boy));
 
         items.clear();
         for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
@@ -47,8 +48,8 @@ public class Level1 extends Level{
     @Override
     public void render(){
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
+//        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 
 
 
@@ -78,9 +79,6 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-//        for (Monster1 monster1 : monsters1.values()){
-//            monster1.render(spriteBatch);
-//        }
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 
@@ -89,7 +87,14 @@ public class Level1 extends Level{
 
     @Override
     public void update(){
-        super.update();
+        for (int i = 0; i < 5; i++) {
+            world.step(1/60f, 10, 7);
+            camera.update();
+        }
+
+        for (Objeto objeto : objetos) {
+            objeto.update();
+        }
         for (Item item : items.values())
             item.update();
     }
@@ -112,6 +117,33 @@ public class Level1 extends Level{
         if (body1 == null || body2 == null)
             return;
 
+        boy.beginContact(contact);
+
+        for (Monster1 m : monsters1.values()){
+            m.beginContact(body1, body2);
+        }
+
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        super.beginContact(contact);
+
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
+
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
+        boy.beginContact(contact);
 
         for (Monster1 m : monsters1.values()){
             m.beginContact(body1, body2);

@@ -203,8 +203,10 @@ public class PausePage extends State {
             }
             case EXIT: {
                 StateManager.setState(StateManager.States.MAIN_MENU);
+                StateManager.oldState = StateManager.States.MAIN_MENU.name();
 //                MainPage.newGame = false;
 //                Level_Manager.loaded = false;
+                pause = false;
                 break;
             }
         }

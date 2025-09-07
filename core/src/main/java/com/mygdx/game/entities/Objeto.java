@@ -78,6 +78,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         else
             bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
         polygonShape.dispose();
+        body.setAwake(true);
         return body;
     }
 
@@ -106,6 +107,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         else
             bodyData = new BodyData(body, new Vector2(width/2f, height/2f), width, height);
         polygonShape.dispose();
+        body.setAwake(true);
         return body;
     }
 

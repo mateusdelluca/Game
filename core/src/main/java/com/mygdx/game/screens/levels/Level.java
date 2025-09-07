@@ -251,25 +251,6 @@ public abstract class Level extends State implements ContactListener, Serializab
             camera.update();
         }
         collisions();
-        updateObjects();
-    }
-
-    public void updateObjects(){
-//        for (Bullet bullet : bullets)
-//            bullet.update();
-        for (Objeto objeto : objetos) {
-            if (objeto instanceof Monster1 || objeto instanceof Boy || objeto instanceof Bullet)
-                continue;
-            objeto.update();
-        }
-
-        for (Monster1 monster1 : monsters1.values()){
-            monster1.update(boy);
-        }
-        for (Block block : blocks)
-            block.update();
-        boy.update();
-
     }
 
     @Override
