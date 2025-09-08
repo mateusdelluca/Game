@@ -10,13 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.Application;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.system.Delete;
 import com.mygdx.game.system.Save;
-
-import java.io.File;
 
 import static com.mygdx.game.images.Images.sprites;
 import static com.mygdx.game.manager.StateManager.oldState;
@@ -133,10 +130,10 @@ public class SavePage extends State {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
             if (oldState.equals("MAIN_MENU")) {
-                StateManager.setState(StateManager.States.MAIN_MENU);
+                StateManager.setStates(StateManager.States.MAIN_MENU);
             } else{
                 if (oldState.equals("PAUSE")) {
-                    StateManager.setState(StateManager.States.PAUSE);
+                    StateManager.setStates(StateManager.States.PAUSE);
                 }
             }
         }

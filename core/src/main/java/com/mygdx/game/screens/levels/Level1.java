@@ -9,10 +9,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
-import com.mygdx.game.items.Crystal;
-import com.mygdx.game.items.Item;
-import com.mygdx.game.items.Laser_Headset;
-import com.mygdx.game.items.Rifle;
+import com.mygdx.game.items.*;
 
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
@@ -42,6 +39,7 @@ public class Level1 extends Level{
         items.get("Laser_Headset").updateItem();
         objetos.clear();
         objetos.add(boy);
+        objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
     }
 
@@ -123,7 +121,9 @@ public class Level1 extends Level{
             m.beginContact(body1, body2);
         }
 
-
+        for (Objeto o : objetos)
+            if (o instanceof Portal)
+                ((Portal) o).beginContact(contact);
     }
 
     @Override

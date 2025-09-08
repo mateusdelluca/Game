@@ -1,9 +1,7 @@
 package com.mygdx.game.manager;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.*;
 import com.mygdx.game.screens.levels.Level_Manager;
@@ -134,7 +132,7 @@ public class StateManager extends Game {
         sounds = new Sounds();
     }
 
-    public static void setState(States newState) {
+    public static void setStates(States newState) {
         if (currentState != null && newState != null)
             oldState = currentState.name();
         currentState = newState;

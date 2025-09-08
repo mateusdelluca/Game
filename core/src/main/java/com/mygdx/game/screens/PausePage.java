@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,9 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
-import com.mygdx.game.system.ScreenshotHelper;
 
 import static com.mygdx.game.system.ScreenshotHelper.sprite;
 
@@ -159,7 +156,7 @@ public class PausePage extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-            StateManager.setState(StateManager.States.LEVEL);
+            StateManager.setStates(StateManager.States.LEVEL);
             if (!Sounds.LEVEL1.isPlaying()) {
 //                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                 Sounds.LEVEL1.play();
@@ -184,7 +181,7 @@ public class PausePage extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
-                StateManager.setState(StateManager.States.LEVEL);
+                StateManager.setStates(StateManager.States.LEVEL);
 //                Sounds.PAUSE_SCREEN.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
 //                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
@@ -194,15 +191,15 @@ public class PausePage extends State {
                 break;
             }
             case SAVEGAME:{
-                StateManager.setState(StateManager.States.SAVE);
+                StateManager.setStates(StateManager.States.SAVE);
                 break;
             }
             case LOADGAME:{
-                StateManager.setState(StateManager.States.LOAD);
+                StateManager.setStates(StateManager.States.LOAD);
                 break;
             }
             case EXIT: {
-                StateManager.setState(StateManager.States.MAIN_MENU);
+                StateManager.setStates(StateManager.States.MAIN_MENU);
                 StateManager.oldState = StateManager.States.MAIN_MENU.name();
 //                MainPage.newGame = false;
 //                Level_Manager.loaded = false;

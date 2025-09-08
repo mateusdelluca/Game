@@ -12,13 +12,14 @@ import com.mygdx.game.screens.PausePage;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.images.Images.tile;
+
 public class Level_Manager extends State implements ContactListener {
 
     private Level level1, level2, level3;
     public static Level currentLevel;
     public static String currentLevelName = "Level1", oldLevel;
 
-    public static ArrayList<Objeto> objetos = new ArrayList<>();
 
     public static ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
@@ -55,6 +56,15 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level1();
             }
             case "Level2": {
+
+
+//                world = new World(new Vector2(0, -10), true);
+                for (Objeto objeto : currentLevel.objetos)
+                    objeto.getBody().setTransform(-10_000, -10_000, 0);
+                for (Body bodies : tile.bodies_of_rects)
+                    bodies.setTransform(-10_000, -10_000, 0);
+                for (Body bodies : tile.bodies_of_thorns)
+                    bodies.setTransform(-10_000, -10_000, 0);
 //                Images.staticObjects = Images.tile.loadMapObjects("Rects");
 //                return level2;
                 return new Level2();
@@ -63,7 +73,7 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level3();
             }
             default: {
-                return level1;
+                return new Level1();
             }
         }
 
@@ -188,12 +198,13 @@ public class Level_Manager extends State implements ContactListener {
 
     public void reset() {
         try {
-            currentLevel = new Level1();
+//            for (Objeto objeto : objetos)
+//                world.destroyBody(objeto.getBody());
+//            world = new World(new Vector2(0, -10), true);
+            world.setContactListener(this);currentLevel = new Level1();
             currentLevelName = "Level1";
             oldLevel = currentLevelName;
             spriteBatch = new SpriteBatch();
-            world = new World(new Vector2(0, -10), true);
-            world.setContactListener(this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

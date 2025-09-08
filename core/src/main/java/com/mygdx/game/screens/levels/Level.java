@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Background;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
@@ -31,7 +29,6 @@ import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
@@ -39,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ScheduledExecutorService;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
@@ -81,7 +77,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     public Rope rope;
     protected boolean beenHit;
 
-
+    public ArrayList<Objeto> objetos = new ArrayList<>();
 
 
     public Level() throws Exception {
@@ -125,11 +121,15 @@ public abstract class Level extends State implements ContactListener, Serializab
         background = new Background();
 
         tile = new Tile(getClass().getSimpleName() + "/" + getClass().getSimpleName() + ".tmx");
+        if (currentLevelName.equals(oldLevel))
+
         staticObjects = tile.loadMapObjects("Rects");
         tile.createBodies(staticObjects, world, false, "Rects");
 
         thorns = tile.loadMapObjects("Thorns_Rects");
         tile.createBodies(thorns, world, false, "Thorns_Rects");
+
+
 
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
@@ -584,7 +584,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         boy.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
             takeScreenshot();
-            StateManager.setState(StateManager.States.PAUSE);
+            StateManager.setStates(StateManager.States.PAUSE);
         }
         return false;
     }

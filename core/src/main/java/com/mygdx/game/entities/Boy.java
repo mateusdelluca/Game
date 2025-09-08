@@ -358,7 +358,7 @@ public class Boy extends Objeto {
         } else {
             if (name.equals("BOY_PUNCHING")) {
                 punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-                if (punchingAnimationTimer >= 2f) {
+                if (punchingAnimationTimer >= 1f) {
                     animations = Animations.BOY_IDLE;
                     punchingAnimationTimer = 0f;
                 }
@@ -467,7 +467,7 @@ public class Boy extends Objeto {
         }
 
         if (keycode == Input.Keys.I){
-            StateManager.setState(StateManager.States.INVENTORY);
+            StateManager.setStates(StateManager.States.INVENTORY);
         }
         if (keycode == Input.Keys.T) {
             use_jetPack = !use_jetPack;

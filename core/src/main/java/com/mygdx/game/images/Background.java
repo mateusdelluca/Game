@@ -29,7 +29,7 @@ public class Background{
     }
 
     public Sprite getBackgroundLevel(String level){
-        if (level.equals("Level3"))
+        if (level.equals("Level2"))
             return Images.backGround2;
         return Images.mountains4;
     }

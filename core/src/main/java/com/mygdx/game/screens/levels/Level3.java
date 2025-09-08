@@ -8,7 +8,6 @@ import com.mygdx.game.items.fans.Fans;
 import java.util.HashMap;
 
 import static com.mygdx.game.items.Rope.NUM_ROPES;
-import static com.mygdx.game.screens.levels.Level_Manager.objetos;
 
 public class Level3 extends Level{
     public Level3() throws Exception {

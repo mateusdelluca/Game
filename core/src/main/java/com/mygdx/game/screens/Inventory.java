@@ -14,7 +14,6 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -129,7 +128,7 @@ public class Inventory extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.I){
-            StateManager.setState(StateManager.States.LEVEL);
+            StateManager.setStates(StateManager.States.LEVEL);
         }
         return false;
     }
@@ -148,7 +147,7 @@ public class Inventory extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             if (close_button.contains(mouseX, mouseY)) {
-                StateManager.setState(StateManager.States.LEVEL);
+                StateManager.setStates(StateManager.States.LEVEL);
             }
 //            for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn.values()){
 //                itemToBeDrawn.touchDown(screenX, screenY, pointer, button);
