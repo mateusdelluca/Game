@@ -171,6 +171,11 @@ public class Monster1 extends Objeto implements Serializable {
             || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Bullet Boy"))){
             beenHit();
         }
+        if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Thorns")
+            || bodyB.equals(body) && bodyA.getUserData().toString().contains("Thorns"))){
+            beenHit();
+
+        }
         if ((bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy"))
             || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
             if (boy.animations.name().equals("BOY_PUNCHING")) {

@@ -1,7 +1,10 @@
 package com.mygdx.game.screens.levels;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.Boy;
+import com.mygdx.game.entities.Jack;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.Portal;
@@ -16,9 +19,11 @@ public class Level2 extends Level{
         monsters1.clear();
         objetos.clear();
         world.destroyBody(boy.getBody());
-        boy = new Boy(new Vector2(100, 500), viewport);
+        boy = new Boy(new Vector2(100, 200), viewport);
+        jack = new Jack(new Vector2(2300f, 300f));
         objetos.add(new Portal(new Vector2(6000 - 300, 400)));
         objetos.add(boy);
+        objetos.add(jack);
     }
 
 
@@ -63,6 +68,11 @@ public class Level2 extends Level{
         super.update();
         for (Objeto o : objetos)
             o.update();
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
     }
 
 }

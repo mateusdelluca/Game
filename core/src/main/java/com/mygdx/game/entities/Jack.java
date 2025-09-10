@@ -134,8 +134,8 @@ public class Jack extends Objeto {
     }
 
     @Override
-    public void beenHit(Body body1, Body body2){
-        super.beenHit(body1, body2);
+    public void beenHit(){
+        super.beenHit();
     }
 
 }

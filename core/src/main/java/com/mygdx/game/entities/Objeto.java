@@ -172,9 +172,12 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
             ||
             (body1.getUserData().toString().contains("Thorn") || body2.getUserData().toString().contains("Thorn"))
-        ||
-            (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar")))
-        beenHit();
+            ||
+            (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
+            ||
+            (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))) {
+                beenHit();
+        }
     }
 
     public void setUserData(Body body){
