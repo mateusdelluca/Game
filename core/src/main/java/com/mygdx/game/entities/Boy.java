@@ -356,13 +356,6 @@ public class Boy extends Objeto {
                 Sounds.HURT.stop();
             }
         } else {
-            if (name.equals("BOY_PUNCHING")) {
-                punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-                if (punchingAnimationTimer >= 1f) {
-                    animations = Animations.BOY_IDLE;
-                    punchingAnimationTimer = 0f;
-                }
-            }
             if (!beenHit) {
                 if (name.equals("BOY_SABER") && !shooting) {
                     if (saber_taken && !hit) {

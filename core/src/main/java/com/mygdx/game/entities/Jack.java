@@ -26,14 +26,16 @@ public class Jack extends Objeto {
     public static final float WIDTH = Images.jack.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;
     private boolean flip = false;
     private float alpha = 1.0f;
-    @Getter @Setter
-    private boolean beenHit;
+//    @Getter @Setter
+//    private boolean beenHit;
     public int HP = 5;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
     @Getter
     private Rifle rifle = new Rifle(new Vector2(-10000, -10000));
     private float deltaTime2;
+
+    private Sprite sprite2 = new Sprite(Images.jack_reloading);
 
     public Jack(Vector2 position){
         super(WIDTH, HEIGHT);
@@ -90,30 +92,27 @@ public class Jack extends Objeto {
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
                 if (timer < 1.1f) {
-                    alpha = new Random().nextFloat(1f);
-                    sprite.setColor(1f, 1f, 1f, alpha);
-                }
-                if (timer > 1f) {
-                    beenHit = false;
-                    timer = 0f;
-                    alpha = 1f;
-                    HP--;
+                    alpha -= 0.01f;
+                    sprite.setAlpha(alpha);
+                } else {
+                        beenHit = false;
+                        timer = 0f;
+                        alpha = 1f;
+                        HP--;
+                    }
                 }
                 if (timer <= 0.05f) {
                     Sounds.HURT.play();
                 }
-                sprite.setAlpha(alpha);
             }
-//            if (rifle.isReloading())
-//                sprite = new Sprite(Images.jack_reloading);
-//            else
-//                sprite = new Sprite(Images.jack);
+            if (rifle.isReloading())
+                sprite = sprite2;
+            else
+                sprite = new Sprite(Images.jack);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
             rifle.render(s);
-        }
-
     }
 
 

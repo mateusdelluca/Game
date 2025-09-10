@@ -30,7 +30,7 @@ public class Laser extends Objeto {
         super.width = WIDTH/2;
         super.height = HEIGHT/2;
         Vector2 size = new Vector2(width/2f, height/2f);
-        body = createBody(size, BodyDef.BodyType.DynamicBody, false);
+        body = createBody(size, BodyDef.BodyType.DynamicBody, 1F, false);
         body.setGravityScale(0f);
         this.isFacingLeft = isFacingLeft;
         this.degrees = (float) Math.toDegrees(radians);

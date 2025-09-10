@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.mygdx.game.entities.Jack;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.*;
@@ -39,6 +40,7 @@ public class Level1 extends Level{
         items.get("Laser_Headset").updateItem();
         objetos.clear();
         objetos.add(boy);
+//        objetos.add(new Jack(new Vector2(200, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
     }
