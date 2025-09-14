@@ -61,7 +61,7 @@ public class Level2 extends Level{
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
         boy.render(spriteBatch);
-        powerBar.render(spriteBatch, camera);
+        powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();
 
         box2DDebugRenderer.render(world, camera.combined);

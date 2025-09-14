@@ -51,26 +51,26 @@ public class Jack extends Objeto {
         if (HP > 0 && visible) {
             deltaTime += Gdx.graphics.getDeltaTime();
             rifle.update();
-            if (!rifle.isReloading()) {
+//            if (!rifle.isReloading()) {
                 if (deltaTime > 5f) {
                     if (rifle.getTotal() > 0) {
                         Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
                             WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
                             body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
-                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+//                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                         deltaTime = 0f;
                         SHOTGUN.play();
                     }
                 }
-            }
-            if (rifle.isReloading() && rifle.getTotal() > 0) {
-                deltaTime2 += Gdx.graphics.getDeltaTime();
-                if (deltaTime2 > 0.6f) {
-                    deltaTime2 = 0f;JACK_RELOADING.play();
-                    rifle.setReloading(false);
-                }
-            }
-            rifle.updateItem(world);
+//            }
+//            if (rifle.isReloading() && rifle.getTotal() > 0) {
+//                deltaTime2 += Gdx.graphics.getDeltaTime();
+//                if (deltaTime2 > 0.6f) {
+//                    deltaTime2 = 0f;JACK_RELOADING.play();
+//                    rifle.setReloading(false);
+//                }
+//            }
+//            rifle.updateItem(world);
         }
         if (HP <= 0){
             visible = false;

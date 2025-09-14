@@ -234,7 +234,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         boy.render(spriteBatch);
         for (Block block : blocks)
             block.render(spriteBatch);
-        powerBar.render(spriteBatch, camera);
+        powerBar.render(spriteBatch, camera,boy);
         ninjaRope.render(spriteBatch);
         for (Stand stand : stands)
             stand.render(spriteBatch);

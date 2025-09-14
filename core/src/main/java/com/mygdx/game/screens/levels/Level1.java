@@ -40,7 +40,7 @@ public class Level1 extends Level{
         items.get("Laser_Headset").updateItem();
         objetos.clear();
         objetos.add(boy);
-//        objetos.add(new Jack(new Vector2(200, 400)));
+        objetos.add(new Jack(new Vector2(100, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
     }
@@ -79,7 +79,7 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        powerBar.render(spriteBatch, camera);
+        powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();
 
         box2DDebugRenderer.render(world, camera.combined);

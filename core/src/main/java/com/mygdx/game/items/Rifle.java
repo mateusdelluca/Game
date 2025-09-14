@@ -37,7 +37,7 @@ public class Rifle extends Objeto implements Item, Serializable {
     private boolean buttonReloadingPressed;
     public static boolean showingNumbBullets = false;
     private int rightSide;
-    public static String stringNumbBullets = "";
+    public String stringNumbBullets = "";
     @Getter
     private int total;
     private int angle;
@@ -91,6 +91,10 @@ public class Rifle extends Objeto implements Item, Serializable {
         leftSideBullets.render(s);
     }
 
+    public String interfaceBullets(){
+        return leftSideBullets.getBulletsLeft().size() + "/" + total;
+    }
+
     public void reloading() {
         Timer timer = new Timer();
         timer.scheduleTask(new Timer.Task() {
@@ -125,11 +129,6 @@ public class Rifle extends Objeto implements Item, Serializable {
     }
 
     @Override
-    public Objeto objeto() {
-        return this;
-    }
-
-    @Override
     public void renderShape(ShapeRenderer s) {
     }
 
@@ -146,16 +145,16 @@ public class Rifle extends Objeto implements Item, Serializable {
         return bullets;
     }
 
-    private void removeBulletsFromFirstCartridge() {
-//        if (numCartridges.getFirst().equals(leftSideBullets))
-//            return;
-        if (!numCartridges.isEmpty()) {
-            for (int i = leftSideBullets.getAccumulated(); i > 0; i--)
-                numCartridges.getFirst().getBulletsLeft().removeLast();
-            numCartridges.removeFirst();
-            leftSideBullets.setAccumulated(0);
-        }
-    }
+//    private void removeBulletsFromFirstCartridge() {
+////        if (numCartridges.getFirst().equals(leftSideBullets))
+////            return;
+//        if (!numCartridges.isEmpty()) {
+//            for (int i = leftSideBullets.getAccumulated(); i > 0; i--)
+//                numCartridges.getFirst().getBulletsLeft().removeLast();
+//            numCartridges.removeFirst();
+//            leftSideBullets.setAccumulated(0);
+//        }
+//    }
 
     /*
     30/30

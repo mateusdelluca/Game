@@ -41,12 +41,12 @@ public class Cartridge implements Item{
     public void addAndRemove(Bullet bullet, Rifle rifle){    //este é o método para contar as balas do pente dentro do rifle
         if (!rifle.isReloading()) {
             if (!bulletsLeft.isEmpty()) {
-                bulletsLeft.removeLast();
+                bulletsLeft.remove((bulletsLeft.size() - 1));
                 bulletsToDraw.add(bullet);
                 if (accumulated < MAX_ROUNDS)
                     accumulated++;
                 GUNSHOT.play();
-                bullets.add(bullet);
+//                bullets.add(bullet);
             }
         }
     }
