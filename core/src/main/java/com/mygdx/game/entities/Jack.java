@@ -123,7 +123,7 @@ public class Jack extends Objeto {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + " Enemy";
     }
 
     public Rectangle getBodyBounds() {

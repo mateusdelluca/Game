@@ -378,7 +378,7 @@ public class Boy extends Objeto {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                         if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 50 : body.getPosition().x - 100, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
                             punch_box.setUserData(this.toString());
                         }
                         if (punchingAnimationTimer >= 1f) {
@@ -734,15 +734,10 @@ public class Boy extends Objeto {
             onGround = true;
         }
 
-        if ((body1.equals(body) && body2.getUserData().toString().contains("Thorns")
-            || body2.equals(body) && body1.getUserData().toString().contains("Thorns"))){
-            beenHit();
-
-        }
-
-        if ((body1.equals(body) && body2.getUserData().toString().contains("Monster1"))
-            || (body2.equals(body) && body1.getUserData().toString().contains("Monster1"))){
-            if (!animations.name().equals("BOY_PUNCHING"))
+        if ((body1.equals(body) && body2.getUserData().toString().contains("Enemy"))
+            || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))
+        || (body1.equals(body) && body2.getUserData().toString().contains("Colliders")
+            || body2.equals(body) && body1.getUserData().toString().contains("Colliders"))){
                 beenHit();
         }
     }

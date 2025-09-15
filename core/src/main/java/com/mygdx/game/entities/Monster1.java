@@ -125,7 +125,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + id;
+        return getClass().getSimpleName() + id + " Enemy";
     }
 
     public Rectangle getBodyBounds() {

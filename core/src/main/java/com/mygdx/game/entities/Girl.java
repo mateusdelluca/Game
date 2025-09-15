@@ -121,7 +121,7 @@ public class Girl extends Objeto{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + " Enemy";
     }
     @Override
     public void beenHit(){
