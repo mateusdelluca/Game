@@ -12,55 +12,52 @@ import com.mygdx.game.items.Bullet;
 import com.mygdx.game.items.Rifle;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.Random;
-
-import static com.mygdx.game.screens.levels.Level_Manager.world;
-import static com.mygdx.game.sfx.Sounds.JACK_RELOADING;
 import static com.mygdx.game.sfx.Sounds.SHOTGUN;
 
 public class Jack extends Objeto {
 
     public static final float DIVISOR = 1.4f;
     public static final float WIDTH = Images.jack.getWidth()/DIVISOR, HEIGHT = Images.jack.getHeight()/DIVISOR;
-    private boolean flip = false;
+    private boolean facingLeft = true;
     private float alpha = 1.0f;
 //    @Getter @Setter
 //    private boolean beenHit;
-    public int HP = 5;
+    public int HP = 20;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
-    @Getter
-    private Rifle rifle = new Rifle(new Vector2(-10000, -10000));
+//    @Getter
+//    private Rifle rifle = new Rifle(new Vector2(-10000, -10000));
     private float deltaTime2;
 
     private Sprite sprite2 = new Sprite(Images.jack_reloading);
+
+    private Bullet bullet;
 
     public Jack(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        sprite.flip(flip, false);
+        sprite.flip(facingLeft, false);
 //        body.setUserData(this.toString());
-        rifle.updateItem();
+//        rifle.updateItem();
     }
 
     public void update(){
         super.update();
         if (HP > 0 && visible) {
             deltaTime += Gdx.graphics.getDeltaTime();
-            rifle.update();
+//            rifle.update();
 //            if (!rifle.isReloading()) {
                 if (deltaTime > 5f) {
-                    if (rifle.getTotal() > 0) {
-                        Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
+//                    if (rifle.getTotal() > 0) {
+                        bullet = new Bullet(new Vector2(!facingLeft ? body.getPosition().x +
                             WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
-                            body.getPosition().y + HEIGHT / 2f), flip, flip ? (float) Math.PI : 0f, true);
+                            body.getPosition().y + HEIGHT / 2f), facingLeft, 0f, false);
 //                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                         deltaTime = 0f;
                         SHOTGUN.play();
-                    }
+//                    }
                 }
 //            }
 //            if (rifle.isReloading() && rifle.getTotal() > 0) {
@@ -80,39 +77,42 @@ public class Jack extends Objeto {
     public void render(SpriteBatch s){
         if (HP <= 0)
             visible = false;
-        if (rifle == null)
-            rifle = new Rifle(new Vector2(-10_000, -20_000));
+//        if (rifle == null)
+//            rifle = new Rifle(new Vector2(-10_000, -20_000));
         if (body == null && visible) {
             loadBody(BodyDef.BodyType.DynamicBody, false);
             timer = 0f;
         }
-        if (sprite == null)
+        if (sprite == null) {
             sprite = new Sprite(Images.jack);
+            sprite.flip(facingLeft, false);
+        }
         if (visible) {
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
-                if (timer < 1.1f) {
-                    alpha -= 0.01f;
+                if (timer < 0.5f) {
+                    alpha -= 0.1f;
                     sprite.setAlpha(alpha);
                 } else {
                         beenHit = false;
                         timer = 0f;
                         alpha = 1f;
-                        HP--;
+                        HP--;sprite.setAlpha(alpha);
+                        Sounds.HURT.play();
                     }
                 }
-                if (timer <= 0.05f) {
-                    Sounds.HURT.play();
-                }
+
             }
-            if (rifle.isReloading())
-                sprite = sprite2;
-            else
-                sprite = new Sprite(Images.jack);
+//            if (rifle.isReloading())
+//                sprite = sprite2;
+//            else
+//                sprite = new Sprite(Images.jack);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
-            rifle.render(s);
+            if (bullet != null)
+                bullet.render(s);
+//            rifle.render(s);
     }
 
 

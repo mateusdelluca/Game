@@ -45,7 +45,7 @@ public class Level3 extends Level{
 
             items2 = new HashMap<>();
             items2.put(Rifle.class.getSimpleName(),(Objeto) items.get(Rifle.class.getSimpleName()));
-            items2.put(Rifle.class.getSimpleName(), jack.getRifle());
+//            items2.put(Rifle.class.getSimpleName(), jack.getRifle());
             items2.put(Rifle.class.getSimpleName(), girl.getRifle());
 
             jack = new Jack(new Vector2(300, 6000 - 380f));

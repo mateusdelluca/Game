@@ -40,7 +40,7 @@ public class Level1 extends Level{
         items.get("Laser_Headset").updateItem();
         objetos.clear();
         objetos.add(boy);
-        objetos.add(new Jack(new Vector2(100, 400)));
+        objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
     }
