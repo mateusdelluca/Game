@@ -20,6 +20,7 @@ public class Level3 extends Level{
         super();
         monsters1.clear();
 //
+        boy = new Boy(new Vector2(10, 5700), viewport);
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size(), boy));
@@ -27,26 +28,27 @@ public class Level3 extends Level{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size(), boy));
-//        for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
-//            if (index < 5) {
-//                posX = 320 + (100 * index);
-//            }
-//            if (index >= 5) {
-//                posY = 6000 - 240 - (150 * index);
-//                posX = 320 + 3 * 200;
-//            }
-//            if ((index >= 8 && index <= 11)) {
-//                posX = 320 + (100 * (index - 5));
-//                posY = 6000 - 2000;
-//            }
-//            if ((index >= 12 && index <= 15)) {
-//                posX = 520 + (100 * (index - 10));
-//                posY = 6000 - 2300;
-//            }
-//            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+        for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
+            if (index < 5) {
+                posX = 320 + (100 * index);
+            }
+            if (index >= 5) {
+                posY = 6000 - 240 - (150 * index);
+                posX = 320 + 3 * 200;
+            }
+            if ((index >= 8 && index <= 11)) {
+                posX = 320 + (100 * (index - 5));
+                posY = 6000 - 2000;
+            }
+            if ((index >= 12 && index <= 15)) {
+                posX = 520 + (100 * (index - 10));
+                posY = 6000 - 2300;
+            }
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+        }
 //            items2.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
 //
-//            items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
+            items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
 //
 //
 //            items2 = new HashMap<>();
@@ -58,10 +60,10 @@ public class Level3 extends Level{
 //
 //            girl = new Girl(new Vector2(4000, 6000 - 700f));
 //
-//            items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
-//            items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
-//            items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-//            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
+            items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
+            items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
+            items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
 ////            items.get("Portal").updateItem();
 //
 //            items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
@@ -88,7 +90,7 @@ public class Level3 extends Level{
 //
 ////        objetos.addAll(blocks);
 //
-//            rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
+            rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
 //            for (int i = 0; i < NUM_ROPES; i++){
 //                ropes.add(new Rope(new Vector2(300f, 6000 - 400 + (i * Rope.HEIGHT)), false));
 //                if (i == 0) {
@@ -98,13 +100,21 @@ public class Level3 extends Level{
 //                ropes.get(i).joint(ropes.get(i-1).getBodyA());
 //            }
 //            objetos.addAll(items2.values());
-            boy = new Boy(new Vector2(10, 5700), viewport);
+            ninjaRope = new NinjaRope(boy.getBody());
             objetos.add(boy);
             objetos.add(jack);
 //            objetos.add(girl);
 //            objetos.addAll(stands);
+            objetos.add(ninjaRope);
             objetos.addAll(monsters1.values());
 //        }
+
+
+        for (Item item : items.values()) {
+            if (item != null) {
+                item.updateItem();
+            }
+        }
     }
 
     @Override
@@ -130,8 +140,8 @@ public class Level3 extends Level{
         tile.render(camera);
 //        jack.render(spriteBatch);
 //        boy.render(spriteBatch);
-//        for (Item item : items.values())
-//            item.render(spriteBatch);
+        for (Item item : items.values())
+            item.render(spriteBatch);
         for (Objeto objeto : objetos) {
             if (objeto != null)
                 objeto.render(spriteBatch);
@@ -150,6 +160,13 @@ public class Level3 extends Level{
         for (Objeto objeto : objetos)
             if (objeto != null)
                 objeto.update();
+        for (Item item : items.values()) {
+            if (item != null) {
+                item.update();
+                item.updateItem();
+            }
+        }
+
 //        ninjaRope.update();
 //        for (Rope rope : ropes)
 //            rope.update();

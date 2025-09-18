@@ -27,7 +27,7 @@ public class Monster1 extends Objeto implements Serializable {
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_deltaTime;
     @Setter @Getter
-    private float HP = 3;
+    private float HP = 7;
     @Setter
     @Getter
     private boolean split;

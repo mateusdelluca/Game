@@ -82,7 +82,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
 
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
@@ -97,20 +96,8 @@ public abstract class Level extends State implements ContactListener, Serializab
         //boy = new Boy(new Vector2(10, 5700), viewport);
         boy = new Boy(new Vector2(80, 400), viewport);
 
-        ninjaRope = new NinjaRope(boy.getBody());
-
-
-
-
-
-
-//        items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
-
-
+//      items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
         mouse = new Mouse(boy.getBody().getPosition());
-
-
-
     }
 
     public void init() {

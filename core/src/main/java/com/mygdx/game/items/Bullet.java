@@ -26,7 +26,7 @@ public class Bullet extends Objeto implements Item {
         super.width = WIDTH;
         super.height = HEIGHT;
         Vector2 size = new Vector2(width/2f, height/2f);
-        body = createBody(size, BodyDef.BodyType.DynamicBody, isSensor); //boy -> sensor = true
+        body = createBody(size, BodyDef.BodyType.DynamicBody, isSensor);
         body.setGravityScale(0f);
         this.isFacingLeft = isFacingLeft;
         this.degrees = (float) Math.toDegrees(radians);

@@ -12,7 +12,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class JetPack extends Objeto implements Item{
 
-    public static final float WIDTH = 128, HEIGHT = 128;
+    public static final float WIDTH = 128f, HEIGHT = 128f;
 
     private float angle = 0;
 

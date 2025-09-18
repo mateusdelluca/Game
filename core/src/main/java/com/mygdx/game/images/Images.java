@@ -117,7 +117,7 @@ public class Images implements Serializable {
         rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         jetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack.png")));
         aim = new Sprite(Images.shoot);
-        spriteJetPack = Images.jetPack;
+        spriteJetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack2.png")));
         ninjaStar = new Texture(Gdx.files.internal("objects/NinjaStar.png"));
         saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
         rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));

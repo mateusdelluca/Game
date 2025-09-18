@@ -56,15 +56,15 @@ public class NinjaRope extends Objeto implements Item{
     private int index;
     private boolean jointHasBeenCreated;
     private boolean touched2;
-
+    public static final float WIDTH = 75, HEIGHT = 85;
 
     public NinjaRope(Body playerBody){
         this.playerBody = playerBody;
     }
 
     public NinjaRope(Vector2 position){
-        super(75f, 85f);
-        body = createBody(new Vector2(75/2f,85/2f), BodyDef.BodyType.StaticBody, true);
+        super(WIDTH, HEIGHT);
+        body = createBody(new Vector2(WIDTH/2f,HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(this.toString());
     }
@@ -106,7 +106,7 @@ public class NinjaRope extends Objeto implements Item{
 
         timer += Gdx.graphics.getDeltaTime();
 
-        if (timer > 0.1f && playerBody.getLinearVelocity().x == 0f) {
+        if (timer > 0.1f && playerBody != null && playerBody.getLinearVelocity().x == 0f) {
             jointHasBeenCreated = false;
             timer = 0f;
         }
