@@ -69,6 +69,12 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level2();
             }
             case "Level3": {
+                for (Objeto objeto : currentLevel.objetos)
+                    objeto.getBody().setTransform(-15_000, -15_000, 0);
+                for (Body bodies : tile.bodies_of_rects)
+                    bodies.setTransform(-13_000, -13_000, 0);
+                for (Body bodies : tile.bodies_of_thorns)
+                    bodies.setTransform(-11_000, -11_000, 0);
                 return new Level3();
             }
             default: {

@@ -98,9 +98,9 @@ public class Level3 extends Level{
 //                ropes.get(i).joint(ropes.get(i-1).getBodyA());
 //            }
 //            objetos.addAll(items2.values());
-        boy = new Boy(new Vector2(10, 5700), viewport);
+            boy = new Boy(new Vector2(10, 5700), viewport);
             objetos.add(boy);
-//            objetos.add(jack);
+            objetos.add(jack);
 //            objetos.add(girl);
 //            objetos.addAll(stands);
             objetos.addAll(monsters1.values());
@@ -132,8 +132,11 @@ public class Level3 extends Level{
 //        boy.render(spriteBatch);
 //        for (Item item : items.values())
 //            item.render(spriteBatch);
-//        for (Objeto objeto : objetos)
-//            objeto.render(spriteBatch);
+        for (Objeto objeto : objetos) {
+            if (objeto != null)
+                objeto.render(spriteBatch);
+        }
+        powerBar.render(spriteBatch, camera, boy);
 //        boy.render(spriteBatch);
 //        powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();
@@ -144,6 +147,9 @@ public class Level3 extends Level{
     @Override
     public void update(){
         super.update();
+        for (Objeto objeto : objetos)
+            if (objeto != null)
+                objeto.update();
 //        ninjaRope.update();
 //        for (Rope rope : ropes)
 //            rope.update();

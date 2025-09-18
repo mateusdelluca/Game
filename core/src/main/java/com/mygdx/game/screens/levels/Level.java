@@ -268,11 +268,11 @@ public abstract class Level extends State implements ContactListener, Serializab
         if (body1 == null || body2 == null)
             return;
 
-
-        boy.beginContact(contact);
-        for (Objeto o : objetos) {
-            o.beenHit(body1, body2);
-        }
+        if (boy != null)
+            boy.beginContact(contact);
+//        for (Objeto o : objetos) {
+//            o.beenHit(body1, body2);
+//        }
 //        for (Rope rope : ropes){
         if (rope != null)
             rope.beginContact(body1, body2);
@@ -363,8 +363,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 //            }
 
-//        }
-        for (int i = 0; i < blocks.size(); i++) {
+/*        }   TODO: blocos para todos os levels
+       for (int i = 0; i < blocks.size(); i++) {
             if (((body1.getUserData().toString().equals("Bullet") &&
                 body2.getUserData().toString().equals("Block" + i))
                 || (body2.getUserData().toString().equals("Bullet") &&
@@ -385,6 +385,9 @@ public abstract class Level extends State implements ContactListener, Serializab
                 }
             }
         }
+*/
+
+
 
 //        Body bullet1 = contact.getFixtureA().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
 //        Body bullet2 = contact.getFixtureB().getBody().getUserData().toString().equals("Bullet") ? contact.getFixtureA().getBody() : null;
