@@ -12,6 +12,7 @@ import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
 import static com.mygdx.game.screens.levels.Level_Manager.currentLevelName;
+import static com.mygdx.game.screens.levels.Level_Manager.lvl;
 
 public class Portal extends Objeto implements Item{
 
@@ -79,7 +80,7 @@ public class Portal extends Objeto implements Item{
 
         if ((body1.equals(body) && body2.getUserData().toString().equals("Boy"))
         || (body2.equals(body) && body1.getUserData().toString().equals("Boy"))){
-            currentLevelName = "Level2";
+            currentLevelName = "Level" + ++lvl;
         }
     }
 

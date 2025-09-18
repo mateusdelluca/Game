@@ -19,6 +19,7 @@ public class Level_Manager extends State implements ContactListener {
     private Level level1, level2, level3;
     public static Level currentLevel;
     public static String currentLevelName = "Level1", oldLevel;
+    public static int lvl = 1;
     public static ArrayList<Body> bodiesToDestroy = new ArrayList<>();
 
     public static SpriteBatch spriteBatch = new SpriteBatch();

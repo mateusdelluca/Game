@@ -92,8 +92,11 @@ public class Level2 extends Level{
         if (body1 == null || body2 == null)
             return;
 
-        for (Objeto o : objetos)
+        for (Objeto o : objetos) {
             o.beenHit(body1, body2);
+            if (o instanceof Portal)
+                ((Portal) o).beginContact(contact);
+        }
     }
 
 }

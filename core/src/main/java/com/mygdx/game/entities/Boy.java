@@ -90,6 +90,7 @@ public class Boy extends Objeto {
         this.viewport = viewport;
         jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10f);
         mass(1.0f, new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), 1.0f);
+        rifle = new Rifle(new Vector2(-10_000, -20_000));
     }
 
     @Override
