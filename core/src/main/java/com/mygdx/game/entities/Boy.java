@@ -379,10 +379,10 @@ public class Boy extends Objeto {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                         if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
-                            punch_box.setUserData(this.toString());
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, true);
+                            punch_box.setUserData("Punch");
                         }
-                        if (punchingAnimationTimer >= 1f) {
+                        if (punchingAnimationTimer >= 0.5f) {
                             animations = Animations.BOY_IDLE;
                             punchingAnimationTimer = 0f;
                             punch_box.setTransform(new Vector2(-2000, -2000), 0);
@@ -579,17 +579,12 @@ public class Boy extends Objeto {
                             getBody().setLinearVelocity(!flip0 ? VELOCITY_X * 5 : -VELOCITY_X * 5, getBody().getLinearVelocity().y);
                         }
                             if (laser) {
-//                                if (!rifle.isReloading()) {
-//                                    if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
                                         laser_rail.add(new Laser(
                                             new Vector2(!facingLeft ? (getBody().getPosition().x +
-                                                WIDTH / 2f) : (getBody().getPosition().x),
-                                                (getBody().getPosition().y + HEIGHT / 2f)),
+                                                WIDTH / 2f) : (getBody().getPosition().x - WIDTH/4f),
+                                                !facingLeft ? (getBody().getPosition().y + (HEIGHT/2f)) : (getBody().getPosition().y + (HEIGHT))),
                                             radians > Math.PI/2f, radians, this.toString()));
                                 LASER_HEADSET.play();
-//                                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
-//                                    }
-//                                }
                         }
                     }
                 }

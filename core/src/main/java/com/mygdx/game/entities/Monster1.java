@@ -176,12 +176,15 @@ public class Monster1 extends Objeto implements Serializable {
             beenHit();
 
         }
-        if ((bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy"))
-            || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
-            if (boy.animations.name().equals("BOY_PUNCHING")) {
-                beenHit();
-                world.clearForces();
-            }
+        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Punch")){
+            beenHit();
+            body.setLinearVelocity(body.getPosition().x < bodyB.getPosition().x ? 20 : -20,20);
+            world.clearForces();
+        }
+        if (bodyB.equals(body) && bodyA.getUserData().toString().equals("Punch")){
+            beenHit();
+            body.setLinearVelocity(body.getPosition().x < bodyA.getPosition().x ? 20 : -20,20);
+            world.clearForces();
         }
     }
 }
