@@ -53,7 +53,7 @@ public class Jack extends Objeto {
 //                    if (rifle.getTotal() > 0) {
                         bullet = new Bullet(new Vector2(!facingLeft ? body.getPosition().x +
                             WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
-                            body.getPosition().y + HEIGHT / 2f), facingLeft, 0f, false);
+                            body.getPosition().y + HEIGHT / 2f), facingLeft, 0f, false, this.toString());
 //                        rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                         deltaTime = 0f;
                         SHOTGUN.play();

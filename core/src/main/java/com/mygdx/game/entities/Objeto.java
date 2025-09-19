@@ -198,16 +198,27 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         if (!body1.equals(body) && !body2.equals(body)){
             return;
         }
-        if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
-            ||
-            (body1.getUserData().toString().contains("Thorns") || body2.getUserData().toString().contains("Thorns"))
-            ||
-            (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
-            ||
-            (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser")))
-            {
+        if (!(body1.getUserData().toString().equals("Boy")) && !(body2.getUserData().toString().equals("Boy"))) {
+            if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
+                ||
+                (body1.getUserData().toString().contains("Thorns") || body2.getUserData().toString().contains("Thorns"))
+                ||
+                (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
+                ||
+                (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))) {
                 beenHit();
             }
+        } else {
+            if ((body1.getUserData().toString().contains("Enemy") || body2.getUserData().toString().contains("Enemy"))
+                ||
+                (body1.getUserData().toString().contains("Thorns") || body2.getUserData().toString().contains("Thorns"))
+                ||
+                (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
+                ||
+                (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))) {
+                beenHit();
+            }
+        }
     }
 
     public void setUserData(Body body){

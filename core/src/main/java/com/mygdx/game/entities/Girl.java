@@ -52,7 +52,7 @@ public class Girl extends Objeto{
                     if (deltaTime > 5f) {
                         Bullet bullet = new Bullet(new Vector2(!flip ? body.getPosition().x +
                             WIDTH / 2f : body.getPosition().x - WIDTH / 2f,
-                            body.getPosition().y + HEIGHT / 2f), !flip, flip ? (float) Math.PI : 0f, true);
+                            body.getPosition().y + HEIGHT / 2f), !flip, flip ? (float) Math.PI : 0f, true, this.toString());
                         rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                         deltaTime = 0f;
                         SHOTGUN.play();

@@ -7,9 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.mygdx.game.entities.Jack;
-import com.mygdx.game.entities.Monster1;
-import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 
 import static com.mygdx.game.images.Images.tile;
@@ -20,7 +18,9 @@ public class Level1 extends Level{
     public Level1() throws Exception {
         super();
         monsters1.clear();
-
+        boy = new Boy(new Vector2(10, 5700), viewport);
+        ninjaRope = new NinjaRope(boy.getBody());
+        mouse = new Mouse(boy.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
@@ -130,25 +130,25 @@ public class Level1 extends Level{
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        super.beginContact(contact);
-
-        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
-            return;
-        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
-            return;
-        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
-            return;
-
-        Body body1 = contact.getFixtureA().getBody();
-        Body body2 = contact.getFixtureB().getBody();
-
-        if (body1 == null || body2 == null)
-            return;
-
-        boy.beginContact(contact);
-
-        for (Monster1 m : monsters1.values()){
-            m.beginContact(body1, body2);
-        }
+//        super.beginContact(contact);
+//
+//        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+//            return;
+//        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+//            return;
+//        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+//            return;
+//
+//        Body body1 = contact.getFixtureA().getBody();
+//        Body body2 = contact.getFixtureB().getBody();
+//
+//        if (body1 == null || body2 == null)
+//            return;
+//
+//        boy.beginContact(contact);
+//
+//        for (Monster1 m : monsters1.values()){
+//            m.beginContact(body1, body2);
+//        }
     }
 }

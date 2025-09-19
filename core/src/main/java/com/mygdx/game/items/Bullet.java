@@ -45,29 +45,29 @@ public class Bullet extends Objeto implements Item {
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
     }
 
-    public Bullet(Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){
-        super(WIDTH, HEIGHT);
-        super.width = WIDTH;
-        super.height = HEIGHT;
-        Vector2 size = new Vector2(width/2f, height/2f);
-        body = createBody(size, BodyDef.BodyType.DynamicBody, isSensor); //boy -> sensor = true
-        body.setGravityScale(0f);
-        this.isFacingLeft = isFacingLeft;
-        this.degrees = (float) Math.toDegrees(radians);
-        this.radians = radians;
-        body.setTransform(position, 0);
-//      getBody().setAwake(true);
-//      getBody().setBullet(false);
-        body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
-        visible = true;
-//        body.setFixedRotation(true);
-        body.setUserData(this.toString());
-        if (degrees > 90f)
-            this.isFacingLeft = true;
-        else
-            body.setTransform(position, (float) Math.toRadians(degrees));
-        bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
-    }
+//    public Bullet(Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){
+//        super(WIDTH, HEIGHT);
+//        super.width = WIDTH;
+//        super.height = HEIGHT;
+//        Vector2 size = new Vector2(width/2f, height/2f);
+//        body = createBody(size, BodyDef.BodyType.DynamicBody, isSensor); //boy -> sensor = true
+//        body.setGravityScale(0f);
+//        this.isFacingLeft = isFacingLeft;
+//        this.degrees = (float) Math.toDegrees(radians);
+//        this.radians = radians;
+//        body.setTransform(position, 0);
+////      getBody().setAwake(true);
+////      getBody().setBullet(false);
+//        body.setLinearVelocity((!isFacingLeft ? VELOCITY : -VELOCITY) * (float) Math.cos(this.radians), VELOCITY * (float) Math.sin(this.radians)); //TODO calcular velocidade x e y de acordo com o ângulo
+//        visible = true;
+////        body.setFixedRotation(true);
+//        body.setUserData(this.toString());
+//        if (degrees > 90f)
+//            this.isFacingLeft = true;
+//        else
+//            body.setTransform(position, (float) Math.toRadians(degrees));
+//        bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
+//    }
 
 
     @Override

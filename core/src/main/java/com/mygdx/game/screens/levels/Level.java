@@ -93,11 +93,11 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         powerBar = new PowerBar();
 
-        //boy = new Boy(new Vector2(10, 5700), viewport);
-        boy = new Boy(new Vector2(80, 400), viewport);
+
+
 
 //      items2.put(NinjaRope.class.getSimpleName(),new NinjaRope(new Vector2(450, 6000 - 450)));
-        mouse = new Mouse(boy.getBody().getPosition());
+
     }
 
     public void init() {
@@ -255,15 +255,14 @@ public abstract class Level extends State implements ContactListener, Serializab
         if (body1 == null || body2 == null)
             return;
 
-        if (boy != null)
-            boy.beginContact(contact);
-//        for (Objeto o : objetos) {
-//            o.beenHit(body1, body2);
-//        }
 //        for (Rope rope : ropes){
         if (rope != null)
             rope.beginContact(body1, body2);
 //        }
+
+        boy.beginContact(contact);
+
+
 
         for (Item item : items.values()) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
@@ -620,6 +619,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
         boy.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
 //        mouse.mouseMoved(screenX, screenY);

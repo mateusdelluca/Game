@@ -5,8 +5,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Jack;
+import com.mygdx.game.entities.Mouse;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
 
 import java.util.ArrayList;
@@ -21,10 +23,13 @@ public class Level2 extends Level{
     public Level2() throws Exception {
         super();
         monsters1.clear();
-//        objetos.clear();
-        world.destroyBody(boy.getBody());
+        objetos.clear();
+//        world.destroyBody(boy.getBody());
         boy = new Boy(new Vector2(100, 200), viewport);
+        ninjaRope = new NinjaRope(boy.getBody());
+        mouse = new Mouse(boy.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));
+        objetos.add(boy);
         objetos.add(new Portal(new Vector2(6000 - 300, 400)));
         objetos.add(jack);
     }
@@ -70,7 +75,6 @@ public class Level2 extends Level{
     @Override
     public void update(){
         super.update();
-        boy.update();
         for (Objeto o : objetos)
             o.update();
     }
@@ -93,7 +97,8 @@ public class Level2 extends Level{
             return;
 
         for (Objeto o : objetos) {
-            o.beenHit(body1, body2);
+            if (o != null && !(o instanceof Portal))
+                o.beenHit(body1, body2);
             if (o instanceof Portal)
                 ((Portal) o).beginContact(contact);
         }

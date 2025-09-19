@@ -54,4 +54,5 @@ public class Fan extends Objeto implements Fans {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }

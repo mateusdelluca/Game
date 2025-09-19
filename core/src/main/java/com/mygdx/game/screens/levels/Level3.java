@@ -6,8 +6,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
+import com.mygdx.game.items.fans.Fan;
 import com.mygdx.game.items.fans.Fans;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.tile;
@@ -19,8 +21,10 @@ public class Level3 extends Level{
     public Level3() throws Exception {
         super();
         monsters1.clear();
-//
         boy = new Boy(new Vector2(10, 5700), viewport);
+        mouse = new Mouse(boy.getBody().getPosition());
+//
+//        boy = new Boy(new Vector2(10, 5700), viewport);
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size(), boy));
@@ -115,6 +119,8 @@ public class Level3 extends Level{
                 item.updateItem();
             }
         }
+
+
     }
 
     @Override
@@ -146,6 +152,9 @@ public class Level3 extends Level{
             if (objeto != null)
                 objeto.render(spriteBatch);
         }
+        for (Fans fan : fans){
+            fan.render(spriteBatch);
+        }
         powerBar.render(spriteBatch, camera, boy);
 //        boy.render(spriteBatch);
 //        powerBar.render(spriteBatch, camera, boy);
@@ -166,7 +175,9 @@ public class Level3 extends Level{
                 item.updateItem();
             }
         }
-
+        for (Fans fan : fans){
+            fan.update2(boy.getBody(), boy.getWidth());
+        }
 //        ninjaRope.update();
 //        for (Rope rope : ropes)
 //            rope.update();
@@ -194,11 +205,12 @@ public class Level3 extends Level{
         if (body1 == null || body2 == null)
             return;
 
-//        for (Objeto o : objetos) {
-//            o.beenHit(body1, body2);
-//            if (o instanceof Portal)
-//                ((Portal) o).beginContact(contact);
-//        }
+        for (Objeto o : objetos) {
+            if (o != null && !(o instanceof Portal))
+                o.beenHit(body1, body2);
+            if (o instanceof Portal)
+                ((Portal) o).beginContact(contact);
+        }
     }
 
 }
