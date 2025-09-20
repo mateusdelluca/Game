@@ -62,14 +62,16 @@ public class Monster1 extends Objeto implements Serializable {
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
         if (boy != null && boy.getBody() != null && body != null) {
-            if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
-                if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
-                    if (boy.getBody().getPosition().x < body.getPosition().x) {
-                        facingRight = false;
-                        body.setLinearVelocity(-5, body.getLinearVelocity().y);
-                    } else {
-                        body.setLinearVelocity(5, body.getLinearVelocity().y);
-                        facingRight = true;
+            if (!isBeenHit()) {
+                if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
+                    if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
+                        if (boy.getBody().getPosition().x < body.getPosition().x) {
+                            facingRight = false;
+                            getBody().applyForce(new Vector2(-5_000, 0), getBody().getWorldCenter(), true);
+                        } else {
+                            getBody().applyForce(new Vector2(5_000, 0), getBody().getWorldCenter(), true);
+                            facingRight = true;
+                        }
                     }
                 }
             }
@@ -103,7 +105,7 @@ public class Monster1 extends Objeto implements Serializable {
 //                          initialTime = System.nanoTime();
 //                        flickering_deltaTime = 0f;
                           timer = 0f;
-                        body.setLinearVelocity(0, 0);
+//                        body.setLinearVelocity(0, 0);
                         animations.changeAnimation("MONSTER1_WALKING");
                         soundRunning = false;
 
@@ -154,7 +156,6 @@ public class Monster1 extends Objeto implements Serializable {
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
         if (body != null && !animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
-            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 4);
             animations.changeAnimation("MONSTER1_FLICKERING");
             Sounds.MONSTER_HURT.play();
             setBeenHit(true);
@@ -176,15 +177,17 @@ public class Monster1 extends Objeto implements Serializable {
             beenHit();
 
         }
-        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Punch")){
+        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Punch") ||
+            bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")){
             beenHit();
-            body.setLinearVelocity(body.getPosition().x < bodyB.getPosition().x ? 20 : -20,20);
-            world.clearForces();
+//            body.setLinearVelocity(body.getPosition().x < bodyB.getPosition().x ? 20 : -20,20);
+//            world.clearForces();
         }
-        if (bodyB.equals(body) && bodyA.getUserData().toString().equals("Punch")){
+        if (bodyB.equals(body) && bodyA.getUserData().toString().equals("Punch") ||
+            bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy")){
             beenHit();
-            body.setLinearVelocity(body.getPosition().x < bodyA.getPosition().x ? 20 : -20,20);
-            world.clearForces();
+//            body.setLinearVelocity(body.getPosition().x < bodyA.getPosition().x ? 20 : -20,20);
+//            world.clearForces();
         }
     }
 }

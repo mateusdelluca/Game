@@ -32,7 +32,7 @@ import static com.mygdx.game.sfx.Sounds.*;
 public class Boy extends Objeto {
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
-    public static final float VELOCITY_X = 20f, JUMP_VELOCITY = 70f;
+    public static final float VELOCITY_X = 1_000f, JUMP_VELOCITY = 70f;
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     @Getter @Setter
@@ -247,6 +247,9 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
+        if (Math.abs(getBody().getLinearVelocity().x) > VELOCITY_X)
+            getBody().setLinearVelocity((Math.abs(getBody().getLinearVelocity().x) / (getBody().getLinearVelocity().x))
+                *  (VELOCITY_X), 1f * getBody().getLinearVelocity().y);
         this.bodyPosition = body.getPosition();
         if (thrown)
             throwTimer += Gdx.graphics.getDeltaTime();
@@ -267,7 +270,7 @@ public class Boy extends Objeto {
         }
 
        aim();  //the commands and precision of pointing and shoot
-        if (Math.abs(getBody().getLinearVelocity().y) < 0.05f && !animations.name().equals("BOY_JUMPING")){
+        if (Math.abs(getBody().getLinearVelocity().y) < 0.5f){
             secondJump = 0;
         }
     }
@@ -444,7 +447,8 @@ public class Boy extends Objeto {
 
     public void keyDown(int keycode){
         if (keycode == Input.Keys.SPACE && use_jetPack && PowerBar.sp > 10) {
-            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
+//            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
+            getBody().applyForceToCenter(new Vector2(0f, 1_000f), true);
             body.setGravityScale(0f);
         }
         if (keycode == Input.Keys.J){
@@ -477,7 +481,8 @@ public class Boy extends Objeto {
             }
         }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
-            body.setLinearVelocity(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, body.getLinearVelocity().y);
+            if (Math.abs(getBody().getLinearVelocity().x) < VELOCITY_X)
+                body.applyForce(new Vector2(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, 0f), getBody().getWorldCenter(), true);
             if (!shooting) {
                 if (!facingLeft) {
 //                    degrees = 0f;
@@ -517,14 +522,16 @@ public class Boy extends Objeto {
                 animations = Animations.BOY_IDLE;
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
+            onGround = false;
             body.setGravityScale(0.4f);
         }
         if (keycode == Input.Keys.SPACE) {
             if (!beenHit && secondJump < 1 && onGround) {
-                onGround = false;
+
                 if (!use_jetPack) {
-                    secondJump++;
-                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
+                    secondJump++;onGround = false;
+//                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
+                    getBody().applyForce(new Vector2(0f, 5_000f), getBody().getWorldCenter(), true);
                 }
             }
         }
@@ -697,7 +704,7 @@ public class Boy extends Objeto {
     @Override
     public void beenHit(){
         if (animations != Animations.BOY_STRICKEN) {
-            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
+//            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
             animations = Animations.BOY_STRICKEN;
             PowerBar.hp -= 10;
             setBeenHit(true);
@@ -731,10 +738,44 @@ public class Boy extends Objeto {
         }
 
         if ((body1.equals(body) && body2.getUserData().toString().contains("Enemy"))
-            || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))
-        || (body1.equals(body) && body2.getUserData().toString().contains("Colliders")
-            || body2.equals(body) && body1.getUserData().toString().contains("Colliders"))){
-                beenHit();
+            || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))){
+            applyForceToBody(body1, body2);
+            beenHit();
         }
+        if (body1.equals(body) && body2.getUserData().toString().contains("Colliders")
+            || body2.equals(body) && body1.getUserData().toString().contains("Colliders")) {
+            beenHit();
+        }
+    }
+
+    private void applyForceToBody(Body body1, Body body2){
+        if (body1.getUserData().toString().contains("Enemy")){
+            Vector2 force = new Vector2(left_or_right(getBody(), body1), 1_000.0f); // força para direita
+            Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
+            getBody().setLinearVelocity(0,0);
+            getBody().applyForce(force, point, true);
+
+            Vector2 force2 = new Vector2(left_or_right(body1, getBody()), 1_000.0f); // força para direita
+            Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
+            body1.setLinearVelocity(0,0);
+            body1.applyForce(force2, point2, true);
+
+        } else {
+            if (body2.getUserData().toString().contains("Enemy")) {
+                Vector2 force = new Vector2(left_or_right(getBody(), body2), 1_000.0f); // força para direita
+                Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
+//                getBody().setLinearVelocity(0,0);
+                getBody().applyForce(force, point, true);
+
+                Vector2 force2 = new Vector2(left_or_right(body2, getBody()), 1_000.0f); // força para direita
+                Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
+//                body2.setLinearVelocity(0,0);
+                body2.applyForce(force2, point2, true);
+            }
+        }
+    }
+
+    private float left_or_right(Body bodyA, Body bodyB){
+       return bodyA.getPosition().x > bodyB.getPosition().x ? 1_000.0f : -1_000f;
     }
 }

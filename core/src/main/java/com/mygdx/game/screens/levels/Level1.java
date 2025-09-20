@@ -92,6 +92,8 @@ public class Level1 extends Level{
             camera.update();
         }
 
+
+
         for (Objeto objeto : objetos) {
             objeto.update();
         }

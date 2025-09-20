@@ -45,7 +45,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         this.height = height;
         visible = true;
         if (body != null) {
-            rect = new Rectangle(body.getPosition().x - width / 2f, body.getPosition().y - height / 2f, width, height);
+            rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
         }
 
     }
@@ -64,7 +64,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         polygonShape.setAsBox(dimensions.x, dimensions.y, new Vector2(width/2f, height/2f), 0);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 10f;
+        fixtureDef.density = 1f;
 //        fixtureDef.restitution = 0.1f;
         fixtureDef.isSensor = isSensor;
         Body body = world.createBody(bodyDef);

@@ -29,8 +29,8 @@ public class Level2 extends Level{
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));
-        objetos.add(boy);
         objetos.add(new Portal(new Vector2(6000 - 300, 400)));
+        objetos.add(boy);
         objetos.add(jack);
     }
 
@@ -65,7 +65,7 @@ public class Level2 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        boy.render(spriteBatch);
+//        boy.render(spriteBatch);
         powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();
 
