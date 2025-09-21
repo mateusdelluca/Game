@@ -39,8 +39,7 @@ public class Jack extends Objeto {
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         sprite.flip(facingLeft, false);
-//        body.setUserData(this.toString());
-//        rifle.updateItem();
+        body.setUserData(this.toString());
     }
 
     public void update(){
@@ -74,6 +73,7 @@ public class Jack extends Objeto {
         }
     }
 
+    @Override
     public void render(SpriteBatch s){
         if (HP <= 0)
             visible = false;
@@ -88,6 +88,8 @@ public class Jack extends Objeto {
             sprite.flip(facingLeft, false);
         }
         if (visible) {
+            sprite.setSize(WIDTH, HEIGHT);
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
             if (beenHit) {
                 timer += Gdx.graphics.getDeltaTime();
                 if (timer < 0.5f) {
@@ -97,22 +99,15 @@ public class Jack extends Objeto {
                         beenHit = false;
                         timer = 0f;
                         alpha = 1f;
-                        HP--;sprite.setAlpha(alpha);
+                        HP--;
+                        sprite.setAlpha(alpha);
                         Sounds.HURT.play();
                     }
                 }
-
-            }
-//            if (rifle.isReloading())
-//                sprite = sprite2;
-//            else
-//                sprite = new Sprite(Images.jack);
-            sprite.setSize(WIDTH, HEIGHT);
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
             if (bullet != null)
                 bullet.render(s);
-//            rifle.render(s);
+            }
     }
 
 

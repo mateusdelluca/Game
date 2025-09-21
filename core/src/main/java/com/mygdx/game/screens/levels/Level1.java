@@ -118,12 +118,12 @@ public class Level1 extends Level{
 
         if (body1 == null || body2 == null)
             return;
-
-        boy.beginContact(contact);
-
-        for (Monster1 m : monsters1.values()){
-            m.beginContact(body1, body2);
-        }
+//
+//        boy.beginContact(contact);
+//
+//        for (Monster1 m : monsters1.values()){
+//            m.beginContact(body1, body2);
+//        }
 
         for (Objeto o : objetos)
             if (o instanceof Portal)

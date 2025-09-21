@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-public class Fan extends Objeto implements Fans {
+public class Fan extends Objeto{
     public static final float multiply = 1.0f;
 
     public static final float WIDTH = 76 * multiply, HEIGHT = 93 * multiply;
@@ -21,27 +21,15 @@ public class Fan extends Objeto implements Fans {
     }
 
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Images.fan.currentSpriteFrame(useOnlyLastFrame,true,false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
+        spriteBatch.draw(Images.fan.currentSpriteFrame(false,true,false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
-    public boolean bodyCloseToFan(Body b, float width){
-        return (((b.getPosition().x + (width/2f)) >= (body.getPosition().x - WIDTH/2f) && (b.getPosition().x) < (body.getPosition().x + WIDTH))
+    public boolean bodyCloseToFan(Body b){
+        return (((b.getWorldCenter().x >= (body.getWorldCenter().x)) && (b.getWorldCenter().x) < (body.getWorldCenter().x))
           && Math.abs(b.getPosition().y - body.getPosition().y) <= 50);
     }
 
-    public void update2(Body b, float width){
-        update();
-        if (bodyCloseToFan(b, width)) {
-            System.out.println(b.getPosition().x + " " + body.getPosition().x);
-            useOnlyLastFrame = false;
-            b.setLinearVelocity(b.getLinearVelocity().x, b.getLinearVelocity().y + 15);
-        } else{
-            useOnlyLastFrame = true;
-        }
-    }
-
-    @Override
-    public void update() {
+    public void update(){
         if (body == null)
             body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
     }
@@ -53,6 +41,17 @@ public class Fan extends Objeto implements Fans {
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public void beginContact(Body bodyA, Body bodyB){
+        if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Enemy")
+            || bodyB.equals(body) && bodyA.getUserData().toString().contains("Enemy"))
+        ||
+            (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")
+                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
+            bodyA.setLinearVelocity(bodyA.getLinearVelocity().x, bodyA.getLinearVelocity().y + 1500);
+            bodyB.setLinearVelocity(bodyA.getLinearVelocity().x, bodyB.getLinearVelocity().y + 1500);
+        }
     }
 
 }

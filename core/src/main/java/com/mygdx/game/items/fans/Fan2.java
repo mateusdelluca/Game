@@ -8,11 +8,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-public class Fan2 extends Objeto implements Fans{
+import static com.mygdx.game.screens.levels.Level_Manager.world;
+
+public class Fan2 extends Objeto{
     public static final float multiply = 1.5f;
 
     public static final float WIDTH = 76 * multiply, HEIGHT = 79 * multiply;
-    private boolean useOnlyLastFrame = true;
 
     public Fan2(Vector2 position){
         super(WIDTH, HEIGHT);
@@ -21,22 +22,7 @@ public class Fan2 extends Objeto implements Fans{
     }
 
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Images.fan2.currentSpriteFrame(useOnlyLastFrame,true,true), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
-    }
-
-    public boolean bodyCloseToFan(Body anotherBody, float width){
-        return (Math.abs(anotherBody.getPosition().x) - (body.getPosition().x) < 80f && Math.abs(anotherBody.getPosition().y - body.getPosition().y) <= 10);
-    }
-
-    public void update2(Body b, float width){
-        update();
-        if (bodyCloseToFan(b, width)) {
-//            System.out.println(b.getPosition().y - fanBody.getPosition().y);
-            useOnlyLastFrame = false;
-            b.setLinearVelocity(b.getLinearVelocity().x + 2, b.getLinearVelocity().y);
-        } else{
-            useOnlyLastFrame = true;
-        }
+        spriteBatch.draw(Images.fan2.currentSpriteFrame(false,true,true), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     @Override
@@ -52,5 +38,18 @@ public class Fan2 extends Objeto implements Fans{
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+
+    public void beginContact(Body bodyA, Body bodyB){
+        if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Enemy")
+            || bodyB.equals(body) && bodyA.getUserData().toString().contains("Enemy"))
+            ||
+            (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")
+                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
+//            world.clearForces();
+            bodyA.applyForce(new Vector2(3_000f, 3_000f), bodyA.getWorldCenter(), true);
+            bodyB.applyForce(new Vector2(3_000f, 3_000f), bodyA.getWorldCenter(), true);
+        }
     }
 }

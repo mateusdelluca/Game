@@ -22,7 +22,6 @@ import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
 import com.mygdx.game.items.fans.Fan2;
-import com.mygdx.game.items.fans.Fans;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
@@ -34,11 +33,8 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.screens.levels.Level_Manager.bodiesToDestroy;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public abstract class Level extends State implements ContactListener, Serializable {
@@ -60,7 +56,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     protected Mouse mouse;
     protected PowerBar powerBar;
 
-    protected ArrayList<Fans> fans = new ArrayList<>();
+    protected ArrayList<Objeto> fans = new ArrayList<>();
 
     public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
@@ -216,7 +212,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 //        rifle.getLeftSideBullets().render(spriteBatch);
         for (Item item : items.values())
             item.render(spriteBatch);
-        for (Fans fan : fans)
+        for (Objeto fan : fans)
             fan.render(spriteBatch);
         boy.render(spriteBatch);
         for (Block block : blocks)
@@ -259,9 +255,10 @@ public abstract class Level extends State implements ContactListener, Serializab
         if (rope != null)
             rope.beginContact(body1, body2);
 //        }
-
-        boy.beginContact(contact);
-
+        for (Objeto objeto : objetos) {
+            objeto.beenHit(body1, body2);
+            objeto.beginContact(body1, body2);
+        }
 
 
         for (Item item : items.values()) {

@@ -1,16 +1,11 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
-import com.mygdx.game.items.fans.Fans;
-
-import java.util.Collection;
-import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.items.Rope.NUM_ROPES;
@@ -152,7 +147,7 @@ public class Level3 extends Level{
             if (objeto != null)
                 objeto.render(spriteBatch);
         }
-        for (Fans fan : fans){
+        for (Objeto fan : fans){
             fan.render(spriteBatch);
         }
         powerBar.render(spriteBatch, camera, boy);
@@ -160,7 +155,7 @@ public class Level3 extends Level{
 //        powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();
 //
-//        box2DDebugRenderer.render(world, camera.combined);
+        box2DDebugRenderer.render(world, camera.combined);
     }
 
     @Override
@@ -175,8 +170,10 @@ public class Level3 extends Level{
                 item.updateItem();
             }
         }
-        for (Fans fan : fans){
-            fan.update2(boy.getBody(), boy.getWidth());
+        for (Objeto fan : fans){
+            if (fan != null && fan.getBody() != null){
+                fan.update();
+            }
         }
 //        ninjaRope.update();
 //        for (Rope rope : ropes)
@@ -204,6 +201,11 @@ public class Level3 extends Level{
 
         if (body1 == null || body2 == null)
             return;
+
+
+        for (Objeto fan : fans){
+            fan.beginContact(body1, body2);
+        }
 
         for (Objeto o : objetos) {
             if (o != null && !(o instanceof Portal))

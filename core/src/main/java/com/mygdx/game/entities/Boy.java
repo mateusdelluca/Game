@@ -389,7 +389,7 @@ public class Boy extends Objeto {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                         if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, true);
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
                             punch_box.setUserData("Punch");
                         }
                         if (punchingAnimationTimer >= 0.5f) {
@@ -724,19 +724,21 @@ public class Boy extends Objeto {
         }
     }
 
-    public void beginContact(Contact contact) {
-        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
-            return;
-        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
-            return;
-        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
-            return;
-
-        Body body1 = contact.getFixtureA().getBody();
-        Body body2 = contact.getFixtureB().getBody();
-
-        if (body1 == null || body2 == null)
-            return;
+    @Override
+    public void beginContact(Body body1, Body body2) {
+//        super.beginContact(body1, body2);
+//        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+//            return;
+//        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+//            return;
+//        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+//            return;
+//
+//        Body body1 = contact.getFixtureA().getBody();
+//        Body body2 = contact.getFixtureB().getBody();
+//
+//        if (body1 == null || body2 == null)
+//            return;
 
         if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Rects")
             || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Rects")) ||
