@@ -75,7 +75,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
-
+    public String polygons_String = "";
     public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
 
@@ -112,11 +112,16 @@ public abstract class Level extends State implements ContactListener, Serializab
         thorns = tile.loadMapObjects("Thorns_Rects");
         tile.createBodies(thorns, world, false, "Thorns_Rects");
 
-
-
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
 
+        if (this instanceof Level4) {
+            polygons_String = "Polygons";
+            if (polygons_String.contains("Polygons")) {
+                MapObjects polygons = tile.loadMapObjects("Polygons");
+                tile.createBodies(polygons, world, false, "Polygons");
+            }
+        }
         Texture t = new Texture(Gdx.files.internal("Font2.png"));
         BitmapFont font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);

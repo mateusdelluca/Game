@@ -51,13 +51,9 @@ public class Level_Manager extends State implements ContactListener {
         oldLevel = currentLevelName;
         switch (currentLevelName) {
             case "Level1": {
-//                a
                 return new Level1();
             }
             case "Level2": {
-
-
-//                world = new World(new Vector2(0, -10), true);
                 for (Objeto objeto : currentLevel.objetos)
                     objeto.getBody().setTransform(-10_000, -10_000, 0);
                 for (Body bodies : tile.bodies_of_rects)
@@ -77,7 +73,17 @@ public class Level_Manager extends State implements ContactListener {
                     bodies.setTransform(-11_000, -11_000, 0);
                 return new Level3();
             }
+            case "Level4": {
+                for (Objeto objeto : currentLevel.objetos)
+                    objeto.getBody().setTransform(-15_000, -15_000, 0);
+                for (Body bodies : tile.bodies_of_rects)
+                    bodies.setTransform(-13_000, -13_000, 0);
+                for (Body bodies : tile.bodies_of_thorns)
+                    bodies.setTransform(-11_000, -11_000, 0);
+                return new Level4();
+            }
             default: {
+                //TODO:
                 return new Level1();
             }
         }

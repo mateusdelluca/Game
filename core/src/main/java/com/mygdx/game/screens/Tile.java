@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -25,6 +26,7 @@ public class Tile {
 
     public ArrayList<Body> bodies_of_thorns = new ArrayList<>();
     public ArrayList<Body> bodies_of_rects = new ArrayList<>();
+    public ArrayList<Body> polygons_bodies = new ArrayList<>();
     @Getter
     @Setter
     private String name = "";
@@ -67,7 +69,21 @@ public class Tile {
                 if (userData.equals("Rects"))
                     bodies_of_rects.add(body);
             }
-
+            if (mapObject instanceof PolygonMapObject){
+                BodyDef bodyDef = new BodyDef();
+                bodyDef.active = true;
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                Body body = world.createBody(bodyDef);
+                PolygonShape ps = new PolygonShape();
+                PolygonMapObject polygonMapObject = new PolygonMapObject();
+                polygonMapObject = (PolygonMapObject) mapObject;
+                ps.set(polygonMapObject.getPolygon().getVertices());
+                Fixture f = body.createFixture(ps, 1f);
+                f.setFriction(0f);
+                body.setUserData(userData);
+                if (userData.equals("Polygons"))
+                    polygons_bodies.add(body);
+            }
         }
     }
 
