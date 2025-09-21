@@ -195,17 +195,24 @@ public class Boy extends Objeto {
 //                s.draw(shoot, worldX - 13, worldY - 9);
             } else {
                 if (laser) {
-
                     animations = Animations.BOY_WALKING;
                     if (!isMoving())
                         animations.animator.setStateTime(0);
-                    Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false,
-                        true, facingLeft));
-                    sprite.setPosition(bodyPosition.x, bodyPosition.y);
-                    sprite.draw(spriteBatch);
-                    flipAndRender(new Sprite(Animations.BOY_HEADSET.animator.currentSpriteFrame(false,
-                        true, facingLeft)),
-                        new Vector2(bodyPosition.x + 45f, bodyPosition.y + 61f));
+                    if (isMoving() || onGround) {
+                        Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false,
+                            true, facingLeft));
+                        sprite.setPosition(bodyPosition.x, bodyPosition.y);
+                        sprite.draw(spriteBatch);
+                        flipAndRender(new Sprite(Animations.BOY_HEADSET.animator.currentSpriteFrame(false,
+                                true, facingLeft)),
+                            new Vector2(bodyPosition.x + 45f, bodyPosition.y + 61f));
+                    }
+                    if (!isMoving() && !onGround) {
+                        animations = Animations.BOY_JUMPING_FRONT_LASER;
+                        Sprite sprite = new Sprite(animations.animator.currentSpriteFrame(false, true));
+                        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+                        sprite.draw(spriteBatch);
+                    }
                 }
             }
         }
@@ -408,10 +415,15 @@ public class Boy extends Objeto {
                                     animations = Animations.BOY_IDLE;
                                 //                   usingOnlyLastFrame = true;
                             } else {
-                                if (isMoving() || use_jetPack)
+                                if (isMoving() || use_jetPack) {
                                     animations = Animations.BOY_JUMPING;
-                                else
-                                    animations = Animations.BOY_JUMPING_FRONT;
+                                }
+                                else {
+                                    if (!laser)
+                                        animations = Animations.BOY_JUMPING_FRONT;
+                                    else
+                                        animations = Animations.BOY_JUMPING_FRONT_LASER;
+                                }
                                 //                    usingOnlyLastFrame = false;
                             }
                         }

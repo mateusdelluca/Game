@@ -64,7 +64,7 @@ public class Images implements Serializable {
 
     public static Sprite throwNinjaStar1, throwNinjaStar2;
 
-    public static Sprite headset_laser;
+    public static Sprite headset_laser, laser_front;
 
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
 
@@ -126,6 +126,7 @@ public class Images implements Serializable {
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         ninjaRope_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85.png")));
         laser_inventory = new Sprite(new Texture(Gdx.files.internal("items/Laser_Headset_75x85.png")));
+//        laser_front = new Sprite(new Texture(Gdx.files.internal("boy/Jumping_Headset.png")));
         headset_laser = laser_inventory;
         ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
         spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
