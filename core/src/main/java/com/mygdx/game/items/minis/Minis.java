@@ -38,6 +38,32 @@ public class Minis extends Objeto{
         visible = true;
         sprite = new Sprite(itemsDraw_minis.get(name)); dropped();
         body.setUserData(name);
+        minis.add(this);
+    }
+
+    public Minis(Vector2 position){
+        body = BodiesAndShapes.circle(position, dimensions.x/2f, BodyDef.BodyType.DynamicBody, false, this.toString(), 10f);
+        dropped = true;
+        visible = true;
+        name = random_name();
+        sprite = new Sprite(itemsDraw_minis.get(name)); dropped();
+        body.setUserData(name);
+        minis.add(this);
+    }
+
+    private String random_name(){
+        int rand = new Random().nextInt(3);
+        switch (rand){
+            case 0:{
+                return "Blue Potion";
+            }
+            case 1:{
+                return "Red Potion";
+            }
+            case 2:{
+                return "Green Potion";
+            }
+        } return "Red Potion";
     }
 
     @Override

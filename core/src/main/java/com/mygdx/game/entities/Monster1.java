@@ -126,9 +126,8 @@ public class Monster1 extends Objeto implements Serializable {
         if (HP <= 0 && HP > -30) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
-            minis.add(new Minis(body.getPosition(), "SP Potion"));
-            minis.add(new Minis(body.getPosition(), "SP Potion"));
-            minis.add(new Minis(body.getPosition(), "SP Potion"));
+            for (int i = 0; i < 3; i++)
+                new Minis(body.getPosition());
             HP = -100;
         }
     }

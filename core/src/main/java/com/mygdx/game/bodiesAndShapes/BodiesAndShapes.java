@@ -163,7 +163,7 @@ public class BodiesAndShapes {
         fixtureDef.isSensor = sensor;
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-        fixtureDef.restitution = 1.5f;
+        fixtureDef.restitution = 1.0f;
         fixtureDef.friction = 1f;
         fixtureDef.shape = circleShape;
         fixtureDef.density = density;
