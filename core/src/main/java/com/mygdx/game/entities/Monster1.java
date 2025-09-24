@@ -18,6 +18,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.screens.levels.Level_Manager.currentLevel;
@@ -126,7 +127,8 @@ public class Monster1 extends Objeto implements Serializable {
         if (HP <= 0 && HP > -30) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
-            for (int i = 0; i < 3; i++)
+            int rand = new Random().nextInt(3);
+            for (int i = 0; i < rand; i++)
                 new Minis(body.getPosition());
             HP = -100;
         }
