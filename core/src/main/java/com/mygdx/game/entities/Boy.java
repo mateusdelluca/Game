@@ -553,12 +553,12 @@ public class Boy extends Objeto {
             body.setGravityScale(0.4f);
         }
         if (keycode == Input.Keys.Y){
-            onGround = false;
-            if (body.getLinearVelocity().y != 0.00f || !onGround) {
+            if (Math.abs(body.getLinearVelocity().y) <= 0 || !onGround) {
                 if (!mortal)
-                    body.applyForceToCenter(new Vector2(isFacingLeft() ? -1000f : 1000f, 3000f), true);
+                    body.applyForceToCenter(new Vector2(isFacingLeft() ? -1000f : 1000f, 4000f), true);
                 mortal = true;
             }
+            onGround = false;
         }
         if (keycode == Input.Keys.SPACE) {
             if (!beenHit && secondJump < 1 && onGround) {
