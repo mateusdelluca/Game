@@ -81,6 +81,7 @@ public class Boy extends Objeto {
     private Array<Laser> laser_rail = new Array<>();
     private Body punch_box;
     private boolean mortal;
+    private boolean punching;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -266,11 +267,22 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
+        if (punching)
+            punchingAnimationTimer += Gdx.graphics.getDeltaTime();
+        if (punchingAnimationTimer >= 0.3f){
+            animations = Animations.BOY_IDLE;
+            punchingAnimationTimer = 0f;
+            punch_box.setTransform(new Vector2(-2000, -2000), 0);
+            punch_box = null;
+            punching = false;
+        }
         if (onGround)
             mortal = false;
+        if (body.getLinearVelocity().y != 0)
+            onGround = false;
         if (Math.abs(getBody().getLinearVelocity().x) > VELOCITY_X)
             getBody().setLinearVelocity((Math.abs(getBody().getLinearVelocity().x) / (getBody().getLinearVelocity().x))
-                *  (VELOCITY_X), 1f * getBody().getLinearVelocity().y);
+                *  (VELOCITY_X), getBody().getLinearVelocity().y);
         this.bodyPosition = body.getPosition();
         if (thrown)
             throwTimer += Gdx.graphics.getDeltaTime();
@@ -403,15 +415,11 @@ public class Boy extends Objeto {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                         if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(10f, 50f), BodyDef.BodyType.StaticBody, false);
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
                             punch_box.setUserData("Punch");
+                            punching = true;
                         }
-                        if (punchingAnimationTimer >= 0.5f) {
-                            animations = Animations.BOY_IDLE;
-                            punchingAnimationTimer = 0f;
-                            punch_box.setTransform(new Vector2(-2000, -2000), 0);
-                            punch_box = null;
-                        }
+
                     } else {
                         if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
                         || animations == Animations.BOY_RELOADING || throwing) {

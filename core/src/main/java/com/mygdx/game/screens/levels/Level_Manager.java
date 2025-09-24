@@ -51,7 +51,7 @@ public class Level_Manager extends State implements ContactListener {
         oldLevel = currentLevelName;
         switch (currentLevelName) {
             case "Level1": {
-                return new Level3();
+                return new Level1();
             }
             case "Level2": {
                 for (Objeto objeto : currentLevel.objetos)
