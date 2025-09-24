@@ -139,13 +139,13 @@ public class Boy extends Objeto {
                         top.setPosition(bodyPosition.x, bodyPosition.y);
                         if (Math.abs(degrees) > 90f) {
                             top.setRotation(-Math.abs(180f - degrees));
-                            top.flip(true, false);
-                            legs.flip(true, false);
-                            jetPackSprite.flip(true, false);
+                            top.setFlip(true, false);
+                            legs.setFlip(true, false);
+                            jetPackSprite.setFlip(true, false);
                         } else {
-                            top.flip(false, false);
-                            legs.flip(false, false);
-                            jetPackSprite.flip(false, false);
+                            top.setFlip(false, false);
+                            legs.setFlip(false, false);
+                            jetPackSprite.setFlip(false, false);
                         }
 
                         legs.draw(spriteBatch);
@@ -271,6 +271,8 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
+        if (rifle != null)
+            rifle.update();
         if (punching)
             punchingAnimationTimer += Gdx.graphics.getDeltaTime();
         if (punchingAnimationTimer >= 0.3f){

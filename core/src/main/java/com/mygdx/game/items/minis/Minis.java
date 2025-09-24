@@ -1,21 +1,16 @@
 package com.mygdx.game.items.minis;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.entities.Objeto;
-import com.mygdx.game.images.Images;
-import com.mygdx.game.items.Item;
+import com.mygdx.game.items.Rifle;
 
 import java.util.Random;
-import java.util.TreeMap;
 
 import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.itemsDraw_minis;
@@ -52,7 +47,7 @@ public class Minis extends Objeto{
     }
 
     private String random_name(){
-        int rand = new Random().nextInt(3);
+        int rand = new Random().nextInt(4);
         switch (rand){
             case 0:{
                 return "Blue Potion";
@@ -62,6 +57,9 @@ public class Minis extends Objeto{
             }
             case 2:{
                 return "Green Potion";
+            }
+            case 3:{
+                return "Cartridge";
             }
         } return "Red Potion";
     }
@@ -120,6 +118,8 @@ public class Minis extends Objeto{
             TRIGGER.play();
             body.setLinearVelocity(0f,0f);
             body.getFixtureList().get(0).setSensor(true);
+            if (name.equals("Cartridge"))
+                Rifle.addCartridge = true;
         }
     }
 

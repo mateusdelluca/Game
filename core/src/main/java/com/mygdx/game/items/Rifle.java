@@ -1,8 +1,5 @@
 package com.mygdx.game.items;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entities.Objeto;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.PausePage;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +39,8 @@ public class Rifle extends Objeto implements Item, Serializable {
     private int angle;
     @Getter @Setter
     private boolean reloading;
-
+    public static int TOTAL_CARTRIDGES = 2;
+    public static boolean addCartridge;
     public Rifle(Vector2 position){
 
         super(WIDTH, HEIGHT);
@@ -55,7 +52,7 @@ public class Rifle extends Objeto implements Item, Serializable {
         body.setTransform(position, body.getAngle());
         body.setUserData(this.toString());
 
-        for (int index = 0; index < 2; index++){
+        for (int index = 0; index < TOTAL_CARTRIDGES; index++){
             numCartridges.add(new Cartridge());
         }
 
@@ -64,6 +61,8 @@ public class Rifle extends Objeto implements Item, Serializable {
             total += c.getBulletsLeft().size();
         }
     }
+
+
 
     @Override
     public void render(SpriteBatch s) {
@@ -126,6 +125,11 @@ public class Rifle extends Objeto implements Item, Serializable {
     public void update() {
 //        bodyData.angle++;
         super.update();
+        if (addCartridge){
+            addCartridge = false;
+            numCartridges.add(new Cartridge());
+            total += numCartridges.get(numCartridges.size() - 1).getBulletsLeft().size();
+        }
     }
 
     @Override

@@ -152,6 +152,7 @@ public class Images implements Serializable {
         itemsDraw_minis.put("Blue Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/SP_Potion_mini.png"))));
         itemsDraw_minis.put("Red Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/HP_Potion_mini.png"))));
         itemsDraw_minis.put("Green Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/Green_Potion_mini.png"))));
+        itemsDraw_minis.put("Cartridge", new Sprite(new Texture(Gdx.files.internal("items/Minis/Cartridge_mini.png"))));
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {
             for (int k = 0; k < 6; k++) {
