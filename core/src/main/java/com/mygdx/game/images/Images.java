@@ -74,6 +74,8 @@ public class Images implements Serializable {
 
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
 
+    public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
+
     public static Sprite spaceItem;
 
     public Images() {
@@ -146,6 +148,8 @@ public class Images implements Serializable {
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
         itemsDraw.put("Laser_Headset", laser_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
+
+        itemsDraw_minis.put("SP Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/SP_Potion_mini.png"))));
 
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
         try {

@@ -7,15 +7,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Monster1_Sprites;
+import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import static com.mygdx.game.entities.Boy.minis;
+import static com.mygdx.game.screens.levels.Level_Manager.currentLevel;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class Monster1 extends Objeto implements Serializable {
@@ -36,6 +41,8 @@ public class Monster1 extends Objeto implements Serializable {
     private String nameAnimation;
     private boolean left;
     private long lastTime, deltaTime, initialTime;
+
+
 
     public Monster1_Sprites animations = new Monster1_Sprites();
     private Boy boy;
@@ -81,12 +88,14 @@ public class Monster1 extends Objeto implements Serializable {
                 for (Fixture f : getBody().getFixtureList()) {
                     f.setSensor(true);
                 }
+
                 body.setUserData("null");
 //            getBody().setGravityScale(0f);
                 Timer timer = new Timer();
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
+
                         setVisible(false);
                     }
                 }, 1);
@@ -114,9 +123,13 @@ public class Monster1 extends Objeto implements Serializable {
                 }
             }
         }
-        if (HP <= 0) {
+        if (HP <= 0 && HP > -30) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
+            minis.add(new Minis(body.getPosition(), "SP Potion"));
+            minis.add(new Minis(body.getPosition(), "SP Potion"));
+            minis.add(new Minis(body.getPosition(), "SP Potion"));
+            HP = -100;
         }
     }
 

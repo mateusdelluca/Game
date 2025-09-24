@@ -1,6 +1,5 @@
 package com.mygdx.game.images;
 
-import com.badlogic.gdx.Gdx;
 import lombok.Getter;
 
 import java.io.Serializable;

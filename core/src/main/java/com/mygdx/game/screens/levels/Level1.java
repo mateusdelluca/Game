@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
+import com.mygdx.game.items.minis.Minis;
 
+import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
@@ -124,6 +126,11 @@ public class Level1 extends Level{
 //        for (Monster1 m : monsters1.values()){
 //            m.beginContact(body1, body2);
 //        }
+
+
+        for (Minis m : minis){
+            m.beginContact(body1,body2);
+        }
 
         for (Objeto o : objetos)
             if (o instanceof Portal)

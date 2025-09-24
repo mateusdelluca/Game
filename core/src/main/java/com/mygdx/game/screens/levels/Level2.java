@@ -81,6 +81,14 @@ public class Level2 extends Level{
     }
 
     @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        boy.touchDown(screenX, screenY, pointer, button);
+        ninjaRope.justTouched(button);
+        mouse.touchDown(screenX, screenY, button);
+        return false;
+    }
+
+    @Override
     public void beginContact(Contact contact) {
         super.beginContact(contact);
 
