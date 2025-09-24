@@ -18,6 +18,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.mygdx.game.images.Images.polygons_bodies;
+
 public class Tile {
 
     TmxMapLoader tmxMapLoader;
@@ -26,9 +28,8 @@ public class Tile {
 
     public ArrayList<Body> bodies_of_thorns = new ArrayList<>();
     public ArrayList<Body> bodies_of_rects = new ArrayList<>();
-    public ArrayList<Body> polygons_bodies = new ArrayList<>();
-    @Getter
-    @Setter
+
+    @Getter @Setter
     private String name = "";
 
     public Tile(String name) {
@@ -53,11 +54,16 @@ public class Tile {
     }
 
     public void createBodies(MapObjects mapObjects, World world, boolean isSensor, String userData) {
+//        int i = 0;
         for (MapObject mapObject : mapObjects) {
             if (mapObject instanceof RectangleMapObject) {
                 BodyDef bodyDef = new BodyDef();
                 bodyDef.active = true;
                 bodyDef.type = BodyDef.BodyType.StaticBody;
+                bodyDef.position.set(new Vector2(0f,0f));
+//                if  (++i >= 3)
+//                    bodyDef.angle = (float) Math.toRadians(330f);
+
                 Body body = world.createBody(bodyDef);
                 PolygonShape shape = createPolygonShape((RectangleMapObject) mapObject);
                 Fixture f = body.createFixture(shape, 1f);
@@ -68,26 +74,41 @@ public class Tile {
                     bodies_of_thorns.add(body);
                 if (userData.equals("Rects"))
                     bodies_of_rects.add(body);
-            }
-            if (mapObject instanceof PolygonMapObject){
-                BodyDef bodyDef = new BodyDef();
-                bodyDef.active = true;
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                Body body = world.createBody(bodyDef);
-                PolygonShape ps = new PolygonShape();
-                PolygonMapObject polygonMapObject = new PolygonMapObject();
-                polygonMapObject = (PolygonMapObject) mapObject;
-                ps.set(polygonMapObject.getPolygon().getVertices());
-                Fixture f = body.createFixture(ps, 1f);
-                f.setFriction(0f);
-                body.setUserData(userData);
-                if (userData.equals("Polygons"))
-                    polygons_bodies.add(body);
+
+                shape.dispose();
+            } else {
+                if (mapObject instanceof PolygonMapObject) {
+                    BodyDef bodyDef = new BodyDef();
+                    bodyDef.type = BodyDef.BodyType.StaticBody;
+                    bodyDef.position.set(new Vector2(0f, 0f));
+                    bodyDef.active = true;
+                    PolygonShape ps = new PolygonShape();
+                    PolygonMapObject polygonMapObject = null;
+                    polygonMapObject = (PolygonMapObject) mapObject;
+                    float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
+
+                    float[] box2Dvertices = new float[vertices.length];
+                    for (int index = 0; index < vertices.length; index++) {
+                        box2Dvertices[index] = vertices[index];
+                    }
+
+                    ps.set(box2Dvertices);
+                    Body body = world.createBody(bodyDef);
+                    body.setActive(true);
+                    Fixture f = body.createFixture(ps, 1f);
+                    f.setFriction(0f);
+                    f.setSensor(isSensor);
+                    body.setUserData(userData);
+                    if (userData.equals("Polygons"))
+                        bodies_of_rects.add(body);
+                    ps.dispose();
+                }
             }
         }
     }
 
     private PolygonShape createPolygonShape(RectangleMapObject mapObject) {
+
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(mapObject.getRectangle().getWidth() / 2f, mapObject.getRectangle().getHeight() / 2f,
                 new Vector2(mapObject.getRectangle().getX() + mapObject.getRectangle().getWidth() / 2f,

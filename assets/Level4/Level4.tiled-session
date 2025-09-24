@@ -1,0 +1,68 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "D:/IdeaProjects/Game/assets/Level4/Level4.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/mateu/OneDrive/Desktop/src/Level3/Level3.tmx": {
+            "scale": 0.10703333333333333,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3003.7371535347243,
+                "y": 3003.7371535347247
+            }
+        },
+        "C:/Users/mateu/OneDrive/Desktop/src/Level3/Tiled.tsx": {
+            "scaleInDock": 1
+        },
+        "D:/IdeaProjects/Game/assets/Level4/Level4.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 621,
+                "y": 600
+            }
+        },
+        "D:/IdeaProjects/Game/assets/Level4/Tiled.tsx": {
+            "scaleInDock": 1
+        },
+        "Level4.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 600,
+                "y": 600
+            }
+        },
+        "Tiled.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/mateu/OneDrive/Desktop/src/level4",
+    "map.height": 30,
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": "0",
+    "map.tileHeight": 40,
+    "map.tileWidth": 40,
+    "openFiles": [
+        "Level4.tmx",
+        "Tiled.tsx",
+        "D:/IdeaProjects/Game/assets/Level4/Level4.tmx"
+    ],
+    "project": "Level4.tiled-project",
+    "recentFiles": [
+        "C:/Users/mateu/OneDrive/Desktop/src/Level3/Level3.tmx",
+        "D:/IdeaProjects/Game/assets/Level4/Level4.tmx",
+        "Tiled.tsx",
+        "Level4.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 40,
+        "width": 40
+    }
+}

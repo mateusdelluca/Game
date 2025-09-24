@@ -154,7 +154,7 @@ public class ItemToBeDrawn implements Item {
                 NinjaRope.isActive2 = false;
                 Boy.ropeShoot = false;
             } else {
-                if (name.equals("NinjaStar")) {
+                if (name.contains("NinjaStar")) {
                     Boy.degrees = 0f;
                     Boy.throwing = equipped[index];
                     Rifle.showingNumbBullets = false;

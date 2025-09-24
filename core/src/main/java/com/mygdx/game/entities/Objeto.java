@@ -195,28 +195,29 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void beenHit(Body body1, Body body2) {
-        if (getBody().equals(body1) || getBody().equals(body2)) {
-            if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
-                ||
-                (body1.getUserData().toString().contains("Thorns") || body2.getUserData().toString().contains("Thorns"))
-                ||
-                (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
-                ||
-                (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
-                ||
-                (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))) {
-                if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl)
-                    beenHit();
-            }
-            if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
-                ||
-                (body1.getUserData().toString().contains("Enemy") || body2.getUserData().toString().contains("Enemy"))
-                ||
-                (body1.getUserData().toString().contains("Thorns") || body2.getUserData().toString().contains("Thorns"))
-                ||
-                (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))){
-                if (this instanceof Boy)
-                    beenHit();
+        if (body1 != null && body2 != null && getBody() != null) {
+            if (getBody().equals(body1) || getBody().equals(body2)) {
+                if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
+                    ||
+                    (body1.getUserData().toString().contains("Colliders") || body2.getUserData().toString().contains("Colliders"))
+                    ||
+                    (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
+                    ||
+                    (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
+                    ||
+                    (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))) {
+                    if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl)
+                        beenHit();
+                }
+                if (
+                    (body1.getUserData().toString().contains("Enemy") || body2.getUserData().toString().contains("Enemy"))
+                    ||
+                    (body1.getUserData().toString().contains("Colliders") || body2.getUserData().toString().contains("Colliders"))
+                    ||
+                    (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))) {
+                    if (this instanceof Boy)
+                        beenHit();
+                }
             }
         }
     }

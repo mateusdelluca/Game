@@ -3,10 +3,7 @@ package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.mygdx.game.entities.Boy;
-import com.mygdx.game.entities.Jack;
-import com.mygdx.game.entities.Mouse;
-import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.*;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
@@ -18,7 +15,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 
 public class Level2 extends Level{
-    public ArrayList<Objeto> objetos = new ArrayList<>();
+//    public ArrayList<Objeto> objetos = new ArrayList<>();
 
     public Level2() throws Exception {
         super();
@@ -29,9 +26,13 @@ public class Level2 extends Level{
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 40),     Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 40),    Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 40),    Monster1.class.getSimpleName() + monsters1.size(), boy));
         objetos.add(new Portal(new Vector2(6000 - 300, 400)));
         objetos.add(boy);
         objetos.add(jack);
+        objetos.addAll(monsters1.values());
     }
 
 
@@ -57,7 +58,7 @@ public class Level2 extends Level{
 
 
         spriteBatch.begin();
-        background.render(getClass().getSimpleName());
+        background.render();
         tile.render(camera);
 //        jack.render(spriteBatch);
 //        boy.render(spriteBatch);
@@ -101,6 +102,8 @@ public class Level2 extends Level{
                 o.beenHit(body1, body2);
             if (o instanceof Portal)
                 ((Portal) o).beginContact(contact);
+            if (o instanceof Boy)
+                ((Boy) o).beginContact(contact);
         }
     }
 

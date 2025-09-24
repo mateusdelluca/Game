@@ -47,7 +47,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     public static HashMap<String, Objeto> items2 = new HashMap<>();
 
     public static HashMap<String, Item> items = new HashMap<>();
-    public Boy boy;
+    public static Boy boy;
     @Getter @Setter
     protected Jack jack;
     @Setter @Getter
@@ -75,7 +75,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
-    public String polygons_String = "";
+//    public String polygons_String = "";
+
     public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
 
@@ -115,13 +116,9 @@ public abstract class Level extends State implements ContactListener, Serializab
         MapObjects thorns_colliders = tile.loadMapObjects("Thorns_Colliders");
         tile.createBodies(thorns_colliders, world, false, "Thorns_Colliders");
 
-        if (this instanceof Level4) {
-            polygons_String = "Polygons";
-            if (polygons_String.contains("Polygons")) {
-                MapObjects polygons = tile.loadMapObjects("Polygons");
-                tile.createBodies(polygons, world, false, "Polygons");
-            }
-        }
+//        polygons_bodies = tile.loadMapObjects("Polygons");
+//        tile.createBodies(polygons_bodies, world, false, "Polygons");
+
         Texture t = new Texture(Gdx.files.internal("Font2.png"));
         BitmapFont font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -152,8 +149,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals("PAUSE"))
             update();
-
-
         camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
@@ -199,7 +194,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public void renderObjects(){
         spriteBatch.begin();
-        background.render(getClass().getSimpleName());
+        background.render();
         tile.render(camera);
 
 //        for (Bullet bullet : bullets)
@@ -208,28 +203,29 @@ public abstract class Level extends State implements ContactListener, Serializab
 //            if (!(objeto instanceof Boy) && !(objeto instanceof Monster1))
 //                objeto.render(spriteBatch);
 //        }
-        for (Monster1 monster1 : monsters1.values()){
-            monster1.render(spriteBatch);
-        }
-        jack.render(spriteBatch);
-        girl.render(spriteBatch);
-//        Rifle rifle = (Rifle) items.get("Rifle");
-//        rifle.getLeftSideBullets().render(spriteBatch);
-        for (Item item : items.values())
-            item.render(spriteBatch);
-        for (Objeto fan : fans)
-            fan.render(spriteBatch);
-        boy.render(spriteBatch);
-        for (Block block : blocks)
-            block.render(spriteBatch);
-        powerBar.render(spriteBatch, camera,boy);
-        ninjaRope.render(spriteBatch);
-        for (Stand stand : stands)
-            stand.render(spriteBatch);
-        ninjaStar.render(spriteBatch);
-        rope.render(spriteBatch);
-        for (Rope rope : ropes)
-            rope.render(spriteBatch);
+//        for (Monster1 monster1 : monsters1.values()){
+//            monster1.render(spriteBatch);
+//        }
+//        jack.render(spriteBatch);
+//        girl.render(spriteBatch);
+////        Rifle rifle = (Rifle) items.get("Rifle");
+////        rifle.getLeftSideBullets().render(spriteBatch);
+//        for (Item item : items.values())
+//            item.render(spriteBatch);
+//        for (Objeto fan : fans)
+//            fan.render(spriteBatch);
+//        boy.render(spriteBatch);
+//        for (Block block : blocks)
+//            block.render(spriteBatch);
+//        powerBar.render(spriteBatch, camera,boy);
+//        ninjaRope.render(spriteBatch);
+//        for (Stand stand : stands)
+//            stand.render(spriteBatch);
+//        ninjaStar.render(spriteBatch);
+//        rope.render(spriteBatch);
+//        for (Rope rope : ropes)
+//            rope.render(spriteBatch);
+//TODO: corrigir o problema de vários objetos sererm desenhados separadamente de objetos o array
         spriteBatch.end();
     }
 
@@ -237,6 +233,10 @@ public abstract class Level extends State implements ContactListener, Serializab
         for (int i = 0; i < 5; i++) {
             world.step(1/60f, 7, 7);
             camera.update();
+        }
+        for (Objeto objeto : objetos){
+            if (objeto != null)
+                objeto.update();
         }
         collisions();
     }
@@ -261,8 +261,10 @@ public abstract class Level extends State implements ContactListener, Serializab
             rope.beginContact(body1, body2);
 //        }
         for (Objeto objeto : objetos) {
-            objeto.beenHit(body1, body2);
-            objeto.beginContact(body1, body2);
+            if (objeto != null) {
+                objeto.beenHit(body1, body2);
+                objeto.beginContact(body1, body2);
+            }
         }
 
 
@@ -447,50 +449,19 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
-            return;
-        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
-            return;
-        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
-            return;
-
-        Body body1 = contact.getFixtureA().getBody();
-        Body body2 = contact.getFixtureB().getBody();
-
-        if (body1 == null || body2 == null)
-            return;
-
-
-//        for (Objeto o : objetos) {
-//            if (body1.getUserData().toString().equals("Boy") || body2.getUserData().toString().equals("Boy"))
-//                if (!body1.getUserData().toString().equals("Rifle") && !body2.getUserData().toString().equals("Rifle") &&
-//                    !body1.getUserData().toString().contains("Crystal") && !body2.getUserData().toString().contains("Crystal") &&
-//                    !body1.getUserData().toString().equals("Bullet") && !body2.getUserData().toString().equals("Bullet") &&
-//                    !body1.getUserData().toString().equals("Rects") && !body2.getUserData().toString().equals("Rects") &&
-//                    !body1.getUserData().toString().equals("Thorns_Rects") && !body2.getUserData().toString().equals("Thorns_Rects") &&
-//                    !body1.getUserData().toString().equals("JetPack") && !body2.getUserData().toString().equals("JetPack"))
-//                    boy.beenHit();
-//            if (((body1.getUserData().toString().contains("Bullet") || body1.getUserData().equals("Thorns_Colliders")) &&
-//                body2.getUserData().toString().equals(o.getBody().getUserData()))
-//                || ((body2.getUserData().toString().contains("Bullet") || body2.getUserData().equals("Thorns_Colliders")) &&
-//                body1.getUserData().toString().equals(o.getBody().getUserData()))
-//                || (body2.getUserData().toString().contains("NinjaStar") &&
-//                body1.getUserData().toString().equals(o.getBody().getUserData()))) {
-//                if (!body1.getFixtureList().get(0).isSensor() &&
-//                    !body2.getFixtureList().get(0).isSensor()) {
-
-//                if (body1.getUserData().toString().equals("Bullet")) {
-//                    body1.setUserData("null");
-//                } else {
-//                    if (body2.getUserData().toString().equals("Bullet")) {
-//                        body2.setUserData("null");
-//                    }
-//                }
-//                 if (!(o instanceof Boy))
-//                    o.beenHit();
-//                }
-//            }
-//        }
+//        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+//            return;
+//        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+//            return;
+//        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+//            return;
+//
+//        Body body1 = contact.getFixtureA().getBody();
+//        Body body2 = contact.getFixtureB().getBody();
+//
+//        if (body1 == null || body2 == null)
+//            return;
+//
     }
 
     protected void collisions() {

@@ -3,6 +3,7 @@ package com.mygdx.game.images;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.screens.levels.Level_Manager;
 
 
 public class Background{
@@ -21,26 +22,20 @@ public class Background{
         camera.position.set(camera.viewportWidth/2f, camera.viewportHeight/2f, 0);
     }
 
-    public void render(String level){
+    public void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        spriteBatch.draw(getBackgroundLevel(level),-WIDTH/2f,-HEIGHT/2f);
+        spriteBatch.draw(getBackgroundLevel(Level_Manager.currentLevelName),-WIDTH/2f,-HEIGHT/2f);
         spriteBatch.end();
     }
 
     public Sprite getBackgroundLevel(String level){
+        if (level.equals("Level4"))
+            return Images.level4;
         if (level.equals("Level2"))
             return Images.backGround2;
         return Images.mountains4;
     }
-
-    public void render(){
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-        spriteBatch.draw(Images.mountains4,-WIDTH/2f,-HEIGHT/2f);
-        spriteBatch.end();
-    }
-
 
     public void dispose(){
         spriteBatch.dispose();

@@ -17,6 +17,7 @@ import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.levels.Level;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class Boy extends Objeto {
     @Getter @Setter
     private boolean facingLeft;
     private float punchingAnimationTimer;
-    public static float BOX_WIDTH = 65f, BOX_HEIGHT = 95f;
+    public static float BOX_WIDTH = 60f, BOX_HEIGHT = 95f;
     public static final Vector2 DIMENSIONS_FOR_SHAPE = new Vector2(BOX_WIDTH, BOX_HEIGHT);
     private Rectangle actionRect = new Rectangle();
     private float flickering_time;
@@ -83,7 +84,7 @@ public class Boy extends Objeto {
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
         this.bodyPosition = bodyPosition;
-        body = createBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f) - 5, DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
+        body = createBody(new Vector2((DIMENSIONS_FOR_SHAPE.x/2f), DIMENSIONS_FOR_SHAPE.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(bodyPosition, 0);;
         body.setUserData(getClass().getSimpleName());
         bodyData.userData = "" + body.getUserData();
@@ -99,6 +100,10 @@ public class Boy extends Objeto {
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
             jetPackSprite.draw(spriteBatch);
+        }
+        if (body.getPosition().y < -100f) {
+            beenHit();
+            body.setTransform(new Vector2(100, 400), 0);
         }
         if (beenHit) { //when take a damage and stay flickering
             Sprite flickering = new Sprite(animations.animator.currentSpriteFrame(usingOnlyLastFrame, looping && !animations.name().equals("BOY_SABER"), flip0));
@@ -539,11 +544,11 @@ public class Boy extends Objeto {
         }
         if (keycode == Input.Keys.SPACE) {
             if (!beenHit && secondJump < 1 && onGround) {
-
+                onGround = false;
                 if (!use_jetPack) {
-                    secondJump++;onGround = false;
+                    secondJump++;
 //                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-                    getBody().applyForce(new Vector2(0f, 5_000f), getBody().getWorldCenter(), true);
+                    body.applyForce(new Vector2(0f, 5_000f), getBody().getWorldCenter(), true);
                 }
             }
         }
@@ -708,7 +713,11 @@ public class Boy extends Objeto {
             item.setVisible(false);
         }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
-
+        if (item.toString().contains("NinjaStar")) {
+            if (item instanceof NinjaStar) {
+                ((NinjaStar) item).setItemToBeDrawn(itemToBeDrawn);
+            }
+        }
         item.setVisible(false);
         TRIGGER.play();
     }
@@ -733,32 +742,35 @@ public class Boy extends Objeto {
 //            return;
 //        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
 //            return;
-//
+
 //        Body body1 = contact.getFixtureA().getBody();
 //        Body body2 = contact.getFixtureB().getBody();
-//
-//        if (body1 == null || body2 == null)
-//            return;
 
-        if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Rects")
-            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Rects")) ||
+        if (body1 == null || body2 == null)
+            return;
+
+        if ((body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Rects")
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Rects")) ||
         (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Block")
-            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Block")) ||
-        (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Rects")
-            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Rects"))
-            || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().equals("Thorns_Colliders")
-                || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().equals("Thorns_Colliders"))){
-            onGround = true;
+            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Block"))
+//            || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Thorns")
+//                || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Thorns"))
+//            || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Enemy")
+//            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Enemy"))){
+        ){
+        onGround = true;
         }
 
         if ((body1.equals(body) && body2.getUserData().toString().contains("Enemy"))
             || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))){
             applyForceToBody(body1, body2);
             beenHit();
+            onGround = true;
         }
         if (body1.equals(body) && body2.getUserData().toString().contains("Colliders")
             || body2.equals(body) && body1.getUserData().toString().contains("Colliders")) {
             beenHit();
+            onGround = true;
         }
     }
 

@@ -45,8 +45,10 @@ public class Images implements Serializable {
     public static Sprite top;
     public static Sprite aim;
     public static Sprite legs;
-    public static MapObjects thorns ;
+    public static MapObjects thorns;
     public static MapObjects staticObjects;
+
+    public static MapObjects polygons_bodies;
     @Getter
     @Setter
     public static Tile tile;
@@ -57,6 +59,8 @@ public class Images implements Serializable {
     private final Sprite laser_inventory;
 
     public SpriteBatch spriteBatch;
+
+    public static Sprite level4;
 
     public static Sprite[] sprites = new Sprite[8];
 
@@ -82,6 +86,7 @@ public class Images implements Serializable {
         jack_reloading = new Texture(Gdx.files.internal("Jack/Jack_Reloading.png"));
         saber = new Sprite(new Texture(Gdx.files.internal("Saber.png")));
         s1 = new Sprite(saber);
+        level4 = new Sprite(new Texture(Gdx.files.internal("Level4/Background.png")));
         crystal = new Texture(Gdx.files.internal("objects/Crystal.png"));
         crystal_red = new Texture("objects/Crystal3_red.png");
         bullet = new Texture("objects/Bullet.png");

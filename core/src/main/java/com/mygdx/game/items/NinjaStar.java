@@ -9,6 +9,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.items.inventory.ItemToBeDrawn;
+import com.mygdx.game.screens.Inventory;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -26,7 +30,11 @@ public class NinjaStar extends Objeto implements Item, Serializable {
     public static int index;
     private Body body2;
 
-    private boolean thrown;
+    @Setter
+    @Getter
+    private ItemToBeDrawn itemToBeDrawn;
+
+    Sprite sprite = new Sprite((Images.ninjaStar));
 
     public NinjaStar(Vector2 position){
         super(WIDTH, HEIGHT);
@@ -44,7 +52,6 @@ public class NinjaStar extends Objeto implements Item, Serializable {
         body.setLinearVelocity(VELOCITY * (float) Math.cos(radians), VELOCITY * (float) Math.sin(radians));
         body.setGravityScale(0.2f);
         visible = true;
-        thrown = true;
     }
 
     public void render(SpriteBatch s, Sprite sprite){
@@ -59,15 +66,18 @@ public class NinjaStar extends Objeto implements Item, Serializable {
     public void render(SpriteBatch s) {
         if (!visible && body.getLinearVelocity().x == 0f)
             body2.setTransform(10_000,1_000, 0f);
-        if (visible && Math.abs(body.getLinearVelocity().x) > 1f)
-            render(s, new Sprite((Images.ninjaStar)));
-        if (visible && Math.abs(body.getLinearVelocity().x) < 1f) {
+        if (visible && Math.abs(body.getLinearVelocity().x) > 0.5f) {
+            render(s, sprite);
+            items.put(this.toString(), this);
+            index++;
+            if (itemToBeDrawn != null)
+                Inventory.removeFromInventory(itemToBeDrawn);
+        }
+        if (visible && Math.abs(body.getLinearVelocity().x) < 0.5f) {
             if (!multiply2) {
                 width *= multiply;
                 height *= multiply;
                 multiply2 = true;
-                if (!thrown)
-                    items.put("NinjaStar" + index++, this);
                 body2.setTransform(body.getPosition().x, body.getPosition().y, body.getAngle());
                 body.setTransform(10000,10000, 0);
                 body.setGravityScale(0f);

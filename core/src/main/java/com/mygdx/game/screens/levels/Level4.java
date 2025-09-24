@@ -1,19 +1,26 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
 import com.mygdx.game.entities.Mouse;
+import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.images.Background;
 import com.mygdx.game.items.*;
 
+import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.items.Rope.NUM_ROPES;
-import static com.mygdx.game.screens.levels.Level_Manager.viewport;
+import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Level4 extends Level{
     public Level4() throws Exception {  //TODO: fix render method and update
         super();
         monsters1.clear();
-        boy = new Boy(new Vector2(10, 5700), viewport);
+        objetos.clear();
+        boy = new Boy(new Vector2(10, 300), viewport);
         mouse = new Mouse(boy.getBody().getPosition());
 
         //TODO: fix positions and number of 'objetos'
@@ -47,13 +54,14 @@ public class Level4 extends Level{
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
         items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
+        items.put(NinjaStar.class.getSimpleName(), new NinjaStar(new Vector2(200, 300)));
 ////            items.get("Portal").updateItem();
 //
 //            items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
 //            items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
 //            items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //
-        ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
+
 //            for (int i = 0; i < 5; i++)
 //                blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 //
@@ -101,6 +109,53 @@ public class Level4 extends Level{
         }
     }
 
+    @Override
+    public void render(){
+        spriteBatch.setProjectionMatrix(camera.combined);
+//        if (!StateManager.oldState.equals("PAUSE"))
+        update();
 
 
+        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
+        if (camera.position.y > 5400f)
+            camera.position.y = 5400f;
+        if (camera.position.x < 800f)
+            camera.position.x = 800f;
+        if (camera.position.y < 1080f/2f)
+            camera.position.y = 1080f/2f;
+        camera.update();
+        viewport.update(Level.WIDTH, Level.HEIGHT);
+
+        spriteBatch.begin();
+        background.render();
+        tile.render(camera);
+        for (Item item : items.values()) {
+            if (item != null) {
+                item.render(spriteBatch);
+            }
+        }
+        for (Objeto objeto : objetos) {
+            if (objeto != null)
+                objeto.render(spriteBatch);
+        }
+        powerBar.render(spriteBatch, camera, boy);
+        spriteBatch.end();
+        box2DDebugRenderer.render(world, camera.combined);
+    }
+
+    public void update(){
+        super.update();
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
+    }
+
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

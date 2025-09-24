@@ -71,7 +71,7 @@ public class Level1 extends Level{
 
 
         spriteBatch.begin();
-        background.render(getClass().getSimpleName());
+        background.render();
         tile.render(camera);
 //        jack.render(spriteBatch);
 //        boy.render(spriteBatch);

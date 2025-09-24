@@ -84,6 +84,25 @@ public class Inventory extends State {
         }
     }
 
+    public static void removeFromInventory(ItemToBeDrawn i1){
+        ItemToBeDrawn itemFirst = null;
+        if (!itemsToBeDrawn.isEmpty()) {
+            itemFirst = i1;
+            itemsToBeDrawn.remove(itemFirst);
+            return;
+        }
+        if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
+            for (ItemToBeDrawn i2 : itemsToBeDrawn) {
+                if(i2 == i1) {
+                    continue;
+                }
+                itemsToBeDrawn.remove(i1);
+                treeMap_Items.remove(i1.getName(), i1);
+//                System.out.println(treeMap_Items.get(i1.getName()));
+            }
+        }
+    }
+
     @Override
     public void create() {
 
