@@ -47,10 +47,11 @@ public class JetPack extends Objeto implements Item{
 
     @Override
     public void update() {
-        if (!visible && body.getUserData().equals(this)) {
+        if (!visible && body != null) {
             body.setTransform(10_000, 10_000, 0);
             body.setUserData("null");
             world.destroyBody(body);
+            body = null;
         }
     }
 

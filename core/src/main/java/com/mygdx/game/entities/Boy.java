@@ -484,19 +484,19 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.I){
             StateManager.setStates(StateManager.States.INVENTORY);
         }
-        if (keycode == Input.Keys.T) {
-            use_jetPack = !use_jetPack;
-            if (use_jetPack) {
-                jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
-//                body.setGravityScale(0.5f);
-                JETPACK.loop(0.4f);
-            }
-            else {
-//                jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y - 10);
-                body.setGravityScale(1f);
-                JETPACK.stop();
-            }
-        }
+//        if (keycode == Input.Keys.T) {
+//            use_jetPack = !use_jetPack;
+//            if (use_jetPack) {
+//                jetPackPosition = new Vector2(body.getPosition().x, body.getPosition().y + 10);
+////                body.setGravityScale(0.5f);
+//                JETPACK.loop(0.4f);
+//            }
+//            else {
+////                jetPackSprite.setPosition(body.getPosition().x, body.getPosition().y - 10);
+//                body.setGravityScale(1f);
+//                JETPACK.stop();
+//            }
+//        }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             if (Math.abs(getBody().getLinearVelocity().x) < VELOCITY_X)
                 body.applyForce(new Vector2(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, 0f), getBody().getWorldCenter(), true);
@@ -547,6 +547,7 @@ public class Boy extends Objeto {
                 onGround = false;
                 if (!use_jetPack) {
                     secondJump++;
+                    body.setGravityScale(1f);
 //                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
                     body.applyForce(new Vector2(0f, 5_000f), getBody().getWorldCenter(), true);
                 }
