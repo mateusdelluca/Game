@@ -493,10 +493,7 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.I){
             StateManager.setStates(StateManager.States.INVENTORY);
         }
-        if (keycode == Input.Keys.Y){
-            if (body.getLinearVelocity().y != 0f || !onGround)
-                mortal = true;
-        }
+
 //        if (keycode == Input.Keys.T) {
 //            use_jetPack = !use_jetPack;
 //            if (use_jetPack) {
@@ -523,13 +520,13 @@ public class Boy extends Objeto {
                     throwNinjaStar1.setFlip(flip0, false);
                 }
             }
-            if (!beenHit && !shooting && !use_jetPack) {
+            if (!beenHit && !shooting && !use_jetPack && !mortal) {
                 animations = Animations.BOY_WALKING;
             }
             usingOnlyLastFrame = false;
             looping = true;
         }
-        if (!beenHit) {
+        if (!beenHit && !mortal) {
             if (keycode == Input.Keys.SPACE) {
                 if (Math.abs(getBody().getLinearVelocity().x) < 15f && !use_jetPack)
                     animations = Animations.BOY_JUMPING_FRONT;
@@ -548,12 +545,20 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
             body.setLinearVelocity(0f,
                 body.getLinearVelocity().y);
-            if (!beenHit && !shooting && !use_jetPack)
+            if (!beenHit && !shooting && !use_jetPack && !mortal)
                 animations = Animations.BOY_IDLE;
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
             onGround = false;
             body.setGravityScale(0.4f);
+        }
+        if (keycode == Input.Keys.Y){
+            onGround = false;
+            if (body.getLinearVelocity().y != 0.00f || !onGround) {
+                if (!mortal)
+                    body.applyForceToCenter(new Vector2(isFacingLeft() ? -1000f : 1000f, 3000f), true);
+                mortal = true;
+            }
         }
         if (keycode == Input.Keys.SPACE) {
             if (!beenHit && secondJump < 1 && onGround) {
@@ -772,19 +777,19 @@ public class Boy extends Objeto {
 //            || (body1.getUserData().toString().equals("Boy") && body2.getUserData().toString().contains("Enemy")
 //            || body2.getUserData().toString().equals("Boy") && body1.getUserData().toString().contains("Enemy"))){
         ){
-        onGround = true;
+            onGround = true;
         }
 
         if ((body1.equals(body) && body2.getUserData().toString().contains("Enemy"))
             || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))){
             applyForceToBody(body1, body2);
-            beenHit();
             onGround = true;
+            beenHit();
         }
         if (body1.equals(body) && body2.getUserData().toString().contains("Colliders")
             || body2.equals(body) && body1.getUserData().toString().contains("Colliders")) {
-            beenHit();
             onGround = true;
+            beenHit();
         }
     }
 
