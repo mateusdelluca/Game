@@ -508,9 +508,10 @@ public class Boy extends Objeto {
 //            }
 //        }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
-            if (Math.abs(getBody().getLinearVelocity().x) < VELOCITY_X)
+            if (Math.abs(getBody().getLinearVelocity().x) < VELOCITY_X) {
                 body.applyForce(new Vector2(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, 0f), getBody().getWorldCenter(), true);
-            if (!shooting) {
+                facingLeft = keycode == Input.Keys.A;
+            }if (!shooting) {
                 if (!facingLeft) {
 //                    degrees = 0f;
 //                    radians = 0f;
@@ -547,6 +548,7 @@ public class Boy extends Objeto {
                 body.getLinearVelocity().y);
             if (!beenHit && !shooting && !use_jetPack && !mortal)
                 animations = Animations.BOY_IDLE;
+
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
             onGround = false;
@@ -555,7 +557,8 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.Y){
             if (Math.abs(body.getLinearVelocity().y) <= 0 || !onGround) {
                 if (!mortal)
-                    body.applyForceToCenter(new Vector2(isFacingLeft() ? -1000f : 1000f, 4000f), true);
+                    body.applyForceToCenter(new Vector2(0f, 4000f), true);
+                body.setLinearVelocity(new Vector2(isFacingLeft() ? -10f : 10f, body.getLinearVelocity().y));
                 mortal = true;
             }
             onGround = false;
