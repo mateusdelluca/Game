@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
+import com.github.yellowstonegames.glyph.GlyphActor;
 import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +57,7 @@ public class Images implements Serializable {
 
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.animator.getFrame(0).getTexture());
+    public static Sprite mortalSprite;
     private final Sprite laser_inventory;
 
     public SpriteBatch spriteBatch;
@@ -75,6 +77,7 @@ public class Images implements Serializable {
     public static Sprite spaceItem;
 
     public Images() {
+        mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
 //        game_over = new Texture(Gdx.files.internal("src/main/res/Game Over.png"));

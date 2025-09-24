@@ -80,6 +80,7 @@ public class Boy extends Objeto {
 
     private Array<Laser> laser_rail = new Array<>();
     private Body punch_box;
+    private boolean mortal;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -96,6 +97,11 @@ public class Boy extends Objeto {
 
     @Override
     public void render(SpriteBatch spriteBatch){
+        if (mortal){
+            mortalSprite.rotate(-30f);
+            mortalSprite.setPosition(body.getPosition().x, body.getPosition().y);
+            mortalSprite.draw(spriteBatch);
+        } else{
         if (use_jetPack){   //when actives jetPack
             jetPackSprite = new Sprite(Animations.BOY_JETPACK.getAnimator().currentSpriteFrame(false, true, flip0));
             jetPackSprite.setPosition(Math.abs(degrees) > 90f ? body.getPosition().x + 10f : body.getPosition().x, body.getPosition().y + 10f);
@@ -225,6 +231,7 @@ public class Boy extends Objeto {
             for (Laser laser : laser_rail)
                 laser.render(spriteBatch);
         }
+        }
     }
 
     public void flipAndRender(Sprite sprite, Vector2 itemPosition){
@@ -259,6 +266,8 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
+        if (onGround)
+            mortal = false;
         if (Math.abs(getBody().getLinearVelocity().x) > VELOCITY_X)
             getBody().setLinearVelocity((Math.abs(getBody().getLinearVelocity().x) / (getBody().getLinearVelocity().x))
                 *  (VELOCITY_X), 1f * getBody().getLinearVelocity().y);
@@ -483,6 +492,10 @@ public class Boy extends Objeto {
 
         if (keycode == Input.Keys.I){
             StateManager.setStates(StateManager.States.INVENTORY);
+        }
+        if (keycode == Input.Keys.Y){
+            if (body.getLinearVelocity().y != 0f || !onGround)
+                mortal = true;
         }
 //        if (keycode == Input.Keys.T) {
 //            use_jetPack = !use_jetPack;
