@@ -10,24 +10,53 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
+import java.util.TreeMap;
+
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.screens.SavePage.PRINTSCREEN;
 
 public class Stats extends State {
 
     private BitmapFont font;
 
+    private final float WIDTH_RECT = 20f, HEIGHT_RECT = 20f;
+
     public static float mouseX, mouseY;
 
-    private Rectangle close_button = new Rectangle(1435f,720f,50,50);
-
     private final SpriteBatch spriteBatch = new SpriteBatch();
+
+    private final TreeMap<String, Rectangle> statsRectangles = new TreeMap<>();
+
+    public static int[] stats_values = new int[6];
+
+    public static int points = 0, exp_Points = 0, base_level = 1;
+
+    public static final String[] VALUES = new String[8];
 
     public Stats() {
         Texture t = new Texture(Gdx.files.internal("Font2.png"));
         font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         font.getData().scale(0.5f);
+
+        VALUES[0] = "DEX";
+        VALUES[1] = "VIT";
+        VALUES[2] = "CRIT";
+
+        VALUES[3] = "STR";
+        VALUES[4] = "AGI";
+        VALUES[5] = "WSD";
+
+        VALUES[6] = "CLOSE_BUTTON";
+
+        statsRectangles.put("DEX", new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put("VIT", new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put("CRIT", new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
+
+        statsRectangles.put("STR", new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put("AGI", new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put("WSD", new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
+
+        statsRectangles.put("CLOSE_BUTTON", new Rectangle(1170, 410, 30,30));
     }
 
     @Override
@@ -50,7 +79,7 @@ public class Stats extends State {
         update();
         spriteBatch.begin();
         printScreen.draw(spriteBatch);
-        stats.setPosition(450, 300);
+        stats.setPosition(800f, 280f);
         stats.draw(spriteBatch);
         spriteBatch.end();
     }
@@ -91,8 +120,15 @@ public class Stats extends State {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
-            if (close_button.contains(mouseX, mouseY)) {
+            if (statsRectangles.get("CLOSE_BUTTON").contains(mouseX, mouseY)) {
                 StateManager.setStates(StateManager.States.LEVEL);
+            }
+        }
+
+        for (int index = 0; index < stats_values.length; index++){
+            if (statsRectangles.get(VALUES[index]).contains(mouseX, mouseY)){
+                stats_values[index]++;
+                System.out.println(VALUES[index] + " " + stats_values[index]);
             }
         }
         return false;
@@ -116,8 +152,7 @@ public class Stats extends State {
     @Override
     public boolean mouseMoved ( int screenX, int screenY){
         mouseX = Gdx.input.getX();
-        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        System.out.println(mouseX + " " + mouseY);
+        mouseY = Gdx.input.getY();
         return false;
     }
 
