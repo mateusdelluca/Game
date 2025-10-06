@@ -42,7 +42,7 @@ public class Stats extends State {
 
         level_font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        level_font.getData().setScale(0.5f,0.5f);
+        level_font.getData().setScale(0.4f,0.4f);
 
         points_font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -116,12 +116,16 @@ public class Stats extends State {
             stats_font.draw(spriteBatch, "" + stats_values[index], (statsCoordinates.get(VALUES[index]).x - 19), (statsCoordinates.get(VALUES[index]).y + 1 - 120));
         }
 
+        level_font.setColor(Color.BLACK);
+        level_font.draw(spriteBatch, "" + base_level, 935, 550);
+        level_font.setColor(Color.WHITE);
+        level_font.draw(spriteBatch, "" + base_level, 935 - 1, 550 + 1);
+
+
         points_font.setColor(Color.BLACK);
         points_font.draw(spriteBatch, "" + points, 1140, 555);
         points_font.setColor(Color.WHITE);
         points_font.draw(spriteBatch, "" + points, 1140 - 1, 555 + 1);
-
-
 
         spriteBatch.end();
     }
