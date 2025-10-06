@@ -122,11 +122,11 @@ public class Minis extends Objeto{
             if (name.equals("Cartridge"))
                 Rifle.addCartridge = true;
             if (name.equals("Blue Potion"))
-                PowerBar.sp += 10;
+                PowerBar.sp_0 += 10;
             if (name.equals("Red Potion"))
-                PowerBar.hp += 10;
+                PowerBar.hp_0 += 10;
             if (name.equals("Green Potion"))
-                PowerBar.hp += 0;
+                PowerBar.hp_0 += 0;
         }
     }
 

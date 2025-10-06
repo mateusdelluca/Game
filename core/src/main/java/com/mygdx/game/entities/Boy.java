@@ -316,17 +316,17 @@ public class Boy extends Objeto {
     }
 
     private void fly() {
-        if (PowerBar.sp > 10 && input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
+        if (PowerBar.sp_0 > 10 && input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
-        if (use_jetPack && PowerBar.sp > 0) {
+        if (use_jetPack && PowerBar.sp_0 > 0) {
             chargingSPTimer3 += Gdx.graphics.getDeltaTime();
             if (chargingSPTimer3 > 0.2f) {
-                PowerBar.sp--;
+                PowerBar.sp_0--;
                 chargingSPTimer3 = 0;
             }
         }
-        if (PowerBar.sp <= 30f){
+        if (PowerBar.sp_0 <= 30f){
             chargingSP = true;
         }
         if (chargingSP) {
@@ -334,11 +334,11 @@ public class Boy extends Objeto {
             if (chargingSPTimer > 3f) {
                 chargingSPTimer2 += Gdx.graphics.getDeltaTime();
                 if (chargingSPTimer2 > 0.3f) {
-                    PowerBar.sp++;
+                    PowerBar.sp_0++;
                     chargingSPTimer2 = 0f;
                 }
             }
-            if (PowerBar.sp > 200f) {
+            if (PowerBar.sp_0 > 200f) {
                 chargingSPTimer = 0f;
                 chargingSPTimer2 = 0f;
                 chargingSP = false;
@@ -487,7 +487,7 @@ public class Boy extends Objeto {
     }
 
     public void keyDown(int keycode){
-        if (keycode == Input.Keys.SPACE && use_jetPack && PowerBar.sp > 10) {
+        if (keycode == Input.Keys.SPACE && use_jetPack && PowerBar.sp_0 > 10) {
 //            body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 20);
             getBody().applyForceToCenter(new Vector2(0f, 1_000f), true);
             body.setGravityScale(0f);
@@ -638,9 +638,9 @@ public class Boy extends Objeto {
                         looping = false;
                         animations.animator.resetStateTime();
                     } else{
-                        if (saber_taken && PowerBar.sp >= 20f) {  //hits
+                        if (saber_taken && PowerBar.sp_0 >= 20f) {  //hits
                             hit = true;
-                            PowerBar.sp -= 20f;
+                            PowerBar.sp_0 -= 20f;
                             SABER.play();
                             animations = Animations.BOY_SABER;
                             setFrameCounter(0);
@@ -735,9 +735,9 @@ public class Boy extends Objeto {
         }
         if (item instanceof Crystal) {
             if (((Crystal) item).getRand() > 0)
-                PowerBar.sp += 10;
+                PowerBar.sp_0 += 10;
             else
-                PowerBar.hp += 10;
+                PowerBar.hp_0 += 10;
             clink2.play();
 //            System.out.println(item);
             item.setVisible(false);
@@ -771,7 +771,7 @@ public class Boy extends Objeto {
         if (animations != Animations.BOY_STRICKEN) {
 //            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
             animations = Animations.BOY_STRICKEN;
-            PowerBar.hp -= 10;
+            PowerBar.hp_0 -= 10;
             setBeenHit(true);
             Sounds.HURT.play();
         }

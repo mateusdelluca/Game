@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
@@ -84,7 +85,9 @@ public class Stats extends State {
 
     @Override
     public void update() {
-
+        //TODO: analizar qual melhor maneira para atualizar valor de hp devido o aumento em vitalidade
+        // e como desenhar na tela em tempo que abre o stage Stats
+        PowerBar.hp_0 = 150f + (5f * stats_values[1]);
     }
 
     @Override

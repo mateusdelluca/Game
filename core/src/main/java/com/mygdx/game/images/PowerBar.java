@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.entities.Boy;
-import com.mygdx.game.items.Rifle;
 
 import java.io.Serializable;
 
@@ -17,7 +16,7 @@ public class PowerBar implements Serializable{
     public static final float WIDTH = Images.hp.getWidth(), HEIGHT = Images.hp.getHeight();
     public static final float WIDTH2 = Images.sp.getWidth(), HEIGHT2 = Images.sp.getHeight();
 
-    public static float hp = WIDTH, sp = WIDTH2;
+    public static float hp_0 = WIDTH/2f, sp_0 = WIDTH2/2f;
 
     private Vector3 position = new Vector3();
 
@@ -33,11 +32,11 @@ public class PowerBar implements Serializable{
         if (boy != null && boy.getRifle() != null)
             Images.font.draw(s, boy.getRifle().stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
-        hp = Math.min(Math.max(Math.max(0, hp), hp), WIDTH);
-        if (hp > WIDTH)
-            hp = WIDTH;
-        s.draw(Images.hp, -900 + position.x + 110, position.y - 450, hp, 124);
-        s.draw(Images.sp, -900 + position.x + 110, position.y - 450, Math.min(sp, WIDTH2), 124);
+        hp_0 = Math.min(Math.max(Math.max(0, hp_0), hp_0), WIDTH);
+        if (hp_0 > WIDTH)
+            hp_0 = WIDTH;
+        s.draw(Images.hp, -900 + position.x + 110, position.y - 450, hp_0, 124);
+        s.draw(Images.sp, -900 + position.x + 110, position.y - 450, Math.min(sp_0, WIDTH2), 124);
         if (position.y > 5400f)
             position.y = 5400f;
         if (position.x < 970f)
