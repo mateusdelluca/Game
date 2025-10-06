@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.Rifle;
 
 import java.util.Random;
@@ -120,6 +121,12 @@ public class Minis extends Objeto{
             body.getFixtureList().get(0).setSensor(true);
             if (name.equals("Cartridge"))
                 Rifle.addCartridge = true;
+            if (name.equals("Blue Potion"))
+                PowerBar.sp += 10;
+            if (name.equals("Red Potion"))
+                PowerBar.hp += 10;
+            if (name.equals("Green Potion"))
+                PowerBar.hp += 0;
         }
     }
 

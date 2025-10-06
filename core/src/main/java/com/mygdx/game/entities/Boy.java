@@ -19,6 +19,7 @@ import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
+import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Contract;
@@ -505,7 +506,13 @@ public class Boy extends Objeto {
         }
 
         if (keycode == Input.Keys.I){
+            ScreenshotHelper.takeScreenshot();
             StateManager.setStates(StateManager.States.INVENTORY);
+        }
+
+        if (keycode == Input.Keys.Q){
+            ScreenshotHelper.takeScreenshot();
+            StateManager.setStates(StateManager.States.STATS);
         }
 
 //        if (keycode == Input.Keys.T) {

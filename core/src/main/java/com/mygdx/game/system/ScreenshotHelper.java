@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.mygdx.game.images.Images;
 
 import static com.mygdx.game.images.Images.sprites;
 import static com.mygdx.game.screens.SavePage.PRINTSCREEN;
@@ -21,6 +22,7 @@ public class ScreenshotHelper {
         sprite.flip(false,true);
         sprites[PRINTSCREEN] = new Sprite(new Texture(printscreen));
         sprites[PRINTSCREEN].flip(false, true);
+        Images.printScreen = new Sprite(sprites[PRINTSCREEN]);
         sprites[PRINTSCREEN].setSize(248, 166);
     }
 

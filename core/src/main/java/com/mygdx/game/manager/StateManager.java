@@ -19,6 +19,7 @@ public class StateManager extends Game {
          SAVE(new SavePage()),
          LEVEL(new Level_Manager()),
          INVENTORY(new Inventory()),
+         STATS(new Stats()),
          GAME_OVER(new GameOver());
 
          @Getter @Setter

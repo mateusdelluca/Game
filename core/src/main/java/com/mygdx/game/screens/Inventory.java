@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
+import static com.mygdx.game.images.Images.printScreen;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.*;
 
 
@@ -39,7 +40,7 @@ public class Inventory extends State {
     public static ArrayList<Vector2> positionsToFill = new ArrayList<>();
 
     public static ArrayList<Rectangle> rectangles = new ArrayList<>();
-
+    private final SpriteBatch spriteBatch = new SpriteBatch();
     private final ShapeRenderer shapeRenderer;
     public Inventory(){
 //        for (int i = 0; i < 20; i++) {
@@ -50,7 +51,7 @@ public class Inventory extends State {
         shapeRenderer = new ShapeRenderer();
     }
 
-    private final SpriteBatch spriteBatch = new SpriteBatch();
+
 
     @Override
     public void update() {
@@ -117,6 +118,7 @@ public class Inventory extends State {
     public void render() {
         update();
         spriteBatch.begin();
+        printScreen.draw(spriteBatch);
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
         for (Vector2 vec2 : positionsToFill)
@@ -226,7 +228,7 @@ public class Inventory extends State {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(new Color(0,1,0,105/255f));
+        sr.setColor(new Color(0,0,1,100/255f));
         for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
             int i = itemToBeDrawn.getIndex();
             if (ItemToBeDrawn.equipped[i])

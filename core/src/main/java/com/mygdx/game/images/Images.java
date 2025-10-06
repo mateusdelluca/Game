@@ -28,7 +28,6 @@ public class Images implements Serializable {
     public static Sprite s1, rifle, jetPack;
     public static Texture ninjaStar;
     public static Sprite mountains4;
-
     public static Sprite backGround2;
     public static Texture crystal, crystal_red;
     public static Texture bullet;
@@ -36,7 +35,6 @@ public class Images implements Serializable {
     public static Animator portal, fire, fan, fan2;
     public static Sprite hp, sp, bar;
     public static Texture pauseBox;
-
     public static Sprite inventory, saber_inventory, rifle_inventory, jetPack_inventory, ninjaStar_inventory, equipped_inventory, ninjaRope_inventory;
     public static Texture jack, jack_reloading, girl;
     public static Texture leaf;
@@ -48,35 +46,27 @@ public class Images implements Serializable {
     public static Sprite legs;
     public static MapObjects thorns;
     public static MapObjects staticObjects;
-
     public static MapObjects polygons_bodies;
     @Getter
     @Setter
     public static Tile tile;
     public static BitmapFont font;
-
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.animator.getFrame(0).getTexture());
     public static Sprite mortalSprite;
     private final Sprite laser_inventory;
 
     public SpriteBatch spriteBatch;
-
     public static Sprite level4;
-
     public static Sprite[] sprites = new Sprite[8];
-
+    public static Sprite printScreen;
     public static Pixmap pixMapBox;
-
     public static Sprite throwNinjaStar1, throwNinjaStar2;
-
     public static Sprite headset_laser, laser_front;
-
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
-
     public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
-
     public static Sprite spaceItem;
+    public static Sprite stats;
 
     public Images() {
         mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
@@ -154,6 +144,10 @@ public class Images implements Serializable {
         itemsDraw_minis.put("Green Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/Green_Potion_mini.png"))));
         itemsDraw_minis.put("Cartridge", new Sprite(new Texture(Gdx.files.internal("items/Minis/Cartridge_mini.png"))));
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
+
+
+        stats = new Sprite(new Texture(Gdx.files.internal("background/Stats.png")));
+
         try {
             for (int k = 0; k < 6; k++) {
                 FileHandle file = Gdx.files.local("saves/Save" + k + ".png"); // Caminho do arquivo de entrada
