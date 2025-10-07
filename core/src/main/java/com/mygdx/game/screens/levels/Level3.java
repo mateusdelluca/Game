@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
+import com.mygdx.game.items.minis.Minis;
 
+import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
@@ -212,6 +214,10 @@ public class Level3 extends Level{
                 o.beenHit(body1, body2);
             if (o instanceof Portal)
                 ((Portal) o).beginContact(contact);
+        }
+
+        for (Minis m : minis){
+            m.beginContact(body1,body2);
         }
     }
 

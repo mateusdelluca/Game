@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.lang.management.GarbageCollectorMXBean;
 import java.util.Random;
 
+import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -175,6 +176,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
+        hit(body);
         if (!isVisible() && body != null) {
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
 //            world.destroyBody(body);
@@ -192,6 +194,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void beenHit(){
         beenHit = true;
+        hit = true;
+
     }
 
     public void beenHit(Body body1, Body body2) {

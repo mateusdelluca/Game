@@ -7,9 +7,11 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
+import com.mygdx.game.items.minis.Minis;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
@@ -112,6 +114,10 @@ public class Level2 extends Level{
                 ((Portal) o).beginContact(contact);
             if (o instanceof Boy)
                 ((Boy) o).beginContact(contact);
+        }
+
+        for (Minis m : minis){
+            m.beginContact(body1,body2);
         }
     }
 

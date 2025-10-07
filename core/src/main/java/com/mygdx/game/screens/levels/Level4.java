@@ -3,6 +3,7 @@ package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Monster1;
@@ -10,7 +11,9 @@ import com.mygdx.game.entities.Mouse;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Background;
 import com.mygdx.game.items.*;
+import com.mygdx.game.items.minis.Minis;
 
+import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
@@ -150,6 +153,24 @@ public class Level4 extends Level{
     @Override
     public void beginContact(Contact contact) {
         super.beginContact(contact);
+
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
+
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null)
+            return;
+
+
+        for (Minis m : minis){
+            m.beginContact(body1,body2);
+        }
     }
 
 

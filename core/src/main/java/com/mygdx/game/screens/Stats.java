@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
@@ -32,6 +33,7 @@ public class Stats extends State {
     public static int[] stats_values = new int[6];
 
     public static int points = 10, exp_Points = 0, base_level = 1;
+    public static final int DEX = 0, VIT = 1, CRIT = 2, STR = 3, AGI = 4, WSD = 5;
 
     public static final String[] VALUES = new String[7];
 
@@ -87,7 +89,8 @@ public class Stats extends State {
     public void update() {
         //TODO: analizar qual melhor maneira para atualizar valor de hp devido o aumento em vitalidade
         // e como desenhar na tela em tempo que abre o stage Stats
-        PowerBar.hp_0 = 150f + (5f * stats_values[1]);
+
+        PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
     }
 
     @Override

@@ -67,6 +67,7 @@ public class Images implements Serializable {
     public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
     public static Sprite spaceItem;
     public static Sprite stats;
+    public static Sprite fuel;
 
     public Images() {
         mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
@@ -103,6 +104,7 @@ public class Images implements Serializable {
         } catch(Exception e){
             e.printStackTrace();
         }
+        fuel = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
         jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
         girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
         shoot = new Sprite(new Texture(Gdx.files.internal("boy/Shoot.png")));

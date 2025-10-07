@@ -18,15 +18,17 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.Stats;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.Contract;
+
 
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.screens.Stats.WSD;
 import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
@@ -316,13 +318,13 @@ public class Boy extends Objeto {
     }
 
     private void fly() {
-        if (PowerBar.sp_0 > 10 && input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
+        if (PowerBar.fuel > 10 && input.isKeyPressed(Input.Keys.SPACE) && use_jetPack){
             body.setLinearVelocity(body.getLinearVelocity().x, body.getLinearVelocity().y + 1);
         }
-        if (use_jetPack && PowerBar.sp_0 > 0) {
+        if (use_jetPack && PowerBar.fuel > 0) {
             chargingSPTimer3 += Gdx.graphics.getDeltaTime();
-            if (chargingSPTimer3 > 0.2f) {
-                PowerBar.sp_0--;
+            if (chargingSPTimer3 > 0.05f * Stats.stats_values[WSD]) {
+                PowerBar.fuel--;
                 chargingSPTimer3 = 0;
             }
         }
@@ -604,7 +606,6 @@ public class Boy extends Objeto {
         viewport.unproject(worldCoordinates);
         worldX = worldCoordinates.x;
         worldY = worldCoordinates.y;
-
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
@@ -724,7 +725,6 @@ public class Boy extends Objeto {
         return new Rectangle(body.getPosition().x + width/2f - 30f, body.getPosition().y + height/2f - 50f, DIMENSIONS_FOR_SHAPE.x, DIMENSIONS_FOR_SHAPE.y);
     }
 
-    @Contract
     public void takeItem(Item item){
         if (item instanceof Portal)
             return;
@@ -774,6 +774,7 @@ public class Boy extends Objeto {
             PowerBar.hp_0 -= 10;
             setBeenHit(true);
             Sounds.HURT.play();
+            PowerBar.hit = true;
         }
     }
 
