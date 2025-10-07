@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.entities.Boy;
@@ -21,9 +20,9 @@ public class PowerBar implements Serializable{
     public static final float WIDTH = Images.hp.getWidth(), HEIGHT = Images.hp.getHeight();
     public static final float WIDTH2 = Images.sp.getWidth(), HEIGHT2 = Images.sp.getHeight();
 
-    public static final float WIDTH3 = Images.fuel.getWidth(), HEIGHT3 = Images.fuel.getHeight();
+    public static final float WIDTH3 = Images.power.getWidth(), HEIGHT3 = Images.power.getHeight();
     public static final Animator HIT = new Animator(4,4,16,128,128,"fire/Hit.png");
-    public static float hp_0 = WIDTH/2f, sp_0 = WIDTH2/2f, maxHP = hp_0, fuel = WIDTH3;
+    public static float hp_0 = WIDTH/3f, sp_0 = WIDTH2/2f, maxHP = hp_0, power = WIDTH3/6f, maxPower = power;
     public static boolean hit;
     private Vector3 position = new Vector3();
 
@@ -41,15 +40,17 @@ public class PowerBar implements Serializable{
             Images.font.draw(s, boy.getRifle().stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
         hp_0 = Math.min(Math.max(Math.max(0, hp_0), hp_0), maxHP);
+        if (maxPower > WIDTH3)
+            maxPower = WIDTH3;
         if (maxHP > WIDTH)
             maxHP = WIDTH;
         if (hp_0 > maxHP)
             hp_0 = maxHP;
-        if (fuel > WIDTH3)
-            fuel = WIDTH3;
+        if (power > maxPower)
+            power = maxPower;
         s.draw(Images.hp, -900 + position.x + 110, position.y - 450, hp_0, 124);
         s.draw(Images.sp, -900 + position.x + 110, position.y - 450, Math.min(sp_0, WIDTH2), 124);
-        s.draw(Images.fuel, -900 + position.x, position.y - 450 + 3f, fuel, Images.fuel.getHeight());
+        s.draw(Images.power, -900 + position.x, position.y - 450 + 3f, power, Images.power.getHeight());
         if (position.y > 5400f)
             position.y = 5400f;
         if (position.x < 970f)

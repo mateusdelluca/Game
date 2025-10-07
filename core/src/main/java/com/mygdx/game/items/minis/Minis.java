@@ -126,7 +126,7 @@ public class Minis extends Objeto{
             if (name.equals("Red Potion"))
                 PowerBar.hp_0 += 10;
             if (name.equals("Green Potion"))
-                PowerBar.fuel += 30;
+                PowerBar.power += 30;
         }
     }
 

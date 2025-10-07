@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.images.Images;
-import com.mygdx.game.images.PowerBar;
+import com.mygdx.game.entities.Character_Features;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
 import java.util.TreeMap;
 
 import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.images.PowerBar.hit;
 
 public class Stats extends State {
 
@@ -24,18 +24,21 @@ public class Stats extends State {
     private final float WIDTH_RECT = 20f, HEIGHT_RECT = 20f;
 
     public static float mouseX, mouseY;
+    public static final int CLOSE_BUTTON = 6;
 
     private final SpriteBatch spriteBatch = new SpriteBatch();
 
     private final TreeMap<String, Rectangle> statsRectangles = new TreeMap<>();
     private final TreeMap<String, Rectangle> statsCoordinates = new TreeMap<>();
 
-    public static int[] stats_values = new int[6];
+    public static Character_Features char_features = new Character_Features();
 
     public static int points = 10, exp_Points = 0, base_level = 1;
+
+    public static final int STATS_SIZE = 6;
     public static final int DEX = 0, VIT = 1, CRIT = 2, STR = 3, AGI = 4, WSD = 5;
 
-    public static final String[] VALUES = new String[7];
+    public static final String[] KEYS = new String[7];
 
     public Stats() {
         Texture t = new Texture(Gdx.files.internal("Font2.png"));
@@ -51,38 +54,38 @@ public class Stats extends State {
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         points_font.getData().setScale(0.9f,0.9f);
 
-        VALUES[0] = "DEX";
-        VALUES[1] = "VIT";
-        VALUES[2] = "CRIT";
+        KEYS[DEX] = "DEX";
+        KEYS[VIT] = "VIT";
+        KEYS[CRIT] = "CRIT";
 
-        VALUES[3] = "STR";
-        VALUES[4] = "AGI";
-        VALUES[5] = "WSD";
+        KEYS[STR] = "STR";
+        KEYS[AGI] = "AGI";
+        KEYS[WSD] = "WSD";
 
-        VALUES[6] = "CLOSE_BUTTON";
+        KEYS[CLOSE_BUTTON] = "CLOSE_BUTTON";
 
-        statsRectangles.put(VALUES[0], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(VALUES[1], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(VALUES[2], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[DEX], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[VIT], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[CRIT], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(VALUES[3], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(VALUES[4], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(VALUES[5], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[STR], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[AGI], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[WSD], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(VALUES[6], new Rectangle(1170, 410, 30,30));
-
-
+        statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1170, 410, 30,30));
 
 
 
 
-        statsCoordinates.put(VALUES[0], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(VALUES[1], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(VALUES[2], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
 
-        statsCoordinates.put(VALUES[3], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(VALUES[4], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(VALUES[5], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
+
+        statsCoordinates.put(KEYS[DEX], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[VIT], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[CRIT], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
+
+        statsCoordinates.put(KEYS[STR], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[AGI], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[WSD], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
     }
 
     @Override
@@ -90,7 +93,7 @@ public class Stats extends State {
         //TODO: analizar qual melhor maneira para atualizar valor de hp devido o aumento em vitalidade
         // e como desenhar na tela em tempo que abre o stage Stats
 
-        PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
+        char_features.update();
     }
 
     @Override
@@ -115,11 +118,11 @@ public class Stats extends State {
 
         stats.draw(spriteBatch);
 
-        for (int index = 0; index < stats_values.length; index++) {
+        for (int index = 0; index < char_features.getStats_values().length; index++) {
             stats_font.setColor(Color.BLACK);
-            stats_font.draw(spriteBatch, "" + stats_values[index], (statsCoordinates.get(VALUES[index]).x - 20), (statsCoordinates.get(VALUES[index]).y - 120));
+            stats_font.draw(spriteBatch, "" + char_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 20), (statsCoordinates.get(KEYS[index]).y - 120));
             stats_font.setColor(Color.WHITE);
-            stats_font.draw(spriteBatch, "" + stats_values[index], (statsCoordinates.get(VALUES[index]).x - 19), (statsCoordinates.get(VALUES[index]).y + 1 - 120));
+            stats_font.draw(spriteBatch, "" + char_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 19), (statsCoordinates.get(KEYS[index]).y + 1 - 120));
         }
 
         level_font.setColor(Color.BLACK);
@@ -177,13 +180,13 @@ public class Stats extends State {
             }
         }
 
-        for (int index = 0; index < stats_values.length; index++){
-            if (statsRectangles.get(VALUES[index]).contains(mouseX, mouseY)){
+        for (int index = 0; index < char_features.getStats_values().length; index++){
+            if (statsRectangles.get(KEYS[index]).contains(mouseX, mouseY)){
                 if (points > 0) {
-                    stats_values[index]++;
+                    char_features.getStats_values()[index]++;
                     points--;
-                    System.out.println(VALUES[index] + " " + stats_values[index]);
-                    System.out.println(statsRectangles.get(VALUES[index]));
+                    System.out.println(KEYS[index] + " " + char_features.getStats_values()[index]);
+                    System.out.println(statsRectangles.get(KEYS[index]));
                 }
             }
         }

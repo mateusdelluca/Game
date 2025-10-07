@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
-import com.github.yellowstonegames.glyph.GlyphActor;
 import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,8 +52,9 @@ public class Images implements Serializable {
     public static BitmapFont font;
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Animations.BOY_JETPACK.animator.getFrame(0).getTexture());
-    public static Sprite mortalSprite;
+    public static Sprite mortalSprite, mortal_saber;
     private final Sprite laser_inventory;
+    public static Sprite laser_rail;
 
     public SpriteBatch spriteBatch;
     public static Sprite level4;
@@ -67,10 +67,11 @@ public class Images implements Serializable {
     public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
     public static Sprite spaceItem;
     public static Sprite stats;
-    public static Sprite fuel;
+    public static Sprite power;
 
     public Images() {
         mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
+        mortal_saber = new Sprite(new Texture(Gdx.files.internal("boy/Mortal_Saber.png")));
         box = new Texture(Gdx.files.internal("saves/Box.png"));
 //        menu = new Texture(Gdx.files.internal("src/main/res/Menu.png"));
 //        game_over = new Texture(Gdx.files.internal("src/main/res/Game Over.png"));
@@ -90,6 +91,7 @@ public class Images implements Serializable {
         portal = new Animator(23, 10, 25, 857, 873, "objects/Portal_Spritesheet.png");
         bar = new Sprite(new Texture(Gdx.files.internal("boy/Bar.png")));
         hp = new Sprite(new Texture(Gdx.files.internal("boy/HP.png")));
+        laser_rail = new Sprite(new Texture(Gdx.files.internal("boy/Laser_Rail.png")));
 //        hp2 = new Texture(Gdx.files.internal("HP_Bar2.png"));
         sp = new Sprite(new Texture(Gdx.files.internal("boy/SP.png")));
 //        sp2 = new Texture(Gdx.files.internal("SP_Bar2.png"));
@@ -104,7 +106,7 @@ public class Images implements Serializable {
         } catch(Exception e){
             e.printStackTrace();
         }
-        fuel = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
+        power = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
         jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
         girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
         shoot = new Sprite(new Texture(Gdx.files.internal("boy/Shoot.png")));

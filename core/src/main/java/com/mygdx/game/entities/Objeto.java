@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.items.Bullet;
+import com.mygdx.game.screens.Stats;
 import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.lang.management.GarbageCollectorMXBean;
 import java.util.Random;
 
 import static com.mygdx.game.images.PowerBar.hit;
+import static com.mygdx.game.screens.Stats.VIT;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -40,6 +42,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     @Getter @Setter
     protected BodyData bodyData;
     protected float timer;
+    @Setter @Getter
+    protected float HP = 5f;
 
     public Objeto(float width, float height){
         this.width = width;
@@ -176,6 +180,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
+
         hit(body);
         if (!isVisible() && body != null) {
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);

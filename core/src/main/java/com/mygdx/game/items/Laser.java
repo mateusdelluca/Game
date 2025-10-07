@@ -14,7 +14,7 @@ import com.mygdx.game.system.BodyData;
 public class Laser extends Objeto {
 
 
-    public static final float WIDTH = Images.hp.getWidth()/5f, HEIGHT = Images.hp.getHeight()/2f;
+    public static final float WIDTH = Images.laser_rail.getWidth()/5f, HEIGHT = Images.laser_rail.getHeight()/2f;
     public static final float VELOCITY = 300f;
 
     private boolean isFacingLeft;
@@ -65,7 +65,7 @@ public class Laser extends Objeto {
             body.setGravityScale(0f);
             visible = true;
         }
-        Sprite sprite = new Sprite(Images.hp);
+        Sprite sprite = new Sprite(Images.laser_rail);
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setOriginCenter();
         sprite.setOrigin(0,0);
