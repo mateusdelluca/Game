@@ -27,6 +27,7 @@ import lombok.Setter;
 
 
 import static com.badlogic.gdx.Gdx.input;
+import static com.mygdx.game.entities.Character_Features.velocityX;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.Stats.char_features;
 import static com.mygdx.game.screens.levels.Level.items;
@@ -36,7 +37,7 @@ import static com.mygdx.game.sfx.Sounds.*;
 public class Boy extends Objeto {
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
-    public static final float VELOCITY_X = 1_000f, JUMP_VELOCITY = 70f;
+
     public Animations animations = Animations.BOY_IDLE;
     private boolean flip0, usingOnlyLastFrame, looping = true, init;
     @Getter @Setter
@@ -281,6 +282,7 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
+        char_features.update();
         if (rifle != null)
             rifle.update();
         if (punching)
@@ -298,9 +300,9 @@ public class Boy extends Objeto {
         }
         if (body.getLinearVelocity().y != 0)
             onGround = false;
-        if (Math.abs(getBody().getLinearVelocity().x) > VELOCITY_X)
+        if (Math.abs(getBody().getLinearVelocity().x) > velocityX)
             getBody().setLinearVelocity((Math.abs(getBody().getLinearVelocity().x) / (getBody().getLinearVelocity().x))
-                *  (VELOCITY_X), getBody().getLinearVelocity().y);
+                *  (velocityX), getBody().getLinearVelocity().y);
         this.bodyPosition = body.getPosition();
         if (thrown)
             throwTimer += Gdx.graphics.getDeltaTime();
@@ -540,8 +542,8 @@ public class Boy extends Objeto {
 //            }
 //        }
         if (keycode == Input.Keys.D || keycode == Input.Keys.A){
-            if (Math.abs(getBody().getLinearVelocity().x) < VELOCITY_X) {
-                body.applyForce(new Vector2(keycode == Input.Keys.D ? VELOCITY_X : -VELOCITY_X, 0f), getBody().getWorldCenter(), true);
+            if (Math.abs(getBody().getLinearVelocity().x) < velocityX) {
+                body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
                 facingLeft = keycode == Input.Keys.A;
             }if (!shooting) {
                 if (!facingLeft) {
@@ -661,9 +663,10 @@ public class Boy extends Objeto {
                             SABER.play();
                             animations = Animations.BOY_SABER;
                             setFrameCounter(0);
-                            getBody().setLinearVelocity(!flip0 ? VELOCITY_X * 5 : -VELOCITY_X * 5, getBody().getLinearVelocity().y);
+                            getBody().setLinearVelocity(!flip0 ? velocityX * 5 : -velocityX * 5, getBody().getLinearVelocity().y);
                         }
                             if (laser) {
+                                if (PowerBar.power >= char_features.power)
                                         laser_rail.add(new Laser(
                                             new Vector2(!facingLeft ? (getBody().getPosition().x +
                                                 WIDTH / 2f) : (getBody().getPosition().x - WIDTH/4f),
@@ -750,10 +753,10 @@ public class Boy extends Objeto {
 //            body.applyForce(new Vector2(1_000_000_000f, 1_000_000_000f), body.getPosition(), true);
         }
         if (item instanceof Crystal) {
-            if (((Crystal) item).getRand() > 0)
-                PowerBar.sp_0 += 10;
-            else
-                PowerBar.hp_0 += 10;
+//            if (((Crystal) item).getRand() > 0)
+//                PowerBar.sp_0 += 10;
+//            else
+//                PowerBar.hp_0 += 10;
             clink2.play();
 //            System.out.println(item);
             item.setVisible(false);

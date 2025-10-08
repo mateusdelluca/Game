@@ -2,17 +2,19 @@ package com.mygdx.game.images;
 
 public class Robot2_Sprites {
 
-    public Animator walking = new Animator(4,4,2,128, 128,"robots/robot2/Robot_Walking.png");
+    public static final int WIDTH = 128, HEIGHT = 128;
 
-    public Animator currentAnimation = walking;
+    public Animator walking = new Animator(4,4,4, WIDTH, HEIGHT,"robots/Robot_Walking.png");
+    public Animator idle = new Animator(1,1,1, WIDTH, HEIGHT,"robots/Robot_Idle.png");
+    public Animator currentAnimation = idle;
 
-    public String nameOfAnimation = "ROBOT2_WALKING";
+    public String nameOfAnimation = "idle";
 
 
     public void changeAnimation(String name){
         nameOfAnimation = name;
         switch(nameOfAnimation) {
-            case "ROBOT2_WALKING":{
+            case "walking":{
                 currentAnimation = walking;
                 break;
             }
@@ -24,8 +26,8 @@ public class Robot2_Sprites {
 //                currentAnimation = split;
 //                break;
 //            }
-            default: {
-                currentAnimation = walking;
+            case "idle": {
+                currentAnimation = idle;
                 break;
             }
         }

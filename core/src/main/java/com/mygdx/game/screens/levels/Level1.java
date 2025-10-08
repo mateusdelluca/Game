@@ -20,7 +20,7 @@ public class Level1 extends Level{
     public Level1() throws Exception {
         super();
         monsters1.clear();
-        boy = new Boy(new Vector2(50, 1700), viewport);
+        boy.setViewport(viewport);
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size(), boy));
@@ -45,6 +45,7 @@ public class Level1 extends Level{
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
+        objetos.add(new Robot(new Vector2(300, 300)));
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.mygdx.game.items.Rifle;
 import java.util.Random;
 
 import static com.mygdx.game.entities.Boy.minis;
+import static com.mygdx.game.entities.Character_Features.*;
 import static com.mygdx.game.images.Images.itemsDraw_minis;
 import static com.mygdx.game.sfx.Sounds.TRIGGER;
 
@@ -122,11 +123,11 @@ public class Minis extends Objeto{
             if (name.equals("Cartridge"))
                 Rifle.addCartridge = true;
             if (name.equals("Blue Potion"))
-                PowerBar.sp_0 += 10;
+                PowerBar.sp_0 += recoveryPowerBluePotion;
             if (name.equals("Red Potion"))
-                PowerBar.hp_0 += 10;
+                PowerBar.hp_0 += recoveryPowerRedPotion;
             if (name.equals("Green Potion"))
-                PowerBar.power += 30;
+                PowerBar.power += recoveryPowerGreenPotion;
         }
     }
 

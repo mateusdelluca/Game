@@ -18,10 +18,9 @@ public class Level3 extends Level{
     public Level3() throws Exception {
         super();
         monsters1.clear();
-        boy = new Boy(new Vector2(10, 5700), viewport);
+        boy.getBody().setTransform(10, 5700, 0);
+        boy.setViewport(viewport);
         mouse = new Mouse(boy.getBody().getPosition());
-//
-//        boy = new Boy(new Vector2(10, 5700), viewport);
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2080, 6000 - 360),    Monster1.class.getSimpleName() + monsters1.size(), boy));

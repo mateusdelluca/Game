@@ -48,11 +48,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public Objeto(float width, float height){
         this.width = width;
         this.height = height;
-        visible = true;
-        if (body != null) {
-            rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
-        }
-
+        this.visible = true;
     }
 
     public Objeto(){
@@ -180,7 +176,9 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
-
+        if (body != null && rect == null) {
+            rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
+        }
         hit(body);
         if (!isVisible() && body != null) {
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);

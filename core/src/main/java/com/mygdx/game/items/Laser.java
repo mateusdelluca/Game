@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.system.BodyData;
+
+import static com.mygdx.game.entities.Character_Features.*;
 
 public class Laser extends Objeto {
 
@@ -21,6 +22,8 @@ public class Laser extends Objeto {
     private float degrees, radians;
     private float timer;
     private float alpha = 1f;
+
+    private float initialDistance, distance;
 
     public Laser(){
     }
@@ -44,15 +47,17 @@ public class Laser extends Objeto {
 //        else
 //            body.setTransform(position, radians);
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
+        initialDistance = getBody().getPosition().x;
     }
 
     @Override
     public void update(){
         super.update();
-        if (Math.abs(body.getLinearVelocity().x) < 30f && Math.abs(body.getLinearVelocity().y) < 10f) {
+        distance += getBody().getPosition().x;
+        if (distance - initialDistance >= laserDistance && body != null) {
             visible = false;
+            body.setTransform(-10_000, -10_000, 0);
             body.setUserData("null");
-//            body = null;
         }
         if (body == null || body.getFixtureList().size == 0)
             return;
@@ -60,6 +65,7 @@ public class Laser extends Objeto {
     }
 
     public void render(SpriteBatch spriteBatch){
+        update();
         if (body == null) {
             body = bodyData.convertDataToBody(BodyDef.BodyType.DynamicBody, true);
             body.setGravityScale(0f);
@@ -67,20 +73,14 @@ public class Laser extends Objeto {
         }
         Sprite sprite = new Sprite(Images.laser_rail);
         sprite.setSize(WIDTH, HEIGHT);
-        sprite.setOriginCenter();
         sprite.setOrigin(0,0);
         sprite.flip(isFacingLeft, false);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         if (visible) {
-            alpha -= 0.01f;
-            alpha = Math.max(alpha, 0.2f);
-            sprite.setAlpha(alpha);
-            if (alpha <= 0.3f)
-                body.setTransform(-10_000, -10_000, 0);
             sprite.draw(spriteBatch);
         }
-        update();
+
     }
 
     @Override

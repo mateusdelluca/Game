@@ -23,8 +23,8 @@ public class Level2 extends Level{
         super();
         monsters1.clear();
         objetos.clear();
-//        world.destroyBody(boy.getBody());
-        boy = new Boy(new Vector2(100, 200), viewport);
+        boy.getBody().setTransform(new Vector2(100, 200), 0);
+        boy.setViewport(viewport);
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));

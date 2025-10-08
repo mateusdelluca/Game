@@ -135,7 +135,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-
+        boy = new Boy(new Vector2(50, 1700), viewport);
     }
 
     @Override
