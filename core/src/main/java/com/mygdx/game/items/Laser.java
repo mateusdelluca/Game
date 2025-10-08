@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.entities.Character_Features.*;

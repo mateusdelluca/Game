@@ -666,13 +666,15 @@ public class Boy extends Objeto {
                             getBody().setLinearVelocity(!flip0 ? velocityX * 5 : -velocityX * 5, getBody().getLinearVelocity().y);
                         }
                             if (laser) {
-                                if (PowerBar.power >= char_features.getPowerSpent())
-                                        laser_rail.add(new Laser(
-                                            new Vector2(!facingLeft ? (getBody().getPosition().x +
-                                                WIDTH / 2f) : (getBody().getPosition().x - WIDTH/4f),
-                                                !facingLeft ? (getBody().getPosition().y + (HEIGHT/2f)) : (getBody().getPosition().y + (HEIGHT))),
-                                            radians > Math.PI/2f, radians, this.toString()));
-                                LASER_HEADSET.play();
+                                if (PowerBar.power >= char_features.getPowerSpent()) {
+                                    laser_rail.add(new Laser(
+                                        new Vector2(!facingLeft ? (getBody().getPosition().x +
+                                            WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
+                                            !facingLeft ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
+                                        radians > Math.PI / 2f, radians, this.toString()));
+                                    LASER_HEADSET.play();
+                                    PowerBar.power -= char_features.getPowerSpent();
+                                }
                         }
                     }
                 }
