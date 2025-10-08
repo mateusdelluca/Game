@@ -44,7 +44,7 @@ public class Character_Features {
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = 1f + (0.5f * stats_values[DEX]);
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
-        powerSpent = 5f - (stats_values[WSD]/2f);
+        powerSpent = 5f/(stats_values[WSD]/4f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
 
