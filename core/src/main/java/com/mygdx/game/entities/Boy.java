@@ -666,7 +666,7 @@ public class Boy extends Objeto {
                             getBody().setLinearVelocity(!flip0 ? velocityX * 5 : -velocityX * 5, getBody().getLinearVelocity().y);
                         }
                             if (laser) {
-                                if (PowerBar.power >= char_features.power)
+                                if (PowerBar.power >= char_features.getPowerSpent())
                                         laser_rail.add(new Laser(
                                             new Vector2(!facingLeft ? (getBody().getPosition().x +
                                                 WIDTH / 2f) : (getBody().getPosition().x - WIDTH/4f),
