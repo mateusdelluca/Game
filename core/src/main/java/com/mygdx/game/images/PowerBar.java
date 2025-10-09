@@ -39,7 +39,9 @@ public class PowerBar implements Serializable{
         if (boy != null && boy.getRifle() != null)
             Images.font.draw(s, boy.getRifle().stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
-        hp_0 = Math.min(Math.max(Math.max(0, hp_0), hp_0), maxHP);
+        hp_0 = Math.min(Math.max(0, hp_0), maxHP);
+        sp_0 = Math.min(Math.max(0, sp_0), maxSP);
+        power = Math.min(Math.max(0, power), maxPower);
         if (maxPower > WIDTH3)
             maxPower = WIDTH3;
         if (maxHP > WIDTH)

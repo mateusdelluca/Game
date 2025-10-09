@@ -111,9 +111,10 @@ public class Bullet extends Objeto implements Item {
         if (visible) {
 //            fixBullet(this);
             sprite.draw(spriteBatch);
+            update();
         } else{
             body.setTransform(-10_000, -10_000, 0);
-        }update();
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.entities.Character_Features;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
@@ -33,7 +34,7 @@ public class Stats extends State {
 
     public static Character_Features char_features = new Character_Features();
 
-    public static int points = 10, exp_Points = 0, base_level = 1;
+    public static int points = 10, exp_Points = 1, base_level = 1;
 
     public static final int STATS_SIZE = 6;
     public static final int DEX = 0, VIT = 1, CRIT = 2, STR = 3, AGI = 4, WSD = 5;
@@ -78,7 +79,6 @@ public class Stats extends State {
 
 
 
-
         statsCoordinates.put(KEYS[DEX], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
         statsCoordinates.put(KEYS[VIT], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
         statsCoordinates.put(KEYS[CRIT], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
@@ -109,7 +109,7 @@ public class Stats extends State {
     @Override
     public void render() {
         update();
-
+        char_features.update();
         spriteBatch.begin();
 
         printScreen.draw(spriteBatch);
@@ -135,6 +135,13 @@ public class Stats extends State {
         points_font.draw(spriteBatch, "" + points, 1140, 555);
         points_font.setColor(Color.WHITE);
         points_font.draw(spriteBatch, "" + points, 1140 - 1, 555 + 1);
+
+        if (exp_Points >= 50f){
+            points += 10;
+            base_level += 1;
+            exp_Points = 1;
+        }
+        spriteBatch.draw(Images.power, 885, 388,Math.max(50f, exp_Points * 5f), Images.power.getHeight());
 
         spriteBatch.end();
     }

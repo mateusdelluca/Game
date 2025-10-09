@@ -38,15 +38,14 @@ public class Character_Features {
         Boy.attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
-        if (hit)
-            hp += (enemy_attack >= def/2f ? -Math.abs(enemy_attack - def/2f) : -Math.abs(Math.min((enemy_attack - def/4f), 5f)));
         jumpingStrength = 5000f + (200f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = 1f + (0.5f * stats_values[DEX]);
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
-        powerSpent = 5f/(stats_values[WSD]/4f);
+        powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-
+        if (hit)
+            hp += (enemy_attack >= def/2f ? -Math.abs(enemy_attack - def/2f) : -Math.abs(Math.min((enemy_attack - def/4f), 5f)));
     }
 }

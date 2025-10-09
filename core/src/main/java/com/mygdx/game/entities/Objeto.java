@@ -184,6 +184,10 @@ public abstract class Objeto implements ObjetoFields, Serializable{
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
 //            world.destroyBody(body);
         }
+        if (HP >= -100 && !visible && !(this instanceof Boy)){
+            HP = -210;
+            Stats.exp_Points += 5;
+        }
     }
 
     public void fixBullet(Bullet bullet){
@@ -212,9 +216,13 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                     ||
                     (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
                     ||
-                    (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))) {
-                    if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl)
+                    (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))
+                    ||
+                    (body1.getUserData().toString().contains("Punch") || body2.getUserData().toString().contains("Punch"))) {
+                    if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl) {
                         beenHit();
+                        HP -= Boy.attack;
+                    }
                 }
                 if (
                     (body1.getUserData().toString().contains("Enemy") || body2.getUserData().toString().contains("Enemy"))
