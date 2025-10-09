@@ -435,7 +435,7 @@ public class Boy extends Objeto {
                     if (name.equals("BOY_PUNCHING")) {
                         punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                         if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 100 : body.getPosition().x + 30, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
+                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
                             punch_box.setUserData("Punch");
                             punching = true;
                         }
