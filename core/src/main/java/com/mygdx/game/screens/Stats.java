@@ -136,12 +136,12 @@ public class Stats extends State {
         points_font.setColor(Color.WHITE);
         points_font.draw(spriteBatch, "" + points, 1140 - 1, 555 + 1);
 
-        if (exp_Points >= 50f){
+        if (exp_Points >= 25f){
             points += 10;
             base_level += 1;
             exp_Points = 1;
         }
-        spriteBatch.draw(Images.power, 885, 388,Math.max(50f, exp_Points * 5f), Images.power.getHeight());
+        spriteBatch.draw(Images.power, 885, 388, Math.max(25f, exp_Points * 5f), Images.power.getHeight());
 
         spriteBatch.end();
     }

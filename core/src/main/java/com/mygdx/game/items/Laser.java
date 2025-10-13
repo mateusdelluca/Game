@@ -26,6 +26,7 @@ public class Laser extends Objeto {
 
     private float initialDistance, distance;
 
+
     public Laser(){
     }
 
@@ -55,7 +56,7 @@ public class Laser extends Objeto {
     public void update(){
         super.update();
         distance += getBody().getPosition().x;
-        if (distance - initialDistance >= laserDistance && body != null) {
+        if (distance - initialDistance >= laserDistance && body != null && body.getUserData().toString().contains("Boy")) {
             visible = false;
             body.setTransform(-10_000, -10_000, 0);
             body.setUserData("null");
