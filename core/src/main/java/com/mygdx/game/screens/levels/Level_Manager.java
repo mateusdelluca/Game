@@ -16,7 +16,6 @@ import static com.mygdx.game.images.Images.tile;
 
 public class Level_Manager extends State implements ContactListener {
 
-    private Level level1, level2, level3;
     public static Level currentLevel;
     public static String currentLevelName = "Level1", oldLevel;
     public static int lvl = 1;
@@ -28,12 +27,18 @@ public class Level_Manager extends State implements ContactListener {
 
     public static Viewport viewport;
     public static OrthographicCamera camera;
-
-//    public static float PPM = 100f;
     public static boolean loaded;
 
     public Level_Manager() {
-        world.setContactListener(this);
+        try {
+            world = new World(new Vector2(0,-10f), true);
+            world.setContactListener(this);
+            currentLevel = returnLevel();
+            oldLevel = currentLevelName;
+            spriteBatch = new SpriteBatch();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changeLevel() {
@@ -44,15 +49,11 @@ public class Level_Manager extends State implements ContactListener {
             throw new RuntimeException(e);
         }
         assert currentLevel != null;
-
     }
 
     public Level returnLevel() throws Exception {
         oldLevel = currentLevelName;
         switch (currentLevelName) {
-            case "Level1": {
-                return new Level1();
-            }
             case "Level2": {
                 for (Objeto objeto : currentLevel.objetos)
                     objeto.getBody().setTransform(-10_000, -10_000, 0);
@@ -83,7 +84,6 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level4();
             }
             default: {
-                //TODO:
                 return new Level1();
             }
         }
@@ -98,12 +98,12 @@ public class Level_Manager extends State implements ContactListener {
     @Override
     public void render() {
         changeLevel();
-        if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
+//        if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
             currentLevel.render();
-        if (loaded) {
-            world.setContactListener(this);
-            loaded = false;
-        }
+//        if (loaded) {
+//            world.setContactListener(this);
+//            loaded = false;
+//        }
     }
 
     @Override
@@ -212,12 +212,14 @@ public class Level_Manager extends State implements ContactListener {
 //            for (Objeto objeto : objetos)
 //                world.destroyBody(objeto.getBody());
 //            world = new World(new Vector2(0, -10), true);
-            world.setContactListener(this);currentLevel = new Level1();
-            currentLevelName = "Level1";
-            oldLevel = currentLevelName;
-            spriteBatch = new SpriteBatch();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "LEVEL";
     }
 }

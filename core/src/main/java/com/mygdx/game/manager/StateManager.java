@@ -9,6 +9,8 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.mygdx.game.Application.level_manager;
+
 public class StateManager extends Game {
 
 
@@ -16,8 +18,8 @@ public class StateManager extends Game {
          MAIN_MENU(new MainPage()),
          LOAD(new LoadPage()),
          PAUSE(new PausePage()),
+         LEVEL(null),
          SAVE(new SavePage()),
-         LEVEL(new Level_Manager()),
          INVENTORY(new Inventory()),
          STATS(new Stats()),
          GAME_OVER(new GameOver());
@@ -118,7 +120,7 @@ public class StateManager extends Game {
     };
 
     public static States currentState;
-    public static String oldState;
+    public static String oldState, currentStateName;
 
     public static Images images;
 
@@ -131,13 +133,19 @@ public class StateManager extends Game {
     public static void init(){
         images = new Images();
         sounds = new Sounds();
+
     }
 
     public static void setStates(States newState) {
-        if (currentState != null && newState != null)
+        if (currentState != null && newState != null) {
             oldState = currentState.name();
-        currentState = newState;
-        Gdx.input.setInputProcessor(currentState);
+            currentState = newState;
+            currentStateName = newState.name();
+            if (currentStateName.equals("LEVEL"))
+                Gdx.input.setInputProcessor(level_manager);
+            else
+                Gdx.input.setInputProcessor(currentState);
+        }
     }
 
     @Override

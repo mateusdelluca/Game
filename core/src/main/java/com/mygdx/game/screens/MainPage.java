@@ -25,6 +25,7 @@ import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
+import static com.mygdx.game.Application.level_manager;
 import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
 
 public class MainPage extends State {
@@ -181,12 +182,16 @@ public class MainPage extends State {
         switch (this.optionChoosed) {
             case NEWGAME: {
                 Sounds.PAUSE_SONG.stop();
-                if (!Sounds.LEVEL1.isPlaying())
-                    Sounds.LEVEL1.play();
+                Sounds.LEVEL1.stop();
+                Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
+
                 StateManager.oldState = StateManager.States.MAIN_MENU.name();
-                StateManager.States.LEVEL.setState(new Level_Manager());
+
+                level_manager = new Level_Manager();
+
                 StateManager.setStates(StateManager.States.LEVEL);
+
                 dispose();
                 break;
             }

@@ -181,10 +181,11 @@ public class PausePage extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         switch (this.optionChoosed) {
             case RETURN: {
+//                StateManager.currentStateName = "LEVEL";
                 StateManager.setStates(StateManager.States.LEVEL);
-//                Sounds.PAUSE_SCREEN.pause();
+                Sounds.PAUSE_SONG.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
-//                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
+                    Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                     Sounds.LEVEL1.play();
                 }
                 pause = false;

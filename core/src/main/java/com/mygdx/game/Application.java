@@ -2,15 +2,15 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.levels.Level_Manager;
 
-import static com.mygdx.game.manager.StateManager.currentState;
-import static com.mygdx.game.manager.StateManager.setStates;
+import static com.mygdx.game.manager.StateManager.*;
 
 public class Application extends Game {
 
     StateManager stateManager;
 
-
+    public static Level_Manager level_manager;
 
     @Override
     public void create() {
@@ -18,27 +18,39 @@ public class Application extends Game {
 //        images = new Images();
 //        sounds = new Sounds();
         stateManager = new StateManager();
-        setStates(StateManager.States.MAIN_MENU);
+        level_manager = new Level_Manager();
+        currentState = States.MAIN_MENU;
+        StateManager.setStates(StateManager.States.MAIN_MENU);
+        StateManager.currentStateName = "MENU";
     }
 
     @Override
     public void resize(int width, int height) {
-        currentState.resize(width, height);
+        if (currentStateName.equals("LEVEL"))
+            level_manager.resize(width, height);
+        else
+            currentState.resize(width, height);
     }
 
     public void update(){
-        currentState.update();
+        if (currentStateName.equals("LEVEL"))
+            level_manager.update();
+        else
+            currentState.update();
     }
 
     @Override
     public void render() {
-        if (!StateManager.currentState.name().equals("PAUSE")) {
+        if (!currentStateName.equals("PAUSE")) {
             update();
             super.render();
-            currentState.render();
+            if (!currentStateName.equals("LEVEL"))
+                currentState.render();
+            else
+                level_manager.render();
         }
         else {
-            StateManager.States.valueOf("LEVEL").render();
+            level_manager.render();
             StateManager.States.valueOf("PAUSE").render();
             pause();
         }
@@ -46,17 +58,26 @@ public class Application extends Game {
 
     @Override
     public void pause() {
-        currentState.pause();
+        if (currentStateName.equals("LEVEL"))
+            level_manager.pause();
+        else
+            currentState.pause();
     }
 
     @Override
     public void resume() {
-        currentState.resume();
+        if (currentStateName.equals("LEVEL"))
+            level_manager.resume();
+        else
+            currentState.resume();
     }
 
     @Override
     public void dispose() {
-        currentState.dispose();
+        if (currentStateName.equals("LEVEL"))
+            level_manager.dispose();
+        else
+            currentState.dispose();
     }
 
 }
