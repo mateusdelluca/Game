@@ -20,7 +20,7 @@ public class Cartridge implements Item{
 
     public static ArrayList<Bullet> bullets = new ArrayList<>();
 
-    public static final int MAX_ROUNDS = 5, MAX_ROUNDS2 = 30;
+    public static final int MAX_ROUNDS = 10, MAX_ROUNDS2 = 30;
 
     @Getter @Setter
     private int accumulated = 0;

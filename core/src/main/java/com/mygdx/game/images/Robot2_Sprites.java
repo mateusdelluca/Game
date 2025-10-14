@@ -1,5 +1,10 @@
 package com.mygdx.game.images;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import static com.mygdx.game.images.Images.sprites;
+
 public class Robot2_Sprites {
 
     public static final int WIDTH = 160, HEIGHT = 160;
@@ -12,12 +17,15 @@ public class Robot2_Sprites {
 
     public Animator currentAnimation = idle;
 
-    public String nameOfAnimation = "idle";
+    public String currentAnim = "idle", oldAnim = "idle";
 
-
+    float stateTime;
     public void changeAnimation(String name){
-        nameOfAnimation = name;
-        switch(nameOfAnimation) {
+        if (!(oldAnim.equals(name))){
+            oldAnim = name;
+            currentAnim = name;
+        }
+        switch(currentAnim) {
             case "walking":{
                 currentAnimation = walking;
                 break;
@@ -34,11 +42,39 @@ public class Robot2_Sprites {
                 currentAnimation = fire;
                 break;
             }
-            case "idle": {
+//            case "idle": {
+//                currentAnimation = idle;
+//                break;
+//            }
+            default:{
                 currentAnimation = idle;
                 break;
             }
         }
+
+    }
+
+    public void update(){
+        if (isFinished()) {
+            resetStateTime();
+            currentAnim = "idle";
+            changeAnimation(currentAnim);
+        }
+    }
+
+    private boolean isFinished(){
+        stateTime += Gdx.graphics.getDeltaTime();
+        currentAnimation.setStateTime(stateTime);
+        return currentAnimation.getAnimation().isAnimationFinished(stateTime);
+    }
+
+    private void resetStateTime(){
+        stateTime = 0f;
+        currentAnimation.setStateTime(stateTime);
+    }
+
+    public Sprite currentFrame(boolean useOnlyLastFrame, boolean looping, boolean facingRight){
+       return new Sprite(currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
     }
 
 }

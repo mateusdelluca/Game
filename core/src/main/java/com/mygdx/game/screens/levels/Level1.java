@@ -19,7 +19,7 @@ public class Level1 extends Level{
 
     public Level1() throws Exception {
         super();
-        monsters1.clear();
+//        monsters1.clear();
         boy.setViewport(viewport);
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
@@ -31,7 +31,7 @@ public class Level1 extends Level{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size(), boy));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size(), boy));
 
-        items.clear();
+//        items.clear();
         for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
@@ -40,12 +40,12 @@ public class Level1 extends Level{
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
-        objetos.clear();
+//        objetos.clear();
         objetos.add(boy);
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
-        objetos.add(new Robot(new Vector2(700, 300)));
+        objetos.add(new Robot(new Vector2(700, 300), boy));
     }
 
     @Override
@@ -133,9 +133,12 @@ public class Level1 extends Level{
             m.beginContact(body1,body2);
         }
 
-        for (Objeto o : objetos)
+        for (Objeto o : objetos) {
             if (o instanceof Portal)
-                ((Portal) o).beginContact(contact);
+                o.beginContact(contact);
+            if (o instanceof Robot)
+                o.beenHit(body1, body2);
+        }
     }
 
     @Override

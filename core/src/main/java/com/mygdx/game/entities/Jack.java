@@ -23,7 +23,6 @@ public class Jack extends Objeto {
     private float alpha = 1.0f;
 //    @Getter @Setter
 //    private boolean beenHit;
-    public int HP = 20;
     public transient Sprite sprite = new Sprite(Images.jack);
     private float timer, deltaTime;
 //    @Getter
@@ -105,9 +104,10 @@ public class Jack extends Objeto {
                     }
                 }
             sprite.draw(s);
-            if (bullet != null)
+            if (bullet != null) {
                 bullet.render(s);
             }
+        }
     }
 
 

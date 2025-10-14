@@ -60,38 +60,38 @@ public class PowerBar implements Serializable{
         if (position.x < 970f)
             position.x = 970f;
 
-        hit(boy.getBody(), s);
+//        hit(boy.getBody(), s);
     }
-    public static void hit(Body body){
-        if (body != null && hit) {
+//    public static void hit(Body body){
+//        if (body != null && hit) {
+//
+//            Sprite sprite = new Sprite(HIT.currentSpriteFrame(false, false));
+//            sprite.setPosition(body.getPosition().x + 32f / 2f, body.getPosition().y);
+//            sprite.setSize(96, 128);
+//            if (spriteBatch != null && !spriteBatch.isDrawing()) {
+//                spriteBatch.begin();
+//                sprite.draw(spriteBatch);
+//                spriteBatch.end();
+//            }
+//            if (HIT.ani_finished()) {
+//                HIT.resetStateTime();
+//                hit = false;
+//            }
+//        }
+//    }
 
-            Sprite sprite = new Sprite(HIT.currentSpriteFrame(false, false));
-            sprite.setPosition(body.getPosition().x + 32f / 2f, body.getPosition().y);
-            sprite.setSize(96, 128);
-            if (spriteBatch != null && !spriteBatch.isDrawing()) {
-                spriteBatch.begin();
-                sprite.draw(spriteBatch);
-                spriteBatch.end();
-            }
-            if (HIT.ani_finished()) {
-                HIT.resetStateTime();
-                hit = false;
-            }
-        }
-    }
-
-    public static void hit(Body body, SpriteBatch spriteBatch){
-        if (body != null && hit) {
-
-            Sprite sprite = new Sprite(HIT.currentSpriteFrame(false, false));
-            sprite.setPosition(body.getPosition().x + 32f / 2f, body.getPosition().y);
-            sprite.setSize(96, 128);
-            sprite.draw(spriteBatch);
-
-            if (HIT.ani_finished()) {
-                HIT.resetStateTime();
-                hit = false;
-            }
-        }
-    }
+//    public static void hit(Body body, SpriteBatch spriteBatch){
+//        if (body != null && hit) {
+//
+//            Sprite sprite = new Sprite(HIT.currentSpriteFrame(false, false));
+//            sprite.setPosition(body.getPosition().x + 32f / 2f, body.getPosition().y);
+//            sprite.setSize(96, 128);
+//            sprite.draw(spriteBatch);
+//
+//            if (HIT.ani_finished()) {
+//                HIT.resetStateTime();
+//                hit = false;
+//            }
+//        }
+//    }
 }

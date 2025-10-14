@@ -42,8 +42,6 @@ public class Monster1 extends Objeto implements Serializable {
     private boolean left;
     private long lastTime, deltaTime, initialTime;
 
-
-
     public Monster1_Sprites animations = new Monster1_Sprites();
     private Boy boy;
     public Monster1(Vector2 position, String userData, Boy boy){
@@ -105,7 +103,7 @@ public class Monster1 extends Objeto implements Serializable {
                         Sounds.MONSTER_HURT.play();
                         soundRunning = true;
                         initialTime = System.nanoTime();
-                        HP--;
+
                     }
 //                    lastTime = System.nanoTime();
 //                    deltaTime = (lastTime - initialTime)/1_000_000_000;
@@ -123,15 +121,15 @@ public class Monster1 extends Objeto implements Serializable {
                 }
             }
         }
-        if (HP <= 0 && HP > -30) {
+        if (HP <= 0 && !split) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
-            int rand = new Random().nextInt(4);
-            for (int i = 0; i < rand; i++)
-                new Minis(body.getPosition());
             HP = -100;
+            dropPotion();
         }
     }
+
+
 
     @Override
     public void renderShape(ShapeRenderer s) {

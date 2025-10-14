@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.items.Bullet;
+import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.screens.Stats;
 import com.mygdx.game.system.BodyData;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected Vector2 dimensions;
     @Getter
     @Setter
-    protected boolean visible;
+    protected boolean visible, dead;
     protected Rectangle rect;
     private float alpha = 1.0f;
     @Getter @Setter
@@ -43,7 +44,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected BodyData bodyData;
     protected float timer;
     @Setter @Getter
-    protected float HP = 5f;
+    protected float HP = 10f;
 
     public Objeto(float width, float height){
         this.width = width;
@@ -179,14 +180,16 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         if (body != null && rect == null) {
             rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
         }
-        hit(body);
+//        hit(body);
         if (!isVisible() && body != null) {
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
 //            world.destroyBody(body);
         }
-        if (HP >= -100 && !visible && !(this instanceof Boy)){
+        if (HP >= -100 && !visible && !(this instanceof Boy) && !dead){
+            dead = true;
             HP = -210;
             Stats.exp_Points += 5;
+            dropPotion();
         }
     }
 
@@ -205,31 +208,41 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     }
 
+    public void dropPotion(){
+        int rand = new Random().nextInt(4);
+        for (int i = 0; i < rand; i++)
+            new Minis(body.getPosition());
+    }
+
     public void beenHit(Body body1, Body body2) {
         if (body1 != null && body2 != null && getBody() != null) {
             if (getBody().equals(body1) || getBody().equals(body2)) {
-                if ((body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
-                    ||
-                    (body1.getUserData().toString().contains("Colliders") || body2.getUserData().toString().contains("Colliders"))
-                    ||
-                    (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
-                    ||
-                    (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
-                    ||
+                if (
+//                    (body1.getUserData().toString().contains("Bullet") || body2.getUserData().toString().contains("Bullet"))
+//                    ||
+//                    (body1.getUserData().toString().contains("Colliders") || body2.getUserData().toString().contains("Colliders"))
+//                    ||
+//                    (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))
+//                    ||
+//                    (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
+//                    ||
                     (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))
-                    ||
-                    (body1.getUserData().toString().contains("Punch") || body2.getUserData().toString().contains("Punch"))) {
-                    if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl) {
+//                    ||
+//                    (body1.getUserData().toString().contains("Punch") || body2.getUserData().toString().contains("Punch"))
+                    ) {
+                    if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl || this instanceof Robot) {
                         beenHit();
                         HP -= Boy.attack;
                     }
                 }
                 if (
-                    (body1.getUserData().toString().contains("Enemy") || body2.getUserData().toString().contains("Enemy"))
+                    (body1.getUserData().toString().contains(" Enemy") || body2.getUserData().toString().contains(" Enemy"))
                     ||
-                    (body1.getUserData().toString().contains("Colliders") || body2.getUserData().toString().contains("Colliders"))
+                    (body1.getUserData().toString().contains(" Colliders") || body2.getUserData().toString().contains(" Colliders"))
                     ||
                     (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))) {
+
+
                     if (this instanceof Boy)
                         beenHit();
                 }

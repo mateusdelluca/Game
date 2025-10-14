@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.images.Robot2_Sprites;
@@ -11,7 +12,6 @@ import com.mygdx.game.items.Laser;
 import lombok.Getter;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
-import static com.mygdx.game.images.Images.laser_rail;
 import static com.mygdx.game.images.Robot2_Sprites.HEIGHT;
 import static com.mygdx.game.images.Robot2_Sprites.WIDTH;
 import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
@@ -22,27 +22,33 @@ public class Robot extends Objeto{
     private Character_Features char_features;
     private Robot2_Sprites sprites = new Robot2_Sprites();
     private Array<Laser> laser_rail = new Array<>();
+
+    private int counter;
     private boolean looping = true, facingRight, useOnlyLastFrame;
 
-    public Robot(Vector2 position){
+    private Boy boy;
+
+    public Robot(Vector2 position, Boy boy){
         super(WIDTH, HEIGHT);
+        this.boy = boy;
         dimensions = new Vector2(46/2f, 108/2f);
         body = box(position, dimensions, BodyDef.BodyType.DynamicBody, false);
         char_features = new Character_Features();
         visible = true;
+        looping = true;
         facingRight = false;
-        sprites.changeAnimation("fire");
+        body.setUserData(this.toString());
     }
 
     @Override
     public void render(SpriteBatch s) {
-        update();
         if (visible) {
+            update();
 //            Sprite sprite = new Sprite(sprites.currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
 //            sprite.setPosition(body.getPosition().x - dimensions.x - 20f, body.getPosition().y - dimensions.y/2f);
 //            sprite.setSize(Robot2_Sprites.WIDTH, Robot2_Sprites.HEIGHT);
 //            sprite.draw(s);
-            Sprite sprite = new Sprite(sprites.currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
+            Sprite sprite = sprites.currentFrame(useOnlyLastFrame, looping, facingRight);
             sprite.setPosition(body.getPosition().x - dimensions.x - 40, body.getPosition().y - 120f/2f);
             sprite.setSize(WIDTH, HEIGHT);
             sprite.draw(s);
@@ -55,20 +61,44 @@ public class Robot extends Objeto{
     @Override
     public void update(){
         super.update();
-        if (sprites.nameOfAnimation.equals("fire"))
-            if (sprites.currentAnimation.ani_finished()){
-                laser_rail.add(new Laser(
-                    new Vector2(!facingRight ? (getBody().getPosition().x +
-                        WIDTH) : (getBody().getPosition().x - WIDTH),
-                        getBody().getPosition().y + (HEIGHT / 4f)),
-                    !facingRight,(!facingRight ? (float) Math.PI : 0f), this.toString() ));
-                LASER_HEADSET.play();
-                sprites.currentAnimation.resetStateTime();
-                looping = true;
-            }
-        for (Laser laser : laser_rail)
-            laser.update();
+
+        if (nameAnim().equals("fire")) {
+            fire();
+        }
+        if (nameAnim().equals("punching")){
+
+        }
+        if (beenHit) {
+            beenHit();
+            beenHit = false;
+        }
+        sprites.update();
     }
+
+    private void fire(){
+        if (sprites.currentAnim.equals("fire")) {
+            if (sprites.currentAnimation.ani_finished()) {
+                laser_rail.add(new Laser(
+                    new Vector2(!facingRight ? (getBody().getPosition().x) : (getBody().getPosition().x - WIDTH),
+                        getBody().getPosition().y + (HEIGHT / 4f)),
+                    !facingRight, (!facingRight ? (float) Math.PI : 0f), this.toString()));
+                LASER_HEADSET.play();
+                if (counter++ > 3) {
+                    changeAnimation("idle");
+                    counter = 0;
+                }
+            }
+            for (Laser laser : laser_rail)
+                laser.update();
+        }
+    }
+
+    @Override
+    public void beenHit(){
+        super.beenHit();
+        changeAnimation("takingPunch");
+    }
+
 
     @Override
     public void renderShape(ShapeRenderer s) {
@@ -77,6 +107,18 @@ public class Robot extends Objeto{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName() + " Enemy";
+    }
+
+    public void beenHit(Body body1, Body body2){
+        super.beenHit(body1, body2);
+    }
+
+    public String nameAnim(){
+        return sprites.currentAnim;
+    }
+
+    public void changeAnimation(String name){
+        sprites.changeAnimation(name);
     }
 }
