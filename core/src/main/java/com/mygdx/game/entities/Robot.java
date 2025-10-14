@@ -42,7 +42,7 @@ public class Robot extends Objeto{
 
     @Override
     public void render(SpriteBatch s) {
-        if (visible) {
+        if (visible && HP > 0) {
             update();
 //            Sprite sprite = new Sprite(sprites.currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
 //            sprite.setPosition(body.getPosition().x - dimensions.x - 20f, body.getPosition().y - dimensions.y/2f);

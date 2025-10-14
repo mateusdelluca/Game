@@ -204,8 +204,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void beenHit(){
         beenHit = true;
-        hit = true;
-
+        if (this instanceof Boy)
+            hit = true;
     }
 
     public void dropPotion(){
@@ -241,8 +241,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                     (body1.getUserData().toString().contains(" Colliders") || body2.getUserData().toString().contains(" Colliders"))
                     ||
                     (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))) {
-
-
                     if (this instanceof Boy)
                         beenHit();
                 }

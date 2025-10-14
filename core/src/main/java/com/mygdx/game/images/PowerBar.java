@@ -13,6 +13,7 @@ import com.mygdx.game.entities.Boy;
 
 import java.io.Serializable;
 
+import static com.mygdx.game.screens.Stats.char_features;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 
 public class PowerBar implements Serializable{

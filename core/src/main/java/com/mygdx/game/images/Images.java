@@ -66,7 +66,7 @@ public class Images implements Serializable {
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
     public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
     public static Sprite spaceItem;
-    public static Sprite stats;
+    public static Sprite stats, atributes;
     public static Sprite power;
 
     public Images() {
@@ -151,7 +151,7 @@ public class Images implements Serializable {
 
 
         stats = new Sprite(new Texture(Gdx.files.internal("background/Stats.png")));
-
+        atributes = new Sprite(new Texture(Gdx.files.internal("background/Atributes.png")));
         try {
             for (int k = 0; k < 6; k++) {
                 FileHandle file = Gdx.files.local("saves/Save" + k + ".png"); // Caminho do arquivo de entrada

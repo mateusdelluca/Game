@@ -17,7 +17,7 @@ public class Character_Features {
     private float attack = 1f, def = 1, jumpingStrength = 5000f, maxVelocityWalking = 10f;
     @Getter @Setter
     private int[] stats_values = new int[STATS_SIZE];
-    public static float velocityX = 1000f, laserDistance = 1000f;;
+    public static float velocityX = 1000f, laserDistance = 1000f;
 
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
     private float enemy_attack = 2f;
@@ -45,7 +45,10 @@ public class Character_Features {
         powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-        if (hit)
-            hp += (enemy_attack >= def/2f ? -Math.abs(enemy_attack - def/2f) : -Math.abs(Math.min((enemy_attack - def/4f), 5f)));
+        if (hit) {
+            hp += (enemy_attack >= def / 2f ? -Math.abs(enemy_attack - def / 2f) : -Math.abs(Math.min((enemy_attack - def / 4f), 5f)));
+            hit = false;
+        }
+        PowerBar.hp_0 = hp;
     }
 }

@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Character_Features;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
@@ -20,7 +22,7 @@ import static com.mygdx.game.images.PowerBar.hit;
 
 public class Stats extends State {
 
-    private BitmapFont stats_font, level_font, points_font;
+    private BitmapFont stats_font, level_font, points_font, points2_font;
 
     private final float WIDTH_RECT = 20f, HEIGHT_RECT = 20f;
 
@@ -54,6 +56,10 @@ public class Stats extends State {
         points_font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         points_font.getData().setScale(0.9f,0.9f);
+
+        points2_font = new BitmapFont(Gdx.files.internal("Font2.fnt"), new TextureRegion(t));
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        points2_font.getData().setScale(0.5f,0.5f);
 
         KEYS[DEX] = "DEX";
         KEYS[VIT] = "VIT";
@@ -115,8 +121,9 @@ public class Stats extends State {
         printScreen.draw(spriteBatch);
 
         stats.setPosition(800f, 280f);
-
+        atributes.setPosition(800f, 100);
         stats.draw(spriteBatch);
+        atributes.draw(spriteBatch);
 
         for (int index = 0; index < char_features.getStats_values().length; index++) {
             stats_font.setColor(Color.BLACK);
@@ -130,6 +137,22 @@ public class Stats extends State {
         level_font.setColor(Color.WHITE);
         level_font.draw(spriteBatch, "" + base_level, 935 - 1, 550 + 1);
 
+
+        points2_font.setColor(Color.BLACK);
+        points2_font.draw(spriteBatch, "  Defense: " + char_features.getDef(), 830, 250);
+        points2_font.draw(spriteBatch, "   Attack: " + char_features.getAttack(), 830, 215);
+        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 175);
+        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 135);
+
+        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 135);
+
+        points2_font.setColor(Color.WHITE);
+        points2_font.draw(spriteBatch, "  Defense: " + char_features.getDef(), 830 - 2, 250 + 2);
+        points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 215 + 2);
+        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 175 + 2);
+        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 135 + 2);
+
+        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000 - 2, 135 + 2);
 
         points_font.setColor(Color.BLACK);
         points_font.draw(spriteBatch, "" + points, 1140, 555);
