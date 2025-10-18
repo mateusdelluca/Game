@@ -21,19 +21,19 @@ public class Application extends Game {
         level_manager = new Level_Manager();
         currentState = States.MAIN_MENU;
         StateManager.setStates(StateManager.States.MAIN_MENU);
-        StateManager.currentStateName = "MENU";
+        StateManager.currentStateName = States.MAIN_MENU.name();
     }
 
     @Override
     public void resize(int width, int height) {
-        if (currentStateName.equals("LEVEL"))
+        if (currentStateName.equals(level_manager.toString()))
             level_manager.resize(width, height);
         else
             currentState.resize(width, height);
     }
 
     public void update(){
-        if (currentStateName.equals("LEVEL"))
+        if (currentStateName.equals(level_manager.toString()))
             level_manager.update();
         else
             currentState.update();
@@ -41,32 +41,34 @@ public class Application extends Game {
 
     @Override
     public void render() {
-        if (!currentStateName.equals("PAUSE")) {
-            update();
-            super.render();
-            if (!currentStateName.equals("LEVEL"))
-                currentState.render();
-            else
+        if (currentState != States.PAUSE) {
+            if (currentStateName.equals(level_manager.toString())) {
+                level_manager.update();
                 level_manager.render();
+            } else {
+                update();
+                super.render();
+                currentState.render();
+            }
         }
         else {
             level_manager.render();
-            StateManager.States.valueOf("PAUSE").render();
+            States.PAUSE.render();
             pause();
         }
     }
 
     @Override
     public void pause() {
-        if (currentStateName.equals("LEVEL"))
-            level_manager.pause();
-        else
-            currentState.pause();
+//        if (currentStateName.equals(level_manager.toString()))
+//            level_manager.pause();
+//        else
+//            currentState.pause(); TODO: verificar se este método é o que está travando o leitor de teclas da classe Inventory
     }
 
     @Override
     public void resume() {
-        if (currentStateName.equals("LEVEL"))
+        if (currentStateName.equals(level_manager.toString()))
             level_manager.resume();
         else
             currentState.resume();
@@ -74,7 +76,7 @@ public class Application extends Game {
 
     @Override
     public void dispose() {
-        if (currentStateName.equals("LEVEL"))
+        if (currentStateName.equals(level_manager.toString()))
             level_manager.dispose();
         else
             currentState.dispose();

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.*;
-import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ public class StateManager extends Game {
          MAIN_MENU(new MainPage()),
          LOAD(new LoadPage()),
          PAUSE(new PausePage()),
-         LEVEL(null),
+         LEVEL_MANAGER(null),
          SAVE(new SavePage()),
          INVENTORY(new Inventory()),
          STATS(new Stats()),
@@ -42,7 +41,7 @@ public class StateManager extends Game {
 
          @Override
          public void render() {
-            state.render();
+             state.render();
          }
 
          public void update(){
@@ -137,14 +136,21 @@ public class StateManager extends Game {
     }
 
     public static void setStates(States newState) {
-        if (currentState != null && newState != null) {
-            oldState = currentState.name();
-            currentState = newState;
-            currentStateName = newState.name();
-            if (currentStateName.equals("LEVEL"))
-                Gdx.input.setInputProcessor(level_manager);
+        try {
+            if (newState.name().equals(level_manager.toString()))
+                oldState = level_manager.toString();
             else
+                oldState = currentState.name();
+            currentState = newState;
+            currentStateName = currentState.name();
+            if (currentStateName.equals(level_manager.toString())) {
+                Gdx.input.setInputProcessor(level_manager);
+            } else {
                 Gdx.input.setInputProcessor(currentState);
+//                currentStateName = currentState.name();
+            }
+        } catch(RuntimeException e){
+            e.printStackTrace();
         }
     }
 

@@ -150,8 +150,8 @@ public class Inventory extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.I){
-//            StateManager.setStates(StateManager.States.LEVEL);
-            level_manager.keyDown(keycode);
+            StateManager.setStates(StateManager.States.LEVEL_MANAGER);
+//            level_manager.keyDown(keycode);
         }
         return false;
     }
@@ -170,7 +170,9 @@ public class Inventory extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             if (close_button.contains(mouseX, mouseY)) {
-                StateManager.currentStateName = "LEVEL";
+                StateManager.setStates(StateManager.States.LEVEL_MANAGER);
+
+//                StateManager.currentStateName = "LEVEL";
             }
 //            for (ItemToBeDrawn itemToBeDrawn : itemsToBeDrawn.values()){
 //                itemToBeDrawn.touchDown(screenX, screenY, pointer, button);

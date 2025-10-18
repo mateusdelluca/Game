@@ -266,4 +266,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     }
 
+    public boolean onGround(){
+        return Math.abs(body.getLinearVelocity().y) <= 0.1f;
+    }
+
 }

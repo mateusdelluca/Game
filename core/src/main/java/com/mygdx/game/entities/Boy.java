@@ -475,10 +475,6 @@ public class Boy extends Objeto {
         }
     }
 
-    private boolean onGround(){
-        return Math.abs(body.getLinearVelocity().y) <= 0.1f;
-    }
-
     private boolean isMoving(){
         return body.getLinearVelocity().x != 0f;
     }
@@ -521,6 +517,7 @@ public class Boy extends Objeto {
         if (keycode == Input.Keys.I){
             ScreenshotHelper.takeScreenshot();
             StateManager.setStates(StateManager.States.INVENTORY);
+
         }
 
         if (keycode == Input.Keys.Q){

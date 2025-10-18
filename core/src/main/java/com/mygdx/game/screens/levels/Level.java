@@ -595,7 +595,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         boy.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
-//        mouse.mouseMoved(screenX, screenY);
+        mouse.mouseMoved(screenX, screenY);
         return false;
     }
 

@@ -18,7 +18,6 @@ import com.mygdx.game.manager.StateManager;
 import java.util.TreeMap;
 
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.images.PowerBar.hit;
 
 public class Stats extends State {
 
@@ -187,7 +186,7 @@ public class Stats extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.Q){
-            StateManager.setStates(StateManager.States.LEVEL);
+            StateManager.setStates(StateManager.States.LEVEL_MANAGER);
         }
         return false;
     }
@@ -206,7 +205,7 @@ public class Stats extends State {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             if (statsRectangles.get("CLOSE_BUTTON").contains(mouseX, mouseY)) {
-                StateManager.setStates(StateManager.States.LEVEL);
+                StateManager.setStates(StateManager.States.LEVEL_MANAGER);
             }
         }
 

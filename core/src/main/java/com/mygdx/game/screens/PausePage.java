@@ -156,7 +156,7 @@ public class PausePage extends State {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
-            StateManager.setStates(StateManager.States.LEVEL);
+            StateManager.setStates(StateManager.States.LEVEL_MANAGER);
             if (!Sounds.LEVEL1.isPlaying()) {
 //                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                 Sounds.LEVEL1.play();
@@ -182,7 +182,7 @@ public class PausePage extends State {
         switch (this.optionChoosed) {
             case RETURN: {
 //                StateManager.currentStateName = "LEVEL";
-                StateManager.setStates(StateManager.States.LEVEL);
+                StateManager.setStates(StateManager.States.LEVEL_MANAGER);
                 Sounds.PAUSE_SONG.pause();
                 if (!Sounds.LEVEL1.isPlaying()) {
                     Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);

@@ -190,7 +190,7 @@ public class MainPage extends State {
 
                 level_manager = new Level_Manager();
 
-                StateManager.setStates(StateManager.States.LEVEL);
+                StateManager.setStates(StateManager.States.LEVEL_MANAGER);
 
                 dispose();
                 break;

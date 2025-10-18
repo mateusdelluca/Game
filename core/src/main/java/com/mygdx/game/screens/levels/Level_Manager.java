@@ -43,8 +43,10 @@ public class Level_Manager extends State implements ContactListener {
 
     public void changeLevel() {
         try {
-            if (!currentLevelName.equals(oldLevel))
+            if (!currentLevelName.equals(oldLevel)) {
                 currentLevel = returnLevel();
+                lvl = Integer.parseInt(currentLevelName.substring(5));
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +56,9 @@ public class Level_Manager extends State implements ContactListener {
     public Level returnLevel() throws Exception {
         oldLevel = currentLevelName;
         switch (currentLevelName) {
+            case "Level1": {
+                return new Level1();
+            }
             case "Level2": {
                 for (Objeto objeto : currentLevel.objetos)
                     objeto.getBody().setTransform(-10_000, -10_000, 0);
@@ -84,7 +89,7 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level4();
             }
             default: {
-                return new Level1();
+                return null;
             }
         }
 
@@ -169,8 +174,8 @@ public class Level_Manager extends State implements ContactListener {
         return false;
     }
 
-    @Override
     public boolean mouseMoved(int i, int i1) {
+
         currentLevel.mouseMoved(i, i1);
         return false;
     }
@@ -220,6 +225,6 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public String toString() {
-        return "LEVEL";
+        return "LEVEL_MANAGER";
     }
 }

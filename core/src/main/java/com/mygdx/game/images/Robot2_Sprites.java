@@ -13,6 +13,8 @@ public class Robot2_Sprites {
     public Animator takingPunch = new Animator(6,6,8, WIDTH, HEIGHT,"robots/robot3/takingPunch.png");
     public Animator punching = new Animator(6,6,10, WIDTH, HEIGHT,"robots/robot3/punching.png");
     public Animator fire = new Animator(5,5,5, WIDTH, HEIGHT,"robots/robot3/fire.png");
+
+    public Animator falling = new Animator(5,5,1, WIDTH, HEIGHT,"robots/robot3/falling.png");
     public Animator idle = new Animator(1,1,1, WIDTH, HEIGHT,"robots/robot3/idle.png");
 
     public Animator currentAnimation = idle;
@@ -40,6 +42,10 @@ public class Robot2_Sprites {
             }
             case "fire":{
                 currentAnimation = fire;
+                break;
+            }
+            case "falling":{
+                currentAnimation = falling;
                 break;
             }
 //            case "idle": {
