@@ -230,8 +230,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     }
 
     public void update(){
-        for (int i = 0; i < 5; i++) {
-            world.step(1/30f, 7, 7);
+        for (int i = 0; i < 10; i++) {
+            world.step(1/60f, 7, 7);
             camera.update();
         }
         for (Objeto objeto : objetos){
