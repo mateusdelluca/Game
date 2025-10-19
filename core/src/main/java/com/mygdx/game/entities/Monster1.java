@@ -7,22 +7,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import com.mygdx.game.images.Animations;
 import com.mygdx.game.images.Monster1_Sprites;
-import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Random;
-
-import static com.mygdx.game.entities.Boy.minis;
-import static com.mygdx.game.screens.levels.Level_Manager.currentLevel;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class Monster1 extends Objeto implements Serializable {
 
@@ -44,6 +35,9 @@ public class Monster1 extends Objeto implements Serializable {
 
     public Monster1_Sprites animations = new Monster1_Sprites();
     private Boy boy;
+    private float time;
+    private boolean attackOnce;
+
     public Monster1(Vector2 position, String userData, Boy boy){
         super(WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
@@ -54,9 +48,22 @@ public class Monster1 extends Objeto implements Serializable {
 
 
     public void render(SpriteBatch spriteBatch){
-        if (visible){
+        if (visible) {
+            if (!isntAttacking()) {
+                time += Gdx.graphics.getDeltaTime();
+                if (time >= animations.attacking.timeOfAnimation()) {
+                    time = 0f;
+                    animations.attacking.resetStateTime();
+                    animations.changeAnimation("MONSTER1_WALKING");
+                    attackOnce = true;
+                }
+            }
             Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
+            if (animations.nameOfAnimation.equals("MONSTER1_ATTACKING")) {
+                float x = body.getPosition().x -256/2f - BOX_WIDTH/2f;
+                sprite.setPosition(x, sprite.getY());
+            }
             sprite.draw(spriteBatch);
         }
     }
@@ -64,23 +71,28 @@ public class Monster1 extends Objeto implements Serializable {
     @Override
     public void update(){
         super.update();
+        nameAnimation = animations.nameOfAnimation;
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
         if (boy != null && boy.getBody() != null && body != null) {
             if (!isBeenHit()) {
                 if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
                     if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
+                       if (isntAttacking() && !attackOnce) {
+                           attack();
+
+                       }
                         if (boy.getBody().getPosition().x < body.getPosition().x) {
                             facingRight = false;
-                            getBody().applyForce(new Vector2(-5_000, 0), getBody().getWorldCenter(), true);
+                            getBody().applyForce(new Vector2(-5_000, 0), boy.getBody().getWorldCenter(), true);
                         } else {
-                            getBody().applyForce(new Vector2(5_000, 0), getBody().getWorldCenter(), true);
+                            getBody().applyForce(new Vector2(5_000, 0), boy.getBody().getWorldCenter(), true);
                             facingRight = true;
                         }
                     }
                 }
             }
-            nameAnimation = animations.nameOfAnimation;
+
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
                 noLooping = true;
                 for (Fixture f : getBody().getFixtureList()) {
@@ -105,18 +117,13 @@ public class Monster1 extends Objeto implements Serializable {
                         initialTime = System.nanoTime();
 
                     }
-//                    lastTime = System.nanoTime();
-//                    deltaTime = (lastTime - initialTime)/1_000_000_000;
                     timer += Gdx.graphics.getDeltaTime();
-                      if (timer >= 0.5f) {
-//                          initialTime = System.nanoTime();
-//                        flickering_deltaTime = 0f;
-                          timer = 0f;
-//                        body.setLinearVelocity(0, 0);
+                    if (timer >= 0.5f) {
+                        timer = 0f;
                         animations.changeAnimation("MONSTER1_WALKING");
                         soundRunning = false;
-
                         beenHit = false;
+                        attackOnce = false;
                     }
                 }
             }
@@ -124,11 +131,19 @@ public class Monster1 extends Objeto implements Serializable {
         if (HP <= 0 && !split) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
-            dropPotion();
+            dropItems();
         }
     }
 
+    private boolean isntAttacking(){
+        return !animations.nameOfAnimation.equals("MONSTER1_ATTACKING");
+    }
 
+    private void attack(){
+        body.setLinearVelocity(0f, body.getLinearVelocity().y);
+        animations.changeAnimation("MONSTER1_ATTACKING");
+
+    }
 
     @Override
     public void renderShape(ShapeRenderer s) {

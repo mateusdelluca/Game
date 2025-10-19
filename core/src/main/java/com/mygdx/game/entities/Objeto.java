@@ -15,11 +15,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.lang.management.GarbageCollectorMXBean;
 import java.util.Random;
 
 import static com.mygdx.game.images.PowerBar.hit;
-import static com.mygdx.game.screens.Stats.VIT;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -188,7 +186,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         }
         if (HP <= 0 && !(this instanceof Boy) && !dead){
             dead = true;
-            dropPotion();
+            dropItems();
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
@@ -215,7 +213,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
             hit = true;
     }
 
-    public void dropPotion(){
+    public void dropItems(){
         int rand = new Random().nextInt(4);
         for (int i = 0; i < rand; i++)
             new Minis(body.getPosition());

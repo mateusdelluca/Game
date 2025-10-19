@@ -4,12 +4,13 @@ public class Monster1_Sprites {
 
     public Animator walking = new Animator(4,4,1,94,128, "monster/Walking.png");
     public Animator flickering = new Animator(4,4,3,94,128, "monster/Flickering.png");
+    public Animator attacking = new Animator(3,3,12,256,128, "monster/Attacking.png");
     public Animator split = new Animator(3,3,6,128,128, "monster/Split.png");
 
     public Animator currentAnimation = walking;
 
     public String nameOfAnimation = "MONSTER1_WALKING";
-
+    public boolean changed;
 
     public void changeAnimation(String name){
         nameOfAnimation = name;
@@ -20,6 +21,10 @@ public class Monster1_Sprites {
                 }
                 case "MONSTER1_FLICKERING":{
                     currentAnimation = flickering;
+                    break;
+                }
+                case "MONSTER1_ATTACKING":{
+                    currentAnimation = attacking;
                     break;
                 }
                 case "MONSTER1_SPLIT":{
