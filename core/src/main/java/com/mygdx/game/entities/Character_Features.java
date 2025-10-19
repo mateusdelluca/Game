@@ -22,7 +22,7 @@ public class Character_Features {
     public static float velocityX = 1000f, laserDistance = 1000f;
 
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
-    private float enemy_attack = 2f;
+    private float enemy_attack = 10f;
     private float laserDamage = 1f;
     @Getter
     private float powerSpent = PowerBar.power;
@@ -48,7 +48,7 @@ public class Character_Features {
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
         if (hit) {
-            hp += (enemy_attack >= def / 2f ? -Math.abs(enemy_attack - def / 2f) : -Math.abs(Math.min((enemy_attack - def / 4f), 5f)));
+            hp += (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
             hit = false;
         }
         PowerBar.hp_0 = hp;

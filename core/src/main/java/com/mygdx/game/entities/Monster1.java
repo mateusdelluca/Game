@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Monster1_Sprites;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
@@ -35,8 +36,10 @@ public class Monster1 extends Objeto implements Serializable {
 
     public Monster1_Sprites animations = new Monster1_Sprites();
     private Boy boy;
-    private float time;
+    private float attacking_duration;
     private boolean attackOnce;
+    private Body attack_box;
+    private float attackOnceTimer;
 
     public Monster1(Vector2 position, String userData, Boy boy){
         super(WIDTH, HEIGHT);
@@ -49,13 +52,14 @@ public class Monster1 extends Objeto implements Serializable {
 
     public void render(SpriteBatch spriteBatch){
         if (visible) {
-            if (!isntAttacking()) {
-                time += Gdx.graphics.getDeltaTime();
-                if (time >= animations.attacking.timeOfAnimation()) {
-                    time = 0f;
+            if (isAttacking()) {
+                attacking_duration += Gdx.graphics.getDeltaTime();
+                if (attacking_duration >= animations.attacking.timeOfAnimation()) {
+                    attacking_duration = 0f;
                     animations.attacking.resetStateTime();
                     animations.changeAnimation("MONSTER1_WALKING");
                     attackOnce = true;
+                    attack_box.setTransform(20_000, 20_000, 0);
                 }
             }
             Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
@@ -92,6 +96,11 @@ public class Monster1 extends Objeto implements Serializable {
                     }
                 }
             }
+            attackOnceTimer += Gdx.graphics.getDeltaTime();
+            if (attackOnceTimer > 3f) {
+                attackOnce = false;
+                attackOnceTimer = 0f;
+            }
 
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
                 noLooping = true;
@@ -123,7 +132,6 @@ public class Monster1 extends Objeto implements Serializable {
                         animations.changeAnimation("MONSTER1_WALKING");
                         soundRunning = false;
                         beenHit = false;
-                        attackOnce = false;
                     }
                 }
             }
@@ -139,10 +147,16 @@ public class Monster1 extends Objeto implements Serializable {
         return !animations.nameOfAnimation.equals("MONSTER1_ATTACKING");
     }
 
+    private boolean isAttacking(){
+        return animations.nameOfAnimation.equals("MONSTER1_ATTACKING");
+    }
+
     private void attack(){
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
         animations.changeAnimation("MONSTER1_ATTACKING");
-
+        attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
+            body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f,40f),
+            BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
     }
 
     @Override
