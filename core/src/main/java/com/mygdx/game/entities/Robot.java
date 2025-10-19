@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Robot2_Sprites;
 import com.mygdx.game.items.Laser;
 import lombok.Getter;
@@ -27,6 +29,9 @@ public class Robot extends Objeto{
     private boolean looping = true, facingRight, useOnlyLastFrame;
 
     private Boy boy;
+    private float timer2;
+
+    private Body punch_box;
 
     public Robot(Vector2 position, Boy boy){
         super(WIDTH, HEIGHT);
@@ -38,6 +43,7 @@ public class Robot extends Objeto{
         looping = true;
         facingRight = false;
         body.setUserData(this.toString());
+        changeAnimation("punching");
     }
 
     @Override
@@ -65,7 +71,17 @@ public class Robot extends Objeto{
             fire();
         }
         if (nameAnim().equals("punching")){
-
+            timer2 += Gdx.graphics.getDeltaTime();
+            if (animCounter(timer2) >= 5f){
+                timer2 = 0f;
+            }
+            if (animCounter(timer2) >= 4f){
+                punch_box = BodiesAndShapes.box(new Vector2(facingRight ? body.getPosition().x + 110 : body.getPosition().x - 30,
+                    body.getPosition().y + 20f), new Vector2(20f, 20f), BodyDef.BodyType.StaticBody, true, " Enemy", 50f);
+            } else{
+                if (punch_box != null)
+                    punch_box.setTransform(22_000, 22_000, 0);
+            }
         }
         if (beenHit) {
             beenHit();
@@ -95,10 +111,10 @@ public class Robot extends Objeto{
                         getBody().getPosition().y + (HEIGHT / 4f)),
                     !facingRight, (!facingRight ? (float) Math.PI : 0f), this.toString()));
                 LASER_HEADSET.play();
-                if (counter++ > 3) {
-                    changeAnimation("idle");
-                    counter = 0;
-                }
+            }
+            if (counter++ > 3) {
+                changeAnimation("idle");
+                counter = 0;
             }
             for (Laser laser : laser_rail)
                 laser.update();
@@ -108,7 +124,7 @@ public class Robot extends Objeto{
     @Override
     public void beenHit(){
         super.beenHit();
-        changeAnimation("takingPunch");
+        changeAnimation("beenHit");
     }
 
 
@@ -132,5 +148,9 @@ public class Robot extends Objeto{
 
     public void changeAnimation(String name){
         sprites.changeAnimation(name);
+    }
+
+    private float animCounter(float stateTime){
+        return sprites.currentAnimation.frameCounter(stateTime);
     }
 }

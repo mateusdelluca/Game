@@ -55,7 +55,7 @@ public class Character_Features {
         if (!lvlUP && exp_Points >= 25) {
             points += 10;
             base_level += 1;
-
+            exp_Points = 1;
 //            EAGLE.play();
             lvlUP = true;
         }

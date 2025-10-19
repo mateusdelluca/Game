@@ -3,14 +3,12 @@ package com.mygdx.game.images;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import static com.mygdx.game.images.Images.sprites;
-
 public class Robot2_Sprites {
 
     public static final int WIDTH = 160, HEIGHT = 160;
 
     public Animator walking = new Animator(6,6,3, WIDTH, HEIGHT,"robots/robot3/walking.png");
-    public Animator takingPunch = new Animator(6,6,8, WIDTH, HEIGHT,"robots/robot3/takingPunch.png");
+    public Animator beenHit = new Animator(6,6,8, WIDTH, HEIGHT,"robots/robot3/takingPunch.png");
     public Animator punching = new Animator(6,6,10, WIDTH, HEIGHT,"robots/robot3/punching.png");
     public Animator fire = new Animator(5,5,5, WIDTH, HEIGHT,"robots/robot3/fire.png");
 
@@ -36,8 +34,8 @@ public class Robot2_Sprites {
                 currentAnimation = punching;
                 break;
             }
-            case "takingPunch":{
-                currentAnimation = takingPunch;
+            case "beenHit":{
+                currentAnimation = beenHit;
                 break;
             }
             case "fire":{
@@ -63,7 +61,8 @@ public class Robot2_Sprites {
     public void update(){
         if (isFinished()) {
             resetStateTime();
-            currentAnim = "idle";
+            //TODO: currentAnim = "idle"
+            currentAnim = "punching";
             changeAnimation(currentAnim);
         }
     }
@@ -80,7 +79,9 @@ public class Robot2_Sprites {
     }
 
     public Sprite currentFrame(boolean useOnlyLastFrame, boolean looping, boolean facingRight){
-       return new Sprite(currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
+       Sprite s = new Sprite(currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
+       s.setScale(1.5f);
+       return s;
     }
 
 }

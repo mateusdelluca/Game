@@ -362,6 +362,10 @@ public class Animator{
         return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
     }
 
+    public float frameCounter(float stateTime){
+        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
+    }
+
     public TextureRegion lastFrame(){
         return frames[frames.length - 1];
     }
