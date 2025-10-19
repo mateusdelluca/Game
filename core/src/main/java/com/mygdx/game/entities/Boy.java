@@ -18,7 +18,6 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.Stats;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
@@ -30,6 +29,7 @@ import static com.badlogic.gdx.Gdx.input;
 import static com.mygdx.game.entities.Character_Features.velocityX;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.Stats.char_features;
+import static com.mygdx.game.screens.Stats.exp_Points;
 import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
@@ -89,6 +89,9 @@ public class Boy extends Objeto {
 
     public static float attack = 1f;
     public static Array<Minis> minis = new Array<>();
+    public static boolean lvlUP;
+    private int lvlUpCounterFrames;
+    float timerLvlUP;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -109,6 +112,7 @@ public class Boy extends Objeto {
             beenHit();
             body.setTransform(new Vector2(100, 400), 0);
         }
+
         if (mortal){
             mortalSprite.rotate(-30f);
             mortalSprite.setPosition(body.getPosition().x, body.getPosition().y);
@@ -248,6 +252,19 @@ public class Boy extends Objeto {
         }
         for (Minis m : minis)
             m.render(spriteBatch);
+
+        if (Boy.lvlUP) {
+            Sprite lvlUP = new Sprite(Animations.BOY_LVL_UP.animator.currentSpriteFrame(false,false));
+            lvlUP.setPosition(body.getPosition().x, body.getPosition().y);
+            lvlUP.draw(spriteBatch);
+            timerLvlUP += Gdx.graphics.getDeltaTime();
+            if (timerLvlUP >= Animations.BOY_LVL_UP.animator.timeOfAnimation()){
+                Boy.lvlUP = false;
+                EAGLE.play();
+                exp_Points = 1;
+                timerLvlUP = 0;
+            }
+        }
     }
 
     public void flipAndRender(Sprite sprite, Vector2 itemPosition){

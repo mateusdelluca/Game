@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.items.Bullet;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.screens.Stats;
@@ -185,11 +186,17 @@ public abstract class Objeto implements ObjetoFields, Serializable{
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
 //            world.destroyBody(body);
         }
-        if (HP >= -100 && !visible && !(this instanceof Boy) && !dead){
+        if (HP <= 0 && !(this instanceof Boy) && !dead){
             dead = true;
-            HP = -210;
-            Stats.exp_Points += 5;
             dropPotion();
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    body.setUserData("null");
+                    setVisible(false);
+                }
+            }, 1);
         }
     }
 
@@ -212,6 +219,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         int rand = new Random().nextInt(4);
         for (int i = 0; i < rand; i++)
             new Minis(body.getPosition());
+        Stats.exp_Points += 5;
     }
 
     public void beenHit(Body body1, Body body2) {

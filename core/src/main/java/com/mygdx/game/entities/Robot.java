@@ -61,9 +61,6 @@ public class Robot extends Objeto{
     @Override
     public void update(){
         super.update();
-        if (HP <= 0){
-            falling();
-        }
         if (nameAnim().equals("fire")) {
             fire();
         }
@@ -74,13 +71,17 @@ public class Robot extends Objeto{
             beenHit();
             beenHit = false;
         }
-        sprites.update();
+        if (HP <= 0){
+            falling();
+        } else
+            sprites.update();
+
     }
 
     private void falling() {
         changeAnimation("falling");
         looping = false;
-        body.applyForceToCenter(new Vector2(facingRight ? -100f : 100f, 100), true);
+        body.applyForceToCenter(new Vector2(facingRight ? -100f : 100f, 10), true);
         if (sprites.falling.ani_finished() && onGround())
             visible = false;
 //        body.setTransform(body.getPosition(), facingRight ? (float) Math.PI/2f : (float) -Math.PI/2f);

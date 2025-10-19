@@ -147,7 +147,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
-//        if (!StateManager.oldState.equals("PAUSE"))
+        if (!StateManager.oldState.equals("PAUSE"))
             update();
         camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
@@ -231,7 +231,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public void update(){
         for (int i = 0; i < 5; i++) {
-            world.step(1/60f, 7, 7);
+            world.step(1/30f, 7, 7);
             camera.update();
         }
         for (Objeto objeto : objetos){

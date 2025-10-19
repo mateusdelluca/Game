@@ -23,9 +23,10 @@ public enum Animations implements Serializable {
     BOY_JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),
     BOY_PUNCHING(new Animator(3,3, 30, 128, 128, "boy/Punching2.png")),
     BOY_SHOOTING_AND_WALKING(new Animator(6,6, 5, 128, 128, "boy/Shooting3.png")),
-
+    BOY_LVL_UP(new Animator(3,3,3,1, 128, 128, "boy/LevelUP.png")),
     BOY_HEADSET(new Animator(3,3,5,42, 50,"boy/Laser_HeadSet-Sheet3.png")),
     BOY_JUMPING_FRONT_LASER((new Animator(3,3,5,128, 128,"boy/Jumping_Headset_Sheet.png")));
+
 
     //monster
 //    MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),

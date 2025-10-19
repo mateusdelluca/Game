@@ -87,7 +87,7 @@ public class Monster1 extends Objeto implements Serializable {
                     f.setSensor(true);
                 }
 
-                body.setUserData("null");
+
 //            getBody().setGravityScale(0f);
                 Timer timer = new Timer();
                 timer.scheduleTask(new Timer.Task() {
@@ -124,7 +124,6 @@ public class Monster1 extends Objeto implements Serializable {
         if (HP <= 0 && !split) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
-            HP = -100;
             dropPotion();
         }
     }

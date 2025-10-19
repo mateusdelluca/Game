@@ -6,8 +6,10 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
+import static com.mygdx.game.entities.Boy.lvlUP;
 import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.screens.Stats.*;
+import static com.mygdx.game.sfx.Sounds.EAGLE;
 
 public class Character_Features {
 
@@ -50,5 +52,12 @@ public class Character_Features {
             hit = false;
         }
         PowerBar.hp_0 = hp;
+        if (!lvlUP && exp_Points >= 25) {
+            points += 10;
+            base_level += 1;
+
+//            EAGLE.play();
+            lvlUP = true;
+        }
     }
 }

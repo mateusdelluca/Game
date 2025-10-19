@@ -26,7 +26,8 @@ import com.mygdx.game.screens.levels.Level_Manager;
 import com.mygdx.game.sfx.Sounds;
 
 import static com.mygdx.game.Application.level_manager;
-import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
+import static com.mygdx.game.manager.StateManager.oldState;
+import static com.mygdx.game.sfx.Sounds.*;
 
 public class MainPage extends State {
 
@@ -186,10 +187,10 @@ public class MainPage extends State {
                 Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
 
-                StateManager.oldState = StateManager.States.MAIN_MENU.name();
 
-                level_manager = new Level_Manager();
-
+                if (oldState.equals(StateManager.States.LEVEL_MANAGER.name()))
+                    level_manager = new Level_Manager();
+                oldState = StateManager.States.MAIN_MENU.name();
                 StateManager.setStates(StateManager.States.LEVEL_MANAGER);
 
                 dispose();
@@ -204,8 +205,7 @@ public class MainPage extends State {
                 break;
             }
         }
-//        shot.play();
-        LASER_HEADSET.play();
+        EAGLE.play();
         return false;
     }
 

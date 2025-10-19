@@ -90,16 +90,12 @@ public class Level1 extends Level{
 
     @Override
     public void update(){
-        for (int i = 0; i < 5; i++) {
-            world.step(1/60f, 10, 7);
-            camera.update();
-        }
+        super.update();
 
+//        for (Objeto objeto : objetos) {
+//            objeto.update();
+//        }
 
-
-        for (Objeto objeto : objetos) {
-            objeto.update();
-        }
         for (Item item : items.values())
             item.update();
     }

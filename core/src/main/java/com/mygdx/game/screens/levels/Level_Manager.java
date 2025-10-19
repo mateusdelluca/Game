@@ -97,7 +97,7 @@ public class Level_Manager extends State implements ContactListener {
 
     @Override
     public void create() {
-        reset();
+
     }
 
     @Override
@@ -210,17 +210,6 @@ public class Level_Manager extends State implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
         currentLevel.postSolve(contact, contactImpulse);
-    }
-
-    public void reset() {
-        try {
-//            for (Objeto objeto : objetos)
-//                world.destroyBody(objeto.getBody());
-//            world = new World(new Vector2(0, -10), true);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

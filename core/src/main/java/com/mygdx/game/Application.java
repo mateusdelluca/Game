@@ -43,7 +43,7 @@ public class Application extends Game {
     public void render() {
         if (currentState != States.PAUSE) {
             if (currentStateName.equals(level_manager.toString())) {
-                level_manager.update();
+//                level_manager.update();
                 level_manager.render();
             } else {
                 update();
