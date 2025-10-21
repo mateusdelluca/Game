@@ -80,7 +80,7 @@ public class Robot2_Sprites {
 
     public Sprite currentFrame(boolean useOnlyLastFrame, boolean looping, boolean facingRight){
        Sprite s = new Sprite(currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
-       s.setScale(1.5f);
+       s.setScale(1.0f);
        return s;
     }
 

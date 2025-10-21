@@ -7,12 +7,9 @@ import java.io.Serializable;
 @Getter
 public enum Animations implements Serializable {
 
-
-
-
-
-    //boy
     BOY_DEAD(new Animator(1,1,1,128,128,"boy/Dead.png")),
+    BOY_ATTACKING_SWORD(new Animator(5,5,15,128,128,"boy/Attacking_Sword2.png")),
+    BOY_SWORD(new Animator(1,1,1,128,128,"boy/Sword.png")),
     BOY_RELOADING(new Animator(3,3,1,128,128, "boy/Reloading.png")),
     BOY_JETPACK(new Animator(4,4,14,128,128, "boy/JetPack.png")),
     BOY_WALKING(new Animator(6,6, 5, 128, 128, "boy/Walking.png")),
@@ -26,15 +23,6 @@ public enum Animations implements Serializable {
     BOY_LVL_UP(new Animator(3,3,3,1, 128, 128, "boy/LevelUP.png")),
     BOY_HEADSET(new Animator(3,3,5,42, 50,"boy/Laser_HeadSet-Sheet3.png")),
     BOY_JUMPING_FRONT_LASER((new Animator(3,3,5,128, 128,"boy/Jumping_Headset_Sheet.png")));
-
-
-    //monster
-//    MONSTER1_WALKING(new Animator(4,4,1,94,128, "monster/Walking.png")),
-//    MONSTER1_FLICKERING(new Animator(4,4,3,94,128, "monster/Flickering.png")),
-//    MONSTER1_SPLIT(new Animator(3,3,6,128,128, "monster/Split.png"));
-
-
-
 
     @Getter
     public Animator animator;

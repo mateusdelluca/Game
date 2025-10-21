@@ -431,59 +431,71 @@ public class Boy extends Objeto {
             }
         } else {
             if (!beenHit) {
-                if (name.equals("BOY_SABER") && !shooting) {
-                    if (saber_taken && !hit) {
-                        setFrameCounter(0);
+                if (name.equals("BOY_ATTACKING_SWORD")) {
+                    if (animations.getAnimator().frameCounter() < 3f && onGround()){
+                        body.applyForceToCenter(new Vector2(50f, 500f), true);
                     }
-                    if (frameCounter() >= 2f) {
-                        saberTime += Gdx.graphics.getDeltaTime();
-                        if (saberTime < 0.4f)
-                            setFrameCounter(2);
-                       if (saberTime >= 0.4f)
-                           setFrameCounter(3);
-                        if (saberTime >= 0.5f) {
-                            hit = false;
-                            saberTime = 0f;
-                            animations = Animations.BOY_IDLE;
-                            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
-                        }
+                    if (animations.getAnimator().frameCounter() >= 0.5f){
+//                        animations.getAnimator().setFramePosition(0);
+//                        animations.getAnimator().resetStateTime();
+//                        animations = Animations.BOY_SWORD;
                     }
                 } else {
-                    if (name.equals("BOY_PUNCHING")) {
-                        punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-                        if (punch_box == null) {
-                            punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
-                            punch_box.setUserData("Punch Boy");
-                            punching = true;
+                    if (name.equals("BOY_SABER") && !shooting) {
+                        if (saber_taken && !hit) {
+                            setFrameCounter(0);
                         }
-
-                    } else {
-                        if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING") || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
-                        || animations == Animations.BOY_RELOADING || throwing) {
-                            if (laser){
-                                if (!isMoving()){
-                                    animations = Animations.BOY_WALKING;
-                                    animations.animator.setFrameCounter(0);
-                                }
+                        if (frameCounter() >= 2f) {
+                            saberTime += Gdx.graphics.getDeltaTime();
+                            if (saberTime < 0.4f)
+                                setFrameCounter(2);
+                            if (saberTime >= 0.4f)
+                                setFrameCounter(3);
+                            if (saberTime >= 0.5f) {
+                                hit = false;
+                                saberTime = 0f;
+                                animations = Animations.BOY_IDLE;
+                                getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y);
                             }
+                        }
+                    } else {
+                        if (name.equals("BOY_PUNCHING")) {
+                            punchingAnimationTimer += Gdx.graphics.getDeltaTime();
+                            if (punch_box == null) {
+                                punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
+                                punch_box.setUserData("Punch Boy");
+                                punching = true;
+                            }
+
                         } else {
-                            if (onGround() && !use_jetPack) {
-                                if (isMoving())
-                                    animations = Animations.BOY_WALKING;
-                                else
-                                    animations = Animations.BOY_IDLE;
-                                //                   usingOnlyLastFrame = true;
+                            if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING")
+                                || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
+                                || name.equals("BOY_SWORD")
+                                || animations == Animations.BOY_RELOADING || throwing) {
+                                if (laser) {
+                                    if (!isMoving()) {
+                                        animations = Animations.BOY_WALKING;
+                                        animations.animator.setFrameCounter(0);
+                                    }
+                                }
                             } else {
-                                if (isMoving() || use_jetPack) {
-                                    animations = Animations.BOY_JUMPING;
-                                }
-                                else {
-                                    if (!laser)
-                                        animations = Animations.BOY_JUMPING_FRONT;
+                                if (onGround() && !use_jetPack) {
+                                    if (isMoving())
+                                        animations = Animations.BOY_WALKING;
                                     else
-                                        animations = Animations.BOY_JUMPING_FRONT_LASER;
+                                        animations = Animations.BOY_IDLE;
+                                    //                   usingOnlyLastFrame = true;
+                                } else {
+                                    if (isMoving() || use_jetPack) {
+                                        animations = Animations.BOY_JUMPING;
+                                    } else {
+                                        if (!laser)
+                                            animations = Animations.BOY_JUMPING_FRONT;
+                                        else
+                                            animations = Animations.BOY_JUMPING_FRONT_LASER;
+                                    }
+                                    //                    usingOnlyLastFrame = false;
                                 }
-                                //                    usingOnlyLastFrame = false;
                             }
                         }
                     }
@@ -535,6 +547,11 @@ public class Boy extends Objeto {
             ScreenshotHelper.takeScreenshot();
             StateManager.setStates(StateManager.States.INVENTORY);
 
+        }
+
+        if (keycode == Input.Keys.X){
+            animations = Animations.BOY_ATTACKING_SWORD;
+            animations.animator.resetStateTime();
         }
 
         if (keycode == Input.Keys.Q){

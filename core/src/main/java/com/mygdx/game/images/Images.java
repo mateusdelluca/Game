@@ -103,7 +103,7 @@ public class Images implements Serializable {
             for (int i = 0; i < saves.length; i++) {
 //                saves[i] = new Texture(Gdx.files.local("saves/Save" + i + ".png"));
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         power = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
@@ -134,7 +134,7 @@ public class Images implements Serializable {
         headset_laser = laser_inventory;
         ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
         spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
-        equipped_inventory.setSize(67,74);
+        equipped_inventory.setSize(67, 74);
         itemsDraw.put("NinjaStar", ninjaStar_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
         itemsDraw.put("Saber", saber_inventory);
@@ -167,13 +167,17 @@ public class Images implements Serializable {
 //                screenshootsSaves[i] = new Sprite(t);
 //                screenshootsSaves[i].setSize(248,166);
 //            }
-        } catch(RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         pixMapBox = new Pixmap(248, 166, Pixmap.Format.RGBA8888);
         pixMapBox.setColor(Color.WHITE);
         pixMapBox.fill();
         spriteBatch = new SpriteBatch();
+
+        pixMapBox.dispose();
+        spriteBatch.dispose();
+        pauseBox.dispose();
     }
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {
