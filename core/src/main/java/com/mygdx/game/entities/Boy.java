@@ -435,10 +435,10 @@ public class Boy extends Objeto {
                     if (animations.getAnimator().frameCounter() < 3f && onGround()){
                         body.applyForceToCenter(new Vector2(50f, 500f), true);
                     }
-                    if (animations.getAnimator().frameCounter() >= 0.5f){
-//                        animations.getAnimator().setFramePosition(0);
-//                        animations.getAnimator().resetStateTime();
+                    if (animations.getAnimator().frameCounter() >= 5f){
+                        animations.getAnimator().setFramePosition(0);
 //                        animations = Animations.BOY_SWORD;
+                        body.setLinearVelocity(0f,0f);
                     }
                 } else {
                     if (name.equals("BOY_SABER") && !shooting) {
