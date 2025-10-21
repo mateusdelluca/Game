@@ -437,8 +437,14 @@ public class Boy extends Objeto {
                     }
                     if (animations.getAnimator().frameCounter() >= 5f){
                         animations.getAnimator().setFramePosition(0);
-//                        animations = Animations.BOY_SWORD;
-                        body.setLinearVelocity(0f,0f);
+                        animations.getAnimator().setFrameCounter(0);
+                        if (body.getLinearVelocity().x < velocityX) {
+                            body.setLinearVelocity(0, 0);
+                            animations = Animations.BOY_SWORD;
+                        }
+                        else{
+                            animations = Animations.BOY_WALKING;
+                        }
                     }
                 } else {
                     if (name.equals("BOY_SABER") && !shooting) {

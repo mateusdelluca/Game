@@ -9,6 +9,7 @@ public enum Animations implements Serializable {
 
     BOY_DEAD(new Animator(1,1,1,128,128,"boy/Dead.png")),
     BOY_ATTACKING_SWORD(new Animator(5,5,15,128,128,"boy/Attacking_Sword2.png")),
+    BOY_WALKING_SWORD(new Animator(6,6,5,128,128,"boy/Walking_Sword.png")),
     BOY_SWORD(new Animator(1,1,1,128,128,"boy/Sword.png")),
     BOY_RELOADING(new Animator(3,3,1,128,128, "boy/Reloading.png")),
     BOY_JETPACK(new Animator(4,4,14,128,128, "boy/JetPack.png")),
