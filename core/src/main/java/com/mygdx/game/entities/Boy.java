@@ -92,6 +92,7 @@ public class Boy extends Objeto {
     public static boolean lvlUP;
     private int lvlUpCounterFrames;
     float timerLvlUP;
+    private boolean usingSword = true;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -432,19 +433,14 @@ public class Boy extends Objeto {
         } else {
             if (!beenHit) {
                 if (name.equals("BOY_ATTACKING_SWORD")) {
+                    usingSword = true;
                     if (animations.getAnimator().frameCounter() < 3f && onGround()){
-                        body.applyForceToCenter(new Vector2(50f, 500f), true);
+                        body.applyForceToCenter(new Vector2(80f, 500f), true);
                     }
                     if (animations.getAnimator().frameCounter() >= 5f){
                         animations.getAnimator().setFramePosition(0);
                         animations.getAnimator().setFrameCounter(0);
-                        if (body.getLinearVelocity().x < velocityX) {
-                            body.setLinearVelocity(0, 0);
-                            animations = Animations.BOY_SWORD;
-                        }
-                        else{
-                            animations = Animations.BOY_WALKING;
-                        }
+                        animations = Animations.BOY_WALKING_SWORD;
                     }
                 } else {
                     if (name.equals("BOY_SABER") && !shooting) {
@@ -476,7 +472,7 @@ public class Boy extends Objeto {
                         } else {
                             if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING")
                                 || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
-                                || name.equals("BOY_SWORD")
+                                || name.equals("BOY_SWORD") || name.equals("BOY_WALKING_SWORD")
                                 || animations == Animations.BOY_RELOADING || throwing) {
                                 if (laser) {
                                     if (!isMoving()) {
@@ -486,8 +482,11 @@ public class Boy extends Objeto {
                                 }
                             } else {
                                 if (onGround() && !use_jetPack) {
-                                    if (isMoving())
+                                    if (isMoving()) {
                                         animations = Animations.BOY_WALKING;
+                                        if (usingSword)
+                                            animations = Animations.BOY_WALKING_SWORD;
+                                    }
                                     else
                                         animations = Animations.BOY_IDLE;
                                     //                   usingOnlyLastFrame = true;
@@ -555,10 +554,7 @@ public class Boy extends Objeto {
 
         }
 
-        if (keycode == Input.Keys.X){
-            animations = Animations.BOY_ATTACKING_SWORD;
-            animations.animator.resetStateTime();
-        }
+
 
         if (keycode == Input.Keys.Q){
             ScreenshotHelper.takeScreenshot();
@@ -595,6 +591,8 @@ public class Boy extends Objeto {
             if (!beenHit && !shooting && !use_jetPack && !mortal && mortalSaber) {
                 animations = Animations.BOY_WALKING;
             }
+            if (usingSword)
+                animations = Animations.BOY_WALKING_SWORD;
             usingOnlyLastFrame = false;
             looping = true;
         }
@@ -619,6 +617,8 @@ public class Boy extends Objeto {
                 body.getLinearVelocity().y);
             if (!beenHit && !shooting && !use_jetPack && !mortal && !mortalSaber)
                 animations = Animations.BOY_IDLE;
+            if (usingSword)
+                animations = Animations.BOY_SWORD;
 
         }
         if (keycode == Input.Keys.SPACE && use_jetPack) {
@@ -685,7 +685,7 @@ public class Boy extends Objeto {
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
                 } else {
-                    if (!shooting && !beenHit && !saber_taken && !laser) { //punches
+                    if (!shooting && !beenHit && !saber_taken && !laser && !usingSword) { //punches
                         punchingAnimationTimer = 0f;
                         animations = Animations.BOY_PUNCHING;
                         JUMP.play();
@@ -694,6 +694,10 @@ public class Boy extends Objeto {
                         looping = false;
                         animations.animator.resetStateTime();
                     } else{
+                        if (usingSword){
+                            animations = Animations.BOY_ATTACKING_SWORD;
+                            animations.animator.resetStateTime();
+                        } else{
                         if (saber_taken && PowerBar.sp_0 >= 20f) {  //hits
                             hit = true;
                             PowerBar.sp_0 -= 20f;
@@ -712,6 +716,7 @@ public class Boy extends Objeto {
                                     LASER_HEADSET.play();
                                     PowerBar.power -= char_features.getPowerSpent();
                                 }
+                            }
                         }
                     }
                 }
