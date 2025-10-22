@@ -92,7 +92,7 @@ public class Boy extends Objeto {
     public static boolean lvlUP;
     private int lvlUpCounterFrames;
     float timerLvlUP;
-    private boolean usingSword = true;
+    private boolean usingSword;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -305,7 +305,7 @@ public class Boy extends Objeto {
             rifle.update();
         if (punching)
             punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-        if (punchingAnimationTimer >= 0.3f){
+        if (punchingAnimationTimer >= 1.05f){
             animations = Animations.BOY_IDLE;
             punchingAnimationTimer = 0f;
             punch_box.setTransform(new Vector2(-2000, -2000), 0);
@@ -468,7 +468,6 @@ public class Boy extends Objeto {
                                 punch_box.setUserData("Punch Boy");
                                 punching = true;
                             }
-
                         } else {
                             if (name.equals("BOY_WALKING") || name.equals("BOY_SHOOTING_AND_WALKING")
                                 || name.equals("BOY_RELOADING") || name.equals("BOY_JETPACK")
@@ -691,8 +690,9 @@ public class Boy extends Objeto {
                         JUMP.play();
                         HIYAH.play();
                         usingOnlyLastFrame = false;
-                        looping = false;
+                        looping = true;
                         animations.animator.resetStateTime();
+                        body.applyForceToCenter(1_000, 0, true);
                     } else{
                         if (usingSword){
                             animations = Animations.BOY_ATTACKING_SWORD;
