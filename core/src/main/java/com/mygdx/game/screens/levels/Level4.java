@@ -141,7 +141,7 @@ public class Level4 extends Level{
             if (objeto != null)
                 objeto.render(spriteBatch);
         }
-        powerBar.render(spriteBatch, camera, boy);
+        powerBar.render(spriteBatch, camera);
         spriteBatch.end();
         box2DDebugRenderer.render(world, camera.combined);
     }

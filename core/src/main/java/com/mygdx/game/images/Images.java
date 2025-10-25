@@ -69,6 +69,8 @@ public class Images implements Serializable {
     public static Sprite stats, atributes;
     public static Sprite power;
 
+    public static Sprite ball;
+
     public Images() {
         mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
         mortal_saber = new Sprite(new Texture(Gdx.files.internal("boy/Mortal_Saber.png")));
@@ -98,7 +100,7 @@ public class Images implements Serializable {
         pauseBox = new Texture(Gdx.files.internal("PauseBox.png"));
         throwNinjaStar1 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar.png")));
         throwNinjaStar2 = new Sprite(new Texture(Gdx.files.internal("boy/ThrowNinjaStar2.png")));
-
+        ball = new Sprite(new Texture(Gdx.files.internal("items/Ball.png")));
         try {
             for (int i = 0; i < saves.length; i++) {
 //                saves[i] = new Texture(Gdx.files.local("saves/Save" + i + ".png"));
@@ -147,6 +149,7 @@ public class Images implements Serializable {
         itemsDraw_minis.put("Red Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/HP_Potion_mini.png"))));
         itemsDraw_minis.put("Green Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/Green_Potion_mini.png"))));
         itemsDraw_minis.put("Cartridge", new Sprite(new Texture(Gdx.files.internal("items/Minis/Cartridge_mini.png"))));
+        itemsDraw_minis.put("Ball", new Sprite(ball));
         inventory = new Sprite(new Texture(Gdx.files.internal("items/Inventory_clear.png")));
 
 
@@ -178,6 +181,7 @@ public class Images implements Serializable {
         pixMapBox.dispose();
         spriteBatch.dispose();
         pauseBox.dispose();
+
     }
 
 //    public static BufferedImage rotateImage(BufferedImage originalImage, double degrees) {

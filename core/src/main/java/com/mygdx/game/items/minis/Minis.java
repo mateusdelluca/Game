@@ -49,7 +49,7 @@ public class Minis extends Objeto{
     }
 
     private String random_name(){
-        int rand = new Random().nextInt(4);
+        int rand = new Random().nextInt(5);
         switch (rand){
             case 0:{
                 return "Blue Potion";
@@ -62,6 +62,9 @@ public class Minis extends Objeto{
             }
             case 3:{
                 return "Cartridge";
+            }
+            case 4:{
+                return "Ball";
             }
         } return "Red Potion";
     }
@@ -124,8 +127,9 @@ public class Minis extends Objeto{
                 Rifle.addCartridge = true;
             if (name.equals("Blue Potion"))
                 PowerBar.sp_0 += recoveryPowerBluePotion;
-            if (name.equals("Red Potion"))
+            if (name.equals("Red Potion")){
                 PowerBar.hp_0 += recoveryPowerRedPotion;
+                }
             if (name.equals("Green Potion"))
                 PowerBar.power += recoveryPowerGreenPotion;
         }

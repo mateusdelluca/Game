@@ -21,7 +21,7 @@ public class Monster1 extends Objeto implements Serializable {
     public static final float WIDTH = 94, HEIGHT = 128;
     public static float BOX_WIDTH = 78f, BOX_HEIGHT = 118f;
 //    public Animations animations = Animations.MONSTER1_WALKING;
-    private boolean usingOnlyLastFrame, noLooping, facingRight;
+    private boolean usingOnlyLastFrame, looping, facingRight;
     private Vector2 dimensions = new Vector2(78f, 118f);
     private float flickering_deltaTime;
 
@@ -36,9 +36,10 @@ public class Monster1 extends Objeto implements Serializable {
 
     public Monster1_Sprites animations = new Monster1_Sprites();
     private Boy boy;
-    private float attacking_duration;
+    private float attacking_time;
     private boolean attackOnce;
-    private Body attack_box;
+    private Body[] attack_box = new Body[500];
+    private int index;
     private float attackOnceTimer;
 
     public Monster1(Vector2 position, String userData, Boy boy){
@@ -52,20 +53,21 @@ public class Monster1 extends Objeto implements Serializable {
 
     public void render(SpriteBatch spriteBatch){
         if (visible) {
-            if (isAttacking()) {
-                attacking_duration += Gdx.graphics.getDeltaTime();
-                if (attacking_duration >= animations.attacking.timeOfAnimation()) {
-                    attacking_duration = 0f;
-                    animations.attacking.resetStateTime();
-                    animations.changeAnimation("MONSTER1_WALKING");
-                    attackOnce = true;
-                    attack_box.setTransform(20_000, 20_000, 0);
+            if (!beenHit) {
+                if (isAttacking()) {
+                    attacking_time += Gdx.graphics.getDeltaTime();
+                    if (attacking_time >= 3/12f) {
+                        attacking_time = 0f;
+                        animations.attacking.resetStateTime();
+                        animations.changeAnimation("MONSTER1_WALKING");
+                        attackOnce = true;
+                    }
                 }
             }
-            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame(usingOnlyLastFrame, !noLooping, facingRight));
+            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame0(usingOnlyLastFrame, looping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             if (animations.nameOfAnimation.equals("MONSTER1_ATTACKING")) {
-                float x = body.getPosition().x -256/2f - BOX_WIDTH/2f;
+                float x = body.getPosition().x - 256 / 2f - BOX_WIDTH / 2f;
                 sprite.setPosition(x, sprite.getY());
             }
             sprite.draw(spriteBatch);
@@ -81,18 +83,17 @@ public class Monster1 extends Objeto implements Serializable {
         if (boy != null && boy.getBody() != null && body != null) {
             if (!isBeenHit()) {
                 if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
-                    if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 300) {
+                    if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 200) {
                        if (isntAttacking() && !attackOnce) {
                            attack();
-
                        }
-                        if (boy.getBody().getPosition().x < body.getPosition().x) {
-                            facingRight = false;
-                            getBody().applyForce(new Vector2(-5_000, 0), boy.getBody().getWorldCenter(), true);
-                        } else {
-                            getBody().applyForce(new Vector2(5_000, 0), boy.getBody().getWorldCenter(), true);
-                            facingRight = true;
-                        }
+                       if (boy.getBody().getPosition().x < body.getPosition().x) {
+                           facingRight = false;
+                           getBody().applyForce(new Vector2(-5_000, 0), boy.getBody().getWorldCenter(), true);
+                       } else {
+                           getBody().applyForce(new Vector2(5_000, 0), boy.getBody().getWorldCenter(), true);
+                           facingRight = true;
+                       }
                     }
                 }
             }
@@ -103,7 +104,7 @@ public class Monster1 extends Objeto implements Serializable {
             }
 
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
-                noLooping = true;
+                looping = false;
                 for (Fixture f : getBody().getFixtureList()) {
                     f.setSensor(true);
                 }
@@ -141,6 +142,15 @@ public class Monster1 extends Objeto implements Serializable {
             split = true;
             dropItems();
         }
+        if (isntAttacking()) {
+            if (animations.attacking.frameCounter(animations.currentAnimation.stateTime) > 1 / 4f) {
+                for (Body attack_box : attack_box)
+                    if (attack_box != null) {
+                        attack_box.setTransform(25_000, 25_000, 0);
+                }
+            }
+        }
+
     }
 
     private boolean isntAttacking(){
@@ -154,7 +164,7 @@ public class Monster1 extends Objeto implements Serializable {
     private void attack(){
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
         animations.changeAnimation("MONSTER1_ATTACKING");
-        attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
+        attack_box[index++] = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
             body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f,40f),
             BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
     }

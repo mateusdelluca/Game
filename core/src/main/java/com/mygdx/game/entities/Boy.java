@@ -28,8 +28,7 @@ import lombok.Setter;
 import static com.badlogic.gdx.Gdx.input;
 import static com.mygdx.game.entities.Character_Features.velocityX;
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.screens.Stats.char_features;
-import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.screens.Stats.*;
 import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
@@ -68,8 +67,7 @@ public class Boy extends Objeto {
     private float chargingSPTimer2;
     private float chargingSPTimer3;
     private boolean chargingSP;
-    @Getter
-    private Rifle rifle;
+    public static Rifle rifle;
     private Vector2 bodyPosition;
 
     public static String nameOfAnimation;
@@ -142,7 +140,7 @@ public class Boy extends Objeto {
                         if (!laser) {
                             legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.getFrame(0));
                             if (isMoving()) //when he is moving and didn't active the jetpack
-                                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
+                                legs = new Sprite(Animations.BOY_SHOOTING_AND_WALKING.animator.currentSpriteFrame0(usingOnlyLastFrame, looping, facingLeft));
                             legs.setPosition(body.getPosition().x, body.getPosition().y);
                         }
                         if (shooting && !laser) {    //when actives the gun and shooting and he is not moving and he has not been hit
@@ -247,13 +245,13 @@ public class Boy extends Objeto {
                 }
             }
         }
+        animations.animator.updateStateTime2();
         if (!laser_rail.isEmpty()) {
             for (Laser laser : laser_rail)
                 laser.render(spriteBatch);
         }
         for (Minis m : minis)
             m.render(spriteBatch);
-
         if (Boy.lvlUP) {
             Sprite lvlUP = new Sprite(Animations.BOY_LVL_UP.animator.currentSpriteFrame(false,false));
             lvlUP.setPosition(body.getPosition().x, body.getPosition().y);
@@ -277,7 +275,7 @@ public class Boy extends Objeto {
         sprite.setOriginCenter();
 //
         sprite.setPosition(itemPosition.x, itemPosition.y);
-        if (degrees > 91f && degrees < 181f) {
+        if (degrees >= 90f && degrees <= 180f) {
             sprite.setRotation(-Math.abs(180 - Math.abs(degrees)));
 //            legs.setFlip(true, false);
             jetPackSprite.setFlip(true, false);
@@ -301,15 +299,18 @@ public class Boy extends Objeto {
     public void update(){
         super.update();
         char_features.update();
+        body.getFixtureList().get(0).setDensity(char_features.getStats_values()[STR] * 0.8f);
         if (rifle != null)
             rifle.update();
         if (punching)
             punchingAnimationTimer += Gdx.graphics.getDeltaTime();
-        if (punchingAnimationTimer >= 1.05f){
+        if (punchingAnimationTimer > 2/3f) {
             animations = Animations.BOY_IDLE;
             punchingAnimationTimer = 0f;
-            punch_box.setTransform(new Vector2(-2000, -2000), 0);
-            punch_box = null;
+            if (punch_box != null){
+                punch_box.setTransform(new Vector2(-2000, -2000), 0);
+                punch_box = null;
+            }
             punching = false;
         }
         if (onGround) {
@@ -339,7 +340,6 @@ public class Boy extends Objeto {
             flickering_time = 0f;
             beenHit = false;
         }
-
        aim();  //the commands and precision of pointing and shoot
         if (Math.abs(getBody().getLinearVelocity().y) < 0.2f){
             secondJump = 0;
@@ -432,15 +432,19 @@ public class Boy extends Objeto {
             }
         } else {
             if (!beenHit) {
-                if (name.equals("BOY_ATTACKING_SWORD")) {
+                if (name.equals("BOY_ATTACKING_SWORD_FIRE")) {
                     usingSword = true;
-                    if (animations.getAnimator().frameCounter() < 3f && onGround()){
-                        body.applyForceToCenter(new Vector2(80f, 500f), true);
+                    if (animations.getAnimator().frameCounter() == 5f && onGround()){
+                        body.applyForceToCenter(new Vector2(10_000f, 1_000f), true);
+                        punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10,
+                            body.getPosition().y + 50f), new Vector2(10f, 30f), BodyDef.BodyType.StaticBody, true, "Punch Boy", 50f);
                     }
-                    if (animations.getAnimator().frameCounter() >= 5f){
+                    if (animations.animator.frameCounter(animations.getAnimator().stateTime2) > 7f){
+                        animations.getAnimator().setStateTime(0f);
                         animations.getAnimator().setFramePosition(0);
                         animations.getAnimator().setFrameCounter(0);
                         animations = Animations.BOY_WALKING_SWORD;
+                        punch_box.setTransform(30_000, 30_000, 0);
                     }
                 } else {
                     if (name.equals("BOY_SABER") && !shooting) {
@@ -461,10 +465,10 @@ public class Boy extends Objeto {
                             }
                         }
                     } else {
-                        if (name.equals("BOY_PUNCHING")) {
+                        if (name.equals("BOY_PUNCHING_FIRE")) {
                             punchingAnimationTimer += Gdx.graphics.getDeltaTime();
                             if (punch_box == null) {
-                                punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10, body.getPosition().y + 50f), new Vector2(20f, 50f), BodyDef.BodyType.StaticBody, false);
+                                punch_box = BodiesAndShapes.box(new Vector2(!flip0 ? body.getPosition().x + 110 : body.getPosition().x - 10, body.getPosition().y + 50f), new Vector2(10f, 30f), BodyDef.BodyType.StaticBody, false);
                                 punch_box.setUserData("Punch Boy");
                                 punching = true;
                             }
@@ -684,18 +688,19 @@ public class Boy extends Objeto {
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
                 } else {
-                    if (!shooting && !beenHit && !saber_taken && !laser && !usingSword) { //punches
+                    if (!shooting && !beenHit && !saber_taken && !laser && !usingSword && !punching) { //punches
                         punchingAnimationTimer = 0f;
-                        animations = Animations.BOY_PUNCHING;
+                        animations = Animations.BOY_PUNCHING_FIRE;
                         JUMP.play();
                         HIYAH.play();
                         usingOnlyLastFrame = false;
                         looping = true;
                         animations.animator.resetStateTime();
-                        body.applyForceToCenter(1_000, 0, true);
+                        punching = true;
+//                        body.applyForceToCenter(1_000, 0, true);
                     } else{
                         if (usingSword){
-                            animations = Animations.BOY_ATTACKING_SWORD;
+                            animations = Animations.BOY_ATTACKING_SWORD_FIRE;
                             animations.animator.resetStateTime();
                         } else{
                         if (saber_taken && PowerBar.sp_0 >= 20f) {  //hits
@@ -722,7 +727,7 @@ public class Boy extends Objeto {
                 }
             }
         }
-        if (button == Input.Buttons.RIGHT) {
+//        if (button == Input.Buttons.RIGHT) {
 //            counterWeaponTaken++;
 //            switch(counterWeaponTaken){
 //                case 1:{
@@ -769,7 +774,7 @@ public class Boy extends Objeto {
 //                    break;
 //                }
 //            }
-        }
+//        }
     }
 
     public void setFrameCounter(int frame){

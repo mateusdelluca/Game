@@ -1,5 +1,6 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -23,8 +24,9 @@ public class Level2 extends Level{
         super();
         monsters1.clear();
         objetos.clear();
-        boy.getBody().setTransform(new Vector2(100, 200), 0);
         boy.setViewport(viewport);
+        boy.getBody().setTransform(new Vector2(100, 200), 0);
+        camera.update();
         ninjaRope = new NinjaRope(boy.getBody());
         mouse = new Mouse(boy.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));
@@ -35,6 +37,8 @@ public class Level2 extends Level{
         objetos.add(boy);
         objetos.add(jack);
         objetos.addAll(monsters1.values());
+        items.put("Rifle", rifle);
+        items.get("Rifle").updateItem();
     }
 
 
@@ -69,9 +73,8 @@ public class Level2 extends Level{
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
 //        boy.render(spriteBatch);
-        powerBar.render(spriteBatch, camera, boy);
+        powerBar.render(spriteBatch, camera);
         spriteBatch.end();
-
         box2DDebugRenderer.render(world, camera.combined);
     }
 
@@ -80,6 +83,8 @@ public class Level2 extends Level{
         super.update();
         for (Objeto o : objetos)
             o.update();
+        for (Item item : items.values())
+            item.update();
     }
 
     @Override

@@ -151,7 +151,7 @@ public class Level3 extends Level{
         for (Objeto fan : fans){
             fan.render(spriteBatch);
         }
-        powerBar.render(spriteBatch, camera, boy);
+        powerBar.render(spriteBatch, camera);
 //        boy.render(spriteBatch);
 //        powerBar.render(spriteBatch, camera, boy);
         spriteBatch.end();

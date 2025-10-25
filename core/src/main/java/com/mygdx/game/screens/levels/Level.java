@@ -75,6 +75,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
+    public static Rifle rifle = new Rifle(new Vector2(500, 400));
+
 //    public String polygons_String = "";
 
     public Level() throws Exception {
@@ -595,7 +597,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         boy.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
-        mouse.mouseMoved(screenX, screenY);
+//        mouse.mouseMoved(screenX, screenY);
         return false;
     }
 

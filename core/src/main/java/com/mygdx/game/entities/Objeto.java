@@ -22,8 +22,8 @@ import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
 
-    @Getter
     @Setter
+    @Getter
     protected transient Body body;
 //    protected PolygonShape polygonShape;
 //    protected FixtureDef fixtureDef;
@@ -275,5 +275,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public boolean onGround(){
         return Math.abs(body.getLinearVelocity().y) <= 0.1f;
     }
+
 
 }

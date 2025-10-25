@@ -72,12 +72,12 @@ public class Robot extends Objeto{
         }
         if (nameAnim().equals("punching")){
             timer2 += Gdx.graphics.getDeltaTime();
-            if (animCounter(timer2) >= 5f){
+            if (animCounter(timer2) >= 0.6f){
                 timer2 = 0f;
                 if (punch_box != null)
                     punch_box.setTransform(22_000, 22_000, 0);
             }
-            if (animCounter(timer2) >= 4f && animCounter(timer2) < 5f){
+            if (animCounter(timer2) >= 0.4f && animCounter(timer2) < 0.6f){
                 punch_box = BodiesAndShapes.box(new Vector2(facingRight ? body.getPosition().x + 110 : body.getPosition().x - 30,
                     body.getPosition().y + 20f), new Vector2(20f, 20f), BodyDef.BodyType.StaticBody, true, " Enemy", 50f);
             }

@@ -62,7 +62,7 @@ public class Robot2_Sprites {
         if (isFinished()) {
             resetStateTime();
             //TODO: currentAnim = "idle"
-            currentAnim = "punching";
+            currentAnim = "idle";
             changeAnimation(currentAnim);
         }
     }

@@ -18,7 +18,6 @@ import com.mygdx.game.manager.StateManager;
 import java.util.TreeMap;
 
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.sfx.Sounds.EAGLE;
 
 public class Stats extends State {
 
@@ -99,7 +98,7 @@ public class Stats extends State {
         //TODO: analizar qual melhor maneira para atualizar valor de hp devido o aumento em vitalidade
         // e como desenhar na tela em tempo que abre o stage Stats
 
-        char_features.update();
+//        char_features.update();
     }
 
     @Override

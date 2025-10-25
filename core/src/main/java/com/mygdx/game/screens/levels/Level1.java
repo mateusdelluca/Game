@@ -36,7 +36,8 @@ public class Level1 extends Level{
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(500, 400)));
+
+        items.put("Rifle", rifle);
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
@@ -46,6 +47,7 @@ public class Level1 extends Level{
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
         objetos.add(new Robot(new Vector2(700, 300), boy));
+        objetos.add(new Ball(new Vector2(500,750)));
     }
 
     @Override
@@ -82,7 +84,7 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        powerBar.render(spriteBatch, camera, boy);
+        powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 
         box2DDebugRenderer.render(world, camera.combined);
