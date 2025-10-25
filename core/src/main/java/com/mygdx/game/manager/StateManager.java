@@ -137,10 +137,10 @@ public class StateManager extends Game {
 
     public static void setStates(States newState) {
         try {
-            if (newState.name().equals(level_manager.toString()))
-                oldState = level_manager.toString();
-            else
-                oldState = currentState.name();
+//            if (newState.name().equals(level_manager.toString()))
+//                oldState = level_manager.toString();
+//            else
+            oldState = currentState.name();
             currentState = newState;
             currentStateName = currentState.name();
             if (currentStateName.equals(level_manager.toString())) {

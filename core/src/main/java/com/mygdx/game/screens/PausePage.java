@@ -15,6 +15,8 @@ import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 
+import static com.mygdx.game.Application.level_manager;
+import static com.mygdx.game.images.Images.printScreen;
 import static com.mygdx.game.system.ScreenshotHelper.sprite;
 
 public class PausePage extends State {
@@ -101,11 +103,11 @@ public class PausePage extends State {
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        StateManager.oldState.render();
-        spriteBatch.begin();
+        spriteBatch.begin();printScreen.draw(spriteBatch);
         if (StateManager.oldState.equals("LEVEL") || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")
             || StateManager.oldState.equals("INVENTORY")) {
             PausePage.pause = true;
-//            StateManager.States.LEVEL.render();
+
             if (sprite != null)
                 sprite.draw(spriteBatch);
         }

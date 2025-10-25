@@ -17,7 +17,7 @@ public class Ball extends Objeto {
 
     public Ball(Vector2 position){
         super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.circle(position, WIDTH/2f, BodyDef.BodyType.DynamicBody, false, this.toString(), 0.15f);
+        body = BodiesAndShapes.circle(position, WIDTH/2f, BodyDef.BodyType.DynamicBody, false, this.toString(), 0.1f);
         body.setTransform(position, 0);
         body.getFixtureList().get(0).setRestitution(1f);
     }

@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.images.Images2;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.levels.Level_Manager;
@@ -188,11 +189,10 @@ public class MainPage extends State {
                 Sounds.LEVEL1.setLooping(true);
 
 
-                if (oldState.equals(StateManager.States.LEVEL_MANAGER.name()))
+//                if (oldState.equals(StateManager.States.LEVEL_MANAGER.name()))
                     level_manager = new Level_Manager();
                 oldState = StateManager.States.MAIN_MENU.name();
                 StateManager.setStates(StateManager.States.LEVEL_MANAGER);
-
                 dispose();
                 break;
             }

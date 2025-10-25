@@ -90,7 +90,7 @@ public class Boy extends Objeto {
     public static boolean lvlUP;
     private int lvlUpCounterFrames;
     float timerLvlUP;
-    private boolean usingSword;
+    public static boolean usingSword;
 
     public Boy(Vector2 bodyPosition, Viewport viewport){
         super(WIDTH, HEIGHT);

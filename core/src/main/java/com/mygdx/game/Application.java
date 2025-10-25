@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.levels.Level_Manager;
 
 import static com.mygdx.game.manager.StateManager.*;
@@ -52,8 +53,7 @@ public class Application extends Game {
             }
         }
         else {
-            level_manager.render();
-            States.PAUSE.render();
+            PausePage.pause = true;
             pause();
         }
     }
@@ -64,6 +64,8 @@ public class Application extends Game {
 //            level_manager.pause();
 //        else
 //            currentState.pause(); TODO: verificar se este método é o que está travando o leitor de teclas da classe Inventory
+        level_manager.pause();
+        States.PAUSE.render();
     }
 
     @Override

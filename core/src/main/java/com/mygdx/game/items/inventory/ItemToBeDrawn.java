@@ -145,6 +145,14 @@ public class ItemToBeDrawn implements Item {
         if (contains[index] && click >= 2) {
             equipped[index] = !equipped[index];
             System.out.println(equipped[index]);
+            if (name.equals("Sword")){
+                Boy.usingSword = equipped[index];
+                Boy.shooting = false;
+                Boy.saber_taken = false;
+                NinjaRope.isActive2 = false;
+                Boy.throwing = false;
+                Boy.ropeShoot = false;
+            } else{
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];
@@ -162,18 +170,18 @@ public class ItemToBeDrawn implements Item {
                     Boy.shooting = false;
                     NinjaRope.isActive2 = false;
                     Boy.ropeShoot = false;
-                } else{
+                } else {
                     if (name.equals("JetPack"))
                         Boy.use_jetPack = equipped[index];
-                    else{
-                        if(name.equals("Saber")){
-                           Boy.saber_taken = equipped[index];
-                           Boy.throwing = false;
-                           Rifle.showingNumbBullets = false;
-                           NinjaRope.isActive2 = false;
+                    else {
+                        if (name.equals("Saber")) {
+                            Boy.saber_taken = equipped[index];
+                            Boy.throwing = false;
+                            Rifle.showingNumbBullets = false;
+                            NinjaRope.isActive2 = false;
                             Boy.ropeShoot = false;
-                        } else{
-                            if(name.equals("NinjaRope")){
+                        } else {
+                            if (name.equals("NinjaRope")) {
                                 NinjaRope.isActive2 = equipped[index];
                                 Boy.ropeShoot = equipped[index];
                             } else {
@@ -190,8 +198,8 @@ public class ItemToBeDrawn implements Item {
                                 }
                             }
                         }
+                     }
                     }
-
                 }
             }
             click = 0;

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Background;
+import com.mygdx.game.images.Images2;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
@@ -75,19 +76,19 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
-    public static Rifle rifle = new Rifle(new Vector2(500, 400));
+    public static Rifle rifle;
 
 //    public String polygons_String = "";
 
     public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
-
+        new Images2();
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
         viewport = new ScreenViewport(camera);
         viewport.update(Level.WIDTH, Level.HEIGHT);
-
+        rifle = new Rifle(new Vector2(500, 400));
         init();
 
         powerBar = new PowerBar();
@@ -149,8 +150,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        if (!StateManager.oldState.equals("PAUSE"))
-            update();
+//        if (!StateManager.oldState.equals(StateManager.States.PAUSE.name()))
+//        update();
         camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;

@@ -55,8 +55,6 @@ public class Images implements Serializable {
     public static Sprite mortalSprite, mortal_saber;
     private final Sprite laser_inventory;
     public static Sprite laser_rail;
-
-    public SpriteBatch spriteBatch;
     public static Sprite level4;
     public static Sprite[] sprites = new Sprite[8];
     public static Sprite printScreen;
@@ -68,7 +66,7 @@ public class Images implements Serializable {
     public static Sprite spaceItem;
     public static Sprite stats, atributes;
     public static Sprite power;
-
+    public static Sprite sword_inventory;
     public static Sprite ball;
 
     public Images() {
@@ -108,41 +106,19 @@ public class Images implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        power = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
-        jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
-        girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
-        shoot = new Sprite(new Texture(Gdx.files.internal("boy/Shoot.png")));
-        shooting1 = new Sprite(new Texture(Gdx.files.internal("boy/Shooting1.png")));
-        shooting2 = new Sprite(new Texture(Gdx.files.internal("boy/Shooting2.png")));
-        ninjaRope_shoot = new Sprite(new Texture(Gdx.files.internal("boy/NinjaRope.png")));
-        rope = new Sprite(new Texture(Gdx.files.internal("boy/NinjaRope2.png")));
-        leaf = new Texture(Gdx.files.internal("boy/Leaf.png"));
-        fire = new Animator(4, 4, 5, 32, 55, "fire/fire.png");
-        fan = new Animator(4, 4, 15, 76, 93, "fan/Fan.png");
-        fan2 = new Animator(4, 4, 15, 76, 79, "fan/Fan2.png");
-        rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
-        jetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack.png")));
-        aim = new Sprite(Images.shoot);
-        spriteJetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack2.png")));
-        ninjaStar = new Texture(Gdx.files.internal("objects/NinjaStar.png"));
-        saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
-        rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));
-        ninjaStar_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaStar_75x85.png")));
-        jetPack_inventory = new Sprite(new Texture(Gdx.files.internal("items/JetPack_75x85.png")));
-        equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
-        ninjaRope_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85.png")));
-        laser_inventory = new Sprite(new Texture(Gdx.files.internal("items/Laser_Headset_75x85.png")));
 //        laser_front = new Sprite(new Texture(Gdx.files.internal("boy/Jumping_Headset.png")));
+        laser_inventory = new Sprite(new Texture(Gdx.files.internal("items/Laser_Headset_75x85.png")));
         headset_laser = laser_inventory;
         ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
         spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
-        equipped_inventory.setSize(67, 74);
+
         itemsDraw.put("NinjaStar", ninjaStar_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("JetPack", jetPack_inventory);
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
         itemsDraw.put("Laser_Headset", laser_inventory);
+        itemsDraw.put("Sword", sword_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
 
         itemsDraw_minis.put("Blue Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/SP_Potion_mini.png"))));
@@ -176,10 +152,8 @@ public class Images implements Serializable {
         pixMapBox = new Pixmap(248, 166, Pixmap.Format.RGBA8888);
         pixMapBox.setColor(Color.WHITE);
         pixMapBox.fill();
-        spriteBatch = new SpriteBatch();
 
         pixMapBox.dispose();
-        spriteBatch.dispose();
         pauseBox.dispose();
 
     }

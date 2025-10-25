@@ -76,7 +76,7 @@ public class Inventory extends State {
         }
         if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
             for (ItemToBeDrawn i2 : itemsToBeDrawn) {
-                if(i2 == i1) {
+                if(i2.getName().equals(i1.getName())) {
                     continue;
                 }
                 itemsToBeDrawn.add(i1);
