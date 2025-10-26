@@ -17,10 +17,13 @@ public class Sword extends Objeto implements Item{
     public static final float WIDTH = Images.sword_inventory.getWidth() * multiply,
         HEIGHT = Images.sword_inventory.getHeight() * multiply;
 
+    private float angle;
+
     public Sword(Vector2 position){
         super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.circle(position, WIDTH/2f, BodyDef.BodyType.DynamicBody, true, this.toString() + " Boy", 1f);
+        body = BodiesAndShapes.circle(position, WIDTH/2f, BodyDef.BodyType.StaticBody, true, this.toString() + " Boy", 1f);
         body.setTransform(position, 0);
+        visible = true;
     }
 
 
@@ -29,7 +32,7 @@ public class Sword extends Objeto implements Item{
         if (visible && body != null) {
             Sprite sprite = new Sprite(Images.sword_inventory);
             sprite.setPosition(body.getPosition().x - WIDTH/2f, body.getPosition().y - HEIGHT/2f);
-            sprite.rotate(1f);
+            sprite.rotate(angle++);
             sprite.draw(s);
         }
     }

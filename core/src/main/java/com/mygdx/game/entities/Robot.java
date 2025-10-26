@@ -97,14 +97,14 @@ public class Robot extends Objeto{
         changeAnimation("falling");
         looping = false;
         body.applyForceToCenter(new Vector2(facingRight ? -100f : 100f, 10), true);
-        if (sprites.falling.ani_finished() && onGround())
+        if (sprites.falling.isAnimFinished() && onGround())
             visible = false;
 //        body.setTransform(body.getPosition(), facingRight ? (float) Math.PI/2f : (float) -Math.PI/2f);
     }
 
     private void fire(){
         if (sprites.currentAnim.equals("fire")) {
-            if (sprites.currentAnimation.ani_finished()) {
+            if (sprites.currentAnimation.isAnimFinished()) {
                 laser_rail.add(new Laser(
                     new Vector2(!facingRight ? (getBody().getPosition().x) : (getBody().getPosition().x - WIDTH),
                         getBody().getPosition().y + (HEIGHT / 4f)),

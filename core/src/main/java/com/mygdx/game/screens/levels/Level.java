@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Background;
-import com.mygdx.game.images.Images2;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
@@ -82,7 +81,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public Level() throws Exception {
         // Constructs a new OrthographicCamera, using the given viewport width and height
-        new Images2();
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();

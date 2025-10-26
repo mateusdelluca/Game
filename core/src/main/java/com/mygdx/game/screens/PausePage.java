@@ -104,7 +104,7 @@ public class PausePage extends State {
         spriteBatch.setProjectionMatrix(camera.combined);
 //        StateManager.oldState.render();
         spriteBatch.begin();printScreen.draw(spriteBatch);
-        if (StateManager.oldState.equals("LEVEL") || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")
+        if (StateManager.oldState.equals(level_manager.toString()) || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")
             || StateManager.oldState.equals("INVENTORY")) {
             PausePage.pause = true;
 

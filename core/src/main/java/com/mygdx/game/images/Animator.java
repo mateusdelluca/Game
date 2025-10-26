@@ -9,14 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
 import lombok.Getter;
-
-import java.io.Serializable;
+import lombok.Setter;
 
 public class Animator{
-
+    @Getter
     private int numColumns, numRows, numFrames, width, height;  //rows and columns of the sprite sheet
     private float fps;
     private String path;
@@ -25,8 +23,9 @@ public class Animator{
     public Texture spriteSheet;
     public Sprite sprite[];
     public Sprite spriteInverse[];
+    @Setter
     @Getter
-    public float stateTime, stateTime2; // A variable for tracking elapsed time for the animation
+    public float stateTime; // A variable for tracking elapsed time for the animation
     private TextureRegion[] frames;
     public int totalFrames;
     public int framePosition;
@@ -36,6 +35,10 @@ public class Animator{
     public float frameDuration;
     private float alphaComponent = 0f;
     private Color color = Color.RED;
+    public float totalTime;
+    public boolean finishedAnimation;
+
+    public static boolean changedAnimation;
 
     public Animator(int numFrames, int numColumns, float fps, int width, int height, String path) {
         this.numFrames = numFrames;
@@ -171,6 +174,7 @@ public class Animator{
         }
 
         frameDuration = 1f/fps;
+        totalTime = frameDuration * numFrames;
         // Initialize the Animation with the frame interval and array of frames
         animation = new Animation<>(frameDuration, sprite);
 //        for (int index = 0; index < numFrames; index++) {
@@ -181,25 +185,23 @@ public class Animator{
     }
 
     public void setFrameCounter(int frame){
-        setStateTime(timeToFrame(frame));
+        setStateTime(timeToFramePosition(frame));
     }
 
-    public void setStateTime(float time){
-       stateTime = time;
-    }
-
-    public float timeToFrame(int frame){
+    public float timeToFramePosition(int frame){
+        if (frame >= numFrames)
+            frame = numFrames;
         return (1f/fps) * frame;
     }
 
-    public float timeOfAnimation(){
-        return (1f/fps) * numFrames;
-    }
+//    public float totalTime(){
+//        return totalTime;
+//    }
 
-    public Sprite sprite(boolean looping){
-        updateFramePosition();
-        return sprite[framePosition];
-    }
+//    public Sprite sprite(boolean looping){
+//        updateFramePosition();
+//        return sprite[framePosition];
+//    }
 
     public TextureRegion getFrame(int index){
         if (index < numFrames) {
@@ -209,60 +211,65 @@ public class Animator{
         }
     }
 
-    public TextureRegion getFramePosition(){
-        updateFramePosition();
-        return frames[framePosition];
-    }
-
-    public void updateFramePosition(){
-        if (framePosition >= (numFrames - 1))
-            framePosition = 0;
-        else
-            framePosition++;
-    }
-
-    public void setFramePosition(int framePosition) {
-        this.framePosition = framePosition;
-    }
-
-    public void updateStateTime2(){
-        if (animation.isAnimationFinished(stateTime2))
-            stateTime2 = 0f;
-        else
-            stateTime2 += Gdx.graphics.getDeltaTime();
-    }
-
-    public TextureRegion currentFrame(boolean looping){
-        stateTime2 += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        // Get current frame of animation for the current stateTime
-        return animation.getKeyFrame(stateTime2, looping);
-    }
-
-//    public int anim_Counter(){
-//        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-//        return animation.getKeyFrameIndex(stateTime);
+//    public TextureRegion getFramePosition(){
+//        updateFramePosition();
+//        return frames[framePosition];
 //    }
 
+//    public void updateFramePosition(){
+//        if (framePosition >= (numFrames - 1))
+//            framePosition = 0;
+//        else
+//            framePosition++;
+//    }
 
-    public boolean ani_finished(){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        return animation.isAnimationFinished(stateTime);
+    public void update(){
+        if (stateTime < totalTime) {
+            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+            finishedAnimation = false;
+        }
+        else {
+            stateTime = totalTime;
+            finishedAnimation = true;
+        }
+        if (changedAnimation) {
+            stateTime = 0;
+            changedAnimation = false;
+        }
     }
 
-    public boolean ani_finished2(){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        float targetTime = numFrames/fps;
-        return stateTime >= targetTime;
-//        return animation.isAnimationFinished(stateTime);
+    public void resetAnimation(){
+        stateTime = 0;
     }
 
-    public void resetStateTime(){
-       if (ani_finished())
-           stateTime = 0f;
+     public TextureRegion currentFrame(boolean looping){
+
+         // Get current frame of animation for the current stateTime
+         return animation.getKeyFrame(stateTime, looping);
+     }
+
+    public int framePosition(){
+        return animation.getKeyFrameIndex(stateTime);
     }
+
+
+    public boolean isAnimFinished(){
+        return finishedAnimation;
+    }
+
+//    public boolean ani_finished2(){
+//        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+//        float targetTime = numFrames/fps;
+//        return stateTime >= targetTime;
+////        return animation.isAnimationFinished(stateTime);
+//    }
+
+//    public void resetStateTime(){
+//       if (ani_finished())
+//           stateTime = 0f;
+//    }
 
     public TextureRegion currentSpriteFrame0(boolean useOnlyLastFrame, boolean looping, boolean flip){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
         Sprite s = null;
         if (!useOnlyLastFrame && !PausePage.pause) {
@@ -272,7 +279,8 @@ public class Animator{
                 s = new Sprite(lastFrame());
             }
         }
-        if (looping && ani_finished() && !PausePage.pause)
+//        if (looping && isAnimFinished() && !PausePage.pause) TODO: verificar se é necessário o uso de !PausePage.pause para parar animações em método render
+        if (looping && isAnimFinished())
             stateTime = 0f;
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();
@@ -294,13 +302,14 @@ public class Animator{
         // Get current frame of animation for the current stateTime
         Sprite s = null;
         if (!useOnlyLastFrame && !PausePage.pause) {
-            s = new Sprite(animation.getKeyFrame(stateTime2, looping));
+            s = new Sprite(animation.getKeyFrame(stateTime, looping));
         } else{
             if (useOnlyLastFrame || PausePage.pause){
                 s = new Sprite(lastFrame());
             }
         }
-        if (looping && ani_finished() && !PausePage.pause)
+        //        if (looping && isAnimFinished() && !PausePage.pause) TODO: verificar se é necessário o uso de !PausePage.pause para parar animações em método render
+        if (looping && isAnimFinished())
             stateTime = 0f;
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();
@@ -356,7 +365,7 @@ public class Animator{
     }
 
     public TextureRegion currentSpriteFrame(boolean useOnlyLastFrame, boolean looping){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+//        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
         Sprite s = null;
         if (!useOnlyLastFrame) {
@@ -364,7 +373,7 @@ public class Animator{
         } if (useOnlyLastFrame){
             s = new Sprite(lastFrame());
         }
-        if (looping && ani_finished())
+        if (looping && isAnimFinished())
             stateTime = 0f;
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();
@@ -378,12 +387,12 @@ public class Animator{
     }
 
     public TextureRegion currentSpriteFrame(int frameUnique, boolean looping, boolean flip){
-        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+//        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
         Sprite s = null;
         s = new Sprite(frames[frameUnique]);
 
-        if (looping && ani_finished())
+        if (looping && isAnimFinished())
             stateTime = 0f;
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();
@@ -401,16 +410,12 @@ public class Animator{
     }
 
     public float frameCounter(){
-        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
+        return animation.getKeyFrame(stateTime).getU2() * numFrames;
     }
 
-    public float frameCounter(float stateTime){
-        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
-    }
-
-    public float frameCounter2(){
-        return animation.getKeyFrame(stateTime2).getU2() * getNumFrames();
-    }
+//    public float frameCounter(float stateTime){
+//        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
+//    }
 
     public TextureRegion lastFrame(){
         return frames[frames.length - 1];
@@ -420,54 +425,14 @@ public class Animator{
         spriteSheet.dispose();
     }
 
-    public int getNumColumns() {
-        return numColumns;
-    }
-
-    public int getNumRows() {
-        return numRows;
-    }
-
-    public int getNumFrames() {
-        return numFrames;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public Texture getSpriteSheet() {
-        return spriteSheet;
-    }
-
-    public TextureRegion[] getFrames() {
-        return frames;
-    }
-
-    public Sprite[] getSpriteInverse() {
-        return spriteInverse;
-    }
-
-    public void setFrameDuration(float targetTime){
-        frameDuration = targetTime;
-        // Initialize the Animation with the frame interval and array of frames
-        animation = new Animation<>(frameDuration, frames);
+//    public void setFrameDuration(float targetTime){
+//        frameDuration = targetTime;
+//        // Initialize the Animation with the frame interval and array of frames
+//        animation = new Animation<>(frameDuration, frames);
 //        for (int index = 0; index < numFrames; index++) {
 //            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 //            sprite[index] = new Sprite(animation.getKeyFrame(stateTime * 1.01F));
-//        }
+//       }
+//
 
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public float getAnimationDuration(){
-        return animation.getAnimationDuration();
-    }
 }

@@ -190,7 +190,7 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     public void setFrameCounter(int frame){
-        setStateTime(animations.currentAnimation.timeToFrame(frame));
+        setStateTime(animations.currentAnimation.timeToFramePosition(frame));
     }
 
     @Override

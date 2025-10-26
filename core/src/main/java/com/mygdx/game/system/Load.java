@@ -1,23 +1,5 @@
 package com.mygdx.game.system;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entities.Boy;
-import com.mygdx.game.entities.Monster1;
-import com.mygdx.game.images.Animations;
-import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.levels.Level;
-import com.mygdx.game.sfx.Sounds;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
-import static com.mygdx.game.screens.MainPage.newGame;
-import static com.mygdx.game.screens.levels.Level_Manager.*;
-
 public class Load{
 
     public Load(int index) {

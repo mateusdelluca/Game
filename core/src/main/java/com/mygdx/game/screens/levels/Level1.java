@@ -41,6 +41,7 @@ public class Level1 extends Level{
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
+        items.put("Sword", new Sword(new Vector2(1000, 450)));
 //        objetos.clear();
         objetos.add(boy);
         objetos.add(new Jack(new Vector2(3000, 400)));
@@ -48,6 +49,7 @@ public class Level1 extends Level{
         objetos.addAll(monsters1.values());
         objetos.add(new Robot(new Vector2(700, 300), boy));
         objetos.add(new Ball(new Vector2(500,750)));
+        objetos.add((Objeto) items.get("Sword"));
     }
 
     @Override
