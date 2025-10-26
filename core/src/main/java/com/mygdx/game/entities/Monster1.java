@@ -58,7 +58,7 @@ public class Monster1 extends Objeto implements Serializable {
                     attacking_time += Gdx.graphics.getDeltaTime();
                     if (attacking_time >= 3/12f) {
                         attacking_time = 0f;
-                        animations.attacking.resetStateTime();
+//                        animations.attacking.resetStateTime(); TODO: arrumar stateTime para fim da animação
                         animations.changeAnimation("MONSTER1_WALKING");
                         attackOnce = true;
                     }
@@ -143,7 +143,7 @@ public class Monster1 extends Objeto implements Serializable {
             dropItems();
         }
         if (isntAttacking()) {
-            if (animations.attacking.frameCounter(animations.currentAnimation.stateTime) > 1 / 4f) {
+            if (animations.currentAnimation.stateTime > 1 / 4f) {
                 for (Body attack_box : attack_box)
                     if (attack_box != null) {
                         attack_box.setTransform(25_000, 25_000, 0);

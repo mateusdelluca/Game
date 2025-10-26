@@ -76,6 +76,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
     public static Rifle rifle;
+    Player player;
 
 //    public String polygons_String = "";
 
@@ -550,6 +551,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean keyDown(int keycode) {
         boy.keyDown(keycode);
+        player.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
             takeScreenshot();
             StateManager.setStates(StateManager.States.PAUSE);
@@ -560,6 +562,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean keyUp(int keycode) {
         boy.keyUp(keycode);
+        player.keyUp(keycode);
         return false;
     }
 
@@ -573,6 +576,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         boy.touchDown(screenX, screenY, pointer, button);
         ninjaRope.justTouched(button);
         mouse.touchDown(screenX, screenY, button);
+        player.touchDown(screenX, screenY, pointer, button);
         return false;
     }
 

@@ -16,7 +16,8 @@ import lombok.Setter;
 
 public class Player extends Objeto{
 
-    public static final float WIDTH = 128f, HEIGHT = 128f;
+    public static final float WIDTH = 60f, HEIGHT = 95f;
+    public static final float BOX_WIDTH = 60f, BOX_HEIGHT = 95f;
     @Setter @Getter
     private boolean isFacingRight;
     public static Player_Animations animations;
@@ -26,22 +27,21 @@ public class Player extends Objeto{
     private float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
+    public static float velocityX = 10f;
+    private boolean stopWalking;
 
     public Player(Vector2 position, Viewport viewport){
-        super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.box(position, new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 10f);
+        body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 10f);
         visible = true;
         isFacingRight = true;
         this.viewport = viewport;
-        animations.changeAnimation("IDLE");
+        Player_Animations.changeAnimation("IDLE");
     }
 
 
     @Override
     public void render(SpriteBatch s) {
-        s.begin();
         renderAnimation(s);
-        s.end();
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -55,19 +55,38 @@ public class Player extends Objeto{
     }
 
     public void update(){
-        animations.getAnimator().update();
+        Player_Animations.currentAnimation.getAnimator().update();
+
+
     }
 
+    private void stopWalking(){
+        if (stopWalking){
+            if (onGround())
+                body.getFixtureList().get(0).setFriction(0.5f);
+            else
+                body.getFixtureList().get(0).setFriction(0f);
+        } else{
+            body.getFixtureList().get(0).setFriction(0f);
+        }
+        if (body.getLinearVelocity().x == 0)
+            stopWalking = false;
+    }
 
     public void keyDown(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
-            body.applyForceToCenter(new Vector2(keycode == Input.Keys.A ? ,0), true);
-
+//            body.applyForceToCenter(new Vector2(keycode == Input.Keys.A ? -velocityX : velocityX, 0), true);
+            body.setLinearVelocity(keycode == Input.Keys.A ? -velocityX : velocityX, body.getLinearVelocity().y);
+            isFacingRight = (keycode == Input.Keys.D);
+            Player_Animations.changeAnimation("WALKING");
         }
     }
 
     public void keyUp(int keycode){
-
+        if (keycode == Input.Keys.A || keycode == Input.Keys.D){
+//            body.setLinearVelocity(0f, body.getLinearVelocity().y);
+            stopWalking = true;
+        }
     }
 
     public void mouseMoved(int screenX, int screenY){

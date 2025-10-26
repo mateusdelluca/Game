@@ -41,7 +41,7 @@ public enum Player_Animations implements Serializable {
         return valueOf(name);
     }
 
-    public void changeAnimation(String name){
+    public static void changeAnimation(String name){
         Animator.changedAnimation = true;
         currentAnimation = getAnimation(name);
     }

@@ -36,7 +36,7 @@ public class Level1 extends Level{
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-
+        player = new Player(new Vector2(300f, 200f), viewport);
         items.put("Rifle", rifle);
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
@@ -44,10 +44,11 @@ public class Level1 extends Level{
         items.put("Sword", new Sword(new Vector2(1000, 450)));
 //        objetos.clear();
         objetos.add(boy);
+        objetos.add(player);
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
-        objetos.add(new Robot(new Vector2(700, 300), boy));
+//        objetos.add(new Robot(new Vector2(700, 300), boy));
         objetos.add(new Ball(new Vector2(500,750)));
         objetos.add((Objeto) items.get("Sword"));
     }
@@ -96,9 +97,9 @@ public class Level1 extends Level{
     public void update(){
         super.update();
 
-//        for (Objeto objeto : objetos) {
-//            objeto.update();
-//        }
+        for (Objeto objeto : objetos) {
+            objeto.update();
+        }
 
         for (Item item : items.values())
             item.update();
