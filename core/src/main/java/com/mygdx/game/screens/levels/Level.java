@@ -470,7 +470,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         for (Monster1 monster1 : monsters1.values()) {
             if (player.actionRect().overlaps(monster1.getBodyBounds())) {
                 monster1.getBody().setLinearVelocity(0, 0);
-                if (player.animations().name().equals("SABER") && player.frameCounter() > 0f) {
+                if (player.animation().name().equals("SABER") && player.frameCounter() > 0f) {
                     for (Fixture f : monster1.getBody().getFixtureList()) {
                         f.setSensor(true);
                     }

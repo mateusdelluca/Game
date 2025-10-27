@@ -228,7 +228,7 @@ public class NinjaRope extends Objeto implements Item{
 
 
     public void render(ShapeRenderer shapeRenderer, Rectangle rect){
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined); //TODO Verificar esta linha
         shapeRenderer.setColor(Color.RED);
         Vector2 playerPos = playerBody.getPosition();
         Vector2 anchorPos = mousePos;

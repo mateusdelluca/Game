@@ -15,7 +15,6 @@ import com.mygdx.game.items.Item;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.mygdx.game.entities.Character_Features.velocityX;
 import static com.mygdx.game.sfx.Sounds.JUMP;
 
 public class Player extends Objeto{
@@ -30,13 +29,14 @@ public class Player extends Objeto{
     private float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
-    public static float velocityX = 10_000_000f;
+    public static float velocityX = 100_000f;
     @Getter @Setter
     private Rectangle actionRect = new Rectangle();
+    private boolean walking;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 10f);
+        body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
         body.setFixedRotation(true);
         visible = true;
         isFacingRight = true;
@@ -65,11 +65,34 @@ public class Player extends Objeto{
         Player_Animations.currentAnimation.getAnimator().update();
         actionRect = actionRect();
         idle();
+        walking();
+    }
+
+    private void walking(){
+        if (animationName().equals("WALKING")){
+            if (animation().animator.finishedAnimation)
+                animation().animator.setStateTime(0);
+        }
+
+    }
+
+    private String animationName(){
+        return animation().name();
     }
 
     private void idle(){
-        if (Math.abs(body.getLinearVelocity().x) <= 0){
+        if (Math.abs(body.getLinearVelocity().x) <= 0 && onGround()){
             changeAnimation("IDLE");
+        }
+        if (Math.abs(body.getLinearVelocity().y) > 0.1f){
+            if (Math.abs(getBody().getLinearVelocity().x) < 1f)
+                changeAnimation("JUMPING_FRONT");
+            if (Math.abs(getBody().getLinearVelocity().x) >= 1f && Math.abs(getBody().getLinearVelocity().x) <= 15f)
+                changeAnimation("JUMPING");
+
+        } if (Math.abs(getBody().getLinearVelocity().x) > 15f && onGround()) {
+            changeAnimation("WALKING");
+            walking = true;
         }
     }
 
@@ -78,12 +101,12 @@ public class Player extends Objeto{
     }
 
     public Rectangle actionRect(){
-        if (animations().name().equals("PUNCHING")) {
+        if (animation().name().equals("PUNCHING")) {
             if (frameCounter() >= 2)
                 return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
                     getBody().getPosition().y + HEIGHT / 2f - 25, 45, 45);
         } else{
-            if (animations().name().equals("SABER")) {
+            if (animation().name().equals("SABER")) {
                 if (frameCounter() > 0)
                     return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
                         getBody().getPosition().y + HEIGHT / 2f - 25, 70, 45);
@@ -102,13 +125,11 @@ public class Player extends Objeto{
             body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
             isFacingRight = (keycode == Input.Keys.D);
             changeAnimation("WALKING");
+            walking = true;
         }
         if (keycode == Input.Keys.SPACE) {
             JUMP.play();
-            if (Math.abs(getBody().getLinearVelocity().x) < 15f)
-                changeAnimation("JUMPING_FRONT");
-            if (Math.abs(getBody().getLinearVelocity().x) >= 15f)
-                changeAnimation("JUMPING");
+            body.applyForceToCenter(0, 1_000_000, true);
         }
 
     }
@@ -116,6 +137,7 @@ public class Player extends Objeto{
     public void keyUp(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
+            walking = false;
         }
     }
 
@@ -144,7 +166,7 @@ public class Player extends Objeto{
         return "Boy";
     }
 
-    public Player_Animations animations(){
+    public Player_Animations animation(){
         return Player_Animations.currentAnimation;
     }
 
