@@ -36,7 +36,7 @@ public class PowerBar implements Serializable{
 
     public void render(SpriteBatch s, OrthographicCamera playerPos){
         position = playerPos.position;
-//        if (Boy.rifle != null)
+        if (Boy.rifle != null)
             Images.font.draw(s, Boy.rifle.stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
 

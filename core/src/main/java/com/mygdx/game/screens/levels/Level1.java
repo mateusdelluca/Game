@@ -1,8 +1,5 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -20,30 +17,30 @@ public class Level1 extends Level{
     public Level1() throws Exception {
         super();
 //        monsters1.clear();
-        boy.setViewport(viewport);
-        ninjaRope = new NinjaRope(boy.getBody());
-        mouse = new Mouse(boy.getBody().getPosition());
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1600, 400),   Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1850, 500),   Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size(), boy));
+        player.setViewport(viewport);
+        ninjaRope = new NinjaRope(player.getBody());
+        mouse = new Mouse(player.getBody().getPosition());
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1600, 400),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1850, 500),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2650, 600),   Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size()));
 
 //        items.clear();
         for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
             posX = 320 + (100 * index);
             items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
         }
-        player = new Player(new Vector2(300f, 200f), viewport);
+//        player = new Player(new Vector2(300f, 200f), viewport);
         items.put("Rifle", rifle);
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
         items.get("Rifle").updateItem();
         items.get("Laser_Headset").updateItem();
         items.put("Sword", new Sword(new Vector2(1000, 450)));
 //        objetos.clear();
-        objetos.add(boy);
+//        objetos.add(boy);
         objetos.add(player);
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
@@ -67,7 +64,7 @@ public class Level1 extends Level{
         update();
 
 
-        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y + 200f, 0);
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)

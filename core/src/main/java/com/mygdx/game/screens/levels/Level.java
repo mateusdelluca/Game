@@ -47,7 +47,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     public static HashMap<String, Objeto> items2 = new HashMap<>();
 
     public static HashMap<String, Item> items = new HashMap<>();
-    public static Boy boy;
+    public static Player player;
     @Getter @Setter
     protected Jack jack;
     @Setter @Getter
@@ -76,7 +76,6 @@ public abstract class Level extends State implements ContactListener, Serializab
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
     public static Rifle rifle;
-    Player player;
 
 //    public String polygons_String = "";
 
@@ -137,7 +136,8 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        boy = new Boy(new Vector2(50, 1700), viewport);
+        player = new Player(new Vector2(50, 1700), viewport);
+
     }
 
     @Override
@@ -151,7 +151,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals(StateManager.States.PAUSE.name()))
 //        update();
-        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y, 0);
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
@@ -169,7 +169,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.begin();
 //        boy.renderShape(shapeRenderer);
-        ninjaRope.render(shapeRenderer, boy.getBodyBounds());
+        ninjaRope.render(shapeRenderer, player.getBodyBounds());
         shapeRenderer.end();
 
         box2DDebugRenderer.render(world, camera.combined);
@@ -274,7 +274,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")){
-                boy.takeItem(item);
+                player.takeItem(item);
                 item.setVisible(false);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
@@ -468,9 +468,9 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     protected void collisions() {
         for (Monster1 monster1 : monsters1.values()) {
-            if (boy.actionRect().overlaps(monster1.getBodyBounds())) {
+            if (player.actionRect().overlaps(monster1.getBodyBounds())) {
                 monster1.getBody().setLinearVelocity(0, 0);
-                if (boy.animations.name().equals("BOY_SABER") && boy.frameCounter() > 0f) {
+                if (player.animations().name().equals("SABER") && player.frameCounter() > 0f) {
                     for (Fixture f : monster1.getBody().getFixtureList()) {
                         f.setSensor(true);
                     }
@@ -545,12 +545,12 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        boy.resize(spriteBatch, width, height);
+        player.resize(spriteBatch, width, height);
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        boy.keyDown(keycode);
+        player.keyDown(keycode);
         player.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
             takeScreenshot();
@@ -561,7 +561,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     @Override
     public boolean keyUp(int keycode) {
-        boy.keyUp(keycode);
         player.keyUp(keycode);
         return false;
     }
@@ -573,10 +572,9 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        boy.touchDown(screenX, screenY, pointer, button);
+        player.touchDown(screenX, screenY, pointer, button);
         ninjaRope.justTouched(button);
         mouse.touchDown(screenX, screenY, button);
-        player.touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
@@ -598,7 +596,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
 
-        boy.mouseMoved(screenX, screenY);
+        player.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
 //        mouse.mouseMoved(screenX, screenY);
         return false;

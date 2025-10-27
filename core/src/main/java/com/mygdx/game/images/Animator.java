@@ -409,10 +409,6 @@ public class Animator{
         return s;
     }
 
-    public float frameCounter(){
-        return animation.getKeyFrame(stateTime).getU2() * numFrames;
-    }
-
 //    public float frameCounter(float stateTime){
 //        return animation.getKeyFrame(stateTime).getU2() * getNumFrames();
 //    }
@@ -434,5 +430,9 @@ public class Animator{
 //            sprite[index] = new Sprite(animation.getKeyFrame(stateTime * 1.01F));
 //       }
 //
+
+    public float frameCounter(){
+        return animation.getKeyFrame(stateTime).getU2() * numFrames;
+    }
 
 }

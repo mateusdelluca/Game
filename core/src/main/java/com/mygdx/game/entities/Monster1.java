@@ -16,6 +16,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+import static com.mygdx.game.screens.levels.Level.player;
+
 public class Monster1 extends Objeto implements Serializable {
 
     public static final float WIDTH = 94, HEIGHT = 128;
@@ -35,19 +37,17 @@ public class Monster1 extends Objeto implements Serializable {
     private long lastTime, deltaTime, initialTime;
 
     public Monster1_Sprites animations = new Monster1_Sprites();
-    private Boy boy;
     private float attacking_time;
     private boolean attackOnce;
     private Body[] attack_box = new Body[500];
     private int index;
     private float attackOnceTimer;
 
-    public Monster1(Vector2 position, String userData, Boy boy){
+    public Monster1(Vector2 position, String userData){
         super(WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        this.boy = boy;
     }
 
 
@@ -80,18 +80,18 @@ public class Monster1 extends Objeto implements Serializable {
         nameAnimation = animations.nameOfAnimation;
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
-        if (boy != null && boy.getBody() != null && body != null) {
+        if (player != null && player.getBody() != null && body != null) {
             if (!isBeenHit()) {
-                if (Math.abs(boy.getBody().getPosition().y - body.getPosition().y) < 100) {
-                    if (Math.abs(boy.getBody().getPosition().x - body.getPosition().x) < 200) {
+                if (Math.abs(player.getBody().getPosition().y - body.getPosition().y) < 100) {
+                    if (Math.abs(player.getBody().getPosition().x - body.getPosition().x) < 200) {
                        if (isntAttacking() && !attackOnce) {
                            attack();
                        }
-                       if (boy.getBody().getPosition().x < body.getPosition().x) {
+                       if (player.getBody().getPosition().x < body.getPosition().x) {
                            facingRight = false;
-                           getBody().applyForce(new Vector2(-5_000, 0), boy.getBody().getWorldCenter(), true);
+                           getBody().applyForce(new Vector2(-5_000, 0), player.getBody().getWorldCenter(), true);
                        } else {
-                           getBody().applyForce(new Vector2(5_000, 0), boy.getBody().getWorldCenter(), true);
+                           getBody().applyForce(new Vector2(5_000, 0), player.getBody().getWorldCenter(), true);
                            facingRight = true;
                        }
                     }

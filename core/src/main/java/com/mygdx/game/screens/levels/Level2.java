@@ -1,6 +1,5 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -9,8 +8,6 @@ import com.mygdx.game.items.Item;
 import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
 import com.mygdx.game.items.minis.Minis;
-
-import java.util.ArrayList;
 
 import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.images.Images.tile;
@@ -24,17 +21,17 @@ public class Level2 extends Level{
         super();
         monsters1.clear();
         objetos.clear();
-        boy.setViewport(viewport);
-        boy.getBody().setTransform(new Vector2(100, 200), 0);
+        player.setViewport(viewport);
+        player.getBody().setTransform(new Vector2(100, 200), 0);
         camera.update();
-        ninjaRope = new NinjaRope(boy.getBody());
-        mouse = new Mouse(boy.getBody().getPosition());
+        ninjaRope = new NinjaRope(player.getBody());
+        mouse = new Mouse(player.getBody().getPosition());
         jack = new Jack(new Vector2(2300f, 300f));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 40),     Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 40),    Monster1.class.getSimpleName() + monsters1.size(), boy));
-        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 40),    Monster1.class.getSimpleName() + monsters1.size(), boy));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 40),     Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 40),    Monster1.class.getSimpleName() + monsters1.size()));
+        monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 40),    Monster1.class.getSimpleName() + monsters1.size()));
         objetos.add(new Portal(new Vector2(6000 - 300, 400)));
-        objetos.add(boy);
+        objetos.add(player);
         objetos.add(jack);
         objetos.addAll(monsters1.values());
         items.put("Rifle", rifle);
@@ -52,7 +49,7 @@ public class Level2 extends Level{
         update();
 
 
-        camera.position.set(boy.getBody().getPosition().x, boy.getBody().getPosition().y + 200f, 0);
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
@@ -89,7 +86,7 @@ public class Level2 extends Level{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        boy.touchDown(screenX, screenY, pointer, button);
+        player.touchDown(screenX, screenY, pointer, button);
         ninjaRope.justTouched(button);
         mouse.touchDown(screenX, screenY, button);
         return false;
