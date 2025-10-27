@@ -20,8 +20,7 @@ import com.mygdx.game.system.BodyData;
 //import static com.mygdx.game.bodies.Builder.box;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.screens.levels.Level_Manager.viewport;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 
 public class NinjaRope extends Objeto implements Item{
@@ -229,10 +228,11 @@ public class NinjaRope extends Objeto implements Item{
 
 
     public void render(ShapeRenderer shapeRenderer, Rectangle rect){
+        shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.setColor(Color.RED);
         Vector2 playerPos = playerBody.getPosition();
         Vector2 anchorPos = mousePos;
-//        shapeRenderer.line(playerBody.getWorldCenter().x + 50, playerBody.getWorldCenter().y, anchorPos.x, anchorPos.y);
+        shapeRenderer.line(playerBody.getWorldCenter().x + 50, playerBody.getWorldCenter().y, anchorPos.x, anchorPos.y);
     }
 
     public void render(SpriteBatch batch) {
