@@ -48,6 +48,7 @@ public class Monster1 extends Objeto implements Serializable {
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
+        mass(1.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 1.0f);
     }
 
 

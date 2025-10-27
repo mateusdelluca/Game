@@ -103,7 +103,9 @@ public class PausePage extends State {
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        StateManager.oldState.render();
-        spriteBatch.begin();printScreen.draw(spriteBatch);
+        spriteBatch.begin();
+        if (printScreen != null)
+            printScreen.draw(spriteBatch);
         if (StateManager.oldState.equals(level_manager.toString()) || StateManager.oldState.equals("SAVE") || StateManager.oldState.equals("LOAD")
             || StateManager.oldState.equals("INVENTORY")) {
             PausePage.pause = true;
@@ -203,7 +205,7 @@ public class PausePage extends State {
             }
             case EXIT: {
                 StateManager.setStates(StateManager.States.MAIN_MENU);
-                StateManager.oldState = StateManager.States.MAIN_MENU.name();
+//                StateManager.oldState = StateManager.States.MAIN_MENU.name();
 //                MainPage.newGame = false;
 //                Level_Manager.loaded = false;
                 pause = false;

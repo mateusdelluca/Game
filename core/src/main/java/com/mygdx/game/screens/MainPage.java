@@ -186,7 +186,7 @@ public class MainPage extends State {
                 Sounds.LEVEL1.stop();
                 Sounds.LEVEL1.play();
                 Sounds.LEVEL1.setLooping(true);
-
+                System.out.println(oldState);
 
                 if (oldState.equals(StateManager.States.PAUSE.name()))
                     level_manager = new Level_Manager();

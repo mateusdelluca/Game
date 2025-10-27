@@ -7,15 +7,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.inventory.ItemToBeDrawn;
+import com.mygdx.game.manager.StateManager;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.sfx.Sounds.JUMP;
+import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Player extends Objeto{
 
@@ -29,7 +34,7 @@ public class Player extends Objeto{
     private float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
-    public static float velocityX = 100_000f;
+    public static float velocityX = 2_000f;
     @Getter @Setter
     private Rectangle actionRect = new Rectangle();
     private boolean walking;
@@ -39,6 +44,7 @@ public class Player extends Objeto{
         body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
         body.setFixedRotation(true);
         visible = true;
+        mass(5.0f, new Vector2((BOX_WIDTH/2f) - 5, BOX_HEIGHT/2f), 1.0f);
         isFacingRight = true;
         this.viewport = viewport;
         changeAnimation("IDLE");
@@ -62,7 +68,7 @@ public class Player extends Objeto{
     }
 
     public void update(){
-        Player_Animations.currentAnimation.getAnimator().update();
+        animation().getAnimator().update();
         actionRect = actionRect();
         idle();
         walking();
@@ -81,18 +87,26 @@ public class Player extends Objeto{
     }
 
     private void idle(){
-        if (Math.abs(body.getLinearVelocity().x) <= 0 && onGround()){
-            changeAnimation("IDLE");
-        }
-        if (Math.abs(body.getLinearVelocity().y) > 0.1f){
-            if (Math.abs(getBody().getLinearVelocity().x) < 1f)
+//        if (Math.abs(body.getLinearVelocity().x) <= 0 && onGround()){
+//            changeAnimation("IDLE");
+//        }
+        if (!onGround()){
+            if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
                 changeAnimation("JUMPING_FRONT");
-            if (Math.abs(getBody().getLinearVelocity().x) >= 1f && Math.abs(getBody().getLinearVelocity().x) <= 15f)
+            if (Math.abs(getBody().getLinearVelocity().x) > 1f && Math.abs(getBody().getLinearVelocity().x) < 15f)
                 changeAnimation("JUMPING");
 
-        } if (Math.abs(getBody().getLinearVelocity().x) > 15f && onGround()) {
-            changeAnimation("WALKING");
-            walking = true;
+        } else {
+            if (Math.abs(getBody().getLinearVelocity().x) >= 15f) {
+                changeAnimation("WALKING");
+                walking = true;
+            } else{
+                if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
+                    if (!beenHit) {
+                        changeAnimation("IDLE");
+                    }
+                }
+            }
         }
     }
 
@@ -129,15 +143,19 @@ public class Player extends Objeto{
         }
         if (keycode == Input.Keys.SPACE) {
             JUMP.play();
-            body.applyForceToCenter(0, 1_000_000, true);
+            body.applyForceToCenter(0, 5_000, true);
         }
-
+        if (keycode == Input.Keys.I){
+            takeScreenshot();
+            setStates(StateManager.States.INVENTORY);
+        }
     }
 
     public void keyUp(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
             walking = false;
+            changeAnimation("IDLE");
         }
     }
 
@@ -148,13 +166,14 @@ public class Player extends Objeto{
         worldY = worldCoordinates.y;
     }
 
-
     public void touchDown(int screenX, int screenY, int pointer, int button){
-
+        if (button == Input.Buttons.LEFT)
+            changeAnimation("ATTACKING_SWORD_FIRE_2");
     }
 
     public void takeItem(Item item){
         item.setVisible(false);
+        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
     }
 
     public Rectangle getBodyBounds() {
@@ -172,5 +191,10 @@ public class Player extends Objeto{
 
     public void changeAnimation(String name){
         Player_Animations.changeAnimation(name);
+    }
+
+    @Override
+    public void beginContact(Body body1, Body body2){
+        super.beginContact(body1, body2);
     }
 }

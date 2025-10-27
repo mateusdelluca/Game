@@ -44,6 +44,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected float timer;
     @Setter @Getter
     protected float HP = 10f;
+    protected boolean touchingGround;
+    protected boolean onGround;
 
     public Objeto(float width, float height){
         this.width = width;
@@ -176,6 +178,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
+        if (body.getLinearVelocity().y == 0)
+            onGround = false;
         if (body != null && rect == null) {
             rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
         }
@@ -265,7 +269,21 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void beginContact(Body body1, Body body2){
+        if (body1 == null || body2 == null || body == null)
+            return;
 
+        onGround = ((body1.getUserData().toString().contains("Thorns") && body2.equals(body)
+            || body2.getUserData().toString().contains("Thorns") && body1.equals(body))
+            ||
+            (body1.getUserData().toString().contains("Colliders") && body2.equals(body)
+                || body2.getUserData().toString().contains("Colliders") && body1.equals(body))
+            ||
+            (body1.getUserData().toString().contains("Rects") && body2.equals(body)
+                || body2.getUserData().toString().contains("Rects") && body1.equals(body)))
+        ||
+            (Math.abs(body.getLinearVelocity().y) <= 1);
+//        if (this instanceof Player)
+//            System.out.println(Math.abs(body.getLinearVelocity().y) + " " + onGround);
     }
 
     public void beginContact(Contact contact){
@@ -273,7 +291,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public boolean onGround(){
-        return Math.abs(body.getLinearVelocity().y) <= 0.1f;
+        return onGround;
     }
 
 
