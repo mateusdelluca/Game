@@ -9,12 +9,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
+import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.Item;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
+import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +29,7 @@ import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 public class Player extends Objeto{
 
     public static final float WIDTH = 128, HEIGHT = 128f;
+    public static Array<Minis> minis = new Array<>();
     public static final float BOX_WIDTH = 50f, BOX_HEIGHT = 95f;
     @Setter @Getter
     private boolean isFacingRight;
@@ -38,6 +43,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private Rectangle actionRect = new Rectangle();
     private boolean walking;
+    private Body attacking_box_body;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -54,6 +60,7 @@ public class Player extends Objeto{
     @Override
     public void render(SpriteBatch s) {
         renderAnimation(s);
+        renderMinis(s);
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -63,21 +70,44 @@ public class Player extends Objeto{
         sprite.draw(s);
     }
 
+    private void renderMinis(SpriteBatch s){
+        for (Minis m : minis){
+            m.render(s);
+            m.update();
+        }
+    }
+
     @Override
     public void renderShape(ShapeRenderer s) {
     }
 
     public void update(){
-        animation().getAnimator().update();
-        actionRect = actionRect();
+        updateAnimation();
+        saberAndPunchUpdateRectangles();
         idle();
         walking();
+        respawn();
+    }
+
+    private void updateAnimation() {
+        animation().getAnimator().update();
+    }
+
+    private void saberAndPunchUpdateRectangles() {
+        attacking_box_body = attackUsingBodies();
+    }
+
+    private void respawn(){
+        if (body.getPosition().y < -100f) {
+            beenHit();
+            body.setTransform(new Vector2(100, 400), 0);
+        }
     }
 
     private void walking(){
         if (animationName().equals("WALKING")){
             if (animation().animator.finishedAnimation)
-                animation().animator.setStateTime(0);
+                animation().animator.resetAnimation();
         }
 
     }
@@ -87,9 +117,6 @@ public class Player extends Objeto{
     }
 
     private void idle(){
-//        if (Math.abs(body.getLinearVelocity().x) <= 0 && onGround()){
-//            changeAnimation("IDLE");
-//        }
         if (!onGround()){
             if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
                 changeAnimation("JUMPING_FRONT");
@@ -114,19 +141,24 @@ public class Player extends Objeto{
         spriteBatch.getProjectionMatrix().setToOrtho2D(body.getPosition().x, body.getPosition().y, width, height);
     }
 
-    public Rectangle actionRect(){
+    public Body attackUsingBodies(){
         if (animation().name().equals("PUNCHING")) {
-            if (frameCounter() >= 2)
-                return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
-                    getBody().getPosition().y + HEIGHT / 2f - 25, 45, 45);
-        } else{
-            if (animation().name().equals("SABER")) {
-                if (frameCounter() > 0)
-                    return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
-                        getBody().getPosition().y + HEIGHT / 2f - 25, 70, 45);
-            }
+//            if (frameCounter() >= 2)
+//                return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
+//                    getBody().getPosition().y + HEIGHT / 2f - 25, 45, 45);
+            return BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + (WIDTH / 2f) + 10 :
+                    getBody().getPosition().x + (WIDTH / 2f) - 55, getBody().getPosition().y + HEIGHT / 2f - 25),
+                new Vector2(45f / 2f, 45f / 2f), BodyDef.BodyType.StaticBody, false, " Boy", 100f);
         }
-        return new Rectangle();
+//        } else{
+//            if (animation().name().equals("SABER")) {
+//                if (frameCounter() > 0)
+//                    return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
+//                        getBody().getPosition().y + HEIGHT / 2f - 25, 70, 45);
+//            }
+//        }
+        attacking_box_body.destroyFixture(attacking_box_body.getFixtureList().get(0));
+        return null;
     }
 
     public float frameCounter(){
@@ -171,9 +203,22 @@ public class Player extends Objeto{
             changeAnimation("ATTACKING_SWORD_FIRE_2");
     }
 
+    @Override
+    public void beenHit(){
+        if (animation() != Player_Animations.STRICKEN) {
+//            getBody().setLinearVelocity(getBody().getLinearVelocity().x, getBody().getLinearVelocity().y + 40f);
+            changeAnimation("STRICKEN");
+            setBeenHit(true);
+            Sounds.HURT.play();
+            PowerBar.hit = true;
+        }
+    }
+
     public void takeItem(Item item){
-        item.setVisible(false);
-        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
+        if (item.isVisible()) {
+            item.setVisible(false);
+            new ItemToBeDrawn(item.toString());
+        }
     }
 
     public Rectangle getBodyBounds() {

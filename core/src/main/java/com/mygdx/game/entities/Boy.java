@@ -86,7 +86,7 @@ public class Boy extends Objeto {
     private boolean punching;
 
     public static float attack = 1f;
-    public static Array<Minis> minis = new Array<>();
+
     public static boolean lvlUP;
     private int lvlUpCounterFrames;
     float timerLvlUP;
@@ -256,8 +256,8 @@ public class Boy extends Objeto {
             for (Laser laser : laser_rail)
                 laser.render(spriteBatch);
         }
-        for (Minis m : minis)
-            m.render(spriteBatch);
+//        for (Minis m : minis)
+//            m.render(spriteBatch);
         if (Boy.lvlUP) {
             Sprite lvlUP = new Sprite(Player_Animations.LVL_UP.animator.currentSpriteFrame(false,false));
             lvlUP.setPosition(body.getPosition().x, body.getPosition().y);

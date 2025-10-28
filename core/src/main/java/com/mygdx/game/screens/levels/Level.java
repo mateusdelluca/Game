@@ -240,7 +240,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             if (objeto != null)
                 objeto.update();
         }
-        collisions();
+//        collisions();
     }
 
     @Override
@@ -274,9 +274,9 @@ public abstract class Level extends State implements ContactListener, Serializab
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")
-            && item.isVisible()){
+            ){
                 player.takeItem(item);
-                item.setVisible(false);
+//                item.setVisible(false);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
 //                    item.setUserData(body1);
@@ -465,27 +465,29 @@ public abstract class Level extends State implements ContactListener, Serializab
 //        if (body1 == null || body2 == null)
 //            return;
 //
-    }
+//    }
 
-    protected void collisions() {
-        for (Monster1 monster1 : monsters1.values()) {
-            if (player.actionRect().overlaps(monster1.getBodyBounds())) {
-                monster1.getBody().setLinearVelocity(0, 0);
-                if (player.animation().name().equals("SABER") && player.frameCounter() > 0f) {
-                    for (Fixture f : monster1.getBody().getFixtureList()) {
-                        f.setSensor(true);
-                    }
-                    monster1.animations.changeAnimation("MONSTER1_SPLIT");
-                    monster1.setSplit(true);
-                    monster1.getBody().setGravityScale(0f);
-                    monster1.getBody().setLinearVelocity(0f, 0f);
-                }
+/*    protected void collisions() {
+//        for (Monster1 monster1 : monsters1.values()) {
+//            if (player.attackUsingBodies().overlaps(monster1.getBodyBounds())) {
+//                monster1.getBody().setLinearVelocity(0, 0);
+//                if (player.animation().name().equals("SABER") && player.frameCounter() > 0f) {
+//                    for (Fixture f : monster1.getBody().getFixtureList()) {
+//                        f.setSensor(true);
+//                    }
+//                    monster1.animations.changeAnimation("MONSTER1_SPLIT");
+//                    monster1.setSplit(true);
+//                    monster1.getBody().setGravityScale(0f);
+//                    monster1.getBody().setLinearVelocity(0f, 0f);
+//                }
+    TODO: VERIFICAR O RECTANGLE DE ACTION RECT DE BOY QUE FOI MUDADO PARA BODIES EM PLAYER
+    */
 //                else {
 //                    if (!monster1.isSplit())
 //                        monster1.animations.changeAnimation("MONSTER1_FLICKERING");
 //                }
 //                monster1.getBody().setFixedRotation(true);
-            }
+//            }
 //            else{
 //                 if (monster1.getBodyBounds().overlaps(boy.getBodyBounds()) &&
 //                     !boy.animations.name().equals("BOY_PUNCHING") &&
@@ -519,7 +521,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 //                body.setTransform(-10_500, -15_320, 0);
 //            }
 //            bodiesToDestroy.clear();
-        }
+//        }
     }
 
     public static boolean contains(MapObjects mapObjects, Rectangle rectangle){

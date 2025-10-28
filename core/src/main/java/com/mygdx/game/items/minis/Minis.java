@@ -8,12 +8,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.Rifle;
 
 import java.util.Random;
 
-import static com.mygdx.game.entities.Boy.minis;
 import static com.mygdx.game.entities.Character_Features.*;
 import static com.mygdx.game.images.Images.itemsDraw_minis;
 import static com.mygdx.game.sfx.Sounds.TRIGGER;
@@ -35,7 +35,7 @@ public class Minis extends Objeto{
         visible = true;
         sprite = new Sprite(itemsDraw_minis.get(name)); dropped();
         body.setUserData(name);
-        minis.add(this);
+        Player.minis.add(this);
     }
 
     public Minis(Vector2 position){
@@ -45,7 +45,7 @@ public class Minis extends Objeto{
         name = random_name();
         sprite = new Sprite(itemsDraw_minis.get(name)); dropped();
         body.setUserData(name);
-        minis.add(this);
+        Player.minis.add(this);
     }
 
     private String random_name(){
