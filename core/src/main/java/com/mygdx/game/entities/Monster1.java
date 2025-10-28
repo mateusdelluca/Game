@@ -39,7 +39,7 @@ public class Monster1 extends Objeto implements Serializable {
     public Monster1_Sprites animations = new Monster1_Sprites();
     private float attacking_time;
     private boolean attackOnce;
-    private Body[] attack_box = new Body[500];
+    private Body attack_box;
     private int index;
     private float attackOnceTimer;
 
@@ -79,12 +79,13 @@ public class Monster1 extends Objeto implements Serializable {
     public void update(){
         super.update();
         nameAnimation = animations.nameOfAnimation;
+        animations.currentAnimation.update();
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
         if (player != null && player.getBody() != null && body != null) {
             if (!isBeenHit()) {
                 if (Math.abs(player.getBody().getPosition().y - body.getPosition().y) < 100) {
-                    if (Math.abs(player.getBody().getPosition().x - body.getPosition().x) < 200) {
+                    if (Math.abs(player.getBody().getPosition().x - body.getPosition().x) < 150) {
                        if (isntAttacking() && !attackOnce) {
                            attack();
                        }
@@ -102,6 +103,7 @@ public class Monster1 extends Objeto implements Serializable {
             if (attackOnceTimer > 3f) {
                 attackOnce = false;
                 attackOnceTimer = 0f;
+                animations.attacking.resetAnimation();
             }
 
             if (nameAnimation.equals("MONSTER1_SPLIT")) {
@@ -144,14 +146,11 @@ public class Monster1 extends Objeto implements Serializable {
             dropItems();
         }
         if (isntAttacking()) {
-            if (animations.currentAnimation.stateTime > 1 / 4f) {
-                for (Body attack_box : attack_box)
-                    if (attack_box != null) {
-                        attack_box.setTransform(25_000, 25_000, 0);
-                }
-            }
-        }
+//            for (Body attack_box : attack_box)
+                if (attack_box != null)
+                    attack_box.setTransform(25_000, 25_000, 0);
 
+        }
     }
 
     private boolean isntAttacking(){
@@ -165,7 +164,7 @@ public class Monster1 extends Objeto implements Serializable {
     private void attack(){
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
         animations.changeAnimation("MONSTER1_ATTACKING");
-        attack_box[index++] = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
+        attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
             body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f,40f),
             BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
     }

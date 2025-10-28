@@ -233,7 +233,7 @@ public class Animator{
             finishedAnimation = true;
         }
         if (changedAnimation) {
-            stateTime = 0;
+            resetAnimation();
             changedAnimation = false;
         }
     }
@@ -281,7 +281,7 @@ public class Animator{
         }
 //        if (looping && isAnimFinished() && !PausePage.pause) TODO: verificar se é necessário o uso de !PausePage.pause para parar animações em método render
         if (looping && isAnimFinished())
-            stateTime = 0f;
+            resetAnimation();
 //        s.setColor(color);
 //        SpriteBatch s1 = new SpriteBatch();
 //        s1.begin();

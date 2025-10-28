@@ -89,7 +89,7 @@ public class Minis extends Objeto{
     public void dropped(){
         if (dropped){
             dropped = false;
-            body.setLinearVelocity(new Vector2(oneOrMinusOne() * (1f), 30f));
+            body.setLinearVelocity(new Vector2(oneOrMinusOne() * (1.1f), 30f));
         }
     }
 
