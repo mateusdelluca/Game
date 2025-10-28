@@ -435,4 +435,16 @@ public class Animator{
         return animation.getKeyFrame(stateTime).getU2() * numFrames;
     }
 
+    public boolean lastFrame0(){
+        return stateTime >= (frameDuration * numFrames);
+    }
+
+    public float stateTimePosition(int framePosition){
+        return frameDuration * framePosition;
+    }
+
+    public boolean isOnFrame(float frame){
+       return stateTime == (int) (frameDuration * frame);
+    }
+
 }

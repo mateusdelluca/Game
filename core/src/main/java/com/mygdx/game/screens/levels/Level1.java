@@ -8,7 +8,7 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.minis.Minis;
 
-import static com.mygdx.game.entities.Boy.minis;
+import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 

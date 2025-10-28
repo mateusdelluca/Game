@@ -236,10 +236,10 @@ public abstract class Level extends State implements ContactListener, Serializab
             world.step(1/60f, 7, 7);
             camera.update();
         }
-        for (Objeto objeto : objetos){
-            if (objeto != null)
-                objeto.update();
-        }
+//        for (Objeto objeto : objetos){
+//            if (objeto != null)
+//                objeto.update();
+//        }
 //        collisions();
     }
 

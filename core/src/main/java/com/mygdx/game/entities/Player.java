@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import static com.mygdx.game.manager.StateManager.setStates;
+import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.JUMP;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
@@ -40,9 +41,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f;
-    @Getter @Setter
-    private Rectangle actionRect = new Rectangle();
-    private boolean walking;
+    private boolean walking, attacking;
     private Body attacking_box_body;
 
     public Player(Vector2 position, Viewport viewport){
@@ -64,7 +63,7 @@ public class Player extends Objeto{
     }
 
     private void renderAnimation(SpriteBatch s){
-        Sprite sprite = new Sprite(Player_Animations.currentAnimation.animator.currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
+        Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
         sprite.setOriginCenter();
         sprite.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
         sprite.draw(s);
@@ -83,18 +82,27 @@ public class Player extends Objeto{
 
     public void update(){
         updateAnimation();
-        saberAndPunchUpdateRectangles();
-        idle();
         walking();
         respawn();
+        attacking();
+        idle();
+    }
+
+    private void attacking() {
+        attacking = (animationName().contains("FIRE"));
+        if (isFinishedCurrentAnimation()) {
+            animation().getAnimator().resetAnimation();
+            changeAnimation("IDLE");
+        }
+        attackingBodiesUpdate();
     }
 
     private void updateAnimation() {
         animation().getAnimator().update();
     }
 
-    private void saberAndPunchUpdateRectangles() {
-        attacking_box_body = attackUsingBodies();
+    private void attackingBodiesUpdate() {
+        attackUsingBodies();
     }
 
     private void respawn(){
@@ -106,10 +114,18 @@ public class Player extends Objeto{
 
     private void walking(){
         if (animationName().equals("WALKING")){
-            if (animation().animator.finishedAnimation)
-                animation().animator.resetAnimation();
+            if (isFinishedCurrentAnimation())
+                resetCurrentAnimation();
         }
 
+    }
+
+    private boolean isFinishedCurrentAnimation(){
+        return animation().animator.finishedAnimation;
+    }
+
+    private void resetCurrentAnimation(){
+        animation().getAnimator().resetAnimation();
     }
 
     private String animationName(){
@@ -117,19 +133,19 @@ public class Player extends Objeto{
     }
 
     private void idle(){
-        if (!onGround()){
-            if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
-                changeAnimation("JUMPING_FRONT");
-            if (Math.abs(getBody().getLinearVelocity().x) > 1f && Math.abs(getBody().getLinearVelocity().x) < 15f)
-                changeAnimation("JUMPING");
+        if (!beenHit && !attacking) {
+            if (!onGround()){
+                if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
+                    changeAnimation("JUMPING_FRONT");
+                if (Math.abs(getBody().getLinearVelocity().x) > 1f && Math.abs(getBody().getLinearVelocity().x) < 15f)
+                    changeAnimation("JUMPING");
 
-        } else {
-            if (Math.abs(getBody().getLinearVelocity().x) >= 15f) {
-                changeAnimation("WALKING");
-                walking = true;
-            } else{
-                if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
-                    if (!beenHit) {
+            } else {
+                if (Math.abs(getBody().getLinearVelocity().x) >= 15f) {
+                    changeAnimation("WALKING");
+                    walking = true;
+                } else{
+                    if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
                         changeAnimation("IDLE");
                     }
                 }
@@ -141,24 +157,14 @@ public class Player extends Objeto{
         spriteBatch.getProjectionMatrix().setToOrtho2D(body.getPosition().x, body.getPosition().y, width, height);
     }
 
-    public Body attackUsingBodies(){
-        if (animation().name().equals("PUNCHING")) {
-//            if (frameCounter() >= 2)
-//                return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
-//                    getBody().getPosition().y + HEIGHT / 2f - 25, 45, 45);
-            return BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + (WIDTH / 2f) + 10 :
-                    getBody().getPosition().x + (WIDTH / 2f) - 55, getBody().getPosition().y + HEIGHT / 2f - 25),
-                new Vector2(45f / 2f, 45f / 2f), BodyDef.BodyType.StaticBody, false, " Boy", 100f);
+    public void attackUsingBodies(){
+        if (animationName().equals("PUNCHING_FIRE")) {
+            if (frameCounter() == 4) {
+                attacking_box_body = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
+                        getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
+                    new Vector2(10, 40f), BodyDef.BodyType.StaticBody, true, " Boy", 100f);
+            }
         }
-//        } else{
-//            if (animation().name().equals("SABER")) {
-//                if (frameCounter() > 0)
-//                    return new Rectangle(isFacingRight ? getBody().getPosition().x + (WIDTH/2f) + 10 : getBody().getPosition().x + (WIDTH / 2f) - 55,
-//                        getBody().getPosition().y + HEIGHT / 2f - 25, 70, 45);
-//            }
-//        }
-        attacking_box_body.destroyFixture(attacking_box_body.getFixtureList().get(0));
-        return null;
     }
 
     public float frameCounter(){
@@ -199,8 +205,9 @@ public class Player extends Objeto{
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
-        if (button == Input.Buttons.LEFT)
-            changeAnimation("ATTACKING_SWORD_FIRE_2");
+        if (button == Input.Buttons.LEFT) {
+            changeAnimation("PUNCHING_FIRE");
+        }
     }
 
     @Override
