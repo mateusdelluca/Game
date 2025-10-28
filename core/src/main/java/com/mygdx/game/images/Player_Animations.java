@@ -22,7 +22,7 @@ public enum Player_Animations implements Serializable {
     JUMPING(new Animator(1,1, 1, 128, 128, "boy/Jumping3.png")),
     JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),
     PUNCHING(new Animator(3,3, 3, 128, 128, "boy/NewPunching.png")),
-    PUNCHING_FIRE(new Animator(6,6, 9, 128, 128, "boy/Punching_Fire.png")),
+    PUNCHING_FIRE(new Animator(6,6, 12, 128, 128, "boy/Punching_Fire.png")),
     SHOOTING_AND_WALKING(new Animator(6,6, 5, 128, 128, "boy/Shooting3.png")),
     LVL_UP(new Animator(3,3,3,1, 128, 128, "boy/LevelUP.png")),
     HEADSET(new Animator(3,3,5,42, 50,"boy/Laser_HeadSet-Sheet3.png")),

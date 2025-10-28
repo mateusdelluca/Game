@@ -22,6 +22,8 @@ import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.JUMP;
@@ -42,7 +44,7 @@ public class Player extends Objeto{
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f;
     private boolean walking, attacking;
-    private Body attacking_box_body;
+    private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -89,12 +91,16 @@ public class Player extends Objeto{
     }
 
     private void attacking() {
-        attacking = (animationName().contains("FIRE"));
-        if (isFinishedCurrentAnimation()) {
-            animation().getAnimator().resetAnimation();
-            changeAnimation("IDLE");
-        }
         attackingBodiesUpdate();
+        if (isFinishedCurrentAnimation() && attacking) {
+            animation().getAnimator().resetAnimation();
+            attacking = false;
+            for (Body attacking_box_body : attacking_box_bodies){
+                if (attacking_box_body != null) {
+                    attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
+                }
+            }
+        }
     }
 
     private void updateAnimation() {
@@ -159,10 +165,10 @@ public class Player extends Objeto{
 
     public void attackUsingBodies(){
         if (animationName().equals("PUNCHING_FIRE")) {
-            if (frameCounter() == 4) {
-                attacking_box_body = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
+            if (animation().getAnimator().stateTime > 0.30 && animation().getAnimator().stateTime < 0.32) {
+                attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                    new Vector2(10, 40f), BodyDef.BodyType.StaticBody, true, " Boy", 100f);
+                    new Vector2(10, 40f), BodyDef.BodyType.StaticBody, false, " Boy", 100f));
             }
         }
     }
@@ -206,7 +212,10 @@ public class Player extends Objeto{
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
-            changeAnimation("PUNCHING_FIRE");
+            if (!attacking ) {
+                changeAnimation("PUNCHING_FIRE");
+                attacking = true;
+            }
         }
     }
 

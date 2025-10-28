@@ -116,7 +116,6 @@ public class BodiesAndShapes {
         body.setTransform(position, 0);
         body.setUserData(userData);
         body.setActive(true);
-        body.setAwake(true);
         return body;
     }
 
