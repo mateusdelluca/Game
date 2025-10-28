@@ -95,6 +95,11 @@ public class Cartridge implements Item{
     }
 
     @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
     public String toString(){
         return "" + (bulletsLeft.size());
     }

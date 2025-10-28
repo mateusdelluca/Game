@@ -82,8 +82,10 @@ public class ItemToBeDrawn implements Item {
 //            equip.draw(spriteBatch);
 //        }
         for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
-            item.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
-            item.draw(spriteBatch);
+            if (item != null) {
+                item.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
+                item.draw(spriteBatch);
+            }
         }
 //        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
 //            || rectangles2.isEmpty()) && index < 20){
@@ -137,6 +139,11 @@ public class ItemToBeDrawn implements Item {
     }
 
     @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
     public String toString(){
         return name;
     }
@@ -152,7 +159,8 @@ public class ItemToBeDrawn implements Item {
                 NinjaRope.isActive2 = false;
                 Boy.throwing = false;
                 Boy.ropeShoot = false;
-            } else{
+            }
+            else{
             if (name.equals("Rifle")) {
                 Boy.throwing = false;
                 Rifle.showingNumbBullets = equipped[index];

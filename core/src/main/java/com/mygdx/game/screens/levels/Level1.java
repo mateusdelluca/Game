@@ -29,10 +29,10 @@ public class Level1 extends Level{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(3300, 600),    Monster1.class.getSimpleName() + monsters1.size()));
 
 //        items.clear();
-        for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
-            posX = 320 + (100 * index);
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
-        }
+//        for (int index = 1, posX = 320, posY = (540); index <= 7; index++) {
+//            posX = 320 + (100 * index);
+//            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+//        } //TODO arrumar o local que é armazenado os Cristais em um array ou hashmap ou ainda treemap
 //        player = new Player(new Vector2(300f, 200f), viewport);
         items.put("Rifle", rifle);
         items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));

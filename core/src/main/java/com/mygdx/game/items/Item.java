@@ -25,5 +25,7 @@ public interface Item extends Serializable {
 
     void setVisible(boolean b);
 
+    boolean isVisible();
+
     String toString();
 }
