@@ -828,7 +828,7 @@ public class Boy extends Objeto {
         if (item instanceof Laser_Headset) {
             item.setVisible(false);
         }
-        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item.toString());
+        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item);
         if (item.toString().contains("NinjaStar")) {
             if (item instanceof NinjaStar) {
                 ((NinjaStar) item).setItemToBeDrawn(itemToBeDrawn);

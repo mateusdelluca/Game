@@ -28,4 +28,8 @@ public interface Item extends Serializable {
     boolean isVisible();
 
     String toString();
+
+    int getIndex();
+
+    void setIndex(int index);
 }

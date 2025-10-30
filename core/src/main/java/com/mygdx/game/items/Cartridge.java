@@ -103,4 +103,14 @@ public class Cartridge implements Item{
     public String toString(){
         return "" + (bulletsLeft.size());
     }
+
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
+    @Override
+    public void setIndex(int index) {
+
+    }
 }

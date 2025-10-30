@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.mygdx.game.screens.Inventory.*;
 
@@ -43,17 +44,22 @@ public class ItemToBeDrawn implements Item {
     public static boolean[] equipped = new boolean[ITEMS_LIMIT];
     @Getter
     private int index;
+    private Item item;
 
     public static String equip = "";
-
-    public ItemToBeDrawn(String name){
+    public static HashMap<Item, Boolean> items = new HashMap<>();
+    public ItemToBeDrawn(Item item){
 //        name = getClass().getSimpleName();
-        this.name = name;
+        this.item = item;
+        this.name = item.toString();
         addItemToInventory(this);
         System.out.println(name);
         treeMap_Items.put(name, this);
 //        if (!treeMap_Items.isEmpty())
-            this.index = treeMap_Items.size() - 1;
+        this.index = treeMap_Items.size() - 1;
+        item.setIndex(index);
+        if (!items.containsKey(item))
+           items.put(item, equipped[index]);
 //        if (name.equals(equip))
 //            return;
 //        if (Inventory.itemsToBeDrawn.size() < ITEMS_LIMIT) {
@@ -81,7 +87,7 @@ public class ItemToBeDrawn implements Item {
 //            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
 //            equip.draw(spriteBatch);
 //        }
-        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
+        for (int i = 0; i < treeMap_Items.sequencedValues().size(); i++) {
             if (item != null) {
                 item.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
                 item.draw(spriteBatch);
@@ -148,70 +154,93 @@ public class ItemToBeDrawn implements Item {
         return name;
     }
 
+    @Override
+    public void setIndex(int index) {
+
+    }
+
     public void equip(){
         if (contains[index] && click >= 2) {
-            equipped[index] = !equipped[index];
-            System.out.println(equipped[index]);
-            if (name.equals("Sword")){
-                Boy.usingSword = equipped[index];
-                Boy.shooting = false;
-                Boy.saber_taken = false;
-                NinjaRope.isActive2 = false;
-                Boy.throwing = false;
-                Boy.ropeShoot = false;
-            }
-            else{
-            if (name.equals("Rifle")) {
-                Boy.throwing = false;
-                Rifle.showingNumbBullets = equipped[index];
-                Boy.shooting = equipped[index];
-                Boy.degrees = 0f;
-                Boy.saber_taken = false;
-                NinjaRope.isActive2 = false;
-                Boy.ropeShoot = false;
-            } else {
-                if (name.contains("NinjaStar")) {
-                    Boy.degrees = 0f;
-                    Boy.throwing = equipped[index];
-                    Rifle.showingNumbBullets = false;
-                    Boy.saber_taken = false;
-                    Boy.shooting = false;
-                    NinjaRope.isActive2 = false;
-                    Boy.ropeShoot = false;
+
+            for (Item item1 : items.keySet()) {
+                if (item1.equals(item)){
+                    equipped[index] = !equipped[index];
                 } else {
-                    if (name.equals("JetPack"))
-                        Boy.use_jetPack = equipped[index];
-                    else {
-                        if (name.equals("Saber")) {
-                            Boy.saber_taken = equipped[index];
-                            Boy.throwing = false;
-                            Rifle.showingNumbBullets = false;
-                            NinjaRope.isActive2 = false;
-                            Boy.ropeShoot = false;
-                        } else {
-                            if (name.equals("NinjaRope")) {
-                                NinjaRope.isActive2 = equipped[index];
-                                Boy.ropeShoot = equipped[index];
-                            } else {
-                                if (name.equals("Laser_Headset")) {
-                                    Boy.laser = equipped[index];
-                                } else {
-                                    NinjaRope.isActive2 = false;
-                                    Boy.ropeShoot = false;
-//                              Boy.throwing = false;
-//                              Rifle.showingNumbBullets = false;
-                                    //                            Boy.shooting = false;
-//                              Boy.saber_taken = false;
-//                              Boy.nameOfAnimation = "BOY_IDLE";
-                                }
-                            }
-                        }
-                     }
-                    }
+                    if (items.containsKey(item1))
+                        items.replace(item1, false);
+                }
+            }
+            if (equipped[index]) {
+                for (int i = 0; i < treeMap_Items.sequencedValues().size(); i++) {
+                    if (i != index)
+                        equipped[i] = false;
                 }
             }
             click = 0;
         }
+//        if (contains[index] && click >= 2) {
+//            equipped[index] = !equipped[index];
+//            System.out.println(equipped[index]);
+//            if (name.equals("Sword")){
+//                Boy.usingSword = equipped[index];
+//                Boy.shooting = false;
+//                Boy.saber_taken = false;
+//                NinjaRope.isActive2 = false;
+//                Boy.throwing = false;
+//                Boy.ropeShoot = false;
+//            }
+//            else{
+//            if (name.equals("Rifle")) {
+//                Boy.throwing = false;
+//                Rifle.showingNumbBullets = equipped[index];
+//                Boy.shooting = equipped[index];
+//                Boy.degrees = 0f;
+//                Boy.saber_taken = false;
+//                NinjaRope.isActive2 = false;
+//                Boy.ropeShoot = false;
+//            } else {
+//                if (name.contains("NinjaStar")) {
+//                    Boy.degrees = 0f;
+//                    Boy.throwing = equipped[index];
+//                    Rifle.showingNumbBullets = false;
+//                    Boy.saber_taken = false;
+//                    Boy.shooting = false;
+//                    NinjaRope.isActive2 = false;
+//                    Boy.ropeShoot = false;
+//                } else {
+//                    if (name.equals("JetPack"))
+//                        Boy.use_jetPack = equipped[index];
+//                    else {
+//                        if (name.equals("Saber")) {
+//                            Boy.saber_taken = equipped[index];
+//                            Boy.throwing = false;
+//                            Rifle.showingNumbBullets = false;
+//                            NinjaRope.isActive2 = false;
+//                            Boy.ropeShoot = false;
+//                        } else {
+//                            if (name.equals("NinjaRope")) {
+//                                NinjaRope.isActive2 = equipped[index];
+//                                Boy.ropeShoot = equipped[index];
+//                            } else {
+//                                if (name.equals("Laser_Headset")) {
+//                                    Boy.laser = equipped[index];
+//                                } else {
+//                                    NinjaRope.isActive2 = false;
+//                                    Boy.ropeShoot = false;
+////                              Boy.throwing = false;
+////                              Rifle.showingNumbBullets = false;
+//                                    //                            Boy.shooting = false;
+////                              Boy.saber_taken = false;
+////                              Boy.nameOfAnimation = "BOY_IDLE";
+//                                }
+//                            }
+//                        }
+//                     }
+//                    }
+//                }
+//            }
+
+//        }
 //        unequipped();
     }
 

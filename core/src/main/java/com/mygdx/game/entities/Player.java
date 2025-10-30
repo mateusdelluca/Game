@@ -187,7 +187,7 @@ public class Player extends Objeto{
         }
         if (keycode == Input.Keys.SPACE) {
             JUMP.play();
-            body.applyForceToCenter(0, 5_000, true);
+            body.applyForceToCenter(0, 10_000, true);
         }
         if (keycode == Input.Keys.I){
             takeScreenshot();
@@ -233,7 +233,7 @@ public class Player extends Objeto{
     public void takeItem(Item item){
         if (item.isVisible()) {
             item.setVisible(false);
-            new ItemToBeDrawn(item.toString());
+            new ItemToBeDrawn(item);
         }
     }
 

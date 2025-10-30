@@ -46,6 +46,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected float HP = 10f;
     protected boolean touchingGround;
     protected boolean onGround;
+    @Getter @Setter
+    private int index;
 
     public Objeto(float width, float height){
         this.width = width;

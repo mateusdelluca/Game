@@ -14,6 +14,7 @@ public class Sword extends Objeto implements Item{
 
     public static float multiply = 1f;
 
+
     public static final float WIDTH = Images.sword_inventory.getWidth() * multiply,
         HEIGHT = Images.sword_inventory.getHeight() * multiply;
 
