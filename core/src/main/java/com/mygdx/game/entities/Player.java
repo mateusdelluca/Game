@@ -71,7 +71,8 @@ public class Player extends Objeto{
     public void render(SpriteBatch s) {
         renderAnimation(s);
         renderMinis(s);
-        renderWeaponAnimations(s);
+        if (!attacking)
+            renderWeaponAnimations(s);
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -147,9 +148,15 @@ public class Player extends Objeto{
     private void renderWeaponAnimations(SpriteBatch spriteBatch){
          switch (whichOneEquip()){
             case "Sword":{
-                if (!animationName().equals("WALKING_SWORD"))
-                    changeAnimation("WALKING_SWORD");
-//                looping = true;
+                if (!animationName().equals("WALKING_SWORD")) {
+                    oldAnimation = "SWORD";
+                    if (!isntMoving()) {
+                        changeAnimation("WALKING_SWORD");
+                    }
+                    else {
+                        changeAnimation("SWORD");
+                    }
+                }
                 break;
             }
             case "Rifle":{
@@ -227,14 +234,20 @@ public class Player extends Objeto{
                     changeAnimation("WALKING");
                     walking = true;
                 } else{
-                    if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
+                    if (isntMoving()){
                         if (!oldAnimation.equals("NONE"))
                             changeAnimation("IDLE");
+                        if (oldAnimation.equals("WALKING_SWORD"))
+                            changeAnimation("SWORD");
                         return true;
                     }
                 }
             }
         } return false;
+    }
+
+    private boolean isntMoving(){
+        return Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0;
     }
 
     public void resize(SpriteBatch spriteBatch, int width, int height){
@@ -291,7 +304,10 @@ public class Player extends Objeto{
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
             if (!attacking) {
-                changeAnimation("PUNCHING_FIRE");
+                if (animationName().contains("SWORD"))
+                    changeAnimation("ATTACKING_SWORD_FIRE_2");
+                else
+                    changeAnimation("PUNCHING_FIRE");
                 resetCurrentAnimation();
                 attacking = true;
             }
