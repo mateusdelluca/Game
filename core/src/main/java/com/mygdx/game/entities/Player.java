@@ -15,6 +15,7 @@ import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.Rifle;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
@@ -24,6 +25,11 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.images.Images.jetPackSprite;
+import static com.mygdx.game.images.Images.legs;
+import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
+import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.JUMP;
@@ -46,6 +52,9 @@ public class Player extends Objeto{
     private boolean walking, attacking;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
+    public static Rifle rifle;
+    private float degrees, radians;
+
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
         body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
@@ -55,6 +64,7 @@ public class Player extends Objeto{
         isFacingRight = true;
         this.viewport = viewport;
         changeAnimation("IDLE");
+        rifle = new Rifle(new Vector2(10_000, 20_000));
     }
 
 
@@ -62,6 +72,7 @@ public class Player extends Objeto{
     public void render(SpriteBatch s) {
         renderAnimation(s);
         renderMinis(s);
+        equipWeaponChangingAnimation(s);
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -88,6 +99,7 @@ public class Player extends Objeto{
         respawn();
         attacking();
         idle();
+
     }
 
     private void attacking() {
@@ -126,6 +138,64 @@ public class Player extends Objeto{
 
     }
 
+    private String whichOneEquip(){
+        for (Item item : items.keySet())
+            if (equipped[item.getIndex()]){
+                return item.toString();
+            }
+        return "";
+    }
+
+    private void equipWeaponChangingAnimation(SpriteBatch spriteBatch){
+         switch (whichOneEquip()){
+            case "Sword":{
+                 changeAnimation("WALKING_SWORD");
+                 break;
+            }
+            case "Rifle":{
+                top = new Sprite(Player_Animations.valueOf("RELOADING").animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
+                top.setOriginCenter();
+                top.setRotation(degrees);
+                top.setPosition(body.getPosition().x, body.getPosition().y);
+                legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
+                if (Math.abs(degrees) > 90f) {
+                    top.setRotation(-Math.abs(180f - degrees));
+                }
+                top.setFlip(Math.abs(degrees) > 90f, false);
+
+                legs.setFlip(Math.abs(degrees) > 90f, false);
+                legs.draw(spriteBatch);
+                top.rotate(degrees);
+                top.draw(spriteBatch);
+                changeAnimation("NONE");
+                break;
+            }
+            case "Saber":{
+                changeAnimation("SABER");
+                break;
+            }
+            case "Laser":{
+                changeAnimation("HEADSET");
+                break;
+            }
+            default:{
+                if (idle()){
+                    changeAnimation("IDLE");
+                    break;
+                }
+            }
+        }
+    }
+
+    private void aim(){
+        if (animationName().equals("LEGS_ONLY")) {
+            float dx = worldX - Math.abs(body.getPosition().x + 64);
+            float dy = worldY - Math.abs(body.getPosition().y + 64);
+            degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
+            radians = (float) Math.atan2(dy, dx);
+        }
+    }
+
     private boolean isFinishedCurrentAnimation(){
         return animation().animator.finishedAnimation;
     }
@@ -138,7 +208,7 @@ public class Player extends Objeto{
         return animation().name();
     }
 
-    private void idle(){
+    private boolean idle(){
         if (!beenHit && !attacking) {
             if (!onGround()){
                 if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
@@ -147,16 +217,18 @@ public class Player extends Objeto{
                     changeAnimation("JUMPING");
 
             } else {
+                System.out.println(getBody().getLinearVelocity().x);
                 if (Math.abs(getBody().getLinearVelocity().x) >= 15f) {
                     changeAnimation("WALKING");
                     walking = true;
                 } else{
                     if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
                         changeAnimation("IDLE");
+                        return true;
                     }
                 }
             }
-        }
+        } return false;
     }
 
     public void resize(SpriteBatch spriteBatch, int width, int height){

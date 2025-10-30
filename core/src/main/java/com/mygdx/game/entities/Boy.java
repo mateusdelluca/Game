@@ -16,7 +16,6 @@ import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
-import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
@@ -144,9 +143,9 @@ public class Boy extends Objeto {
                             anim.draw(spriteBatch);
                         } else {
                             if (!laser) {
-                                legs = new Sprite(Player_Animations.SHOOTING_AND_WALKING.animator.getFrame(0));
+                                legs = new Sprite(Player_Animations.LEGS_ONLY.animator.getFrame(0));
                                 if (isMoving()) //when he is moving and didn't active the jetpack
-                                    legs = new Sprite(Player_Animations.SHOOTING_AND_WALKING.animator.currentSpriteFrame0(usingOnlyLastFrame, looping, facingLeft));
+                                    legs = new Sprite(Player_Animations.LEGS_ONLY.animator.currentSpriteFrame0(usingOnlyLastFrame, looping, facingLeft));
                                 legs.setPosition(body.getPosition().x, body.getPosition().y);
                             }
                             if (shooting && !laser) {    //when actives the gun and shooting and he is not moving and he has not been hit
@@ -205,7 +204,7 @@ public class Boy extends Objeto {
                         }
                         if (ropeShoot) {
                             if (isMoving()) //when he is moving and didn't active the jetpack
-                                legs = new Sprite(Player_Animations.SHOOTING_AND_WALKING.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
+                                legs = new Sprite(Player_Animations.LEGS_ONLY.animator.currentSpriteFrame(usingOnlyLastFrame, looping, facingLeft));
                             legs.setPosition(body.getPosition().x, body.getPosition().y);
                             ninjaRope_shoot.setOriginCenter();
                             ninjaRope_shoot.setRotation(degrees);
