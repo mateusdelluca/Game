@@ -153,18 +153,18 @@ public class Player extends Objeto{
                  break;
             }
             case "Rifle":{
-                top = new Sprite(Player_Animations.valueOf("RELOADING").animator.currentSpriteFrame(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
+                top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
-                top.setRotation(degrees);
-                top.setPosition(body.getPosition().x, body.getPosition().y);
-                legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
-                if (Math.abs(degrees) > 90f) {
-                    top.setRotation(-Math.abs(180f - degrees));
-                }
-                top.setFlip(Math.abs(degrees) > 90f, false);
-
-                legs.setFlip(Math.abs(degrees) > 90f, false);
+                top.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+                legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMoving(), isMoving(), !isFacingRight));
+//                if (Math.abs(degrees) > 90f) {
+//                    top.setRotation(-Math.abs(180f - degrees));
+//                }
+//                top.setFlip(Math.abs(degrees) > 90f, false);
+//                legs.setFlip(Math.abs(degrees) > 90f, false);
+                legs.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
                 legs.draw(spriteBatch);
+                top.setRotation(degrees);
                 top.rotate(degrees);
                 top.draw(spriteBatch);
                 changeAnimation("NONE");
@@ -194,6 +194,10 @@ public class Player extends Objeto{
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
             radians = (float) Math.atan2(dy, dx);
         }
+    }
+
+    private boolean isMoving(){
+        return body.getLinearVelocity().x != 0;
     }
 
     private boolean isFinishedCurrentAnimation(){
