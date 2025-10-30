@@ -26,12 +26,10 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 import static com.mygdx.game.images.Images.*;
-import static com.mygdx.game.images.Images.jetPackSprite;
 import static com.mygdx.game.images.Images.legs;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.sfx.Sounds.JUMP;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
@@ -54,6 +52,7 @@ public class Player extends Objeto{
 
     public static Rifle rifle;
     private float degrees, radians;
+    private String oldAnimation = "IDLE";
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -72,7 +71,7 @@ public class Player extends Objeto{
     public void render(SpriteBatch s) {
         renderAnimation(s);
         renderMinis(s);
-        equipWeaponChangingAnimation(s);
+        renderWeaponAnimations(s);
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -99,7 +98,6 @@ public class Player extends Objeto{
         respawn();
         attacking();
         idle();
-
     }
 
     private void attacking() {
@@ -131,7 +129,7 @@ public class Player extends Objeto{
     }
 
     private void walking(){
-        if (animationName().equals("WALKING")){
+        if (animationName().equals("WALKING") || animationName().equals("WALKING_SWORD")){
             if (isFinishedCurrentAnimation())
                 resetCurrentAnimation();
         }
@@ -146,11 +144,13 @@ public class Player extends Objeto{
         return "";
     }
 
-    private void equipWeaponChangingAnimation(SpriteBatch spriteBatch){
+    private void renderWeaponAnimations(SpriteBatch spriteBatch){
          switch (whichOneEquip()){
             case "Sword":{
-                 changeAnimation("WALKING_SWORD");
-                 break;
+                if (!animationName().equals("WALKING_SWORD"))
+                    changeAnimation("WALKING_SWORD");
+//                looping = true;
+                break;
             }
             case "Rifle":{
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
@@ -168,6 +168,7 @@ public class Player extends Objeto{
                 top.rotate(degrees);
                 top.draw(spriteBatch);
                 changeAnimation("NONE");
+                oldAnimation = "NONE";
                 break;
             }
             case "Saber":{
@@ -227,7 +228,8 @@ public class Player extends Objeto{
                     walking = true;
                 } else{
                     if (Math.abs(getBody().getLinearVelocity().x) == 0 && Math.abs(getBody().getLinearVelocity().y) == 0){
-                        changeAnimation("IDLE");
+                        if (!oldAnimation.equals("NONE"))
+                            changeAnimation("IDLE");
                         return true;
                     }
                 }
@@ -288,8 +290,9 @@ public class Player extends Objeto{
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
-            if (!attacking ) {
+            if (!attacking) {
                 changeAnimation("PUNCHING_FIRE");
+                resetCurrentAnimation();
                 attacking = true;
             }
         }
