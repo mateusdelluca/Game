@@ -39,7 +39,7 @@ public class Animator{
     public boolean finishedAnimation;
 
     public static boolean changedAnimation;
-
+    private boolean looping;
     public Animator(int numFrames, int numColumns, float fps, int width, int height, String path) {
         this.numFrames = numFrames;
         this.numColumns = numColumns;
@@ -236,6 +236,9 @@ public class Animator{
             resetAnimation();
             changedAnimation = false;
         }
+        if (looping && finishedAnimation){
+            stateTime = 0;
+        }
     }
 
     public void resetAnimation(){
@@ -300,6 +303,7 @@ public class Animator{
     public TextureRegion currentSpriteFrame(boolean useOnlyLastFrame, boolean looping, boolean flip){
 //        stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         // Get current frame of animation for the current stateTime
+        this.looping = looping;
         Sprite s = null;
         if (!useOnlyLastFrame) {
             s = new Sprite(animation.getKeyFrame(stateTime, looping));

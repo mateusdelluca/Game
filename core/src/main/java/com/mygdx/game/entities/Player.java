@@ -15,11 +15,13 @@ import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.Item;
+import com.mygdx.game.items.Laser_Headset;
 import com.mygdx.game.items.Rifle;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
+import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,13 +49,15 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f;
-    private boolean walking, attacking;
+    private boolean walking, attacking, laser;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
     public static Rifle rifle;
     private float degrees, radians;
     private String oldAnimation = "IDLE";
+    public static Character_Features character_features = new Character_Features();
 
+    private Sprite headsetlaser;
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
         body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
@@ -99,6 +103,7 @@ public class Player extends Objeto{
         respawn();
         attacking();
         idle();
+        character_features.update();
     }
 
     private void attacking() {
@@ -184,8 +189,13 @@ public class Player extends Objeto{
                 changeAnimation("SABER");
                 break;
             }
-            case "Laser":{
-                changeAnimation("HEADSET");
+            case "Laser_Headset":{
+                laser = true;
+                headsetlaser = new Sprite(Player_Animations.HEADSET.getAnimator().currentSpriteFrameUpdateStateTime(false,
+                    true, !isFacingRight));
+                headsetlaser.setPosition(isFacingRight ? body.getPosition().x - 3f : body.getPosition().x - 10f, body.getPosition().y + 12f);
+                if (!animationName().equals("JUMPING_FRONT_LASER"))
+                    headsetlaser.draw(spriteBatch);
                 break;
             }
             default:{
@@ -225,9 +235,12 @@ public class Player extends Objeto{
     private boolean idle(){
         if (!beenHit && !attacking) {
             if (!onGround()){
-                if (Math.abs(getBody().getLinearVelocity().x) <= 1f)
-                    changeAnimation("JUMPING_FRONT");
-                if (Math.abs(getBody().getLinearVelocity().x) > 1f && Math.abs(getBody().getLinearVelocity().x) < 15f)
+                if (Math.abs(getBody().getLinearVelocity().x) <= 2f)
+                    if (laser)
+                       changeAnimation("JUMPING_FRONT_LASER");
+                    else
+                        changeAnimation("JUMPING_FRONT");
+                if (Math.abs(getBody().getLinearVelocity().x) > 2f && Math.abs(getBody().getLinearVelocity().x) < 15f)
                     changeAnimation("JUMPING");
 
             } else {
@@ -236,7 +249,7 @@ public class Player extends Objeto{
                     changeAnimation("WALKING");
                     walking = true;
                 } else{
-                    if (!isMoving() || (!attacking && !walking)){
+                    if (!isMoving() || !walking){
                         if (!oldAnimation.equals("NONE"))
                             changeAnimation("IDLE");
                         if (oldAnimation.equals("WALKING_SWORD"))
@@ -263,8 +276,6 @@ public class Player extends Objeto{
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
                     new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 0f));
             }
-            if (frameCounter() > 0)
-                body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
         }
     }
 
@@ -283,16 +294,26 @@ public class Player extends Objeto{
         if (keycode == Input.Keys.SPACE) {
             JUMP.play();
             body.applyForceToCenter(0, 10_000, true);
+            if (!isMoving()){
+                changeAnimation("JUMPING_FRONT_LASER");
+                looping = true;
+            }
+
         }
         if (keycode == Input.Keys.I){
             takeScreenshot();
             setStates(StateManager.States.INVENTORY);
         }
+        if (keycode == Input.Keys.Q){
+            ScreenshotHelper.takeScreenshot();
+            StateManager.setStates(StateManager.States.STATS);
+        }
     }
 
     public void keyUp(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
-            body.setLinearVelocity(0f, body.getLinearVelocity().y);
+            if (!animationName().contains("FIRE"))
+                body.setLinearVelocity(0f, body.getLinearVelocity().y);
             walking = false;
             changeAnimation("IDLE");
         }
@@ -310,10 +331,13 @@ public class Player extends Objeto{
             if (!attacking) {
                 if (animationName().contains("SWORD"))
                     changeAnimation("ATTACKING_SWORD_FIRE_2");
-                else
+                else {
                     changeAnimation("PUNCHING_FIRE");
+                    body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                }
                 resetCurrentAnimation();
                 attacking = true;
+
             }
         }
     }

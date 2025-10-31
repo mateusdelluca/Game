@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.entities.Boy;
+import com.mygdx.game.entities.Player;
 
 import java.io.Serializable;
 
@@ -36,8 +37,8 @@ public class PowerBar implements Serializable{
 
     public void render(SpriteBatch s, OrthographicCamera playerPos){
         position = playerPos.position;
-        if (Boy.rifle != null)
-            Images.font.draw(s, Boy.rifle.stringNumbBullets, -500 + position.x, position.y - 450);
+        if (Player.rifle != null)
+            Images.font.draw(s, Player.rifle.stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
 
         sp_0 = Math.min(Math.max(0, sp_0), maxSP);
