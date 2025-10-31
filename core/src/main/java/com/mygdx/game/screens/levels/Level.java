@@ -598,7 +598,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-
         player.mouseMoved(screenX, screenY);
         ninjaRope.mouseMoved(screenX, screenY);
 //        mouse.mouseMoved(screenX, screenY);

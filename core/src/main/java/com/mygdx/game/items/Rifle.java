@@ -19,10 +19,11 @@ import static com.mygdx.game.items.Cartridge.MAX_ROUNDS;
 
 public class Rifle extends Objeto implements Item, Serializable {
 
-    public static final float WIDTH = rifle.getWidth();
-    public static final float HEIGHT = rifle.getHeight();
+    public static final float MULTIPLY = 1/3f;
+    public static final float WIDTH = rifle.getWidth() * MULTIPLY;
+    public static final float HEIGHT = rifle.getHeight() * MULTIPLY;
 //    public static final int MAX_ROUNDS = 30;
-    public final float MULTIPLY = 1/6f;
+
     @Getter
     private ArrayList<Cartridge> numCartridges = new ArrayList<>();
     @Getter

@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
-import com.mygdx.game.items.Item;
-import com.mygdx.game.items.Laser_Headset;
-import com.mygdx.game.items.Rifle;
+import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
@@ -32,7 +30,9 @@ import static com.mygdx.game.images.Images.legs;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
+import static com.mygdx.game.screens.Stats.char_features;
 import static com.mygdx.game.sfx.Sounds.JUMP;
+import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Player extends Objeto{
@@ -49,8 +49,10 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f;
-    private boolean walking, attacking, laser;
+    private boolean walking, attacking, laser, shooting;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
+
+    private Array<Laser> laser_rail = new Array<>();
 
     public static Rifle rifle;
     private float degrees, radians;
@@ -77,6 +79,14 @@ public class Player extends Objeto{
         renderMinis(s);
         if (!attacking)
             renderWeaponAnimations(s);
+        renderLaser(s);
+    }
+
+    private void renderLaser(SpriteBatch spriteBatch){
+        if (!laser_rail.isEmpty()) {
+            for (Laser laser : laser_rail)
+                laser.render(spriteBatch);
+        }
     }
 
     private void renderAnimation(SpriteBatch s){
@@ -103,6 +113,7 @@ public class Player extends Objeto{
         respawn();
         attacking();
         idle();
+        aim();
         character_features.update();
     }
 
@@ -167,19 +178,20 @@ public class Player extends Objeto{
                 break;
             }
             case "Rifle":{
+                spriteBatch.draw(shoot, worldX - 13, worldY - 9);
+                shooting = true;
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
                 top.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
                 legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMoving(), isMoving(), !isFacingRight));
-//                if (Math.abs(degrees) > 90f) {
-//                    top.setRotation(-Math.abs(180f - degrees));
-//                }
-//                top.setFlip(Math.abs(degrees) > 90f, false);
-//                legs.setFlip(Math.abs(degrees) > 90f, false);
+                top.setRotation(degrees);
+                if (Math.abs(degrees) > 90f)
+                    top.setRotation(-Math.abs(180f - degrees));
+                top.setFlip(Math.abs(degrees) > 90f, false);
+                legs.setFlip(Math.abs(degrees) > 90f, false);
+                isFacingRight = !(Math.abs(degrees) > 90f);
                 legs.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
                 legs.draw(spriteBatch);
-                top.setRotation(degrees);
-                top.rotate(degrees);
                 top.draw(spriteBatch);
                 changeAnimation("NONE");
                 oldAnimation = "NONE";
@@ -190,10 +202,18 @@ public class Player extends Objeto{
                 break;
             }
             case "Laser_Headset":{
+                spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 laser = true;
                 headsetlaser = new Sprite(Player_Animations.HEADSET.getAnimator().currentSpriteFrameUpdateStateTime(false,
                     true, !isFacingRight));
                 headsetlaser.setPosition(isFacingRight ? body.getPosition().x - 3f : body.getPosition().x - 10f, body.getPosition().y + 12f);
+                headsetlaser.setOriginCenter();
+                headsetlaser.setRotation(degrees);
+                if (Math.abs(degrees) > 90f) {
+                    headsetlaser.setRotation(-Math.abs(180f - degrees));
+                }
+                headsetlaser.setFlip(Math.abs(degrees) > 90f, false);
+                isFacingRight = !(Math.abs(degrees) > 90f);
                 if (!animationName().equals("JUMPING_FRONT_LASER"))
                     headsetlaser.draw(spriteBatch);
                 break;
@@ -208,7 +228,7 @@ public class Player extends Objeto{
     }
 
     private void aim(){
-        if (animationName().equals("LEGS_ONLY")) {
+        if (laser || shooting) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
@@ -315,7 +335,7 @@ public class Player extends Objeto{
             if (!animationName().contains("FIRE"))
                 body.setLinearVelocity(0f, body.getLinearVelocity().y);
             walking = false;
-            changeAnimation("IDLE");
+//            changeAnimation("IDLE");
         }
     }
 
@@ -329,14 +349,38 @@ public class Player extends Objeto{
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
             if (!attacking) {
-                if (animationName().contains("SWORD"))
-                    changeAnimation("ATTACKING_SWORD_FIRE_2");
-                else {
-                    changeAnimation("PUNCHING_FIRE");
-                    body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                if (laser) {
+                    if (PowerBar.power >= char_features.getPowerSpent()) {
+                        laser_rail.add(new Laser(
+                            new Vector2(isFacingRight ? (getBody().getPosition().x +
+                                WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
+                                isFacingRight ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
+                            radians > Math.PI / 2f, radians, this.toString()));
+                        LASER_HEADSET.play();
+                        PowerBar.power -= char_features.getPowerSpent();
+                    }
+                } else {
+                    if (shooting) {
+                        if (!rifle.isReloading()) {
+                            if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                                Bullet bullet = new Bullet(
+                                    new Vector2(isFacingRight ? (getBody().getPosition().x +
+                                        WIDTH / 2f) : (getBody().getPosition().x),
+                                        (getBody().getPosition().y + HEIGHT / 2f)),
+                                    !isFacingRight, radians, true, this.toString());
+                                rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                            }
+                        }
+                    } else {
+                        if (animationName().contains("SWORD"))
+                            changeAnimation("ATTACKING_SWORD_FIRE_2");
+                        else {
+                            changeAnimation("PUNCHING_FIRE");
+                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                        }
+                    }attacking = true;
                 }
                 resetCurrentAnimation();
-                attacking = true;
 
             }
         }
