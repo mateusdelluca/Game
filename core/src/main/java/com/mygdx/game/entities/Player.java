@@ -335,7 +335,6 @@ public class Player extends Objeto{
             if (!animationName().contains("FIRE"))
                 body.setLinearVelocity(0f, body.getLinearVelocity().y);
             walking = false;
-//            changeAnimation("IDLE");
         }
     }
 
