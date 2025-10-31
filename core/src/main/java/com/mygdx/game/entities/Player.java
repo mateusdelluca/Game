@@ -103,14 +103,16 @@ public class Player extends Objeto{
 
     private void attacking() {
         attackingBodiesUpdate();
-        if (isFinishedCurrentAnimation() && attacking) {
-            animation().getAnimator().resetAnimation();
-            attacking = false;
-            for (Body attacking_box_body : attacking_box_bodies){
+        if (!attacking) {
+            for (Body attacking_box_body : attacking_box_bodies) {
                 if (attacking_box_body != null) {
                     attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
                 }
             }
+        }
+        if (isFinishedCurrentAnimation() && attacking) {
+            animation().getAnimator().resetAnimation();
+            attacking = false;
         }
     }
 
@@ -234,7 +236,7 @@ public class Player extends Objeto{
                     changeAnimation("WALKING");
                     walking = true;
                 } else{
-                    if (isntMoving()){
+                    if (!isMoving() || (!attacking && !walking)){
                         if (!oldAnimation.equals("NONE"))
                             changeAnimation("IDLE");
                         if (oldAnimation.equals("WALKING_SWORD"))
@@ -259,8 +261,10 @@ public class Player extends Objeto{
             if (animation().getAnimator().stateTime > 0.30 && animation().getAnimator().stateTime < 0.32) {
                 attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                    new Vector2(10, 40f), BodyDef.BodyType.StaticBody, false, " Boy", 100f));
+                    new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 0f));
             }
+            if (frameCounter() > 0)
+                body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
         }
     }
 
