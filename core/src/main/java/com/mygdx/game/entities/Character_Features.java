@@ -22,7 +22,8 @@ public class Character_Features {
 
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
     private float enemy_attack = 10f;
-    private float laserDamage = 1f;
+    @Getter
+    private float laserDamage = 1f, damage;
     @Getter
     private float powerSpent = PowerBar.power;
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
@@ -48,7 +49,8 @@ public class Character_Features {
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
 
         if (hit) {
-            hp += (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
+            damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
+            hp += damage;
             hit = false;
         }
         if (!lvlUP && exp_Points >= 25) {

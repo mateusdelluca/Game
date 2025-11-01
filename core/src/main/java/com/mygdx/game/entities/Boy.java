@@ -344,6 +344,7 @@ public class Boy extends Objeto {
             animations = Player_Animations.IDLE;
             flickering_time = 0f;
             beenHit = false;
+            font.getData().setScale(10f);
         }
        aim();  //the commands and precision of pointing and shoot
         if (Math.abs(getBody().getLinearVelocity().y) < 0.2f){

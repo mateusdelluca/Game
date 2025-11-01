@@ -26,19 +26,19 @@ public class PowerBar implements Serializable{
     public static float hp_0 = WIDTH/3f, sp_0 = WIDTH2/2f, maxSP = sp_0, maxHP = WIDTH, power = WIDTH3/6f, maxPower = power;
     public static boolean hit;
     private Vector3 position = new Vector3();
-
+    private BitmapFont font;
     private static float x, y;
     public PowerBar(){
         Texture t = new Texture(Gdx.files.internal("Font.png"));
-        Images.font = new BitmapFont(Gdx.files.internal("Font.fnt"), new TextureRegion(t));
+        font = new BitmapFont(Gdx.files.internal("Font.fnt"), new TextureRegion(t));
         t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        Images.font.getData().scale(0.5f);
+        font.getData().scale(0.5f);
     }
 
     public void render(SpriteBatch s, OrthographicCamera playerPos){
         position = playerPos.position;
         if (Player.rifle != null)
-            Images.font.draw(s, Player.rifle.stringNumbBullets, -500 + position.x, position.y - 450);
+            font.draw(s, Player.rifle.stringNumbBullets, -500 + position.x, position.y - 450);
         s.draw(Images.bar, -900 + position.x, position.y - 450);
 
         sp_0 = Math.min(Math.max(0, sp_0), maxSP);
@@ -64,7 +64,6 @@ public class PowerBar implements Serializable{
             position.y = 5400f;
         if (position.x < 970f)
             position.x = 970f;
-
 //        hit(boy.getBody(), s);
     }
 //    public static void hit(Body body){

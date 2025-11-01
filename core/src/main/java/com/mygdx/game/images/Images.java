@@ -48,7 +48,7 @@ public class Images implements Serializable {
     @Getter
     @Setter
     public static Tile tile;
-    public static BitmapFont font;
+
     public static Sprite spriteJetPack;
     public static Sprite jetPackSprite = new Sprite(Player_Animations.JETPACK.animator.getFrame(0).getTexture());
     public static Sprite mortalSprite, mortal_saber;

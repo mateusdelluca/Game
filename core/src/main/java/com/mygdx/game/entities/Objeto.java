@@ -1,12 +1,16 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.items.Bullet;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.screens.Stats;
@@ -18,6 +22,8 @@ import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.images.PowerBar.hit;
+import static com.mygdx.game.screens.Stats.char_features;
+import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -48,11 +54,19 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected boolean onGround;
     @Getter @Setter
     private int index;
+    protected BitmapFont font;
+    protected float scale = 10f;
+    protected boolean isScale;
+    protected Character_Features character_features = new Character_Features();
 
     public Objeto(float width, float height){
         this.width = width;
         this.height = height;
         this.visible = true;
+        Texture t = new Texture(Gdx.files.internal("Font.png"));
+        font = new BitmapFont(Gdx.files.internal("Font.fnt"), new TextureRegion(t));
+        font.getData().setScale(scale, scale);
+        t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
 
     public Objeto(){
@@ -180,6 +194,17 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
+        character_features.update();
+        if (beenHit && !isScale) {
+            if (scale > 0f)
+                scale -= 0.2f;
+            font.getData().setScale(scale, scale);
+            if (scale <= 0f) {
+                scale = 10f;
+                isScale = true;
+                font.getData().setScale(scale, scale);
+            }
+        }
         if (body.getLinearVelocity().y == 0)
             onGround = false;
         if (body != null && rect == null) {
@@ -215,8 +240,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void beenHit(){
         beenHit = true;
-        if (this instanceof Boy)
-            hit = true;
+        hit = true;
     }
 
     public void dropItems(){
@@ -253,7 +277,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                     (body1.getUserData().toString().contains(" Colliders") || body2.getUserData().toString().contains(" Colliders"))
                     ||
                     (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))) {
-                    if (this instanceof Boy)
+                    if (this instanceof Player)
                         beenHit();
                 }
             }

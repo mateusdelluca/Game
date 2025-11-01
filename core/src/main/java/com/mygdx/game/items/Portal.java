@@ -31,7 +31,7 @@ public class Portal extends Objeto implements Item{
         if (body == null)
             body = bodyData.convertDataToBody(BodyDef.BodyType.StaticBody, true);
         s.setColor(1f,1f,1f,1f);
-        s.draw(Images.portal.currentSpriteFrame0(!open_portal, true, false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
+        s.draw(Images.portal.currentSpriteFrameUpdateStateTime(!open_portal, true, false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     @Override
