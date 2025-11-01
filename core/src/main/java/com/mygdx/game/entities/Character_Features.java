@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
-import static com.mygdx.game.entities.Boy.lvlUP;
+import static com.mygdx.game.entities.Player.lvlUP;
 import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.screens.Stats.*;
 
@@ -36,7 +36,7 @@ public class Character_Features {
         PowerBar.maxSP = 40f + (4 * stats_values[WSD]);
         PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
         PowerBar.maxPower = 50f + (5f* stats_values[WSD]);
-        Boy.attack = 1f + (0.5f * stats_values[STR]);
+        attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
         jumpingStrength = 5000f + (200f * stats_values[STR]);
@@ -64,7 +64,7 @@ public class Character_Features {
         PowerBar.maxSP = 40f + (4 * stats_values[WSD]);
         PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
         PowerBar.maxPower = 50f + (5f* stats_values[WSD]);
-        Boy.attack = 1f + (0.5f * stats_values[STR]);
+        attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
         jumpingStrength = 5000f + (200f * stats_values[STR]);

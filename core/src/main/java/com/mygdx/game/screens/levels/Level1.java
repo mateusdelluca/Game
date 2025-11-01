@@ -78,8 +78,6 @@ public class Level1 extends Level{
         spriteBatch.begin();
         background.render();
         tile.render(camera);
-//        jack.render(spriteBatch);
-//        boy.render(spriteBatch);
         for (Item item : items.values())
             item.render(spriteBatch);
         for (Objeto objeto : objetos)

@@ -43,6 +43,7 @@ public class Bullet extends Objeto implements Item {
         else
             body.setTransform(position, (float) Math.toRadians(degrees));
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
+
     }
 
 //    public Bullet(Vector2 position, boolean isFacingLeft, float radians, boolean isSensor){

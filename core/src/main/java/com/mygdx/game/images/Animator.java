@@ -237,7 +237,7 @@ public class Animator{
             changedAnimation = false;
         }
         if (looping && finishedAnimation){
-            stateTime = 0;
+            resetAnimation();
         }
     }
 

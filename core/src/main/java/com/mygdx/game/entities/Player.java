@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,14 +32,15 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Stats.char_features;
-import static com.mygdx.game.sfx.Sounds.JUMP;
-import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
+import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.sfx.Sounds.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
 public class Player extends Objeto{
 
     public static final float WIDTH = 128, HEIGHT = 128f;
     public static Array<Minis> minis = new Array<>();
+    public static boolean lvlUP;
     public static final float BOX_WIDTH = 50f, BOX_HEIGHT = 95f;
     @Setter @Getter
     private boolean isFacingRight;
@@ -48,7 +50,7 @@ public class Player extends Objeto{
     private float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
-    public static float velocityX = 2_000f;
+    public static float velocityX = 2_000f, timerLvlUP;
     private boolean walking, attacking, laser, shooting;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
@@ -77,9 +79,26 @@ public class Player extends Objeto{
     public void render(SpriteBatch s) {
         renderAnimation(s);
         renderMinis(s);
-        if (!attacking)
+        if (!attacking || shooting)
             renderWeaponAnimations(s);
         renderLaser(s);
+        rifle.render(s);
+        updateBaseLevel(s);
+    }
+
+    private void updateBaseLevel(SpriteBatch spriteBatch){
+        if (Player.lvlUP) {
+            Sprite sprite = new Sprite(Player_Animations.LVL_UP.animator.currentSpriteFrameUpdateStateTime(false,false, !isFacingRight));
+            sprite.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+            sprite.draw(spriteBatch);
+            timerLvlUP += Gdx.graphics.getDeltaTime();
+            if (timerLvlUP >= Player_Animations.LVL_UP.animator.totalTime){
+                Player.lvlUP = false;
+                EAGLE.play();
+                exp_Points = 1;
+                timerLvlUP = 0;
+            }
+        }
     }
 
     private void renderLaser(SpriteBatch spriteBatch){
@@ -115,6 +134,8 @@ public class Player extends Objeto{
         idle();
         aim();
         character_features.update();
+        if (rifle != null)
+            rifle.update();
     }
 
     private void attacking() {
@@ -149,6 +170,7 @@ public class Player extends Objeto{
 
     private void walking(){
         if (animationName().equals("WALKING") || animationName().equals("WALKING_SWORD")){
+            walking = true;
             if (isFinishedCurrentAnimation())
                 resetCurrentAnimation();
         }
@@ -180,10 +202,13 @@ public class Player extends Objeto{
             case "Rifle":{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 shooting = true;
+                Rifle.showingNumbBullets = true;
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
                 top.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
                 legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMoving(), isMoving(), !isFacingRight));
+                if (!isMoving())
+                    Player_Animations.valueOf("LEGS_ONLY").getAnimator().setFrameCounter(0);
                 top.setRotation(degrees);
                 if (Math.abs(degrees) > 90f)
                     top.setRotation(-Math.abs(180f - degrees));
@@ -237,7 +262,7 @@ public class Player extends Objeto{
     }
 
     private boolean isMoving(){
-        return body.getLinearVelocity().x != 0;
+        return Math.abs(body.getLinearVelocity().x) > 0f;
     }
 
     private boolean isFinishedCurrentAnimation(){
@@ -255,26 +280,28 @@ public class Player extends Objeto{
     private boolean idle(){
         if (!beenHit && !attacking) {
             if (!onGround()){
-                if (Math.abs(getBody().getLinearVelocity().x) <= 2f)
+                if (!isMoving()) {
                     if (laser)
-                       changeAnimation("JUMPING_FRONT_LASER");
-                    else
+                        changeAnimation("JUMPING_FRONT_LASER");
+                    if (!walking)
                         changeAnimation("JUMPING_FRONT");
-                if (Math.abs(getBody().getLinearVelocity().x) > 2f && Math.abs(getBody().getLinearVelocity().x) < 15f)
-                    changeAnimation("JUMPING");
+                } else
+                    if (!walking)
+                        changeAnimation("JUMPING");
 
             } else {
-                System.out.println(getBody().getLinearVelocity().x);
-                if (Math.abs(getBody().getLinearVelocity().x) >= 15f) {
-                    changeAnimation("WALKING");
-                    walking = true;
-                } else{
-                    if (!isMoving() || !walking){
-                        if (!oldAnimation.equals("NONE"))
-                            changeAnimation("IDLE");
-                        if (oldAnimation.equals("WALKING_SWORD"))
-                            changeAnimation("SWORD");
-                        return true;
+                if (onGround) {
+                    System.out.println(getBody().getLinearVelocity().x);
+                    if (isMoving()) {
+                        changeAnimation("WALKING");
+                    } else {
+                        if (!isMoving() || !walking) {
+                            if (!oldAnimation.equals("NONE"))
+                                changeAnimation("IDLE");
+                            if (oldAnimation.equals("WALKING_SWORD"))
+                                changeAnimation("SWORD");
+                            return true;
+                        }
                     }
                 }
             }
@@ -305,21 +332,38 @@ public class Player extends Objeto{
 
     public void keyDown(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
-//            body.applyForceToCenter(new Vector2(keycode == Input.Keys.A ? -velocityX : velocityX, 0), true);
-            body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
+            body.applyForceToCenter(new Vector2(keycode == Input.Keys.A ? -velocityX : velocityX, 0), true);
+//            body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
+//            body.setLinearVelocity(new Vector2(15,0));
             isFacingRight = (keycode == Input.Keys.D);
-            changeAnimation("WALKING");
-            walking = true;
+            if (!animationName().contains("WALKING")){
+                changeAnimation("WALKING");
+                walking = true;
+                animation().getAnimator().resetAnimation();
+            }
         }
         if (keycode == Input.Keys.SPACE) {
             JUMP.play();
             body.applyForceToCenter(0, 10_000, true);
             if (!isMoving()){
-                changeAnimation("JUMPING_FRONT_LASER");
-                looping = true;
+                if (laser)
+                    changeAnimation("JUMPING_FRONT_LASER");
+                else
+                    changeAnimation("JUMPING_FRONT");
+//                looping = true;
             }
 
         }
+        if (keycode == Input.Keys.R){
+            if (rifle != null) {
+                if (!rifle.isReloading() && !rifle.isButtonReloadingPressed()) {
+                    rifle.setButtonReloadingPressed(true);
+                    rifle.setReloading(true);
+                    rifle.reloading();
+                }
+            }
+        }
+
         if (keycode == Input.Keys.I){
             takeScreenshot();
             setStates(StateManager.States.INVENTORY);
@@ -334,7 +378,8 @@ public class Player extends Objeto{
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
             if (!animationName().contains("FIRE"))
                 body.setLinearVelocity(0f, body.getLinearVelocity().y);
-            walking = false;
+            if (animationName().contains("WALKING"))
+                walking = false;
         }
     }
 
@@ -348,40 +393,40 @@ public class Player extends Objeto{
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
             if (!attacking) {
-                if (laser) {
-                    if (PowerBar.power >= char_features.getPowerSpent()) {
-                        laser_rail.add(new Laser(
-                            new Vector2(isFacingRight ? (getBody().getPosition().x +
-                                WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
-                                isFacingRight ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
-                            radians > Math.PI / 2f, radians, this.toString()));
-                        LASER_HEADSET.play();
-                        PowerBar.power -= char_features.getPowerSpent();
+                attacking = true;
+            }
+            if (laser) {
+                if (PowerBar.power >= char_features.getPowerSpent()) {
+                    laser_rail.add(new Laser(
+                        new Vector2(isFacingRight ? (getBody().getPosition().x +
+                            WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
+                            isFacingRight ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
+                        radians > Math.PI / 2f, radians, this.toString()));
+                    LASER_HEADSET.play();
+                    PowerBar.power -= char_features.getPowerSpent();
+                }
+            } else {
+                if (shooting) {
+                    if (!rifle.isReloading()) {
+                        if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                            Bullet bullet = new Bullet(
+                                new Vector2(isFacingRight ? (getBody().getPosition().x +
+                                    WIDTH / 2f) : (getBody().getPosition().x),
+                                    (getBody().getPosition().y + HEIGHT / 2f)),
+                                !isFacingRight, radians, false, this.toString());
+                            rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                        }
                     }
                 } else {
-                    if (shooting) {
-                        if (!rifle.isReloading()) {
-                            if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
-                                Bullet bullet = new Bullet(
-                                    new Vector2(isFacingRight ? (getBody().getPosition().x +
-                                        WIDTH / 2f) : (getBody().getPosition().x),
-                                        (getBody().getPosition().y + HEIGHT / 2f)),
-                                    !isFacingRight, radians, true, this.toString());
-                                rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
-                            }
-                        }
-                    } else {
-                        if (animationName().contains("SWORD"))
-                            changeAnimation("ATTACKING_SWORD_FIRE_2");
-                        else {
-                            changeAnimation("PUNCHING_FIRE");
-                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
-                        }
-                    }attacking = true;
+                    if (animationName().contains("SWORD"))
+                        changeAnimation("ATTACKING_SWORD_FIRE_2");
+                    else {
+                        changeAnimation("PUNCHING_FIRE");
+                        body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                    }
                 }
-                resetCurrentAnimation();
-
             }
+            resetCurrentAnimation();
         }
     }
 
@@ -416,8 +461,13 @@ public class Player extends Objeto{
         return Player_Animations.currentAnimation;
     }
 
-    public void changeAnimation(String name){
-        Player_Animations.changeAnimation(name);
+    public void changeAnimation(String name) {
+        if (!animationName().equals(name))
+            Player_Animations.changeAnimation(name);
+        if (name.equals("IDLE")){
+            shooting = false;
+            walking = false;
+        }
     }
 
     @Override
