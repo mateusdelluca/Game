@@ -17,6 +17,7 @@ import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.screens.Stats;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
@@ -303,8 +304,8 @@ public class Boy extends Objeto {
 
     public void update(){
         super.update();
-        char_features.update();
-        body.getFixtureList().get(0).setDensity(char_features.getStats_values()[STR] * 0.8f);
+//        Stats.character_features.update();
+//        body.getFixtureList().get(0).setDensity(Stats.character_features.getStats_values()[STR] * 0.8f);
         if (rifle != null)
             rifle.update();
         if (punching)
@@ -646,12 +647,12 @@ public class Boy extends Objeto {
                     secondJump++;
                     body.setGravityScale(1f);
 //                    body.setLinearVelocity(getBody().getLinearVelocity().x, JUMP_VELOCITY);
-                    body.applyForce(new Vector2(0f, char_features.getJumpingStrength()), getBody().getWorldCenter(), true);
+//                    body.applyForce(new Vector2(0f, Stats.character_features.getJumpingStrength()), getBody().getWorldCenter(), true);
                 }
             } else {
-                if (mortal || mortalSaber)
-                    body.applyForceToCenter(new Vector2(0f, char_features.getJumpingStrength()), true);
-                body.setLinearVelocity(new Vector2(isFacingLeft() ? -20f : 20f, body.getLinearVelocity().y));
+//                if (mortal || mortalSaber)
+//                    body.applyForceToCenter(new Vector2(0f, Stats.character_features.getJumpingStrength()), true);
+//                body.setLinearVelocity(new Vector2(isFacingLeft() ? -20f : 20f, body.getLinearVelocity().y));
                 if (saber_taken) {
                     mortalSaber = true;
                     mortal = false;
@@ -716,15 +717,15 @@ public class Boy extends Objeto {
                             getBody().setLinearVelocity(!flip0 ? velocityX * 5 : -velocityX * 5, getBody().getLinearVelocity().y);
                         }
                             if (laser) {
-                                if (PowerBar.power >= char_features.getPowerSpent()) {
+//                                if (PowerBar.power >= Stats.character_features.getPowerSpent()) {
                                     laser_rail.add(new Laser(
                                         new Vector2(!facingLeft ? (getBody().getPosition().x +
                                             WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
                                             !facingLeft ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
                                         radians > Math.PI / 2f, radians, this.toString()));
                                     LASER_HEADSET.play();
-                                    PowerBar.power -= char_features.getPowerSpent();
-                                }
+//                                    PowerBar.power -= Stats.character_features.getPowerSpent();
+//                                }
                             }
                         }
                     }

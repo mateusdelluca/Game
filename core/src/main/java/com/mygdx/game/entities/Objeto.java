@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.images.PowerBar.hit;
-import static com.mygdx.game.screens.Stats.char_features;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
@@ -205,8 +204,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                 font.getData().setScale(scale, scale);
             }
         }
-        if (body.getLinearVelocity().y == 0)
-            onGround = false;
         if (body != null && rect == null) {
             rect = new Rectangle(body.getPosition().x - (width / 2f), body.getPosition().y - (height / 2f), width, height);
         }
@@ -297,17 +294,25 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void beginContact(Body body1, Body body2){
         if (body1 == null || body2 == null || body == null)
             return;
+        if (
+            (
+            ((body1.getUserData().toString().contains("Thorns") && body2.equals(body))
+            || (body2.getUserData().toString().contains("Thorns") && body1.equals(body)))
+            ||
 
-        onGround = ((body1.getUserData().toString().contains("Thorns") && body2.equals(body)
-            || body2.getUserData().toString().contains("Thorns") && body1.equals(body))
+            ((body1.getUserData().toString().contains("Colliders") && body2.equals(body))
+            || (body2.getUserData().toString().contains("Colliders") && body1.equals(body)))
+
             ||
-            (body1.getUserData().toString().contains("Colliders") && body2.equals(body)
-                || body2.getUserData().toString().contains("Colliders") && body1.equals(body))
-            ||
-            (body1.getUserData().toString().contains("Rects") && body2.equals(body)
-                || body2.getUserData().toString().contains("Rects") && body1.equals(body)))
+            ((body1.getUserData().toString().contains("Rect") && body2.equals(body))
+            || body2.getUserData().toString().contains("Rect") && body1.equals(body))
+
+            )
         ||
-            (Math.abs(body.getLinearVelocity().y) <= 1);
+            (Math.abs(body.getLinearVelocity().y) <= 1)){
+            onGround = true;
+        } else
+            onGround = false;
 //        if (this instanceof Player)
 //            System.out.println(Math.abs(body.getLinearVelocity().y) + " " + onGround);
     }

@@ -17,6 +17,7 @@ import com.mygdx.game.manager.StateManager;
 
 import java.util.TreeMap;
 
+import static com.mygdx.game.entities.Player.character_features;
 import static com.mygdx.game.images.Images.*;
 
 public class Stats extends State {
@@ -32,8 +33,6 @@ public class Stats extends State {
 
     private final TreeMap<String, Rectangle> statsRectangles = new TreeMap<>();
     private final TreeMap<String, Rectangle> statsCoordinates = new TreeMap<>();
-
-    public static Character_Features char_features = new Character_Features();
 
     public static int points = 10, exp_Points = 1, base_level = 1;
 
@@ -114,7 +113,7 @@ public class Stats extends State {
     @Override
     public void render() {
         update();
-        char_features.update();
+        character_features.update();
         spriteBatch.begin();
 
         printScreen.draw(spriteBatch);
@@ -124,11 +123,11 @@ public class Stats extends State {
         stats.draw(spriteBatch);
         atributes.draw(spriteBatch);
 
-        for (int index = 0; index < char_features.getStats_values().length; index++) {
+        for (int index = 0; index < character_features.getStats_values().length; index++) {
             stats_font.setColor(Color.BLACK);
-            stats_font.draw(spriteBatch, "" + char_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 20), (statsCoordinates.get(KEYS[index]).y - 120));
+            stats_font.draw(spriteBatch, "" + character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 20), (statsCoordinates.get(KEYS[index]).y - 120));
             stats_font.setColor(Color.WHITE);
-            stats_font.draw(spriteBatch, "" + char_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 19), (statsCoordinates.get(KEYS[index]).y + 1 - 120));
+            stats_font.draw(spriteBatch, "" + character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 19), (statsCoordinates.get(KEYS[index]).y + 1 - 120));
         }
 
         level_font.setColor(Color.BLACK);
@@ -138,15 +137,15 @@ public class Stats extends State {
 
 
         points2_font.setColor(Color.BLACK);
-        points2_font.draw(spriteBatch, "  Defense: " + char_features.getDef(), 830, 250);
-        points2_font.draw(spriteBatch, "   Attack: " + char_features.getAttack(), 830, 215);
+        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830, 250);
+        points2_font.draw(spriteBatch, "   Attack: " + character_features.getAttack(), 830, 215);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 175);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 135);
 
         points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 135);
 
         points2_font.setColor(Color.WHITE);
-        points2_font.draw(spriteBatch, "  Defense: " + char_features.getDef(), 830 - 2, 250 + 2);
+        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830 - 2, 250 + 2);
         points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 215 + 2);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 175 + 2);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 135 + 2);
@@ -205,12 +204,12 @@ public class Stats extends State {
             }
         }
 
-        for (int index = 0; index < char_features.getStats_values().length; index++){
+        for (int index = 0; index < character_features.getStats_values().length; index++){
             if (statsRectangles.get(KEYS[index]).contains(mouseX, mouseY)){
                 if (points > 0) {
-                    char_features.getStats_values()[index]++;
+                    character_features.getStats_values()[index]++;
                     points--;
-                    System.out.println(KEYS[index] + " " + char_features.getStats_values()[index]);
+                    System.out.println(KEYS[index] + " " + character_features.getStats_values()[index]);
                     System.out.println(statsRectangles.get(KEYS[index]));
                 }
             }

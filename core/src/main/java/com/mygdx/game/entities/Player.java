@@ -33,7 +33,6 @@ import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
-import static com.mygdx.game.screens.Stats.char_features;
 import static com.mygdx.game.screens.Stats.exp_Points;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
@@ -54,7 +53,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f, timerLvlUP;
-    private boolean walking, attacking, laser, shooting;
+    private boolean walking, attacking, laser, shooting, sword;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
     private Array<Laser> laser_rail = new Array<>();
@@ -96,7 +95,7 @@ public class Player extends Objeto{
         if (beenHit) {
             font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             flickering_time += Gdx.graphics.getDeltaTime();
-            if (flickering_time >= 2.0f) {  //the timer of 1second to normalize after has been hit
+            if (flickering_time >= 1.0f) {  //the timer of 1second to normalize after has been hit
                 flickering_time = 0f;
                 beenHit = false;
 //                scale = 10f;
@@ -150,20 +149,22 @@ public class Player extends Objeto{
     public void update(){
        super.update();
         updateAnimation();
-        if (attacking) {
-            if (rifle != null)
-                rifle.update();
-            attacking();
-            aim();
-        } else {
-            if (walking) {
-                walking();
+        if (!beenHit) {
+            if (attacking) {
+                if (rifle != null)
+                    rifle.update();
+                attacking();
+                aim();
             } else {
-                idle();
+                if (walking) {
+                    walking();
+                } else {
+                    idle();
+                }
             }
         }
         respawn();
-//        character_features.update();
+        character_features.update();
 
     }
 
@@ -217,6 +218,7 @@ public class Player extends Objeto{
     private void switchWeaponsAnimations(SpriteBatch spriteBatch){
          switch (whichOneEquip()){
             case "Sword":{
+                sword = true;
                 if (!animationName().equals("WALKING_SWORD")) {
                     oldAnimation = "SWORD";
                     if (isMoving()) {
@@ -308,34 +310,28 @@ public class Player extends Objeto{
     }
 
     private boolean idle(){
+        System.out.println(onGround);
         if (!beenHit && !attacking) {
-            if (!onGround()){
+            if (!onGround){
                 if (!isMoving()) {
                     if (laser)
                         changeAnimation("JUMPING_FRONT_LASER");
                     if (!walking)
                         changeAnimation("JUMPING_FRONT");
-                } else
-                    if (!walking)
+                } else {
                         changeAnimation("JUMPING");
-
+                }
             } else {
-                if (onGround) {
-                    System.out.println(getBody().getLinearVelocity().x);
-                    if (isMoving()) {
-                        changeAnimation("WALKING");
-                    } else {
-                        if (!isMoving() || !walking) {
-                            if (!oldAnimation.equals("NONE"))
-                                changeAnimation("IDLE");
-                            if (oldAnimation.equals("WALKING_SWORD"))
-                                changeAnimation("SWORD");
-                            return true;
-                        }
+                System.out.println(getBody().getLinearVelocity().x);
+                    if (sword)
+                        changeAnimation("SWORD");
+                    else{
+                        changeAnimation("IDLE");
+                        return true;
                     }
                 }
             }
-        } return false;
+        return false;
     }
 
     private boolean isntMoving(){
@@ -441,14 +437,14 @@ public class Player extends Objeto{
                 attacking = true;
             }
             if (laser) {
-                if (PowerBar.power >= char_features.getPowerSpent()) {
+                if (PowerBar.power >= character_features.getPowerSpent()) {
                     laser_rail.add(new Laser(
                         new Vector2(isFacingRight ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
                             isFacingRight ? (getBody().getPosition().y + (HEIGHT / 2f)) : (getBody().getPosition().y + (HEIGHT))),
                         radians > Math.PI / 2f, radians, this.toString()));
                     LASER_HEADSET.play();
-                    PowerBar.power -= char_features.getPowerSpent();
+                    PowerBar.power -= character_features.getPowerSpent();
                 }
             } else {
                 if (shooting) {
@@ -523,11 +519,6 @@ public class Player extends Objeto{
     public void changeAnimation(String name) {
         if (!animationName().equals(name))
             Player_Animations.changeAnimation(name);
-        if (name.equals("IDLE")){
-            shooting = false;
-            walking = false;
-            attacking = false;
-        }
     }
 
     @Override

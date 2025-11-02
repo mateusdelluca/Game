@@ -65,7 +65,7 @@ public class Monster1 extends Objeto implements Serializable {
                     }
                 }
             }
-            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrame0(usingOnlyLastFrame, looping, facingRight));
+            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrameUpdateStateTime(usingOnlyLastFrame, looping, facingRight));
             sprite.setPosition(body.getPosition().x, body.getPosition().y);
             if (animations.nameOfAnimation.equals("MONSTER1_ATTACKING")) {
                 float x = body.getPosition().x - 256 / 2f - BOX_WIDTH / 2f;

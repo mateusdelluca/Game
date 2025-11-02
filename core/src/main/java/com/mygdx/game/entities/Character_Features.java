@@ -15,7 +15,7 @@ public class Character_Features {
     @Getter @Setter
     private float hp = PowerBar.hp_0; //TODO: arrumar o hp da classe PowerBar colocando nesta classe e usar para outros personagens
     @Getter @Setter
-    private float attack = 1f, def = 1, jumpingStrength = 5000f, maxVelocityWalking = 10f;
+    private float attack = 1f, def = 1, jumpingStrength = 10_000f, maxVelocityWalking = 10f;
     @Getter @Setter
     private int[] stats_values = new int[STATS_SIZE];
     public static float velocityX = 1000f, laserDistance = 1000f;
@@ -40,7 +40,7 @@ public class Character_Features {
         attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
-        jumpingStrength = 5000f + (200f * stats_values[STR]);
+        jumpingStrength = 10_000f + (200f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = 1f + (0.5f * stats_values[DEX]);
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
