@@ -187,7 +187,7 @@ public class Player extends Objeto{
     }
 
     private void attacking() {
-        if (isFinishedCurrentAnimation() && !shooting && !laser && !sword) {
+        if (isFinishedCurrentAnimation() && (shooting || laser || sword)) {
             animation().getAnimator().resetAnimation();
         }
     }
@@ -235,13 +235,16 @@ public class Player extends Objeto{
                 shooting = false;
                 laser = false;
                 usingSaber = false;
-                if (!animationName().equals("WALKING_SWORD")) {
-                    oldAnimation = "SWORD";
-                    if (isMoving()) {
-                        changeAnimation("WALKING_SWORD");
-                    }
-                    else {
-                        changeAnimation("SWORD");
+                if (animationName().equals("ATTACKING_SWORD_FIRE_2")){
+
+                }else {
+                    if (!animationName().equals("WALKING_SWORD")) {
+                        oldAnimation = "SWORD";
+                        if (isMoving()) {
+                            changeAnimation("WALKING_SWORD");
+                        } else {
+                            changeAnimation("SWORD");
+                        }
                     }
                 }
                 break;
