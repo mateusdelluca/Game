@@ -243,7 +243,17 @@ public class Player extends Objeto{
                 laser = false;
                 usingSaber = false;
                 if (animationName().equals("ATTACKING_SWORD_FIRE_2")){
-
+                    if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() >= 10){
+                        attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
+                                getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
+                            new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 10f));
+                    } else{
+                        for (Body attacking_box_body : attacking_box_bodies) {
+                            if (attacking_box_body != null) {
+                                attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
+                            }
+                        }
+                    }
                 }else {
                     if (!animationName().equals("WALKING_SWORD")) {
                         oldAnimation = "SWORD";
@@ -530,6 +540,7 @@ public class Player extends Objeto{
         if (item.isVisible()) {
             item.setVisible(false);
             new ItemToBeDrawn(item);
+            TRIGGER.play();
         }
     }
 
@@ -568,24 +579,24 @@ public class Player extends Objeto{
 
     private void applyForceToBody(Body body1, Body body2){
         if (body1.getUserData().toString().contains("Enemy")){
-            Vector2 force = new Vector2(left_or_right(getBody(), body1), 1_000.0f); // força para direita
+            Vector2 force = new Vector2(left_or_right(getBody(), body1), 1_000.0f);
             Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
 //            getBody().setLinearVelocity(0,0);
             getBody().applyForce(force, point, true);
 
-            Vector2 force2 = new Vector2(left_or_right(body1, getBody()), 1_000.0f); // força para direita
+            Vector2 force2 = new Vector2(left_or_right(body1, getBody()), 1_000.0f);
             Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
 //            body1.setLinearVelocity(0,0);
             body1.applyForce(force2, point2, true);
 
         } else {
             if (body2.getUserData().toString().contains("Enemy")) {
-                Vector2 force = new Vector2(left_or_right(getBody(), body2), 1_000.0f); // força para direita
+                Vector2 force = new Vector2(left_or_right(getBody(), body2), 1_000.0f);
                 Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
 //                getBody().setLinearVelocity(0,0);
                 getBody().applyForce(force, point, true);
 
-                Vector2 force2 = new Vector2(left_or_right(body2, getBody()), 1_000.0f); // força para direita
+                Vector2 force2 = new Vector2(left_or_right(body2, getBody()), 1_000.0f);
                 Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
 //                body2.setLinearVelocity(0,0);
                 body2.applyForce(force2, point2, true);
