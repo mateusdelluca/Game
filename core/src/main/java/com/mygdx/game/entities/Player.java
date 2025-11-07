@@ -163,8 +163,15 @@ public class Player extends Objeto{
     private void renderAnimation(SpriteBatch s){
         Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
         sprite.setOriginCenter();
-        sprite.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+        setBodyPosition(sprite);
         sprite.draw(s);
+    }
+
+    private void setBodyPosition(Sprite sprite) {
+        if (animationName().equals("ATTACKING_SWORD_FIRE_2"))
+            sprite.setPosition(isFacingRight ? body.getPosition().x - 20f: body.getPosition().x - 192f + 40f, body.getPosition().y - BOX_HEIGHT/2f);
+        else
+            sprite.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
     }
 
     private void renderMinis(SpriteBatch s){

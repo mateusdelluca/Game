@@ -466,7 +466,7 @@ public class Animator{
 //
 
     public float frameCounter(){
-        return animation.getKeyFrame(stateTime).getU2() * numFrames;
+        return animation.getKeyFrameIndex(stateTime);
     }
 
     public boolean lastFrame0(){
