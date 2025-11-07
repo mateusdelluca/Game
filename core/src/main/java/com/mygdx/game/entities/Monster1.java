@@ -91,9 +91,10 @@ public class Monster1 extends Objeto implements Serializable {
                        }
                        if (player.getBody().getPosition().x < body.getPosition().x) {
                            facingRight = false;
-                           getBody().applyForce(new Vector2(-5_000, 0), player.getBody().getWorldCenter(), true);
+                           getBody().setLinearVelocity(new Vector2(-5,0));
                        } else {
-                           getBody().applyForce(new Vector2(5_000, 0), player.getBody().getWorldCenter(), true);
+                           getBody().setLinearVelocity(new Vector2(5,0));
+//                           getBody().applyForce(new Vector2(5_000, 0), player.getBody().getWorldCenter(), true);
                            facingRight = true;
                        }
                     }
@@ -111,14 +112,12 @@ public class Monster1 extends Objeto implements Serializable {
                 for (Fixture f : getBody().getFixtureList()) {
                     f.setSensor(true);
                 }
-
-
-//            getBody().setGravityScale(0f);
+                getBody().setGravityScale(0f);
+                getBody().setLinearVelocity(new Vector2(0,0));
                 Timer timer = new Timer();
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
-
                         setVisible(false);
                     }
                 }, 1);

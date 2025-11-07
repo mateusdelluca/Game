@@ -62,8 +62,6 @@ public class Player extends Objeto{
     public static Character_Features character_features = new Character_Features();
 
     private Sprite headsetlaser;
-
-    private float scale = 10f;
     private float flickering_time;
 
     public Player(Vector2 position, Viewport viewport){
@@ -90,22 +88,21 @@ public class Player extends Objeto{
     }
 
     private void switching(SpriteBatch s){
-        if (!beenHit) {
+        if (!animationName().equals("STRICKEN")) {
             if (attackingWeapons) {
                 if (rifle != null)
                     rifle.update();
                 attacking();
                 aim();
                 switchWeaponsAnimations(s);
+            }
+            if (punching) {
+                punching();
             } else {
-                if (punching){
-                    punching();
+                if (isMoving()) {
+                    walking();
                 } else {
-                    if (walking) {
-                        walking();
-                    } else {
-                        idle();
-                    }
+                    idle();
                 }
             }
         }
@@ -127,15 +124,26 @@ public class Player extends Objeto{
         if (beenHit) {
             font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             flickering_time += Gdx.graphics.getDeltaTime();
-            if (flickering_time >= 0.8f) {  //the timer of 1second to normalize after has been hit
+            changeAnimation("STRICKEN");
+            body.setLinearVelocity(0,0);
+            if (flickering_time >= 1f) {  //the timer of 1second to normalize after has been hit
                 flickering_time = 0f;
                 beenHit = false;
-//                scale = 10f;
-//                font.getData().setScale(scale);
-                changeAnimation("IDLE");
                 isScale = false;
+                changeAnimation("IDLE");
+
             }
         }
+    }
+
+    @Override
+    public void beenHit(){
+        super.beenHit();
+//        changeAnimation("STRICKEN");
+//        if (animation() != Player_Animations.STRICKEN) {
+//            setBeenHit(true);
+//            Sounds.HURT.play();
+//        }
     }
 
     private void updateBaseLevel(SpriteBatch spriteBatch){
@@ -231,7 +239,6 @@ public class Player extends Objeto{
             }
         }
         attackingWeapons = false;
-
         return "";
     }
 
@@ -243,11 +250,17 @@ public class Player extends Objeto{
                 laser = false;
                 usingSaber = false;
                 if (animationName().equals("ATTACKING_SWORD_FIRE_2")){
+                    for (Body body1 : attacking_box_bodies) {
+                        body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f :
+                        getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50), 0f);
+                    }
                     if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() >= 10){
-                        attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
+                        Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                                 getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, true, " Boy", 10f));
+                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 10f);
                         body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
+                        attacking_box_bodies.add(body1);
+
                     } else{
                         for (Body attacking_box_body : attacking_box_bodies) {
                             if (attacking_box_body != null) {
@@ -359,7 +372,7 @@ public class Player extends Objeto{
                 if (!isMoving()) {
                     if (laser)
                         changeAnimation("JUMPING_FRONT_LASER");
-                    if (!walking)
+                    else
                         changeAnimation("JUMPING_FRONT");
                 } else {
                         changeAnimation("JUMPING");
@@ -526,16 +539,7 @@ public class Player extends Objeto{
         return false;
     }
 
-    @Override
-    public void beenHit(){
-        super.beenHit();
-        if (animation() != Player_Animations.STRICKEN) {
-            changeAnimation("STRICKEN");
-            setBeenHit(true);
-            Sounds.HURT.play();
-            PowerBar.hit = true;
-        }
-    }
+
 
     public void takeItem(Item item){
         if (item.isVisible()) {

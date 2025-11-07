@@ -54,7 +54,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     @Getter @Setter
     private int index;
     protected BitmapFont font;
-    protected float scale = 10f;
+    protected float scale = 5f;
     protected boolean isScale;
     protected Character_Features character_features = new Character_Features();
 
@@ -199,7 +199,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                 scale -= 0.2f;
             font.getData().setScale(scale, scale);
             if (scale <= 0f) {
-                scale = 10f;
+                scale = 5f;
                 isScale = true;
                 font.getData().setScale(scale, scale);
             }
@@ -209,7 +209,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         }
 //        hit(body);
         if (!isVisible() && body != null) {
-            body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10000), 0);
+            body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10_000), 0);
 //            world.destroyBody(body);
         }
         if (HP <= 0 && !(this instanceof Boy) && !dead){
