@@ -76,10 +76,7 @@ public class Character_Features {
         powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-        if (hit) {
-            hp += (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
-            hit = false;
-        }
+        damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
         PowerBar.hp_0 = hp;
         if (!lvlUP && exp_Points >= 25) {
             points += 10;

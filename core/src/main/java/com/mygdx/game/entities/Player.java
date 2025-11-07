@@ -127,7 +127,7 @@ public class Player extends Objeto{
         if (beenHit) {
             font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             flickering_time += Gdx.graphics.getDeltaTime();
-            if (flickering_time >= 1.0f) {  //the timer of 1second to normalize after has been hit
+            if (flickering_time >= 0.8f) {  //the timer of 1second to normalize after has been hit
                 flickering_time = 0f;
                 beenHit = false;
 //                scale = 10f;
@@ -246,7 +246,8 @@ public class Player extends Objeto{
                     if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() >= 10){
                         attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                                 getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                            new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 10f));
+                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, true, " Boy", 10f));
+                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
                     } else{
                         for (Body attacking_box_body : attacking_box_bodies) {
                             if (attacking_box_body != null) {
