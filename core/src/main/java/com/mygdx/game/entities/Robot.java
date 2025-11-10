@@ -149,7 +149,7 @@ public class Robot extends Objeto{
         sprites.changeAnimation(name);
     }
 
-//    private float animCounter(float stateTime){
-//        return sprites.currentAnimation.frameCounter(stateTime);
-//    }
+    private float animCounter(float stateTime){
+        return sprites.currentAnimation.frameCounter();
+    }
 }

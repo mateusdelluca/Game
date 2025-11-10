@@ -75,6 +75,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
+    public static ArrayList<Fire> fire_objects = new ArrayList<>();
+
     public static Rifle rifle;
 
 //    public String polygons_String = "";
@@ -236,6 +238,9 @@ public abstract class Level extends State implements ContactListener, Serializab
             world.step(1/60f, 7, 7);
             camera.update();
         }
+
+
+
 //        for (Objeto objeto : objetos){
 //            if (objeto != null)
 //                objeto.update();
