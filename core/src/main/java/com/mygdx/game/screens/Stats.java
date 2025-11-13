@@ -19,12 +19,16 @@ import java.util.TreeMap;
 
 import static com.mygdx.game.entities.Player.character_features;
 import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.screens.levels.Level_Manager.camera;
+import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 
 public class Stats extends State {
 
     private BitmapFont stats_font, level_font, points_font, points2_font;
 
     private final float WIDTH_RECT = 20f, HEIGHT_RECT = 20f;
+
+    private final float WIDTH_CLOSE_BUTTON = 30f, HEIGHT_CLOSE_BUTTON = 30f;
 
     public static float mouseX, mouseY;
     public static final int CLOSE_BUTTON = 6;
@@ -69,27 +73,23 @@ public class Stats extends State {
 
         KEYS[CLOSE_BUTTON] = "CLOSE_BUTTON";
 
-        statsRectangles.put(KEYS[DEX], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[VIT], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[CRIT], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[DEX], new Rectangle(1010, 422, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[VIT], new Rectangle(1010, 452, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[CRIT], new Rectangle(1010, 472, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(KEYS[STR], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[AGI], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[WSD], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[STR], new Rectangle(1155, 422, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[AGI], new Rectangle(1155, 452, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[WSD], new Rectangle(1155, 472, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1170, 410, 30,30));
+        statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1175, 280, WIDTH_CLOSE_BUTTON,HEIGHT_CLOSE_BUTTON));
 
+        statsCoordinates.put(KEYS[DEX], new Rectangle(1010, 727, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[VIT], new Rectangle(1010, 700, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[CRIT], new Rectangle(1010, 672, WIDTH_RECT, HEIGHT_RECT));
 
-
-
-
-        statsCoordinates.put(KEYS[DEX], new Rectangle(1010, 627, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(KEYS[VIT], new Rectangle(1010, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(KEYS[CRIT], new Rectangle(1010, 572, WIDTH_RECT, HEIGHT_RECT));
-
-        statsCoordinates.put(KEYS[STR], new Rectangle(1155, 627, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(KEYS[AGI], new Rectangle(1155, 600, WIDTH_RECT, HEIGHT_RECT));
-        statsCoordinates.put(KEYS[WSD], new Rectangle(1155, 572, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[STR], new Rectangle(1155, 727, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[AGI], new Rectangle(1155, 700, WIDTH_RECT, HEIGHT_RECT));
+        statsCoordinates.put(KEYS[WSD], new Rectangle(1155, 672, WIDTH_RECT, HEIGHT_RECT));
     }
 
     @Override
@@ -114,12 +114,13 @@ public class Stats extends State {
     public void render() {
         update();
         character_features.update();
+
         spriteBatch.begin();
 
         printScreen.draw(spriteBatch);
 
-        stats.setPosition(800f, 280f);
-        atributes.setPosition(800f, 100);
+        stats.setPosition(800f, 380f);
+        atributes.setPosition(800f, 200);
         stats.draw(spriteBatch);
         atributes.draw(spriteBatch);
 
@@ -131,34 +132,34 @@ public class Stats extends State {
         }
 
         level_font.setColor(Color.BLACK);
-        level_font.draw(spriteBatch, "" + base_level, 935, 550);
+        level_font.draw(spriteBatch, "" + base_level, 935, 650);
         level_font.setColor(Color.WHITE);
-        level_font.draw(spriteBatch, "" + base_level, 935 - 1, 550 + 1);
+        level_font.draw(spriteBatch, "" + base_level, 935 - 1, 650 + 1);
 
 
         points2_font.setColor(Color.BLACK);
-        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830, 250);
-        points2_font.draw(spriteBatch, "   Attack: " + character_features.getAttack(), 830, 215);
-        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 175);
-        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 135);
+        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830, 350);
+        points2_font.draw(spriteBatch, "   Attack: " + character_features.getAttack(), 830, 315);
+        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 275);
+        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 235);
 
-        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 135);
+        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 235);
 
         points2_font.setColor(Color.WHITE);
-        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830 - 2, 250 + 2);
-        points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 215 + 2);
-        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 175 + 2);
-        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 135 + 2);
+        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830 - 2, 350 + 2);
+        points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 315 + 2);
+        points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 275 + 2);
+        points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 235 + 2);
 
-        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000 - 2, 135 + 2);
+        points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000 - 2, 235 + 2);
 
         points_font.setColor(Color.BLACK);
-        points_font.draw(spriteBatch, "" + points, 1140, 555);
+        points_font.draw(spriteBatch, "" + points, 1140, 655);
         points_font.setColor(Color.WHITE);
-        points_font.draw(spriteBatch, "" + points, 1140 - 1, 555 + 1);
+        points_font.draw(spriteBatch, "" + points, 1140 - 1, 655 + 1);
 
 
-        spriteBatch.draw(Images.power, 885, 388, Math.max(25f, exp_Points * 5f), Images.power.getHeight());
+        spriteBatch.draw(Images.power, 885, 488, Math.max(25f, exp_Points * 5f), Images.power.getHeight());
 
         spriteBatch.end();
     }
@@ -201,7 +202,9 @@ public class Stats extends State {
         if (button == Input.Buttons.LEFT) {
             if (statsRectangles.get("CLOSE_BUTTON").contains(mouseX, mouseY)) {
                 StateManager.setStates(StateManager.States.LEVEL_MANAGER);
+//                System.out.println(mouseX + " " + mouseY + " " + statsRectangles.get("CLOSE_BUTTON").getX() + " " + statsRectangles.get("CLOSE_BUTTON").getY());
             }
+            System.out.println(mouseX + " " + mouseY);
         }
 
         for (int index = 0; index < character_features.getStats_values().length; index++){
@@ -210,10 +213,11 @@ public class Stats extends State {
                     character_features.getStats_values()[index]++;
                     points--;
                     System.out.println(KEYS[index] + " " + character_features.getStats_values()[index]);
-                    System.out.println(statsRectangles.get(KEYS[index]));
+                    System.out.println(statsCoordinates.get(KEYS[index]));
                 }
             }
         }
+        System.out.println(mouseX + " " + mouseY);
         return false;
     }
 
@@ -236,6 +240,7 @@ public class Stats extends State {
     public boolean mouseMoved ( int screenX, int screenY){
         mouseX = Gdx.input.getX();
         mouseY = Gdx.input.getY();
+
         return false;
     }
 
