@@ -32,6 +32,7 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.sfx.Sounds.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
@@ -57,6 +58,8 @@ public class Player extends Objeto{
     private Array<Laser> laser_rail = new Array<>();
 
     public static Rifle rifle;
+
+    public static ArrayList<Fire> fire_objects = new ArrayList<>();
     private float degrees, radians;
     private String oldAnimation = "IDLE";
     public static Character_Features character_features = new Character_Features();
@@ -85,6 +88,15 @@ public class Player extends Objeto{
         updateBaseLevel(s);
         switching(s);
         updateBeenHit(s);
+        renderFireBall(s);
+    }
+
+    private void renderFireBall(SpriteBatch s) {
+        if (!fire_objects.isEmpty()) {
+            for (Fire fire : fire_objects) {
+                fire.render(spriteBatch);
+            }
+        }
     }
 
     private void switching(SpriteBatch s){
@@ -111,7 +123,10 @@ public class Player extends Objeto{
     private void punching(){
         attackingBodiesUpdate();
         if (animationName().equals("PUNCHING_FIRE") && isFinishedCurrentAnimation()) {
-            for (Body attacking_box_body : attacking_box_bodies) {
+            if (frameCounter() >= 5) {
+                fire_objects.add(new Fire(new Vector2(isFacingRight ? body.getPosition().x + 50f : body.getPosition().x - 50f, body.getPosition().y + 20f), isFacingRight));
+            }
+                for (Body attacking_box_body : attacking_box_bodies) {
                 if (attacking_box_body != null) {
                     attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
                 }
@@ -199,6 +214,15 @@ public class Player extends Objeto{
         respawn();
         whichOneEquip();
         character_features.update();
+        updateFireBalls();
+    }
+
+    private void updateFireBalls() {
+        if (!fire_objects.isEmpty()) {
+            for (Fire fire : fire_objects) {
+                fire.update();
+            }
+        }
     }
 
     private void attacking() {
@@ -571,6 +595,10 @@ public class Player extends Objeto{
     public void beginContact(Body body1, Body body2){
         super.beginContact(body1, body2);
 
+        for (Fire fire : fire_objects){
+            fire.beginContact(body1, body2);
+        }
+
         if ((body1.equals(body) && body2.getUserData().toString().contains("Enemy"))
             || (body2.equals(body) && body1.getUserData().toString().contains("Enemy"))){
             applyForceToBody(body1, body2);
@@ -580,6 +608,8 @@ public class Player extends Objeto{
             || body2.equals(body) && body1.getUserData().toString().contains("Colliders")) {
             beenHit();
         }
+
+
     }
 
     private void applyForceToBody(Body body1, Body body2){

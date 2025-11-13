@@ -75,7 +75,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public ArrayList<Objeto> objetos = new ArrayList<>();
 
-    public static ArrayList<Fire> fire_objects = new ArrayList<>();
+
 
     public static Rifle rifle;
 

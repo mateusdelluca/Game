@@ -82,11 +82,7 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        if (!fire_objects.isEmpty()) {
-            for (Fire fire : fire_objects) {
-                fire.render(spriteBatch);
-            }
-        }
+
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 
@@ -104,11 +100,7 @@ public class Level1 extends Level{
         for (Item item : items.values())
             item.update();
 
-        if (!fire_objects.isEmpty()) {
-            for (Fire fire : fire_objects) {
-                fire.update();
-            }
-        }
+
     }
 
 
