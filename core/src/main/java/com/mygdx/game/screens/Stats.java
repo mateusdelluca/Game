@@ -81,7 +81,7 @@ public class Stats extends State {
         statsRectangles.put(KEYS[AGI], new Rectangle(1155, 452, WIDTH_RECT, HEIGHT_RECT));
         statsRectangles.put(KEYS[WSD], new Rectangle(1155, 472, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1175, 280, WIDTH_CLOSE_BUTTON,HEIGHT_CLOSE_BUTTON));
+        statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1175, 270, WIDTH_CLOSE_BUTTON, HEIGHT_CLOSE_BUTTON));
 
         statsCoordinates.put(KEYS[DEX], new Rectangle(1010, 727, WIDTH_RECT, HEIGHT_RECT));
         statsCoordinates.put(KEYS[VIT], new Rectangle(1010, 700, WIDTH_RECT, HEIGHT_RECT));
