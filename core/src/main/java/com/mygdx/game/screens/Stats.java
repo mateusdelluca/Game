@@ -138,7 +138,7 @@ public class Stats extends State {
 
 
         points2_font.setColor(Color.BLACK);
-        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830, 350);
+        points2_font.draw(spriteBatch, "   Defense: " + character_features.getDef(), 830, 350);
         points2_font.draw(spriteBatch, "   Attack: " + character_features.getAttack(), 830, 315);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 275);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 235);
@@ -146,7 +146,7 @@ public class Stats extends State {
         points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 235);
 
         points2_font.setColor(Color.WHITE);
-        points2_font.draw(spriteBatch, "  Defense: " + character_features.getDef(), 830 - 2, 350 + 2);
+        points2_font.draw(spriteBatch, "   Defense: " + character_features.getDef(), 830 - 2, 350 + 2);
         points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 315 + 2);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 275 + 2);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 235 + 2);
