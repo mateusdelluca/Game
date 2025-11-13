@@ -157,7 +157,7 @@ public class Player extends Objeto{
 //        changeAnimation("STRICKEN");
 //        if (animation() != Player_Animations.STRICKEN) {
 //            setBeenHit(true);
-//            Sounds.HURT.play();
+            Sounds.HURT.play();
 //        }
     }
 
@@ -344,7 +344,7 @@ public class Player extends Objeto{
             case "Laser_Headset":{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 laser = true;
-                sword = true;
+                sword = false;
                 shooting = false;
                 usingSaber = false;
                 headsetlaser = new Sprite(Player_Animations.HEADSET.getAnimator().currentSpriteFrameUpdateStateTime(false,

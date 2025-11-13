@@ -41,14 +41,14 @@ public class Monster1 extends Objeto implements Serializable {
     private boolean attackOnce;
     private Body attack_box;
     private int index;
-    private float attackOnceTimer;
+    private float attackOnceTimer, waitingForAttack;
 
     public Monster1(Vector2 position, String userData){
         super(WIDTH, HEIGHT);
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        mass(1.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 1.0f);
+        mass(1.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 0f);
     }
 
 
@@ -161,11 +161,15 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     private void attack(){
-        body.setLinearVelocity(0f, body.getLinearVelocity().y);
-        animations.changeAnimation("MONSTER1_ATTACKING");
-        attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
-            body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f,40f),
-            BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
+        waitingForAttack += Gdx.graphics.getDeltaTime();
+        if (waitingForAttack > 1f) {
+            waitingForAttack = 0;
+            body.setLinearVelocity(0f, body.getLinearVelocity().y);
+            animations.changeAnimation("MONSTER1_ATTACKING");
+            attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
+                    body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f, 40f),
+                BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
+        }
     }
 
     @Override
