@@ -212,7 +212,7 @@ public class Level3 extends Level{
             if (o != null && !(o instanceof Portal))
                 o.beenHit(body1, body2);
             if (o instanceof Portal)
-                ((Portal) o).beginContact(contact);
+                o.beginContact(contact);
         }
 
         for (Minis m : minis){
