@@ -51,7 +51,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 2_000f, timerLvlUP;
-    private boolean walking, attackingWeapons, laser, shooting, sword, punching, usingSaber;
+    private boolean walking, usingWeapons, laser_attack, shooting, sword, punching, saber, throwing_fire;
 
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
@@ -66,7 +66,6 @@ public class Player extends Objeto{
 
     private Sprite headsetlaser;
     private float flickering_time;
-    private boolean throwing_fire;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -102,10 +101,10 @@ public class Player extends Objeto{
 
     private void switching(SpriteBatch s){
         if (!animationName().equals("STRICKEN")) {
-            if (attackingWeapons) {
+            if (usingWeapons) {
                 if (rifle != null)
                     rifle.update();
-                attacking();
+                attackingWithWeapons();
                 aim();
                 switchWeaponsAnimations(s);
             }
@@ -239,8 +238,8 @@ public class Player extends Objeto{
         }
     }
 
-    private void attacking() {
-        if (isFinishedCurrentAnimation() && (shooting || laser || sword)) {
+    private void attackingWithWeapons() {
+        if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword)) {
             animation().getAnimator().resetAnimation();
         }
     }
@@ -272,11 +271,11 @@ public class Player extends Objeto{
     private String whichOneEquip(){
         for (Item item : items.keySet()) {
             if (equipped[item.getIndex()]) {
-                attackingWeapons = true;
+                usingWeapons = true;
                 return item.toString();
             }
         }
-        attackingWeapons = false;
+        usingWeapons = false;
         return "";
     }
 
@@ -285,8 +284,8 @@ public class Player extends Objeto{
             case "Sword":{
                 sword = true;
                 shooting = false;
-                laser = false;
-                usingSaber = false;
+                laser_attack = false;
+                saber = false;
                 if (animationName().equals("ATTACKING_SWORD_FIRE_2")){
                     for (Body body1 : attacking_box_bodies) {
                         body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f :
@@ -323,8 +322,8 @@ public class Player extends Objeto{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 shooting = true;
                 sword = false;
-                laser = false;
-                usingSaber = false;
+                laser_attack = false;
+                saber = false;
 
 
                 Rifle.showingNumbBullets = true;
@@ -350,17 +349,17 @@ public class Player extends Objeto{
             case "Saber":{
                 sword = false;
                 shooting = false;
-                laser = false;
-                usingSaber = true;
+                laser_attack = false;
+                saber = true;
                 changeAnimation("SABER");
                 break;
             }
             case "Laser_Headset":{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
-                laser = true;
+                laser_attack = true;
                 sword = false;
                 shooting = false;
-                usingSaber = false;
+                saber = false;
                 headsetlaser = new Sprite(Player_Animations.HEADSET.getAnimator().currentSpriteFrameUpdateStateTime(false,
                     true, !isFacingRight));
                 headsetlaser.setPosition(isFacingRight ? body.getPosition().x - 5f : body.getPosition().x - 10f, body.getPosition().y + 12f);
@@ -379,7 +378,7 @@ public class Player extends Objeto{
     }
 
     private void aim(){
-        if (laser || shooting) {
+        if (laser_attack || shooting) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
@@ -408,7 +407,7 @@ public class Player extends Objeto{
         if (!beenHit) {
             if (!onGround){
                 if (!isMoving()) {
-                    if (laser)
+                    if (laser_attack)
                         changeAnimation("JUMPING_FRONT_LASER");
                     else
                         changeAnimation("JUMPING_FRONT");
@@ -466,7 +465,7 @@ public class Player extends Objeto{
             JUMP.play();
             body.applyForceToCenter(0, 10_000, true);
             if (!isMoving()){
-                if (laser)
+                if (laser_attack)
                     changeAnimation("JUMPING_FRONT_LASER");
                 else
                     changeAnimation("JUMPING_FRONT");
@@ -509,8 +508,11 @@ public class Player extends Objeto{
                 walking = false;
         }
         if (keycode == Input.Keys.F) {
-            changeAnimation("THROWING_FIRE");
-            throwing_fire = true;
+            if (PowerBar.sp_0 > 0) {
+                changeAnimation("THROWING_FIRE");
+                throwing_fire = true;
+                PowerBar.sp_0 -= 10f;
+            }
         }
     }
 
@@ -531,7 +533,7 @@ public class Player extends Objeto{
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
-            if (laser) {
+            if (laser_attack) {
                 if (PowerBar.power >= character_features.getPowerSpent()) {
                     laser_rail.add(new Laser(
                         new Vector2(isFacingRight ? (getBody().getPosition().x +
