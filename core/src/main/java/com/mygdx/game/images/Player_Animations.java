@@ -8,6 +8,7 @@ import java.io.Serializable;
 public enum Player_Animations implements Serializable {
 
     DEAD(new Animator(1,1,1,128,128,"boy/Dead.png")),
+    THROWING_FIRE(new Animator(8,8,16,128,128,"boy/Throwing_Fire.png")),
     ATTACKING_SWORD(new Animator(5,5,15,128,128,"boy/Attacking_Sword2.png")),
     ATTACKING_SWORD_FIRE(new Animator(7,7,14,128,128,"boy/Attacking_Sword_Fire.png")),
     ATTACKING_SWORD_FIRE_2(new Animator(12,12,12,192,128,"boy/Sword_Fire_2Hits_3.png")),
