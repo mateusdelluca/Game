@@ -56,10 +56,8 @@ public class Fire extends Objeto {
     }
 
     public void beginContact(Body body1, Body body2){
-        if ((body.getUserData().toString().contains("Fire") && body2.getUserData().toString().contains("Enemy"))){
-            visible = false;
-        }
-        if ((body.getUserData().toString().contains("Fire") && body1.getUserData().toString().contains("Enemy"))){
+        if ((body.getUserData().toString().contains("Fire") && body2.getUserData().toString().contains("Enemy"))
+            || (body.getUserData().toString().contains("Fire") && body1.getUserData().toString().contains("Enemy"))){
             visible = false;
         }
     }

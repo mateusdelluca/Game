@@ -66,6 +66,7 @@ public class Player extends Objeto{
 
     private Sprite headsetlaser;
     private float flickering_time;
+    private boolean throwing_fire;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -108,30 +109,42 @@ public class Player extends Objeto{
                 aim();
                 switchWeaponsAnimations(s);
             }
-            if (punching) {
-                punching();
+            if (throwing_fire) {
+                throwing_fire();
             } else {
-                if (isMoving()) {
-                    walking();
+                if (punching) {
+                    punching();
                 } else {
-                    idle();
+                    if (isMoving()) {
+                        walking();
+                    } else {
+                        idle();
+                    }
                 }
+            }
+        }
+    }
+
+    private void throwing_fire() {
+        if (animationName().equals("THROWING_FIRE")) {
+            if (isFinishedCurrentAnimation()) {
+                throwing_fire = false;
+                resetCurrentAnimation();
+                fire_objects.add(new Fire(new Vector2(isFacingRight ? body.getPosition().x + 50f : body.getPosition().x - 50f, body.getPosition().y + 20f), isFacingRight));
+            }
+        }
+        for (Body attacking_box_body : attacking_box_bodies) {
+            if (attacking_box_body != null) {
+                attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
             }
         }
     }
 
     private void punching(){
         attackingBodiesUpdate();
-        if (animationName().equals("PUNCHING_FIRE") && isFinishedCurrentAnimation()) {
-            if (frameCounter() >= 5) {
-                fire_objects.add(new Fire(new Vector2(isFacingRight ? body.getPosition().x + 50f : body.getPosition().x - 50f, body.getPosition().y + 20f), isFacingRight));
-            }
-                for (Body attacking_box_body : attacking_box_bodies) {
-                if (attacking_box_body != null) {
-                    attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
-                }
-            }
+        if (isFinishedCurrentAnimation()) {
             punching = false;
+            walking = true;
             resetCurrentAnimation();
         }
     }
@@ -427,7 +440,7 @@ public class Player extends Objeto{
             if (animation().getAnimator().stateTime > 0.30 && animation().getAnimator().stateTime < 0.32) {
                 attacking_box_bodies.add(BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                    new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 0f));
+                    new Vector2(10, 40f), BodyDef.BodyType.KinematicBody, true, " Boy", 0f));
             }
         }
     }
@@ -493,6 +506,10 @@ public class Player extends Objeto{
             }
             if (animationName().contains("WALKING"))
                 walking = false;
+        }
+        if (keycode == Input.Keys.F) {
+            changeAnimation("THROWING_FIRE");
+            throwing_fire = true;
         }
     }
 
