@@ -34,7 +34,7 @@ public class Fire extends Objeto {
         if (visible) {
             Sprite sprite = new Sprite(animation.currentSpriteFrameUpdateStateTime(false, true, !isFacingRight));
             sprite.setSize(WIDTH, HEIGHT);
-            sprite.setPosition(body.getPosition().x - 100f, body.getPosition().y - 10f - (RADIUS / 2f));
+            sprite.setPosition(isFacingRight ? body.getPosition().x - 100f : body.getPosition().x, body.getPosition().y - 10f - (RADIUS / 2f));
             sprite.setRotation((float) Math.toDegrees(body.getAngle()));
             sprite.draw(s);
         }

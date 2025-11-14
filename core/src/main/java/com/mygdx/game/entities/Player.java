@@ -133,11 +133,7 @@ public class Player extends Objeto{
                 fire_objects.add(new Fire(new Vector2(isFacingRight ? body.getPosition().x + 50f : body.getPosition().x - 50f, body.getPosition().y + 20f), isFacingRight));
             }
         }
-        for (Body attacking_box_body : attacking_box_bodies) {
-            if (attacking_box_body != null) {
-                attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
-            }
-        }
+
     }
 
     private void punching(){
@@ -146,6 +142,11 @@ public class Player extends Objeto{
             punching = false;
             walking = true;
             resetCurrentAnimation();
+        }
+        for (Body attacking_box_body : attacking_box_bodies) {
+            if (attacking_box_body != null) {
+                attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
+            }
         }
     }
     private void updateBeenHit(SpriteBatch s) {
