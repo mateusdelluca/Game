@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.minis.Minis;
+import com.mygdx.game.sfx.Sounds;
 
 import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.entities.Player.minis;
@@ -126,6 +127,13 @@ public class Level3 extends Level{
     public void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals("PAUSE"))
+
+        if (Sounds.LEVEL2.isPlaying()) {
+            Sounds.LEVEL2.stop();
+            Sounds.LEVEL3.play();
+            Sounds.LEVEL3.setLooping(true);
+        }
+
         update();
 
 

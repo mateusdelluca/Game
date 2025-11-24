@@ -8,6 +8,7 @@ import com.mygdx.game.items.Item;
 import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
 import com.mygdx.game.items.minis.Minis;
+import com.mygdx.game.sfx.Sounds;
 
 
 import static com.mygdx.game.entities.Player.minis;
@@ -43,7 +44,11 @@ public class Level2 extends Level{
     @Override
     public void render(){
 //        super.render();
-
+        if (Sounds.LEVEL1.isPlaying()) {
+            Sounds.LEVEL1.stop();
+            Sounds.LEVEL2.play();
+            Sounds.LEVEL2.setLooping(true);
+        }
 
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals("PAUSE"))

@@ -161,9 +161,9 @@ public class PausePage extends State {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE){
             StateManager.setStates(StateManager.States.LEVEL_MANAGER);
-            if (!Sounds.LEVEL1.isPlaying()) {
+            if (!Sounds.LEVEL3.isPlaying()) {
 //                Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
-                Sounds.LEVEL1.play();
+                Sounds.LEVEL3.play();
             }
             pause = false;
 
@@ -191,6 +191,11 @@ public class PausePage extends State {
                 if (!Sounds.LEVEL1.isPlaying()) {
                     Sounds.LEVEL1.setPosition(Sounds.pause_musicPosition);
                     Sounds.LEVEL1.play();
+                }
+                if (Sounds.LEVEL2.isPlaying()) {
+                    Sounds.LEVEL2.stop();
+                    Sounds.LEVEL3.play();
+                    Sounds.LEVEL3.setLooping(true);
                 }
                 pause = false;
                 break;
