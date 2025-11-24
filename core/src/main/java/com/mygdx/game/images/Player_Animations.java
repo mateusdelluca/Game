@@ -19,7 +19,7 @@ public enum Player_Animations implements Serializable {
     WALKING(new Animator(6,6, 5, 128, 128, "boy/Walking.png")),
     IDLE(new Animator(1,1, 1, 128, 128, "boy/Idle.png")),
     SABER(new Animator(4,4, 15, 128, 128, "boy/saber_Sheet.png")),
-    STRICKEN(new Animator(2,2, 2, 128, 128, "boy/Stricken.png")),
+    STRICKEN(new Animator(2,2, 4, 128, 128, "boy/Stricken.png")),
     JUMPING(new Animator(1,1, 1, 128, 128, "boy/Jumping3.png")),
     JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),
     PUNCHING(new Animator(3,3, 3, 128, 128, "boy/NewPunching.png")),

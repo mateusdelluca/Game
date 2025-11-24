@@ -47,9 +47,8 @@ public class Character_Features {
         powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-
+        damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
         if (hit) {
-            damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
             hp += damage;
             hit = false;
         }

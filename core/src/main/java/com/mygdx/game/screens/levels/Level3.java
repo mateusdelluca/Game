@@ -15,11 +15,14 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 
 public class Level3 extends Level{
-    public Level3() throws Exception {
+
+    public Level3() {
         super();
         monsters1.clear();
-        player.getBody().setTransform(10, 5700, 0);
-        player.setViewport(viewport);
+        objetos.clear();
+        player = new Player(new Vector2(100, 5700), viewport);
+//        player.setViewport(viewport);
+        objetos.add(player);
         mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));
@@ -101,7 +104,7 @@ public class Level3 extends Level{
 //            }
 //            objetos.addAll(items2.values());
             ninjaRope = new NinjaRope(player.getBody());
-            objetos.add(player);
+//            objetos.add(player);
             objetos.add(jack);
 //            objetos.add(girl);
 //            objetos.addAll(stands);
@@ -220,4 +223,9 @@ public class Level3 extends Level{
         }
     }
 
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

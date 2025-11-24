@@ -81,7 +81,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 //    public String polygons_String = "";
 
-    public Level() throws Exception {
+    public Level() {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
@@ -138,8 +138,10 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        player = new Player(new Vector2(50, 1700), viewport);
-
+        if (this instanceof Level3)
+            player = new Player(new Vector2(10, 5700), viewport);
+        else
+            player = new Player(new Vector2(100, 400), viewport);
     }
 
     @Override
@@ -613,5 +615,9 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
+    }
+
+    public String toString() {
+        return getClass().getSimpleName();
     }
 }

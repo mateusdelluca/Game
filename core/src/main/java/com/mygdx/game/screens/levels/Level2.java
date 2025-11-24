@@ -18,7 +18,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.camera;
 public class Level2 extends Level{
 //    public ArrayList<Objeto> objetos = new ArrayList<>();
 
-    public Level2() throws Exception {
+    public Level2() {
         super();
         monsters1.clear();
         objetos.clear();
@@ -122,6 +122,11 @@ public class Level2 extends Level{
         for (Minis m : minis){
             m.beginContact(body1,body2);
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
 
 }

@@ -14,7 +14,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Level1 extends Level{
 
-    public Level1() throws Exception {
+    public Level1(){
         super();
 //        monsters1.clear();
         player.setViewport(viewport);
@@ -42,6 +42,7 @@ public class Level1 extends Level{
 //        objetos.clear();
 //        objetos.add(boy);
         objetos.add(player);
+        objetos.add(new Monster3(new Vector2(600, 700)));
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
@@ -162,5 +163,10 @@ public class Level1 extends Level{
 //        for (Monster1 m : monsters1.values()){
 //            m.beginContact(body1, body2);
 //        }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
 }

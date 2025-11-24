@@ -73,13 +73,13 @@ public class Stats extends State {
 
         KEYS[CLOSE_BUTTON] = "CLOSE_BUTTON";
 
-        statsRectangles.put(KEYS[DEX], new Rectangle(1010, 422, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[VIT], new Rectangle(1010, 452, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[CRIT], new Rectangle(1010, 472, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[DEX], new Rectangle(1010, 420, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[VIT], new Rectangle(1010, 450, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[CRIT], new Rectangle(1010, 470, WIDTH_RECT, HEIGHT_RECT));
 
-        statsRectangles.put(KEYS[STR], new Rectangle(1155, 422, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[AGI], new Rectangle(1155, 452, WIDTH_RECT, HEIGHT_RECT));
-        statsRectangles.put(KEYS[WSD], new Rectangle(1155, 472, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[STR], new Rectangle(1155, 420, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[AGI], new Rectangle(1155, 450, WIDTH_RECT, HEIGHT_RECT));
+        statsRectangles.put(KEYS[WSD], new Rectangle(1155, 470, WIDTH_RECT, HEIGHT_RECT));
 
         statsRectangles.put(KEYS[CLOSE_BUTTON], new Rectangle(1175, 270, WIDTH_CLOSE_BUTTON, HEIGHT_CLOSE_BUTTON));
 

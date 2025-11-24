@@ -3,9 +3,11 @@ package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
@@ -30,38 +32,34 @@ public class Level_Manager extends State implements ContactListener {
     public static boolean loaded;
 
     public Level_Manager() {
-        try {
-            world = new World(new Vector2(0,-10f), true);
-            world.setContactListener(this);
-            currentLevel = returnLevel();
-            oldLevel = currentLevelName;
-            spriteBatch = new SpriteBatch();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        world = new World(new Vector2(0,-10f), true);
+        world.setContactListener(this);
+        currentLevel = returnLevel();
+        oldLevel = currentLevelName;
+        spriteBatch = new SpriteBatch();
     }
 
     public void changeLevel() {
-        try {
-            if (!currentLevelName.equals(oldLevel)) {
-                currentLevel = returnLevel();
-                lvl = Integer.parseInt(currentLevelName.substring(5));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (!currentLevelName.equals(oldLevel)) {
+            currentLevel = returnLevel();
+            lvl = Integer.parseInt(currentLevelName.substring(5));
         }
-        assert currentLevel != null;
     }
 
-    public Level returnLevel() throws Exception {
+    public Level returnLevel() {
         oldLevel = currentLevelName;
         switch (currentLevelName) {
             case "Level1": {
                 return new Level1();
             }
             case "Level2": {
-                for (Objeto objeto : currentLevel.objetos)
-                    objeto.getBody().setTransform(-10_000, -10_000, 0);
+                if (currentLevel.objetos != null) {
+                    for (Objeto objeto : currentLevel.objetos) {
+                        objeto.getBody().setTransform(-10_000, -10_000, 0);
+                        world.destroyBody(objeto.getBody());
+
+                    }currentLevel.objetos.clear();
+                }
                 for (Body bodies : tile.bodies_of_rects)
                     bodies.setTransform(-10_000, -10_000, 0);
                 for (Body bodies : tile.bodies_of_thorns)
@@ -71,8 +69,11 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level2();
             }
             case "Level3": {
-                for (Objeto objeto : currentLevel.objetos)
-                    objeto.getBody().setTransform(-15_000, -15_000, 0);
+                if (currentLevel.objetos != null) {
+                    for (Objeto objeto : currentLevel.objetos)
+                        objeto.getBody().setTransform(-15_000, -15_000, 0);
+                    currentLevel.objetos.clear();
+                }
                 for (Body bodies : tile.bodies_of_rects)
                     bodies.setTransform(-13_000, -13_000, 0);
                 for (Body bodies : tile.bodies_of_thorns)
@@ -80,8 +81,11 @@ public class Level_Manager extends State implements ContactListener {
                 return new Level3();
             }
             case "Level4": {
-                for (Objeto objeto : currentLevel.objetos)
-                    objeto.getBody().setTransform(-15_000, -15_000, 0);
+                if (currentLevel.objetos != null) {
+                    for (Objeto objeto : currentLevel.objetos)
+                        objeto.getBody().setTransform(-15_000, -15_000, 0);
+                    currentLevel.objetos.clear();
+                }
                 for (Body bodies : tile.bodies_of_rects)
                     bodies.setTransform(-13_000, -13_000, 0);
                 for (Body bodies : tile.bodies_of_thorns)
@@ -101,14 +105,32 @@ public class Level_Manager extends State implements ContactListener {
     }
 
     @Override
+    public void update() {
+        if (!PausePage.pause && currentLevel != null)
+            currentLevel.update();
+        if (!oldLevel.equals(currentLevelName)) {
+            oldLevel = currentLevelName;
+            assert currentLevel != null;
+            try {
+                currentLevel = returnLevel();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            currentLevelName = currentLevel.toString();
+        }
+    }
+
+    @Override
     public void render() {
         changeLevel();
 //        if (!StateManager.oldState.equals(StateManager.States.LEVEL.name()))
-            currentLevel.render();
+        currentLevel.render();
 //        if (loaded) {
 //            world.setContactListener(this);
 //            loaded = false;
 //        }
+
+
     }
 
     @Override
@@ -186,11 +208,7 @@ public class Level_Manager extends State implements ContactListener {
         return false;
     }
 
-    @Override
-    public void update() {
-        if (!PausePage.pause && currentLevel != null)
-            currentLevel.update();
-    }
+
 
     @Override
     public void beginContact(Contact contact) {

@@ -13,7 +13,7 @@ import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Level4 extends Level{
-    public Level4() throws Exception {  //TODO: fix render method and update
+    public Level4(){  //TODO: fix render method and update
         super();
         monsters1.clear();
         objetos.clear();

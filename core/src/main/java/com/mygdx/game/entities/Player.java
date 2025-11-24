@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
@@ -28,11 +29,12 @@ import java.util.ArrayList;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.images.Images.legs;
+import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Stats.exp_Points;
-import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
+import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.sfx.Sounds.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
 
@@ -72,7 +74,7 @@ public class Player extends Objeto{
         body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
         body.setFixedRotation(true);
         visible = true;
-        mass(5.0f, new Vector2((BOX_WIDTH/2f) - 5, BOX_HEIGHT/2f), 1.0f);
+        mass(5.0f, new Vector2((BOX_WIDTH/2f) - 5, BOX_HEIGHT/2f), 0f);
         isFacingRight = true;
         this.viewport = viewport;
         changeAnimation("IDLE");
@@ -152,15 +154,22 @@ public class Player extends Objeto{
         if (beenHit) {
             font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             flickering_time += Gdx.graphics.getDeltaTime();
-            changeAnimation("STRICKEN");
-            body.setLinearVelocity(0,0);
-            if (flickering_time >= 1f) {  //the timer of 1second to normalize after has been hit
+            if (flickering_time >= 1f){
                 flickering_time = 0f;
-                beenHit = false;
                 isScale = false;
-                changeAnimation("IDLE");
-
             }
+
+            body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+            if (!animationName().equals("STRICKEN")) {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        beenHit = false;
+                    changeAnimation("IDLE");
+                    }
+                }, 0.5f);
+            }
+            changeAnimation("STRICKEN");
         }
     }
 
@@ -253,9 +262,13 @@ public class Player extends Objeto{
     }
 
     private void respawn(){
-        if (body.getPosition().y < -100f) {
-            beenHit();
-            body.setTransform(new Vector2(100, 400), 0);
+        if (body != null) {
+            if (currentLevelName.contains("1") || currentLevelName.contains("2")) {
+                if (body.getPosition().y < -100) {
+                    beenHit();
+                    body.setTransform(new Vector2(100, 400), 0);
+                }
+            }
         }
     }
 
@@ -324,8 +337,6 @@ public class Player extends Objeto{
                 sword = false;
                 laser_attack = false;
                 saber = false;
-
-
                 Rifle.showingNumbBullets = true;
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
@@ -343,7 +354,7 @@ public class Player extends Objeto{
                 legs.draw(spriteBatch);
                 top.draw(spriteBatch);
                 changeAnimation("NONE");
-                oldAnimation = "NONE";
+//                oldAnimation = "NONE";
                 break;
             }
             case "Saber":{
@@ -565,7 +576,7 @@ public class Player extends Objeto{
                     }
                 }
             }
-            resetCurrentAnimation();
+//            resetCurrentAnimation();
         }
     }
 
