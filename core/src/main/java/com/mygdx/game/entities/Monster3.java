@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
-import com.mygdx.game.images.Monster1_Sprites;
+import com.mygdx.game.images.Monster_Sprites;
 
 public class Monster3 extends Objeto{
 
     public static final float DIVISOR = 4f;
     public static final float WIDTH = 250/DIVISOR, HEIGHT = 250/DIVISOR;
-    Monster1_Sprites animation = new Monster1_Sprites();
+    Monster_Sprites animation = new Monster_Sprites();
 
     public Monster3(Vector2 position){
         super(WIDTH, HEIGHT);

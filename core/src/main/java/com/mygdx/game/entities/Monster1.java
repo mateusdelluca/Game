@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
-import com.mygdx.game.images.Monster1_Sprites;
+import com.mygdx.game.images.Monster_Sprites;
 import com.mygdx.game.sfx.Sounds;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +36,7 @@ public class Monster1 extends Objeto implements Serializable {
     private boolean left;
     private long lastTime, deltaTime, initialTime;
 
-    public Monster1_Sprites animations = new Monster1_Sprites();
+    public Monster_Sprites animations = new Monster_Sprites();
     private float attacking_time;
     private boolean attackOnce;
     private Body attack_box;

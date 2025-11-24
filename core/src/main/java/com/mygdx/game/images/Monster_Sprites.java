@@ -1,6 +1,6 @@
 package com.mygdx.game.images;
 
-public class Monster1_Sprites {
+public class Monster_Sprites {
 
     public Animator walking = new Animator(4,4,1,94,128, "monster/Walking.png");
     public Animator flickering = new Animator(4,4,3,94,128, "monster/Flickering.png");
