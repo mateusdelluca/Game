@@ -166,7 +166,18 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         body.setMassData(massData);
     }
 
-    public abstract void render(SpriteBatch s);
+    public void render(SpriteBatch s){
+        if (beenHit) {
+            font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
+            if (scale >= 0.1) {
+                scale -= 0.1f;
+                font.getData().setScale(scale, scale);
+            }
+            else{
+                scale = 5.0f;
+            }
+        }
+    }
 
     public abstract void renderShape(ShapeRenderer s);
 

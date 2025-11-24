@@ -54,6 +54,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     public void render(SpriteBatch spriteBatch){
         if (visible) {
+            super.render(spriteBatch);
             if (!beenHit) {
                 if (isAttacking()) {
                     attacking_time += Gdx.graphics.getDeltaTime();
@@ -168,7 +169,7 @@ public class Monster1 extends Objeto implements Serializable {
             animations.changeAnimation("MONSTER1_ATTACKING");
             attack_box = BodiesAndShapes.box(new Vector2(!facingRight ? body.getPosition().x - 110 :
                     body.getPosition().x + 110, body.getPosition().y + 50f), new Vector2(80f, 40f),
-                BodyDef.BodyType.StaticBody, false, " Enemy", 50f);
+                BodyDef.BodyType.KinematicBody, false, " Enemy", 50f);
         }
     }
 

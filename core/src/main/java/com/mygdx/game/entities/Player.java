@@ -152,7 +152,7 @@ public class Player extends Objeto{
     }
     private void updateBeenHit(SpriteBatch s) {
         if (beenHit) {
-            font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
+//            font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             flickering_time += Gdx.graphics.getDeltaTime();
             if (flickering_time >= 1f){
                 flickering_time = 0f;
@@ -549,8 +549,8 @@ public class Player extends Objeto{
                     laser_rail.add(new Laser(
                         new Vector2(isFacingRight ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
-                            isFacingRight ? (getBody().getPosition().y + (HEIGHT / 4f) - 20f) : (getBody().getPosition().y + (HEIGHT))),
-                        radians > Math.PI / 2f, radians, this.toString()));
+                            isFacingRight ? (getBody().getPosition().y + (HEIGHT / 4f) - 20f) : (getBody().getPosition().y + (HEIGHT/2f))),
+                        radians > (Math.PI / 2f), radians, this.toString()));
                     LASER_HEADSET.play();
                     PowerBar.power -= character_features.getPowerSpent();
                 }
