@@ -1,12 +1,14 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.polygons_bodies;
+import static com.mygdx.game.images.Images.tile;
 
 public class Tile {
 
@@ -37,7 +40,6 @@ public class Tile {
         tmxMapLoader = new TmxMapLoader();
         tiledMap = tmxMapLoader.load(name);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
-
     }
 
     public void render(OrthographicCamera camera) {
@@ -130,4 +132,34 @@ public class Tile {
             }
         }
     }
+
+
+    public TextureRegion getTextureRegionOfCell(int layerIndex, int tileX, int tileY){
+        MapLayer layer = tiledMap.getLayers().get(layerIndex);
+
+//        if (layer instanceof TiledMapTileLayer) {
+            TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
+            TiledMapTileLayer.Cell cell;
+            cell = tileLayer.getCell(tileX, tileY);
+            if (cell != null && cell.getTile() != null) {
+                return cell.getTile().getTextureRegion();
+            }
+//        }
+        return null;
+    }
+
+    public TextureRegion getTextureRegionOfCell(String layerName, int tileX, int tileY){
+        MapLayer layer = tiledMap.getLayers().get(layerName);
+
+        if (layer instanceof TiledMapTileLayer) {
+            TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
+            TiledMapTileLayer.Cell cell;
+            cell = tileLayer.getCell(tileX, tileY);
+            if (cell != null && cell.getTile() != null) {
+                return cell.getTile().getTextureRegion();
+            }
+        }
+        return null;
+    }
+
 }

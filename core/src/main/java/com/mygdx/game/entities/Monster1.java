@@ -55,22 +55,23 @@ public class Monster1 extends Objeto implements Serializable {
     public void render(SpriteBatch spriteBatch){
         if (visible) {
             super.render(spriteBatch);
+            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrameUpdateStateTime(usingOnlyLastFrame, looping, facingRight));
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
             if (!beenHit) {
                 if (isAttacking()) {
                     attacking_time += Gdx.graphics.getDeltaTime();
-                    if (attacking_time >= 3/12f) {
+                    if (attacking_time >= 3 / 12f) {
                         attacking_time = 0f;
 //                        animations.attacking.resetStateTime(); TODO: arrumar stateTime para fim da animação
                         animations.changeAnimation("MONSTER1_WALKING");
                         attackOnce = true;
                     }
+
+                    if (animations.nameOfAnimation.equals("MONSTER1_ATTACKING")) {
+                        float x = body.getPosition().x - 256 / 2f - BOX_WIDTH / 2f;
+                        sprite.setPosition(x, sprite.getY());
+                    }
                 }
-            }
-            Sprite sprite = new Sprite(animations.currentAnimation.currentSpriteFrameUpdateStateTime(usingOnlyLastFrame, looping, facingRight));
-            sprite.setPosition(body.getPosition().x, body.getPosition().y);
-            if (animations.nameOfAnimation.equals("MONSTER1_ATTACKING")) {
-                float x = body.getPosition().x - 256 / 2f - BOX_WIDTH / 2f;
-                sprite.setPosition(x, sprite.getY());
             }
             sprite.draw(spriteBatch);
         }
@@ -86,7 +87,7 @@ public class Monster1 extends Objeto implements Serializable {
         if (player != null && player.getBody() != null && body != null) {
             if (!isBeenHit()) {
                 if (Math.abs(player.getBody().getPosition().y - body.getPosition().y) < 100) {
-                    if (Math.abs(player.getBody().getPosition().x - body.getPosition().x) < 150) {
+                    if (Math.abs(player.getBody().getPosition().x - body.getPosition().x) < 100) {
                        if (isntAttacking() && !attackOnce) {
                            attack();
                        }
@@ -99,6 +100,20 @@ public class Monster1 extends Objeto implements Serializable {
                            facingRight = true;
                        }
                     }
+                }
+            }
+            if (animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
+                if (!soundRunning) {
+                    Sounds.MONSTER_HURT.play();
+                    soundRunning = true;
+                    initialTime = System.nanoTime();
+                }
+                timer += Gdx.graphics.getDeltaTime();
+                if (timer >= 0.5f) {
+                    timer = 0f;
+                    animations.changeAnimation("MONSTER1_WALKING");
+                    soundRunning = false;
+                    beenHit = false;
                 }
             }
             attackOnceTimer += Gdx.graphics.getDeltaTime();
@@ -123,21 +138,7 @@ public class Monster1 extends Objeto implements Serializable {
                     }
                 }, 1);
             } else {
-                if (animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
-                    if (!soundRunning) {
-                        Sounds.MONSTER_HURT.play();
-                        soundRunning = true;
-                        initialTime = System.nanoTime();
 
-                    }
-                    timer += Gdx.graphics.getDeltaTime();
-                    if (timer >= 0.5f) {
-                        timer = 0f;
-                        animations.changeAnimation("MONSTER1_WALKING");
-                        soundRunning = false;
-                        beenHit = false;
-                    }
-                }
             }
         }
         if (HP <= 0 && !split) {
@@ -208,7 +209,7 @@ public class Monster1 extends Objeto implements Serializable {
     public void beenHit() {
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
-        if (body != null && !animations.nameOfAnimation.equals("MONSTER1_FLICKERING")) {
+        if (body != null && !beenHit) {
             animations.changeAnimation("MONSTER1_FLICKERING");
             Sounds.MONSTER_HURT.play();
             setBeenHit(true);

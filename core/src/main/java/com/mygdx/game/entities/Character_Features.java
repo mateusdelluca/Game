@@ -1,9 +1,13 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.images.PowerBar;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.*;
 import java.util.Arrays;
 
 import static com.mygdx.game.entities.Player.lvlUP;
@@ -23,7 +27,7 @@ public class Character_Features {
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
     private float enemy_attack = 10f;
     @Getter
-    private float laserDamage = 1f, damage;
+    private int laserDamage = 1, damage;
     @Getter
     private float powerSpent = PowerBar.power;
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
@@ -31,6 +35,10 @@ public class Character_Features {
     public Character_Features(){
         Arrays.fill(stats_values, 1);
         init();
+    }
+
+    public void drawDamage(SpriteBatch spriteBatch, BitmapFont font, Body body){
+        font.draw(spriteBatch, "" + damage, body.getPosition().x, body.getPosition().y);
     }
 
     public void update(){
@@ -42,12 +50,12 @@ public class Character_Features {
         def = 1f + (0.5f * stats_values[VIT]);
         jumpingStrength = 10_000f + (200f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
-        laserDamage = 1f + (0.5f * stats_values[DEX]);
+        laserDamage = (int) (1 + (0.5f * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
         powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-        damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
+        damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
         if (hit) {
             hp += damage;
             hit = false;
@@ -70,13 +78,12 @@ public class Character_Features {
         def = 1f + (0.5f * stats_values[VIT]);
         jumpingStrength = 5000f + (200f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
-        laserDamage = 1f + (0.5f * stats_values[DEX]);
+        laserDamage = (int) (1 + (0.5 * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
         powerSpent = 2f/(stats_values[WSD]/2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f+ stats_values[VIT] / 4f;
-        damage = (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
-        PowerBar.hp_0 = hp;
+        damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2f), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4f)), enemy_attack)));
         if (!lvlUP && exp_Points >= 25) {
             points += 10;
             base_level += 1;

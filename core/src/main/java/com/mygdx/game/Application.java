@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.levels.Level_Manager;
+import com.mygdx.game.sfx.Sounds;
 
 import static com.mygdx.game.manager.StateManager.*;
 
@@ -12,6 +13,8 @@ public class Application extends Game {
     StateManager stateManager;
 
     public static Level_Manager level_manager;
+
+    public static Sounds sounds;
 
     @Override
     public void create() {

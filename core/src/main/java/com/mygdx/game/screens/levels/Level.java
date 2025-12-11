@@ -231,7 +231,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 //        rope.render(spriteBatch);
 //        for (Rope rope : ropes)
 //            rope.render(spriteBatch);
-//TODO: corrigir o problema de vários objetos sererm desenhados separadamente de objetos o array
+//TODO: corrigir o problema de vários objetos sererm desenhados separadamente de objetos (o array)
         spriteBatch.end();
     }
 
@@ -266,13 +266,15 @@ public abstract class Level extends State implements ContactListener, Serializab
             return;
 
 //        for (Rope rope : ropes){
-        if (rope != null)
-            rope.beginContact(body1, body2);
-//        }
+        if (ninjaRope != null)
+            if (rope != null)
+                rope.beginContact(body1, body2);
+//          }
         for (Objeto objeto : objetos) {
             if (objeto != null) {
                 objeto.beenHit(body1, body2);
                 objeto.beginContact(body1, body2);
+
             }
         }
 
@@ -425,8 +427,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
-
-        ninjaRope.beginContact(contact);
+        if (ninjaRope != null)
+            ninjaRope.beginContact(contact);
 
 
 
@@ -561,7 +563,6 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean keyDown(int keycode) {
         player.keyDown(keycode);
-        player.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE){
             takeScreenshot();
             StateManager.setStates(StateManager.States.PAUSE);
@@ -583,8 +584,10 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         player.touchDown(screenX, screenY, pointer, button);
-        ninjaRope.justTouched(button);
-        mouse.touchDown(screenX, screenY, button);
+        if (ninjaRope != null)
+            ninjaRope.justTouched(button);
+        if (mouse != null)
+         mouse.touchDown(screenX, screenY, button);
         return false;
     }
 
@@ -607,7 +610,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         player.mouseMoved(screenX, screenY);
-        ninjaRope.mouseMoved(screenX, screenY);
+        if (ninjaRope != null)
+            ninjaRope.mouseMoved(screenX, screenY);
 //        mouse.mouseMoved(screenX, screenY);
         return false;
     }

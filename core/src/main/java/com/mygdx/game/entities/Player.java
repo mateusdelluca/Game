@@ -52,7 +52,7 @@ public class Player extends Objeto{
     private float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
-    public static float velocityX = 2_000f, timerLvlUP;
+    public static float velocityX = 5_000f, timerLvlUP;
     private boolean walking, usingWeapons, laser_attack, shooting, sword, punching, saber, throwing_fire;
 
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
@@ -64,7 +64,7 @@ public class Player extends Objeto{
     public static ArrayList<Fire> fire_objects = new ArrayList<>();
     private float degrees, radians;
     private String oldAnimation = "IDLE";
-    public static Character_Features character_features = new Character_Features();
+    public Character_Features character_features = new Character_Features();
 
     private Sprite headsetlaser;
     private float flickering_time;
@@ -84,6 +84,9 @@ public class Player extends Objeto{
 
     @Override
     public void render(SpriteBatch s) {
+        super.render(s);
+        if (beenHit)
+            character_features.drawDamage(s, font, body);
         renderAnimation(s);
         renderMinis(s);
         renderLaser(s);
@@ -116,7 +119,7 @@ public class Player extends Objeto{
                 if (punching) {
                     punching();
                 } else {
-                    if (isMoving()) {
+                    if (isMoving() || walking) {
                         walking();
                     } else {
                         idle();
@@ -139,7 +142,7 @@ public class Player extends Objeto{
 
     private void punching(){
         attackingBodiesUpdate();
-        if (isFinishedCurrentAnimation()) {
+        if (isFinishedCurrentAnimation() && animationName().contains("PUNCHING")) {
             punching = false;
             walking = true;
             resetCurrentAnimation();
@@ -152,35 +155,30 @@ public class Player extends Objeto{
     }
     private void updateBeenHit(SpriteBatch s) {
         if (beenHit) {
-//            font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
+
+            body.applyForceToCenter(playerBodyXPositionHigherThanAnotherBody ? 15_000f : -15_000f, 0, true);
+            changeAnimation("STRICKEN");
+
             flickering_time += Gdx.graphics.getDeltaTime();
-            if (flickering_time >= 1f){
+            if (flickering_time >= 0.5f){
                 flickering_time = 0f;
                 isScale = false;
+                beenHit = false;
+                changeAnimation("IDLE");
             }
-
-            body.setLinearVelocity(0, getBody().getLinearVelocity().y);
-            if (!animationName().equals("STRICKEN")) {
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        beenHit = false;
-                    changeAnimation("IDLE");
-                    }
-                }, 0.5f);
-            }
-            changeAnimation("STRICKEN");
         }
     }
 
     @Override
     public void beenHit(){
         super.beenHit();
-//        changeAnimation("STRICKEN");
-//        if (animation() != Player_Animations.STRICKEN) {
-//            setBeenHit(true);
+
+        if (animation() != Player_Animations.STRICKEN) {
+            setBeenHit(true);
             Sounds.HURT.play();
-//        }
+            changeAnimation("STRICKEN");
+            hit = true;
+        }
     }
 
     private void updateBaseLevel(SpriteBatch spriteBatch){
@@ -206,7 +204,7 @@ public class Player extends Objeto{
     }
 
     private void renderAnimation(SpriteBatch s){
-        Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame, looping, !isFacingRight));
+        Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame, looping || walking, !isFacingRight));
         sprite.setOriginCenter();
         setBodyPosition(sprite);
         sprite.draw(s);
@@ -273,10 +271,15 @@ public class Player extends Objeto{
     }
 
     private void walking(){
-        if (animationName().equals("WALKING") || animationName().equals("WALKING_SWORD")){
+        if (animationName().contains("WALKING") || animationName().contains("LEGS") ){
             walking = true;
             if (isFinishedCurrentAnimation())
                 resetCurrentAnimation();
+            if (!isMoving()) {
+                resetCurrentAnimation();
+                walking = false;
+                changeAnimation("IDLE");
+            }
         }
 
     }
@@ -515,8 +518,8 @@ public class Player extends Objeto{
                         changeAnimation("JUMPING_FRONT");
                 }
             }
-            if (animationName().contains("WALKING"))
-                walking = false;
+//            if (animationName().contains("WALKING"))
+//                walking = false;
         }
         if (keycode == Input.Keys.F) {
             if (PowerBar.sp_0 > 0) {
@@ -570,9 +573,11 @@ public class Player extends Objeto{
                     if (animationName().contains("SWORD"))
                         changeAnimation("ATTACKING_SWORD_FIRE_2");
                     else {
-                        punching = true;
-                        changeAnimation("PUNCHING_FIRE");
-                        body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                        if (!punching) {
+                            punching = true;
+                            changeAnimation("PUNCHING_FIRE");
+                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+                        }
                     }
                 }
             }

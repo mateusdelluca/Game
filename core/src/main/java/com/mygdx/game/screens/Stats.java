@@ -17,8 +17,8 @@ import com.mygdx.game.manager.StateManager;
 
 import java.util.TreeMap;
 
-import static com.mygdx.game.entities.Player.character_features;
 import static com.mygdx.game.images.Images.*;
+import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 
@@ -113,7 +113,7 @@ public class Stats extends State {
     @Override
     public void render() {
         update();
-        character_features.update();
+        player.character_features.update();
 
         spriteBatch.begin();
 
@@ -124,11 +124,11 @@ public class Stats extends State {
         stats.draw(spriteBatch);
         atributes.draw(spriteBatch);
 
-        for (int index = 0; index < character_features.getStats_values().length; index++) {
+        for (int index = 0; index < player.character_features.getStats_values().length; index++) {
             stats_font.setColor(Color.BLACK);
-            stats_font.draw(spriteBatch, "" + character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 20), (statsCoordinates.get(KEYS[index]).y - 120));
+            stats_font.draw(spriteBatch, "" + player.character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 20), (statsCoordinates.get(KEYS[index]).y - 120));
             stats_font.setColor(Color.WHITE);
-            stats_font.draw(spriteBatch, "" + character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 19), (statsCoordinates.get(KEYS[index]).y + 1 - 120));
+            stats_font.draw(spriteBatch, "" + player.character_features.getStats_values()[index], (statsCoordinates.get(KEYS[index]).x - 19), (statsCoordinates.get(KEYS[index]).y + 1 - 120));
         }
 
         level_font.setColor(Color.BLACK);
@@ -138,15 +138,15 @@ public class Stats extends State {
 
 
         points2_font.setColor(Color.BLACK);
-        points2_font.draw(spriteBatch, "   Defense: " + character_features.getDef(), 830, 350);
-        points2_font.draw(spriteBatch, "   Attack: " + character_features.getAttack(), 830, 315);
+        points2_font.draw(spriteBatch, "   Defense: " + player.character_features.getDef(), 830, 350);
+        points2_font.draw(spriteBatch, "   Attack: " + player.character_features.getAttack(), 830, 315);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830, 275);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830, 235);
 
         points2_font.draw(spriteBatch, "Max Power: " + PowerBar.maxPower, 1000, 235);
 
         points2_font.setColor(Color.WHITE);
-        points2_font.draw(spriteBatch, "   Defense: " + character_features.getDef(), 830 - 2, 350 + 2);
+        points2_font.draw(spriteBatch, "   Defense: " + player.character_features.getDef(), 830 - 2, 350 + 2);
         points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 315 + 2);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 275 + 2);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 235 + 2);
@@ -207,12 +207,12 @@ public class Stats extends State {
             System.out.println(mouseX + " " + mouseY);
         }
 
-        for (int index = 0; index < character_features.getStats_values().length; index++){
+        for (int index = 0; index < player.character_features.getStats_values().length; index++){
             if (statsRectangles.get(KEYS[index]).contains(mouseX, mouseY)){
                 if (points > 0) {
-                    character_features.getStats_values()[index]++;
+                    player.character_features.getStats_values()[index]++;
                     points--;
-                    System.out.println(KEYS[index] + " " + character_features.getStats_values()[index]);
+                    System.out.println(KEYS[index] + " " + player.character_features.getStats_values()[index]);
                     System.out.println(statsCoordinates.get(KEYS[index]));
                 }
             }

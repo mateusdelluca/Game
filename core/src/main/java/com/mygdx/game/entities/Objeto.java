@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
-import com.mygdx.game.images.Images;
 import com.mygdx.game.items.Bullet;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.screens.Stats;
@@ -22,7 +21,6 @@ import java.io.Serializable;
 import java.util.Random;
 
 import static com.mygdx.game.images.PowerBar.hit;
-import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -56,7 +54,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected BitmapFont font;
     protected float scale = 5f;
     protected boolean isScale;
-    protected Character_Features character_features = new Character_Features();
+    public Character_Features character_features = new Character_Features();
+    protected boolean playerBodyXPositionHigherThanAnotherBody;
 
     public Objeto(float width, float height){
         this.width = width;
@@ -251,6 +250,11 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         hit = true;
     }
 
+
+    public boolean playerBodyXPositionHigherThanAnotherBody(Body bodyA, Body bodyB){
+        return (bodyA.equals(body) && bodyA.getPosition().x > bodyB.getPosition().x);
+    }
+
     public void dropItems(){
         int rand = new Random().nextInt(4);
         for (int i = 0; i < rand; i++)
@@ -324,8 +328,11 @@ public abstract class Objeto implements ObjetoFields, Serializable{
             onGround = true;
         } else
             onGround = false;
-//        if (this instanceof Player)
-//            System.out.println(Math.abs(body.getLinearVelocity().y) + " " + onGround);
+
+        if ((body1.getUserData().toString().contains("Boy") && body2.getUserData().toString().contains("Enemy")))
+            playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body1, body2);
+        if (body2.getUserData().toString().contains("Boy") && body1.getUserData().toString().contains("Boy"))
+            playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body2, body1);
     }
 
     public void beginContact(Contact contact){

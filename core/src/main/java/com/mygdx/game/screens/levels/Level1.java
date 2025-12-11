@@ -1,5 +1,6 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -13,13 +14,13 @@ import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Level1 extends Level{
-
+    Sprite sprite;
     public Level1(){
         super();
 //        monsters1.clear();
         player.setViewport(viewport);
         ninjaRope = new NinjaRope(player.getBody());
-        mouse = new Mouse(player.getBody().getPosition());
+//        mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(1300, 400),    Monster1.class.getSimpleName() + monsters1.size()));
@@ -34,11 +35,11 @@ public class Level1 extends Level{
 //            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
 //        } //TODO arrumar o local que é armazenado os Cristais em um array ou hashmap ou ainda treemap
 //        player = new Player(new Vector2(300f, 200f), viewport);
-        items.put("Rifle", rifle);
-        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
-        items.get("Rifle").updateItem();
-        items.get("Laser_Headset").updateItem();
-        items.put("Sword", new Sword(new Vector2(1000, 450)));
+//        items.put("Rifle", rifle);
+//        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
+//        items.get("Rifle").updateItem();
+//        items.get("Laser_Headset").updateItem();
+//        items.put("Sword", new Sword(new Vector2(1000, 450)));
 //        objetos.clear();
 //        objetos.add(boy);
         objetos.add(player);
@@ -47,8 +48,11 @@ public class Level1 extends Level{
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
 //        objetos.add(new Robot(new Vector2(700, 300), boy));
-        objetos.add(new Ball(new Vector2(500,750)));
-        objetos.add((Objeto) items.get("Sword"));
+//        objetos.add(new Ball(new Vector2(500,750)));
+//        objetos.add((Objeto) items.get("Sword"));
+
+//        sprite = new Sprite(tile.getTextureRegionOfCell(3, 100, 10));
+
     }
 
     @Override
@@ -83,7 +87,10 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-
+        if (sprite != null) {
+            sprite.setPosition(500, 500);
+            sprite.draw(spriteBatch);
+        }
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 

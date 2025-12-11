@@ -11,12 +11,14 @@ import com.mygdx.game.entities.Player;
 
 import java.io.Serializable;
 
+import static com.mygdx.game.screens.levels.Level.player;
+
 public class PowerBar implements Serializable{
 
     public static final float WIDTH = Images.hp.getWidth(), HEIGHT = Images.hp.getHeight();
     public static final float WIDTH2 = Images.sp.getWidth(), HEIGHT2 = Images.sp.getHeight();
     public static final float WIDTH3 = Images.power.getWidth(), HEIGHT3 = Images.power.getHeight();
-    public static final Animator HIT = new Animator(4,4,16,128,128,"fire/Hit.png");
+//    public static final Animator HIT = new Animator(4,4,16,128,128,"fire/Hit.png");
     public static float hp_0 = WIDTH/2f, sp_0 = WIDTH2/2f, maxSP = WIDTH2, maxHP = WIDTH, power = WIDTH3/3f, maxPower = power;
     public static boolean hit;
     private Vector3 position = new Vector3();
@@ -37,21 +39,21 @@ public class PowerBar implements Serializable{
 
         sp_0 = Math.min(Math.max(0, sp_0), maxSP);
         power = Math.min(Math.max(0, power), maxPower);
-        if (maxPower > WIDTH3)
-            maxPower = WIDTH3;
-        if (maxHP > WIDTH)
-            maxHP = WIDTH;
-        if (maxSP > WIDTH2)
-            maxSP = WIDTH2;
-        if (hp_0 > WIDTH)
-            hp_0 = WIDTH;
-        if (power > maxPower)
-            power = maxPower;
-        if (hp_0 < 0){
-            hp_0 = 0f;
-        }
-        hp_0 = Math.min(Math.max(0, hp_0), maxHP);
-        s.draw(Images.hp, -900 + position.x + 110, position.y - 450, hp_0, 124);
+//        if (maxPower > WIDTH3)
+//            maxPower = WIDTH3;
+//        if (maxHP > WIDTH)
+//            maxHP = WIDTH;
+//        if (maxSP > WIDTH2)
+//            maxSP = WIDTH2;
+//        if (hp_0 > WIDTH)
+//            hp_0 = WIDTH;
+//        if (power > maxPower)
+//            power = maxPower;
+//        if (hp_0 < 0){
+//            hp_0 = 0f;
+//        }
+//        hp_0 = Math.min(Math.max(0, hp_0), maxHP);
+        s.draw(Images.hp, -900 + position.x + 110, position.y - 450, player.character_features.getHp(), 124);
         s.draw(Images.sp, -900 + position.x + 110, position.y - 450, Math.min(sp_0, maxSP), 124);
         s.draw(Images.power, -900 + position.x, position.y - 450 + 3f, power, Images.power.getHeight());
         if (position.y > 5400f)

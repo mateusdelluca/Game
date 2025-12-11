@@ -25,7 +25,7 @@ public class Sounds implements Serializable{
 
     public static final Sound LASER_HEADSET = Gdx.audio.newSound(Gdx.files.internal("sounds/Laser_Headset.mp3"));
 
-    public static final Music PAUSE_SONG = Gdx.audio.newMusic(Gdx.files.internal("sounds/Sunglasses.mp3"));
+    public static final Music PAUSE_SONG = Gdx.audio.newMusic(Gdx.files.internal("sounds/Vitallity.mp3"));
 
     public static Music LEVEL4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Funk Metro.mp3"));
 

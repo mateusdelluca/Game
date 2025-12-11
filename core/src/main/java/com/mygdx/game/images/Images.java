@@ -14,6 +14,8 @@ import java.io.Serializable;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.files.FileHandle;
+import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
+
 import java.util.TreeMap;
 
 public class Images implements Serializable {
@@ -67,6 +69,7 @@ public class Images implements Serializable {
     public static Sprite power;
     public static Sprite sword_inventory;
     public static Sprite ball;
+    public static Animator explosions;
 
     public Images() {
         mortalSprite = new Sprite(new Texture(Gdx.files.internal("boy/Mortal.png")));
@@ -127,6 +130,8 @@ public class Images implements Serializable {
         aim = new Sprite(Images.shoot);
         spriteJetPack = new Sprite(new Texture(Gdx.files.internal("boy/JetPack2.png")));
         ninjaStar = new Texture(Gdx.files.internal("objects/NinjaStar.png"));
+        explosions = new Animator(9, 9, 10, 256, 256, "fire/Explosions.png");
+
         saber_inventory = new Sprite(new Texture(Gdx.files.internal("items/Saber_75x85.png")));
         rifle_inventory = new Sprite(new Texture(Gdx.files.internal("items/Rifle_75x85.png")));
         ninjaStar_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaStar_75x85.png")));
