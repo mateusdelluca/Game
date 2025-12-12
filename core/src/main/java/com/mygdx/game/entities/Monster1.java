@@ -141,7 +141,7 @@ public class Monster1 extends Objeto implements Serializable {
 
             }
         }
-        if (HP <= 0 && !split) {
+        if (character_features.getHp() <= 0 && !split) {
             animations.changeAnimation("MONSTER1_SPLIT");
             split = true;
             dropItems();

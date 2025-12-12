@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.images.Images.legs;
-import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
@@ -177,7 +176,6 @@ public class Player extends Objeto{
             setBeenHit(true);
             Sounds.HURT.play();
             changeAnimation("STRICKEN");
-            hit = true;
         }
     }
 
@@ -233,7 +231,6 @@ public class Player extends Objeto{
         updateAnimation();
         respawn();
         whichOneEquip();
-        character_features.update();
         updateFireBalls();
     }
 
@@ -272,7 +269,7 @@ public class Player extends Objeto{
 
     private void walking(){
         if (animationName().contains("WALKING") || animationName().contains("LEGS") ){
-            walking = true;
+//            walking = true;
             if (isFinishedCurrentAnimation())
                 resetCurrentAnimation();
             if (!isMoving()) {
@@ -476,8 +473,9 @@ public class Player extends Objeto{
             }
         }
         if (keycode == Input.Keys.SPACE) {
+            walking = false;
             JUMP.play();
-            body.applyForceToCenter(0, 10_000, true);
+            body.applyForceToCenter(0, character_features.getJumpingStrength() , true);
             if (!isMoving()){
                 if (laser_attack)
                     changeAnimation("JUMPING_FRONT_LASER");
@@ -547,6 +545,7 @@ public class Player extends Objeto{
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.LEFT) {
+            walking = false;
             if (laser_attack) {
                 if (PowerBar.power >= character_features.getPowerSpent()) {
                     laser_rail.add(new Laser(

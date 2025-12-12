@@ -43,7 +43,7 @@ public class Jack extends Objeto {
 
     public void update(){
         super.update();
-        if (HP > 0 && visible) {
+        if (character_features.getHp() > 0 && visible) {
             deltaTime += Gdx.graphics.getDeltaTime();
 //            rifle.update();
 //            if (!rifle.isReloading()) {
@@ -67,14 +67,14 @@ public class Jack extends Objeto {
 //            }
 //            rifle.updateItem(world);
         }
-        if (HP <= 0){
+        if (character_features.getHp() <= 0){
             visible = false;
         }
     }
 
     @Override
     public void render(SpriteBatch s){
-        if (HP <= 0)
+        if (character_features.getHp() <= 0)
             visible = false;
 //        if (rifle == null)
 //            rifle = new Rifle(new Vector2(-10_000, -20_000));
@@ -98,7 +98,6 @@ public class Jack extends Objeto {
                         beenHit = false;
                         timer = 0f;
                         alpha = 1f;
-                        HP--;
                         sprite.setAlpha(alpha);
                         Sounds.HURT.play();
                     }
@@ -122,7 +121,7 @@ public class Jack extends Objeto {
     }
 
     public Rectangle getBodyBounds() {
-        if (HP <= 0 || body == null)
+        if (character_features.getHp() <= 0 || body == null)
             return new Rectangle();
         return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, WIDTH + 20f, HEIGHT + 5f);
     }

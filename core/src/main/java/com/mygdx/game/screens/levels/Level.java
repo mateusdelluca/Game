@@ -138,10 +138,17 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        if (this instanceof Level3)
-            player = new Player(new Vector2(10, 5700), viewport);
-        else
-            player = new Player(new Vector2(100, 400), viewport);
+        if (this instanceof Level1)
+            player = new Player(new Vector2(30f, 1500f), viewport);
+        if (this instanceof Level3) {
+            player.getBody().setTransform(5700f, 30f, 0);
+            player.setViewport(viewport);
+        }
+        else {
+            player.getBody().setTransform(30f, 1500f, 0);
+            player.setViewport(viewport);
+        }
+
     }
 
     @Override

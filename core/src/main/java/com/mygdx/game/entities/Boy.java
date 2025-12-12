@@ -847,7 +847,6 @@ public class Boy extends Objeto {
 
             setBeenHit(true);
             Sounds.HURT.play();
-            PowerBar.hit = true;
         }
     }
 

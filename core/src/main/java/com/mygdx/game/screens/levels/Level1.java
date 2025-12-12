@@ -14,7 +14,6 @@ import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 public class Level1 extends Level{
-    Sprite sprite;
     public Level1(){
         super();
 //        monsters1.clear();
@@ -87,10 +86,6 @@ public class Level1 extends Level{
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        if (sprite != null) {
-            sprite.setPosition(500, 500);
-            sprite.draw(spriteBatch);
-        }
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
 

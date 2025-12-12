@@ -113,7 +113,7 @@ public class Stats extends State {
     @Override
     public void render() {
         update();
-        player.character_features.update();
+        player.character_features.update(player);
 
         spriteBatch.begin();
 

@@ -20,8 +20,6 @@ import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
 
 public class Robot extends Objeto{
 
-    @Getter
-    private Character_Features char_features;
     private Robot2_Sprites sprites = new Robot2_Sprites();
     private Array<Laser> laser_rail = new Array<>();
 
@@ -38,7 +36,6 @@ public class Robot extends Objeto{
         this.boy = boy;
         dimensions = new Vector2(46/2f, 108/2f);
         body = box(position, dimensions, BodyDef.BodyType.DynamicBody, false);
-        char_features = new Character_Features();
         visible = true;
         looping = true;
         facingRight = false;
@@ -48,7 +45,7 @@ public class Robot extends Objeto{
 
     @Override
     public void render(SpriteBatch s) {
-        if (visible && HP > 0) {
+        if (visible && character_features.getHp() > 0) {
             update();
 //            Sprite sprite = new Sprite(sprites.currentAnimation.currentSpriteFrame(useOnlyLastFrame, looping, facingRight));
 //            sprite.setPosition(body.getPosition().x - dimensions.x - 20f, body.getPosition().y - dimensions.y/2f);
@@ -86,7 +83,7 @@ public class Robot extends Objeto{
             beenHit();
             beenHit = false;
         }
-        if (HP <= 0){
+        if (character_features.getHp() <= 0){
             falling();
         } else
             sprites.update();

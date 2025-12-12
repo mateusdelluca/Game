@@ -20,7 +20,6 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Random;
 
-import static com.mygdx.game.images.PowerBar.hit;
 import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public abstract class Objeto implements ObjetoFields, Serializable{
@@ -45,8 +44,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     @Getter @Setter
     protected BodyData bodyData;
     protected float timer;
-    @Setter @Getter
-    protected float HP = 10f;
     protected boolean touchingGround;
     protected boolean onGround;
     @Getter @Setter
@@ -203,7 +200,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
-        character_features.update();
+        character_features.update(this);
         if (beenHit && !isScale) {
             if (scale > 0f)
                 scale -= 0.2f;
@@ -222,7 +219,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
             body.setTransform(10_000 + new Random().nextFloat(10000), 10_000 + new Random().nextFloat(10_000), 0);
 //            world.destroyBody(body);
         }
-        if (HP <= 0 && !(this instanceof Boy) && !dead){
+        if (character_features.getHp() <= 0 && !(this instanceof Player) && !dead){
             dead = true;
             dropItems();
             Timer timer = new Timer();
@@ -247,7 +244,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void beenHit(){
         beenHit = true;
-        hit = true;
     }
 
 
@@ -280,7 +276,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                     ) {
                     if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl || this instanceof Robot) {
                         beenHit();
-                        HP -= Boy.attack;
                     }
                 }
                 if (

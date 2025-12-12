@@ -20,7 +20,6 @@ public class PowerBar implements Serializable{
     public static final float WIDTH3 = Images.power.getWidth(), HEIGHT3 = Images.power.getHeight();
 //    public static final Animator HIT = new Animator(4,4,16,128,128,"fire/Hit.png");
     public static float hp_0 = WIDTH/2f, sp_0 = WIDTH2/2f, maxSP = WIDTH2, maxHP = WIDTH, power = WIDTH3/3f, maxPower = power;
-    public static boolean hit;
     private Vector3 position = new Vector3();
     private BitmapFont font;
     private static float x, y;
