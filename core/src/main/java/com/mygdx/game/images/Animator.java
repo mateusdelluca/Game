@@ -224,12 +224,9 @@ public class Animator{
 //    }
 
     public void update(){
-        if (stateTime < totalTime) {
+        if (stateTime < totalTime)
             stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-            finishedAnimation = false;
-        }
-        else {
-            stateTime = totalTime;
+        if (isAnimFinished()){
             finishedAnimation = true;
         }
         if (changedAnimation) {
@@ -243,6 +240,7 @@ public class Animator{
 
     public void resetAnimation(){
         stateTime = 0;
+        finishedAnimation = false;
     }
 
      public TextureRegion currentFrame(boolean looping){
@@ -257,7 +255,7 @@ public class Animator{
 
 
     public boolean isAnimFinished(){
-        return finishedAnimation;
+        return (stateTime >= totalTime) || finishedAnimation;
     }
 
 //    public boolean ani_finished2(){

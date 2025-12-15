@@ -38,9 +38,7 @@ public class Level1 extends Level{
 //        items.put(Laser_Headset.class.getSimpleName(), new Laser_Headset(new Vector2(300, 400)));
 //        items.get("Rifle").updateItem();
 //        items.get("Laser_Headset").updateItem();
-//        items.put("Sword", new Sword(new Vector2(1000, 450)));
-//        objetos.clear();
-//        objetos.add(boy);
+        items.put("Sword", new Sword(new Vector2(1000, 450)));
         objetos.add(player);
         objetos.add(new Monster3(new Vector2(600, 700)));
         objetos.add(new Jack(new Vector2(3000, 400)));
@@ -49,9 +47,6 @@ public class Level1 extends Level{
 //        objetos.add(new Robot(new Vector2(700, 300), boy));
 //        objetos.add(new Ball(new Vector2(500,750)));
 //        objetos.add((Objeto) items.get("Sword"));
-
-//        sprite = new Sprite(tile.getTextureRegionOfCell(3, 100, 10));
-
     }
 
     @Override
@@ -136,8 +131,7 @@ public class Level1 extends Level{
         }
 
         for (Objeto o : objetos) {
-            if (o instanceof Portal)
-                o.beginContact(contact);
+//                o.beginContact(contact);  //TODO: verificar se é necessário este método para colisão de objetos com o tilemap
             if (o instanceof Robot)
                 o.beenHit(body1, body2);
         }

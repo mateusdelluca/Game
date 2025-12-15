@@ -302,28 +302,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void beginContact(Body body1, Body body2){
-        if (body1 == null || body2 == null || body == null)
-            return;
-        if (
-            (
-            ((body1.getUserData().toString().contains("Thorns") && body2.equals(body))
-            || (body2.getUserData().toString().contains("Thorns") && body1.equals(body)))
-            ||
-
-            ((body1.getUserData().toString().contains("Colliders") && body2.equals(body))
-            || (body2.getUserData().toString().contains("Colliders") && body1.equals(body)))
-
-            ||
-            ((body1.getUserData().toString().contains("Rect") && body2.equals(body))
-            || body2.getUserData().toString().contains("Rect") && body1.equals(body))
-
-            )
-        ||
-            (Math.abs(body.getLinearVelocity().y) <= 1)){
-            onGround = true;
-        } else
-            onGround = false;
-
         if ((body1.getUserData().toString().contains("Boy") && body2.getUserData().toString().contains("Enemy")))
             playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body1, body2);
         if (body2.getUserData().toString().contains("Boy") && body1.getUserData().toString().contains("Boy"))
@@ -331,7 +309,38 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void beginContact(Contact contact){
+        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
+            return;
+        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
+            return;
+        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
+            return;
 
+        Body body1 = contact.getFixtureA().getBody();
+        Body body2 = contact.getFixtureB().getBody();
+
+        if (body1 == null || body2 == null || body == null)
+            return;
+
+        onGround = false;
+        if (
+            (
+                ((body1.getUserData().toString().contains("Thorns") && body2.equals(body))
+                    || (body2.getUserData().toString().contains("Thorns") && body1.equals(body)))
+                    ||
+
+                    ((body1.getUserData().toString().contains("Colliders") && body2.equals(body))
+                        || (body2.getUserData().toString().contains("Colliders") && body1.equals(body)))
+
+                    ||
+                    ((body1.getUserData().toString().contains("Rect") && body2.equals(body))
+                        || body2.getUserData().toString().contains("Rect") && body1.equals(body))
+
+            )                ||
+                (Math.abs(body.getLinearVelocity().y) <= 0.5)){
+
+            onGround = true;
+        }
     }
 
     public boolean onGround(){

@@ -16,6 +16,8 @@ import java.util.Random;
 
 import static com.mygdx.game.entities.Character_Features.*;
 import static com.mygdx.game.images.Images.itemsDraw_minis;
+import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.TRIGGER;
 
 public class Minis extends Objeto{
@@ -126,12 +128,16 @@ public class Minis extends Objeto{
             if (name.equals("Cartridge"))
                 Rifle.addCartridge = true;
             if (name.equals("Blue Potion"))
-                PowerBar.sp_0 += recoveryPowerBluePotion;
+                player.character_features.setSp(Math.min(PowerBar.maxSP,player.character_features.getSp() + recoveryPowerBluePotion));
             if (name.equals("Red Potion")){
-                PowerBar.hp_0 += recoveryPowerRedPotion;
-                }
-            if (name.equals("Green Potion"))
-                PowerBar.power += recoveryPowerGreenPotion;
+                player.character_features.setHp(Math.min(PowerBar.maxHP, player.character_features.getHp() + recoveryPowerRedPotion));
+            }
+            if (name.equals("Green Potion")){
+                player.character_features.setPower(Math.min(PowerBar.maxPower, player.character_features.getPower() + recoveryPowerGreenPotion));
+            }
+            if (name.equals("Ball")) {
+                exp_Points += 20;
+            }
         }
     }
 

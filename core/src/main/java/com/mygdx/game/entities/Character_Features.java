@@ -1,5 +1,6 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -12,11 +13,12 @@ import java.util.Arrays;
 
 import static com.mygdx.game.entities.Player.lvlUP;
 import static com.mygdx.game.screens.Stats.*;
+import static com.mygdx.game.screens.levels.Level.player;
 
 public class Character_Features {
 
     @Getter @Setter
-    private float hp = 200; //TODO: arrumar o hp da classe PowerBar colocando nesta classe e usar para outros personagens
+    private float hp = 250, sp = 100, power = 120; //TODO: arrumar o hp da classe PowerBar colocando nesta classe e usar para outros personagens
     @Getter @Setter
     private float attack = 1f, def = 1, jumpingStrength = 50_000f, maxVelocityWalking = 10f;
     @Getter @Setter
@@ -25,12 +27,13 @@ public class Character_Features {
 
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
     @Getter @Setter
-    private int enemy_attack = 20;
+    private int enemy_attack = 12;
     @Getter
     private int laserDamage = 1, damage, damageDraw;
     @Getter
     private float powerSpent = PowerBar.power;
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
+    private float timer;
 
     public Character_Features(){
         Arrays.fill(stats_values, 1);
@@ -38,7 +41,7 @@ public class Character_Features {
     }
     public void init() {
         PowerBar.maxSP = 40f + (4 * stats_values[WSD]);
-        PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
+        PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
         PowerBar.maxPower = 50f + (5f * stats_values[WSD]);
         attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
@@ -65,8 +68,8 @@ public class Character_Features {
     }
 
     public void update(Objeto obj){
-        PowerBar.maxSP = 40f + (4 * stats_values[WSD]);
-        PowerBar.maxHP = 150f + (6f * stats_values[VIT]);
+        PowerBar.maxSP = 100f + (4 * stats_values[WSD]);
+        PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
         PowerBar.maxPower = 50f + (5f* stats_values[WSD]);
         attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
@@ -94,18 +97,14 @@ public class Character_Features {
             if (damage == 0)
                 damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4)), enemy_attack)));
             hp += damage;
-            if (damageDraw == 0)
+            if (damage != 0)
                 damageDraw = damage;
             damage = 0;
-
-            Timer.schedule(
-                new Timer.Task() {
-                    @Override
-                    public void run() {
-                        obj.beenHit = false;
-                    }
-                }
-                , 200);
+            timer += Gdx.graphics.getDeltaTime();
+            if (timer >= 0.2f) {
+                obj.beenHit = false;
+                timer = 0f;
             }
+        }
     }
 }

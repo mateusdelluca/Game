@@ -281,7 +281,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             if (objeto != null) {
                 objeto.beenHit(body1, body2);
                 objeto.beginContact(body1, body2);
-
+                objeto.beginContact(contact);
             }
         }
 
