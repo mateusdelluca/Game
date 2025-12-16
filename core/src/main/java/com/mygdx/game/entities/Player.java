@@ -42,8 +42,6 @@ public class Player extends Objeto{
     public static Array<Minis> minis = new Array<>();
     public static boolean lvlUP;
     public static final float BOX_WIDTH = 50f, BOX_HEIGHT = 95f;
-    @Setter @Getter
-    private boolean isFacingRight;
     @Getter @Setter
     private Viewport viewport;
     @Getter @Setter
@@ -51,7 +49,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
-    private boolean walking, usingWeapon = true, laser_attack, shooting, sword = true, punching, saber, throwing_fire;
+    private boolean walking, usingWeapon, laser_attack, shooting, sword, punching, saber, throwing_fire;
 
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
@@ -78,6 +76,7 @@ public class Player extends Objeto{
         this.viewport = viewport;
         changeAnimation("IDLE");
         rifle = new Rifle(new Vector2(10_000, 20_000));
+        isFacingRight = true;
     }
 
 
@@ -154,8 +153,8 @@ public class Player extends Objeto{
     }
     private void updateBeenHit(SpriteBatch s) {
         if (beenHit) {
-
-            body.applyForceToCenter(playerBodyXPositionHigherThanAnotherBody ? 15_000f : -15_000f, 0, true);
+            float forceX = 10;
+            body.applyForceToCenter(playerBodyXPositionHigherThanAnotherBody ? forceX : -forceX, 0, true);
             changeAnimation("STRICKEN");
 
             flickering_time += Gdx.graphics.getDeltaTime();
@@ -163,6 +162,7 @@ public class Player extends Objeto{
                 flickering_time = 0f;
                 isScale = false;
                 beenHit = false;
+                walking = false;
                 changeAnimation("IDLE");
             }
         }
@@ -308,17 +308,17 @@ public class Player extends Objeto{
                 saber = false;
                 if (animationName().contains("ATTACKING_SWORD")){
                     for (Body body1 : attacking_box_bodies) {
-                        body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f :
+                        body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f - 40f :
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50), 0f);
                     }
-                    if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() >= 10){
-                        Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
+                    if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() > 9){
+                        Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f - 20f:
                                 getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 10f);
+                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 1f);
 //                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
                         attacking_box_bodies.add(body1);
 
-                    } if (frameCounter() >= 11){
+                    } if (frameCounter() > 10){
                         for (Body attacking_box_body : attacking_box_bodies) {
                             if (attacking_box_body != null) {
                                 attacking_box_body.setTransform(new Vector2(10_000, 10_000), 0);
@@ -673,28 +673,24 @@ public class Player extends Objeto{
     }
 
     private void applyForceToBody(Body body1, Body body2){
-        float yForce = 3_000f;
+        float yForce = 300f;
         if (body1.getUserData().toString().contains("Enemy")){
             Vector2 force = new Vector2(left_or_right(getBody(), body1), yForce);
             Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
-//            getBody().setLinearVelocity(0,0);
             getBody().applyForce(force, point, true);
 
             Vector2 force2 = new Vector2(left_or_right(body1, getBody()), yForce);
             Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
-//            body1.setLinearVelocity(0,0);
             body1.applyForce(force2, point2, true);
 
         } else {
             if (body2.getUserData().toString().contains("Enemy")) {
                 Vector2 force = new Vector2(left_or_right(getBody(), body2), yForce);
                 Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
-//                getBody().setLinearVelocity(0,0);
                 getBody().applyForce(force, point, true);
 
                 Vector2 force2 = new Vector2(left_or_right(body2, getBody()), yForce);
                 Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
-//                body2.setLinearVelocity(0,0);
                 body2.applyForce(force2, point2, true);
             }
         }

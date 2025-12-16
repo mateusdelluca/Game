@@ -20,7 +20,7 @@ public class Monster3 extends Objeto{
         body.setTransform(position, 0);
         animation.changeAnimation("");
         body.setFixedRotation(true);
-        body.setGravityScale(0f);
+//        body.setGravityScale(0f);
     }
 
     @Override

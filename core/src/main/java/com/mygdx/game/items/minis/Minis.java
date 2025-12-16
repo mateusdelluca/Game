@@ -45,7 +45,8 @@ public class Minis extends Objeto{
         dropped = true;
         visible = true;
         name = random_name();
-        sprite = new Sprite(itemsDraw_minis.get(name)); dropped();
+        sprite = new Sprite(itemsDraw_minis.get(name));
+        dropped();
         body.setUserData(name);
         Player.minis.add(this);
     }
@@ -121,8 +122,7 @@ public class Minis extends Objeto{
     public void beginContact(Body bodyA, Body bodyB){
         if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy") ||
             (bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
-            visible = false;
-            TRIGGER.play();
+            takeItem();
             body.setLinearVelocity(0f,0f);
             body.getFixtureList().get(0).setSensor(true);
             if (name.equals("Cartridge"))

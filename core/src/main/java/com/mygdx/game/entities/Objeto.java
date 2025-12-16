@@ -53,7 +53,8 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     protected boolean isScale;
     public Character_Features character_features = new Character_Features();
     protected boolean playerBodyXPositionHigherThanAnotherBody;
-
+    @Setter @Getter
+    protected boolean isFacingRight;
     public Objeto(float width, float height){
         this.width = width;
         this.height = height;
@@ -253,7 +254,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void dropItems(){
         int rand = new Random().nextInt(4);
         for (int i = 0; i < rand; i++)
-            new Minis(body.getPosition());
+            new Minis(new Vector2(isFacingRight ? body.getPosition().x - 25 : body.getPosition().x + 50, body.getPosition().y));
         Stats.exp_Points += 5;
     }
 
@@ -303,7 +304,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     public void beginContact(Body body1, Body body2){
         if ((body1.getUserData().toString().contains("Boy") && body2.getUserData().toString().contains("Enemy")))
             playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body1, body2);
-        if (body2.getUserData().toString().contains("Boy") && body1.getUserData().toString().contains("Boy"))
+        if (body2.getUserData().toString().contains("Enemy") && body1.getUserData().toString().contains("Boy"))
             playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body2, body1);
     }
 
@@ -321,7 +322,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
         if (body1 == null || body2 == null || body == null)
             return;
 
-        onGround = false;
+
         if (
             (
                 ((body1.getUserData().toString().contains("Thorns") && body2.equals(body))
@@ -336,10 +337,11 @@ public abstract class Objeto implements ObjetoFields, Serializable{
                         || body2.getUserData().toString().contains("Rect") && body1.equals(body))
 
             )                ||
-                (Math.abs(body.getLinearVelocity().y) <= 0.5)){
+                (Math.abs(body.getLinearVelocity().y) <= 0.1)){
 
             onGround = true;
-        }
+        } else
+            onGround = false;
     }
 
     public boolean onGround(){
