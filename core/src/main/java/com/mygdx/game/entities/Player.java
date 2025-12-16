@@ -278,10 +278,11 @@ public class Player extends Objeto{
             if (!isMovingXAxis()) {
                 resetCurrentAnimation();
                 walking = false;
-                changeAnimation("IDLE");
+//                changeAnimation("IDLE");
+
             }
         }
-        if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f){
+        if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
             changeAnimation("JUMPING");
         }
     }
@@ -307,12 +308,12 @@ public class Player extends Objeto{
                 laser_attack = false;
                 saber = false;
                 if (animationName().contains("ATTACKING_SWORD")){
-                    for (Body body1 : attacking_box_bodies) {
-                        body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f - 40f :
-                        getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50), 0f);
-                    }
-                    if ((frameCounter() >= 5 && frameCounter() <= 7) || frameCounter() > 9){
-                        Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f - 20f:
+//                    for (Body body1 : attacking_box_bodies) {
+//                        body1.setTransform(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) - 20f :
+//                        getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50), 0f);
+//                    }
+                    if ((frameCounter() >= 5)){
+                        Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + (WIDTH/2f):
                                 getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
                             new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 1f);
 //                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
@@ -420,7 +421,7 @@ public class Player extends Objeto{
     private void idle(){
 //        System.out.println(onGround);
         if (!usingWeapon && !beenHit) {
-            if (!onGround) {
+            if (!onGround()) {
                 if (!isMovingXAxis()) {
                     if (laser_attack) {
                         changeAnimation("JUMPING_FRONT_LASER");
@@ -477,7 +478,7 @@ public class Player extends Objeto{
                 walking = true;
                 animation().getAnimator().resetAnimation();
             }
-            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround){
+            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
                 changeAnimation("JUMPING");
                 walking = false;
             }
