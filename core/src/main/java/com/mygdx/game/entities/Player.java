@@ -51,7 +51,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
-    private boolean walking, usingWeapons, laser_attack, shooting, sword, punching, saber, throwing_fire;
+    private boolean walking, usingWeapon = true, laser_attack, shooting, sword = true, punching, saber, throwing_fire;
 
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
@@ -66,6 +66,7 @@ public class Player extends Objeto{
 
     private Sprite headsetlaser;
     private float flickering_time;
+    private boolean hit;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -103,16 +104,16 @@ public class Player extends Objeto{
     }
 
     private void switching(SpriteBatch s){
-        if (!animationName().equals("STRICKEN")) {
-            if (usingWeapons) {
-                if (rifle != null)
-                    rifle.update();
-                attackingWithWeapons();
-                aim();
-                switchWeaponAnimation(s);
-            }
+        if (!animationName().contains("STRICKEN")) {
             if (throwing_fire) {
                 throwing_fire();
+            }
+            if (usingWeapon) {
+                if (rifle != null)
+                    rifle.update();
+                resetAnimationWeapon();
+                aim();
+                switchWeaponAnimation(s);
             } else {
                 if (punching) {
                     punching();
@@ -241,9 +242,12 @@ public class Player extends Objeto{
         }
     }
 
-    private void attackingWithWeapons() {
+    private void resetAnimationWeapon() {
         if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword)) {
-            resetCurrentAnimation();
+           if (animationName().contains("SWORD_FIRE") || animationName().contains("SABER")) {
+               resetCurrentAnimation();
+               hit = false;
+           }
         }
     }
 
@@ -277,18 +281,20 @@ public class Player extends Objeto{
                 changeAnimation("IDLE");
             }
         }
-
+        if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f){
+            changeAnimation("JUMPING");
+        }
     }
 
     private String whichOneEquip(){
         for (Item item : items.keySet()) {
             if (equipped[item.getIndex()]) {
                 System.out.println("using weapon: " + item.toString());
-                usingWeapons = true;
+                usingWeapon = true;
                 return item.toString();
             }
         }
-        usingWeapons = false;
+        usingWeapon = false;
         return "";
     }
 
@@ -296,10 +302,11 @@ public class Player extends Objeto{
          switch (whichOneEquip()){
             case "Sword":{
                 sword = true;
+                changeAnimation("ATTACKING_SWORD_FIRE_2");
                 shooting = false;
                 laser_attack = false;
                 saber = false;
-                if (animationName().equals("ATTACKING_SWORD_FIRE_2")){
+                if (animationName().contains("ATTACKING_SWORD")){
                     for (Body body1 : attacking_box_bodies) {
                         body1.setTransform(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH / 2f :
                         getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50), 0f);
@@ -308,7 +315,7 @@ public class Player extends Objeto{
                         Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + WIDTH/2f :
                                 getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
                             new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 10f);
-                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
+//                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
                         attacking_box_bodies.add(body1);
 
                     } if (frameCounter() >= 11){
@@ -318,15 +325,12 @@ public class Player extends Objeto{
                             }
                         }
                     }
-                }else {
-                    if (!animationName().equals("WALKING_SWORD")) {
-                        oldAnimation = "SWORD";
-                        if (isMovingXAxis()) {
-                            changeAnimation("WALKING_SWORD");
-                        } else {
-                            changeAnimation("SWORD");
-                        }
-                    }
+                }
+                if (isMovingXAxis() && !hit) {
+                    changeAnimation("WALKING_SWORD");
+                }
+                if (!isMovingXAxis() && !hit) {
+                    changeAnimation("SWORD");
                 }
                 break;
             }
@@ -415,20 +419,21 @@ public class Player extends Objeto{
 
     private void idle(){
 //        System.out.println(onGround);
-        if (!beenHit) {
-            if (!onGround){
+        if (!usingWeapon && !beenHit) {
+            if (!onGround) {
                 if (!isMovingXAxis()) {
-                    if (laser_attack)
+                    if (laser_attack) {
                         changeAnimation("JUMPING_FRONT_LASER");
-                    else
+                    } else {
                         changeAnimation("JUMPING_FRONT");
-                } else {
-                        changeAnimation("JUMPING");
+                    }
                 }
-            } if (onGround) {
-//                System.out.println(getBody().getLinearVelocity().x);
-                if (sword)
-                    changeAnimation("SWORD");
+                if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f) {
+                    changeAnimation("JUMPING");
+                    walking = false;
+                }
+            }
+            if (onGround()) {
                 if (isntMovingAxisXnorY() && isFinishedCurrentAnimation())
                     changeAnimation("IDLE");
             }
@@ -459,14 +464,22 @@ public class Player extends Objeto{
 
     public void keyDown(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
+            hit = false;
             body.applyForceToCenter(new Vector2(keycode == Input.Keys.A ? -velocityX : velocityX, 0), true);
 //            body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
 //            body.setLinearVelocity(new Vector2(15,0));
             isFacingRight = (keycode == Input.Keys.D);
             if (!animationName().contains("WALKING") && onGround()){
-                changeAnimation("WALKING");
+                if (sword)
+                    changeAnimation("WALKING_SWORD");
+                else
+                    changeAnimation("WALKING");
                 walking = true;
                 animation().getAnimator().resetAnimation();
+            }
+            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround){
+                changeAnimation("JUMPING");
+                walking = false;
             }
         }
         if (keycode == Input.Keys.SPACE) {
@@ -480,7 +493,10 @@ public class Player extends Objeto{
                     changeAnimation("JUMPING_FRONT");
 //                looping = true;
             }
-
+            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f){
+                changeAnimation("JUMPING");
+                walking = false;
+            }
         }
         if (keycode == Input.Keys.R){
             if (rifle != null) {
@@ -521,7 +537,7 @@ public class Player extends Objeto{
             if (PowerBar.sp_0 > 0) {
                 changeAnimation("THROWING_FIRE");
                 throwing_fire = true;
-                PowerBar.sp_0 -= 10f;
+                character_features.setSp(Math.max(character_features.getSp() -10f, 0));
             }
         }
     }
@@ -567,20 +583,26 @@ public class Player extends Objeto{
 //                        }
 //                    }
                 } else {
-                    if (animationName().contains("SWORD") || sword) {
+                    if (usingWeapon && sword && !hit){
                         changeAnimation("ATTACKING_SWORD_FIRE_2");
+                        hit = true;
                     }
-                    else {
+//                    if (animationName().contains("SWORD") || sword) {
+//                        if (!isMovingXAxis())
+//
+//
+
+//                    else {
 //                        if (!punching) {
-                            punching = true;
-                            changeAnimation("PUNCHING_FIRE");
-                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
+//                            punching = true;
+//                            changeAnimation("PUNCHING_FIRE");
+//                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
 //                        }
                     }
                 }
             }
 //            resetCurrentAnimation();
-        }
+//        }
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -623,8 +645,10 @@ public class Player extends Objeto{
     public void changeAnimation(String name) {
         if (!animationName().equals(name))
             Player_Animations.changeAnimation(name);
-        if (!animationName().contains("WALKING"))
-            walking = false;
+//        if (!animationName().contains("WALKING") && !animationName().contains("SWORD"))
+//            walking = false;
+//        if (!animationName().contains("SWORD"))
+//            sword = false;
     }
 
     @Override
@@ -649,25 +673,26 @@ public class Player extends Objeto{
     }
 
     private void applyForceToBody(Body body1, Body body2){
+        float yForce = 3_000f;
         if (body1.getUserData().toString().contains("Enemy")){
-            Vector2 force = new Vector2(left_or_right(getBody(), body1), 1_000.0f);
+            Vector2 force = new Vector2(left_or_right(getBody(), body1), yForce);
             Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
 //            getBody().setLinearVelocity(0,0);
             getBody().applyForce(force, point, true);
 
-            Vector2 force2 = new Vector2(left_or_right(body1, getBody()), 1_000.0f);
+            Vector2 force2 = new Vector2(left_or_right(body1, getBody()), yForce);
             Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
 //            body1.setLinearVelocity(0,0);
             body1.applyForce(force2, point2, true);
 
         } else {
             if (body2.getUserData().toString().contains("Enemy")) {
-                Vector2 force = new Vector2(left_or_right(getBody(), body2), 1_000.0f);
+                Vector2 force = new Vector2(left_or_right(getBody(), body2), yForce);
                 Vector2 point = getBody().getWorldCenter(); // aplica no centro de massa
 //                getBody().setLinearVelocity(0,0);
                 getBody().applyForce(force, point, true);
 
-                Vector2 force2 = new Vector2(left_or_right(body2, getBody()), 1_000.0f);
+                Vector2 force2 = new Vector2(left_or_right(body2, getBody()), yForce);
                 Vector2 point2 = getBody().getWorldCenter(); // aplica no centro de massa
 //                body2.setLinearVelocity(0,0);
                 body2.applyForce(force2, point2, true);
@@ -676,7 +701,8 @@ public class Player extends Objeto{
     }
 
     private float left_or_right(Body bodyA, Body bodyB){
-        return bodyA.getPosition().x > bodyB.getPosition().x ? 1_000.0f : -1_000f;
+        float xForce = 5f;
+        return bodyA.getPosition().x > bodyB.getPosition().x ? xForce : -xForce;
     }
 
 }

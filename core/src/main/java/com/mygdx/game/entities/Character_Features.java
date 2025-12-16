@@ -29,7 +29,7 @@ public class Character_Features {
     @Getter @Setter
     private int enemy_attack = 12;
     @Getter
-    private int laserDamage = 1, damage, damageDraw;
+    private int laserDamage = 1, damage = -10, damageDraw = -10;
     @Getter
     private float powerSpent = PowerBar.power;
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
@@ -68,9 +68,11 @@ public class Character_Features {
     }
 
     public void update(Objeto obj){
-        PowerBar.maxSP = 100f + (4 * stats_values[WSD]);
-        PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
-        PowerBar.maxPower = 50f + (5f* stats_values[WSD]);
+        if (!obj.beenHit) {
+            PowerBar.maxSP = 100f + (4 * stats_values[WSD]);
+            PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
+            PowerBar.maxPower = 50f + (5f * stats_values[WSD]);
+        }
         attack = 1f + (0.5f * stats_values[STR]);
         velocityX = 850f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
@@ -94,16 +96,17 @@ public class Character_Features {
 
     public void damage(Objeto obj){
         if (obj.beenHit) {
-            if (damage == 0)
-                damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4)), enemy_attack)));
-            hp += damage;
+            if (obj.getBody().getUserData().toString().contains("Enemy") ||
+                obj.getBody().getUserData().toString().contains("Boy") )
+            damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4)), enemy_attack)));
             if (damage != 0)
                 damageDraw = damage;
-            damage = 0;
             timer += Gdx.graphics.getDeltaTime();
             if (timer >= 0.2f) {
                 obj.beenHit = false;
                 timer = 0f;
+                hp += damage;
+                System.out.println(hp);
             }
         }
     }

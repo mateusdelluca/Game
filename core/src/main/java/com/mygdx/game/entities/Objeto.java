@@ -164,7 +164,6 @@ public abstract class Objeto implements ObjetoFields, Serializable{
 
     public void render(SpriteBatch s){
         if (beenHit) {
-            font.draw(s, "" + character_features.getDamage(), body.getPosition().x, body.getPosition().y);
             if (scale >= 0.1) {
                 scale -= 0.1f;
                 font.getData().setScale(scale, scale);
@@ -200,7 +199,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
-        character_features.update(this);
+//        character_features.update(this);
         if (beenHit && !isScale) {
             if (scale > 0f)
                 scale -= 0.2f;

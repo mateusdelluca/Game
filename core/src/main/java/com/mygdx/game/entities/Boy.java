@@ -85,8 +85,6 @@ public class Boy extends Objeto {
     private boolean mortal, mortalSaber;
     private boolean punching;
 
-    public static float attack = 1f;
-
     public static boolean lvlUP;
     private int lvlUpCounterFrames;
     float timerLvlUP;

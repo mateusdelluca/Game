@@ -97,7 +97,7 @@ public class Stats extends State {
         //TODO: analizar qual melhor maneira para atualizar valor de hp devido o aumento em vitalidade
         // e como desenhar na tela em tempo que abre o stage Stats
 
-//        char_features.update();
+        player.character_features.update(player);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class Stats extends State {
 
         points2_font.setColor(Color.WHITE);
         points2_font.draw(spriteBatch, "   Defense: " + player.character_features.getDef(), 830 - 2, 350 + 2);
-        points2_font.draw(spriteBatch, "   Attack: " + Boy.attack, 830 - 2, 315 + 2);
+        points2_font.draw(spriteBatch, "   Attack: " + player.character_features.getAttack(), 830 - 2, 315 + 2);
         points2_font.draw(spriteBatch, "   Max HP: " + PowerBar.maxHP, 830 - 2, 275 + 2);
         points2_font.draw(spriteBatch, "   Max SP: " + PowerBar.maxSP, 830 - 2, 235 + 2);
 

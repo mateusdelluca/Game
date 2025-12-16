@@ -49,6 +49,7 @@ public class Monster1 extends Objeto implements Serializable {
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
         mass(1.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 0f);
+        character_features.setHp(40);
     }
 
 
@@ -74,6 +75,8 @@ public class Monster1 extends Objeto implements Serializable {
                 }
             }
             sprite.draw(spriteBatch);
+            if (beenHit)
+                character_features.drawDamage(spriteBatch, font, body);
         }
     }
 
@@ -82,6 +85,7 @@ public class Monster1 extends Objeto implements Serializable {
         super.update();
         nameAnimation = animations.nameOfAnimation;
         animations.currentAnimation.update();
+        character_features.update(this);
         if (body == null)
             loadBody(BodyDef.BodyType.DynamicBody, false);
         if (player != null && player.getBody() != null && body != null) {
@@ -218,30 +222,9 @@ public class Monster1 extends Objeto implements Serializable {
 
 
     public void beginContact(Body bodyA, Body bodyB){
-        if ((bodyA.equals(body) && bodyB.getUserData().toString().equals("Laser Boy"))
-        || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Laser Boy"))){
+        if (bodyB.equals(body) && bodyA.getUserData().toString().contains("Boy")||
+            bodyB.equals(body) && bodyA.getUserData().toString().contains("Boy")){
             beenHit();
-        }
-        if ((bodyA.equals(body) && bodyB.getUserData().toString().equals("Bullet Boy"))
-            || (bodyB.equals(body) && bodyA.getUserData().toString().equals("Bullet Boy"))){
-            beenHit();
-        }
-        if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Thorns")
-            || bodyB.equals(body) && bodyA.getUserData().toString().contains("Thorns"))){
-            beenHit();
-
-        }
-        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Punch") ||
-            bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")){
-            beenHit();
-//            body.setLinearVelocity(body.getPosition().x < bodyB.getPosition().x ? 20 : -20,20);
-//            world.clearForces();
-        }
-        if (bodyB.equals(body) && bodyA.getUserData().toString().equals("Punch") ||
-            bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy")){
-            beenHit();
-//            body.setLinearVelocity(body.getPosition().x < bodyA.getPosition().x ? 20 : -20,20);
-//            world.clearForces();
         }
     }
 }
