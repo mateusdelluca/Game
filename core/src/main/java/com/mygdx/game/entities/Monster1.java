@@ -48,7 +48,7 @@ public class Monster1 extends Objeto implements Serializable {
         id = Integer.parseInt(String.valueOf(userData.charAt(8)));
         body = createBody(new Vector2(dimensions.x/2f, dimensions.y/2f), BodyDef.BodyType.DynamicBody, false);
         body.setTransform(position, 0);
-        mass(1.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 0f);
+        mass(30.0f, new Vector2(WIDTH/2f, HEIGHT/2f), 0f);
         character_features.setHp(40);
         isFacingRight = false;
     }
@@ -96,11 +96,11 @@ public class Monster1 extends Objeto implements Serializable {
                         if (isntAttacking() && !attackOnce) {
                             attack();
                         }
-                        if (player.getBody().getPosition().x < body.getPosition().x) {
+                        if (player.getBody().getPosition().x <= body.getPosition().x) {
                             isFacingRight = false;
-                            getBody().setLinearVelocity(new Vector2(-5, 0));
+
                         } else {
-                            getBody().setLinearVelocity(new Vector2(5, 0));
+
 //                           getBody().applyForce(new Vector2(5_000, 0), player.getBody().getWorldCenter(), true);
                             isFacingRight = true;
                         }
@@ -113,7 +113,7 @@ public class Monster1 extends Objeto implements Serializable {
                         timer = 0f;
                     }
                     timer += Gdx.graphics.getDeltaTime();
-                    if (timer >= 0.5f) {
+                    if (timer >= 1.5f) {
                         timer = 0f;
                         animations.changeAnimation("MONSTER1_WALKING");
                         soundRunning = false;

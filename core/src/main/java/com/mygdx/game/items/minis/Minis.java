@@ -120,8 +120,8 @@ public class Minis extends Objeto{
 
 
     public void beginContact(Body bodyA, Body bodyB){
-        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy") ||
-            (bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
+        if (bodyA.equals(body) && bodyB.getUserData().toString().equals("Player") ||
+            (bodyB.equals(body) && bodyA.getUserData().toString().equals("Player"))){
             takeItem();
             body.setLinearVelocity(0f,0f);
             body.getFixtureList().get(0).setSensor(true);

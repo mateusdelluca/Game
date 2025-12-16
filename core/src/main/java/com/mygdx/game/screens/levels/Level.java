@@ -288,8 +288,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         for (Item item : items.values()) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
-            if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Boy"))
-            || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Boy")
+            if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Player"))
+            || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Player")
             ){
                 player.takeItem(item);
 //                item.setVisible(false);

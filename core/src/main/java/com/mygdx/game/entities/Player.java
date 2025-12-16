@@ -68,7 +68,7 @@ public class Player extends Objeto{
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, "Boy", 0.1f);
+        body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, this.toString(), 0.1f);
         body.setFixedRotation(true);
         visible = true;
         mass(5.0f, new Vector2((BOX_WIDTH/2f) - 5, BOX_HEIGHT/2f), 0f);
@@ -636,7 +636,7 @@ public class Player extends Objeto{
 
     @Override
     public String toString() {
-        return "Boy";
+        return getClass().getSimpleName();
     }
 
     public Player_Animations animation(){
