@@ -59,7 +59,7 @@ public class Player extends Objeto{
 
     public static ArrayList<Fire> fire_objects = new ArrayList<>();
     private float degrees, radians;
-    private String oldAnimation = "IDLE";
+
     public Character_Features character_features = new Character_Features();
 
     private Sprite headsetlaser;
@@ -86,6 +86,7 @@ public class Player extends Objeto{
         super.render(s);
         if (beenHit)
             character_features.drawDamage(s, font, body);
+        character_features.update(this);
         renderAnimation(s);
         renderMinis(s);
         renderLaser(s);
@@ -108,7 +109,7 @@ public class Player extends Objeto{
             if (throwing_fire) {
                 throwing_fire();
             }
-            if (usingWeapon) {
+            if (usingWeapon && !animationName().equals("WALKING_SWORD")) {
                 if (rifle != null)
                     rifle.update();
                 resetAnimationWeapon();
@@ -255,6 +256,7 @@ public class Player extends Objeto{
 
     private void updateAnimation() {
         animation().getAnimator().update();
+        System.out.println(animationName() + " " + walking);
     }
 
     private void attackingBodiesUpdate() {
@@ -316,7 +318,7 @@ public class Player extends Objeto{
 //                    }
                     if ((frameCounter() >= 5)){
                         Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + (WIDTH/2f):
-                                getBody().getPosition().x - (WIDTH / 2f) + 20, getBody().getPosition().y + (HEIGHT / 2f) - 50),
+                                getBody().getPosition().x - (WIDTH / 2f) - 5, getBody().getPosition().y + (HEIGHT / 2f) - 50),
                             new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 1f);
 //                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
                         attacking_box_bodies.add(body1);
@@ -471,18 +473,21 @@ public class Player extends Objeto{
 //            body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
 //            body.setLinearVelocity(new Vector2(15,0));
             isFacingRight = (keycode == Input.Keys.D);
+            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
+                changeAnimation("JUMPING");
+                walking = false;
+            }
             if (onGround()){
                 if (sword)
                     changeAnimation("WALKING_SWORD");
                 else
                     changeAnimation("WALKING");
-                walking = true;
-                animation().getAnimator().resetAnimation();
+                if (!walking) {
+                    walking = true;
+                    animation().getAnimator().resetAnimation();
+                }
             }
-            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
-                changeAnimation("JUMPING");
-                walking = false;
-            }
+
         }
         if (keycode == Input.Keys.SPACE) {
             walking = false;
@@ -587,6 +592,7 @@ public class Player extends Objeto{
                 } else {
                     if (usingWeapon && sword && !hit){
                         changeAnimation("ATTACKING_SWORD_FIRE_2");
+                        body.setLinearVelocity(0, getBody().getLinearVelocity().y);
                         hit = true;
                     } else {
 //                    if (animationName().contains("SWORD") || sword) {

@@ -20,10 +20,10 @@ public class Character_Features {
     @Getter @Setter
     private float hp = 250, sp = 100, power = 120; //TODO: arrumar o hp da classe PowerBar colocando nesta classe e usar para outros personagens
     @Getter @Setter
-    private float attack = 1f, def = 1, jumpingStrength = 50_000f, maxVelocityWalking = 10f;
+    private float attack = 12f, def = 1, jumpingStrength = 15_000f, maxVelocityWalking = 15f;
     @Getter @Setter
     private int[] stats_values = new int[STATS_SIZE];
-    public static float velocityX = 1000f, laserDistance = 1000f;
+    public static float velocityX = 1500f, laserDistance = 1000f;
 
     //TODO: por enquanto o enemy_atack fica nesta classe, mas implementar para cada personagem
     @Getter @Setter
@@ -40,20 +40,19 @@ public class Character_Features {
         init();
     }
     public void init() {
-        PowerBar.maxSP = 40f + (4 * stats_values[WSD]);
+        PowerBar.maxSP = 100f + (4 * stats_values[WSD]);
         PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
         PowerBar.maxPower = 50f + (5f * stats_values[WSD]);
-        attack = 1f + (0.5f * stats_values[STR]);
-        velocityX = 850f + (150 * stats_values[AGI]);
+        attack = 12f + (0.5f * stats_values[STR]);
+        velocityX = 1500f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
-        jumpingStrength = 50_000f + (5_000f * stats_values[STR]);
+        jumpingStrength = 5_000f + (5_000f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
-        laserDamage = (int) (1 + (0.5 * stats_values[DEX]));
+        laserDamage = (int) (1 + (0.5f * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD] / 2f;
         powerSpent = 2f / (stats_values[WSD] / 2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f + stats_values[VIT] / 4f;
-        damage = 0;
         if (!lvlUP && exp_Points >= 25) {
             points += 10;
             base_level += 1;
@@ -73,10 +72,10 @@ public class Character_Features {
             PowerBar.maxHP = 300f + (6f * stats_values[VIT]);
             PowerBar.maxPower = 50f + (5f * stats_values[WSD]);
         }
-        attack = 1f + (0.5f * stats_values[STR]);
-        velocityX = 850f + (150 * stats_values[AGI]);
+        attack = 12f + (0.5f * stats_values[STR]);
+        velocityX = 1500f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
-        jumpingStrength = 50_000f + (5_000f * stats_values[STR]);
+        jumpingStrength = 5_000f + (5_000f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = (int) (1 + (0.5f * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
@@ -96,11 +95,11 @@ public class Character_Features {
 
     public void damage(Objeto obj){
         if (obj.beenHit) {
-            if (obj.getBody().getUserData().toString().contains("Enemy") ||
-                obj.getBody().getUserData().toString().contains("Boy") )
-            damage = (int) (enemy_attack >= def ? -Math.abs(Math.min(enemy_attack - (def / 2), enemy_attack)) : -Math.abs(Math.min((enemy_attack - (def / 4)), enemy_attack)));
-            if (damage != 0)
-                damageDraw = damage;
+            if (obj.getBody().getUserData().toString().contains("Enemy"))
+                damage = (int) (attack >= def ? -Math.abs(attack - (def / 2)) : -Math.abs(attack - (def / 4)));
+            if (obj.getBody().getUserData().toString().equals("Player"))
+                damage = (int) (enemy_attack >= def ? -Math.abs(enemy_attack - (def / 2)) : -Math.abs(enemy_attack - (def / 4)));
+            damageDraw = damage;
             timer += Gdx.graphics.getDeltaTime();
             if (timer >= 0.2f) {
                 obj.beenHit = false;
