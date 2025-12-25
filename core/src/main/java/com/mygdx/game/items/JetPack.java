@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 
 import static com.mygdx.game.images.Images.spriteJetPack;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class JetPack extends Objeto implements Item{
 

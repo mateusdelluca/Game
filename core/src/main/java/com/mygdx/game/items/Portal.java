@@ -64,22 +64,15 @@ public class Portal extends Objeto implements Item{
     }
 
 
-    public void beginContact(Contact contact) {
-        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
-            return;
-        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
-            return;
-        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
-            return;
-
-        Body body1 = contact.getFixtureA().getBody();
-        Body body2 = contact.getFixtureB().getBody();
+    @Override
+    public void beginContact(Body body1, Body body2) {
+//        super.beginContact(body1, body2);
 
         if (body1 == null || body2 == null)
             return;
 
-        if ((body1.equals(body) && body2.getUserData().toString().equals("Boy"))
-        || (body2.equals(body) && body1.getUserData().toString().equals("Boy"))){
+        if ((body1.equals(body) && body2.getUserData().toString().equals("Player"))
+        || (body2.equals(body) && body1.getUserData().toString().equals("Player"))){
             currentLevelName = "Level" + ++lvl;
         }
     }

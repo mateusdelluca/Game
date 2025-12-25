@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-import static com.mygdx.game.screens.levels.Level_Manager.world;
 
 public class Fan2 extends Objeto{
     public static final float multiply = 1.5f;

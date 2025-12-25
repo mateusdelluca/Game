@@ -21,7 +21,7 @@ import com.mygdx.game.system.BodyData;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
-
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class NinjaRope extends Objeto implements Item{
 

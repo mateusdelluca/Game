@@ -16,11 +16,10 @@ public class Monster3 extends Objeto{
 
     public Monster3(Vector2 position){
         super(WIDTH, HEIGHT);
-        body = BodiesAndShapes.box(position, new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, true, this.toString(), 1f);
+        body = BodiesAndShapes.box(position, new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, this.toString(), 1f);
         body.setTransform(position, 0);
         animation.changeAnimation("");
         body.setFixedRotation(true);
-//        body.setGravityScale(0f);
     }
 
     @Override

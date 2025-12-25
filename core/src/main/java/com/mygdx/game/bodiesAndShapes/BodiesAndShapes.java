@@ -3,7 +3,7 @@ package com.mygdx.game.bodiesAndShapes;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class BodiesAndShapes {
 

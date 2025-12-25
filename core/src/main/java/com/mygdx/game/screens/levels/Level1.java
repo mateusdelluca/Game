@@ -17,7 +17,7 @@ public class Level1 extends Level{
     public Level1(){
         super();
 //        monsters1.clear();
-        player.setViewport(viewport);
+//        player.setViewport(viewport);
         ninjaRope = new NinjaRope(player.getBody());
 //        mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size()));
@@ -39,7 +39,6 @@ public class Level1 extends Level{
 //        items.get("Rifle").updateItem();
 //        items.get("Laser_Headset").updateItem();
         items.put("Sword", new Sword(new Vector2(1000, 450)));
-        objetos.add(player);
         objetos.add(new Monster3(new Vector2(600, 700)));
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
@@ -51,40 +50,40 @@ public class Level1 extends Level{
 
     @Override
     public void render(){
-
+        super.render();
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
 //        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 
 
 
 
-        spriteBatch.setProjectionMatrix(camera.combined);
-//        if (!StateManager.oldState.equals("PAUSE"))
-        update();
-
-
-        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
-        if (camera.position.y > 5400f)
-            camera.position.y = 5400f;
-        if (camera.position.x < 970f)
-            camera.position.x = 970f;
-        if (camera.position.y < 1080f/2f)
-            camera.position.y = 1080f/2f;
-        camera.update();
-        viewport.update(Level.WIDTH, Level.HEIGHT);
-
-
-        spriteBatch.begin();
-        background.render();
-        tile.render(camera);
-        for (Item item : items.values())
-            item.render(spriteBatch);
-        for (Objeto objeto : objetos)
-            objeto.render(spriteBatch);
-        powerBar.render(spriteBatch, camera);
-        spriteBatch.end();
-
-        box2DDebugRenderer.render(world, camera.combined);
+//        spriteBatch.setProjectionMatrix(camera.combined);
+////        if (!StateManager.oldState.equals("PAUSE"))
+//        update();
+//
+//
+//        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
+//        if (camera.position.y > 5400f)
+//            camera.position.y = 5400f;
+//        if (camera.position.x < 970f)
+//            camera.position.x = 970f;
+//        if (camera.position.y < 1080f/2f)
+//            camera.position.y = 1080f/2f;
+//        camera.update();
+//        viewport.update(Level.WIDTH, Level.HEIGHT);
+//
+//
+//        spriteBatch.begin();
+//        background.render();
+//        tile.render(camera);
+//        for (Item item : items.values())
+//            item.render(spriteBatch);
+//        for (Objeto objeto : objetos)
+//            objeto.render(spriteBatch);
+//        powerBar.render(spriteBatch, camera);
+//        spriteBatch.end();
+//
+//        box2DDebugRenderer.render(world, camera.combined);
     }
 
     @Override
@@ -119,16 +118,18 @@ public class Level1 extends Level{
         if (body1 == null || body2 == null)
             return;
 //
-//        boy.beginContact(contact);
+//        for (Objeto objeto : objetos)
+//            if (objeto instanceof Portal)
+//                objeto.beginContact(body1, body2);
 //
 //        for (Monster1 m : monsters1.values()){
 //            m.beginContact(body1, body2);
 //        }
 
 
-        for (Minis m : minis){
-            m.beginContact(body1,body2);
-        }
+//        for (Minis m : minis){
+//            m.beginContact(body1,body2);
+//        }
 
         for (Objeto o : objetos) {
 //                o.beginContact(contact);  //TODO: verificar se é necessário este método para colisão de objetos com o tilemap

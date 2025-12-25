@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class BodyData implements Serializable {
     @Serial

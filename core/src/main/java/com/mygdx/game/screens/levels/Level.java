@@ -16,18 +16,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Background;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.fans.Fan;
 import com.mygdx.game.items.fans.Fan2;
+import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.Tile;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.mygdx.game.entities.Player.*;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 
 import java.io.*;
@@ -41,13 +44,15 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
+    public static World world = new World(new Vector2(0,-10), false);
+
     protected transient Background background;
     protected transient Box2DDebugRenderer box2DDebugRenderer;
 
     public static HashMap<String, Objeto> items2 = new HashMap<>();
 
     public static HashMap<String, Item> items = new HashMap<>();
-    public static Player player;
+
     @Getter @Setter
     protected Jack jack;
     @Setter @Getter
@@ -73,9 +78,9 @@ public abstract class Level extends State implements ContactListener, Serializab
     public Rope rope;
     protected boolean beenHit;
 
-    public ArrayList<Objeto> objetos = new ArrayList<>();
+    protected ArrayList<Objeto> objetos = new ArrayList<>();
 
-
+    public static Player player;
 
     public static Rifle rifle;
 
@@ -83,11 +88,15 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public Level() {
         // Constructs a new OrthographicCamera, using the given viewport width and height
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        camera.update();
-        viewport = new ScreenViewport(camera);
+
         viewport.update(Level.WIDTH, Level.HEIGHT);
+        world = new World(new Vector2(0, -10), false);
+        world.setContactListener(this);
+
+        if (this instanceof Level3) {
+            player = new Player(new Vector2(30, 5700), viewport);
+        } else
+            player = new Player(new Vector2(30, 400), viewport);
         rifle = new Rifle(new Vector2(500, 400));
         init();
 
@@ -102,8 +111,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public void init() {
         Box2D.init();
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
 
         background = new Background();
 
@@ -138,51 +145,44 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        if (this instanceof Level1)
-            player = new Player(new Vector2(30f, 1500f), viewport);
-        if (this instanceof Level3) {
-            player.getBody().setTransform(5700f, 30f, 0);
-            player.setViewport(viewport);
-        }
-        else {
-            player.getBody().setTransform(30f, 1500f, 0);
-            player.setViewport(viewport);
-        }
+
+
+        objetos.add(player);
+
+//        else {
+//            player.getBody().setTransform(30f, 1500f, 0);
+//            player.setViewport(viewport);
+//        }
 
     }
 
     @Override
     public void render(){
+        update();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 
 
-
-
-        spriteBatch.setProjectionMatrix(camera.combined);
-//        if (!StateManager.oldState.equals(StateManager.States.PAUSE.name()))
-//        update();
-        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y, 0);
+        camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
         if (camera.position.x < 970f)
             camera.position.x = 970f;
+        if (camera.position.y < 1080f/2f)
+            camera.position.y = 1080f/2f;
         camera.update();
         viewport.update(Level.WIDTH, Level.HEIGHT);
-//        try {
-//            renderObjects();
-//        } catch (NullPointerException e) {
-//            System.out.println(e.getMessage());
-//        }
-        shapeRenderer.setProjectionMatrix(camera.combined);
-//        camera.update();
 
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.begin();
-//        boy.renderShape(shapeRenderer);
-        ninjaRope.render(shapeRenderer, player.getBodyBounds());
-        shapeRenderer.end();
 
+        spriteBatch.begin();
+        background.render();
+        tile.render(camera);
+        for (Item item : items.values())
+            item.render(spriteBatch);
+        for (Objeto objeto : objetos)
+            objeto.render(spriteBatch);
+        powerBar.render(spriteBatch, camera);
+        spriteBatch.end();
         box2DDebugRenderer.render(world, camera.combined);
 
     }
@@ -250,10 +250,10 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 
 
-//        for (Objeto objeto : objetos){
-//            if (objeto != null)
-//                objeto.update();
-//        }
+        for (Objeto objeto : objetos){
+            if (objeto != null)
+                objeto.update();
+        }
 //        collisions();
     }
 
@@ -284,7 +284,9 @@ public abstract class Level extends State implements ContactListener, Serializab
                 objeto.beginContact(contact);
             }
         }
-
+        for (Minis m : minis){
+            m.beginContact(body1,body2);
+        }
 
         for (Item item : items.values()) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");

@@ -15,10 +15,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 public class Level4 extends Level{
     public Level4(){  //TODO: fix render method and update
         super();
-        monsters1.clear();
-        objetos.clear();
-        player = new Player(new Vector2(10, 300), viewport);
-        mouse = new Mouse(player.getBody().getPosition());
+//        mouse = new Mouse(player.getBody().getPosition());
 
         //TODO: fix positions and number of 'objetos'
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));

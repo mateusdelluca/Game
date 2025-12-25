@@ -21,9 +21,10 @@ public class Level3 extends Level{
         super();
         monsters1.clear();
         objetos.clear();
-        player = new Player(new Vector2(100, 5700), viewport);
+//        player = new Player(new Vector2(100, 5700), viewport);
+        player.getBody().setTransform(100, 5700, 0);
 //        player.setViewport(viewport);
-        objetos.add(player);
+//        objetos.add(player);
         mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));
@@ -173,9 +174,9 @@ public class Level3 extends Level{
     @Override
     public void update(){
         super.update();
-        for (Objeto objeto : objetos)
-            if (objeto != null)
-                objeto.update();
+//        for (Objeto objeto : objetos)
+//            if (objeto != null)
+//                objeto.update();
         for (Item item : items.values()) {
             if (item != null) {
                 item.update();

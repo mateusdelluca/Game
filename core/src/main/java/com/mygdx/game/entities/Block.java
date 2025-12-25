@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import java.util.Random;
 
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class Block extends Objeto{
 

@@ -60,7 +60,7 @@ public class Player extends Objeto{
     public static ArrayList<Fire> fire_objects = new ArrayList<>();
     private float degrees, radians;
 
-    public Character_Features character_features = new Character_Features();
+    public static Character_Features character_features = new Character_Features();
 
     private Sprite headsetlaser;
     private float flickering_time;

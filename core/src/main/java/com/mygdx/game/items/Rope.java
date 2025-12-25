@@ -16,8 +16,8 @@ import lombok.Setter;
 
 import static com.mygdx.game.entities.Mouse.clicked;
 import static com.mygdx.game.entities.Mouse.mouseBody;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.*;
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class Rope extends Objeto {
 

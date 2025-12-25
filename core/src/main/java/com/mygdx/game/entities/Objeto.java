@@ -20,15 +20,14 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Random;
 
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
-public abstract class Objeto implements ObjetoFields, Serializable{
+public abstract class Objeto implements Serializable{
 
     @Setter
     @Getter
     protected transient Body body;
-//    protected PolygonShape polygonShape;
-//    protected FixtureDef fixtureDef;
+
     @Getter @Setter
     protected float width, height;
     protected Vector2 dimensions;
@@ -200,7 +199,7 @@ public abstract class Objeto implements ObjetoFields, Serializable{
     }
 
     public void update(){
-//        character_features.update(this);
+        character_features.update(this);
         if (beenHit && !isScale) {
             if (scale > 0f)
                 scale -= 0.2f;

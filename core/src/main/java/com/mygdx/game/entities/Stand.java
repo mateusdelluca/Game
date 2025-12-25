@@ -1,7 +1,7 @@
 package com.mygdx.game.entities;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
-import static com.mygdx.game.screens.levels.Level_Manager.world;
+import static com.mygdx.game.screens.levels.Level.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
