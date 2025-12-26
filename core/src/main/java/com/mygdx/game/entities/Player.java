@@ -92,8 +92,13 @@ public class Player extends Objeto{
         renderLaser(s);
         updateBaseLevel(s);
         switching(s);
-        updateBeenHit(s);
         renderFireBall(s);
+        updateWalking();
+    }
+
+    private void updateWalking() {
+        if (onGround && isMovingXAxis())
+            walking = true;
     }
 
     private void renderFireBall(SpriteBatch s) {
@@ -127,6 +132,7 @@ public class Player extends Objeto{
                 }
             }
         }
+        updateBeenHit();
     }
 
     private void throwing_fire() {
@@ -154,14 +160,15 @@ public class Player extends Objeto{
             changeAnimation("IDLE");
         }
     }
-    private void updateBeenHit(SpriteBatch s) {
-        if (beenHit) {
-            float forceX = 10;
-            body.applyForceToCenter(playerBodyXPositionHigherThanAnotherBody ? forceX : -forceX, 0, true);
-            changeAnimation("STRICKEN");
+    private void updateBeenHit() {
+        if (animationName().equals("STRICKEN")) {
+//            float forceX = 10;
+//            body.applyForceToCenter(playerBodyXPositionHigherThanAnotherBody ? forceX : -forceX, 0, true);
+//            changeAnimation("STRICKEN");
 
             flickering_time += Gdx.graphics.getDeltaTime();
-            if (flickering_time >= 0.5f){
+            System.out.println(flickering_time);
+            if (flickering_time >= 1.5f){
                 flickering_time = 0f;
                 isScale = false;
                 beenHit = false;
@@ -174,9 +181,7 @@ public class Player extends Objeto{
     @Override
     public void beenHit(){
         super.beenHit();
-
-        if (animation() != Player_Animations.STRICKEN) {
-            setBeenHit(true);
+        if (!animationName().equals("STRICKEN") && beenHit) {
             Sounds.HURT.play();
             changeAnimation("STRICKEN");
         }
@@ -205,7 +210,8 @@ public class Player extends Objeto{
     }
 
     private void renderAnimation(SpriteBatch s){
-        Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame, looping || walking, !isFacingRight));
+        Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame,
+            looping || walking || animationName().equals("STRICKEN"), !isFacingRight));
         sprite.setOriginCenter();
         setBodyPosition(sprite);
         sprite.draw(s);
@@ -256,7 +262,7 @@ public class Player extends Objeto{
 
     private void updateAnimation() {
         animation().getAnimator().update();
-        System.out.println(animationName() + " " + walking);
+//        System.out.println(animationName() + " " + walking);
     }
 
     private void attackingBodiesUpdate() {
@@ -484,7 +490,7 @@ public class Player extends Objeto{
                     changeAnimation("WALKING");
                 if (!walking) {
                     walking = true;
-                    animation().getAnimator().resetAnimation();
+//                    animation().getAnimator().resetAnimation();
                 }
             }
 
