@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.minis.Minis;
+import com.mygdx.game.entities.Bridge;
+
 
 import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.images.Images.tile;
@@ -43,6 +45,10 @@ public class Level1 extends Level{
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
+
+        objetos.add(new Bridge(new Vector2(1400, 300), 4));
+
+
 //        objetos.add(new Robot(new Vector2(700, 300), boy));
 //        objetos.add(new Ball(new Vector2(500,750)));
 //        objetos.add((Objeto) items.get("Sword"));
