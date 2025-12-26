@@ -335,6 +335,10 @@ public abstract class Objeto implements Serializable{
                     ((body1.getUserData().toString().contains("Rect") && body2.equals(body))
                         || body2.getUserData().toString().contains("Rect") && body1.equals(body))
 
+                    ||
+                    ((body1.getUserData().toString().contains("Knot") && body2.equals(body))
+                        || body2.getUserData().toString().contains("Knot") && body1.equals(body))
+
             )                ||
                 (Math.abs(body.getLinearVelocity().y) <= 0.1)){
 

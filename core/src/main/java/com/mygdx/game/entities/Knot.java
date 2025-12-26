@@ -11,14 +11,14 @@ import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 
 public class Knot extends Objeto{
 
-    public static final float DIVISOR = 1f;
+    public static final float DIVISOR = 1.5f;
 
     public static final float RADIUS = 60f/DIVISOR;
 
     private Sprite knot = new Sprite(new Texture(Gdx.files.internal("block/Joint.png")));
 
     public Knot(Vector2 position){
-        body = BodiesAndShapes.circle(position, RADIUS/2f, BodyDef.BodyType.DynamicBody, false, this.toString(), 10f);
+        body = BodiesAndShapes.circle(position, RADIUS/2f, BodyDef.BodyType.DynamicBody, false, this.toString());
     }
 
     @Override
@@ -36,5 +36,10 @@ public class Knot extends Objeto{
 
     @Override
     public void renderShape(ShapeRenderer s) {
+    }
+
+    @Override
+    public String toString(){
+        return getClass().getSimpleName();
     }
 }

@@ -20,8 +20,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.mygdx.game.images.Images.polygons_bodies;
-import static com.mygdx.game.images.Images.tile;
+import static com.mygdx.game.images.Images.*;
 
 public class Tile {
 
@@ -76,7 +75,6 @@ public class Tile {
                     bodies_of_thorns.add(body);
                 if (userData.equals("Rects"))
                     bodies_of_rects.add(body);
-
                 shape.dispose();
             } else {
                 if (mapObject instanceof PolygonMapObject) {

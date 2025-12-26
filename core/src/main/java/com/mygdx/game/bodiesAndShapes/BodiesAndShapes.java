@@ -175,4 +175,23 @@ public class BodiesAndShapes {
         return body;
     }
 
+    public static Body circle(Vector2 position, Float radius, BodyDef.BodyType type, boolean sensor, String userData){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.active = true;
+        bodyDef.type = type;
+        bodyDef.position.set(new Vector2(0,0));
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = sensor;
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(radius);
+        fixtureDef.shape = circleShape;
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setTransform(position, 0);
+        body.setUserData(userData);
+        body.setActive(true);
+        body.setAwake(true);
+        return body;
+    }
+
 }
