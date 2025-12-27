@@ -31,20 +31,20 @@ public class Bridge extends Objeto{
     private boolean joint;
 
     public Bridge(Vector2 position, int size){
-        begin = box(new Vector2(1380f, 1000f - 720f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "begin", 10f);
-        end = box(new Vector2(1580, 1000f - 720f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "end", 10f);
+        begin = box(new Vector2(position.x - RADIUS/2f, position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "begin", 10f);
+        end = box(new Vector2(position.x - RADIUS/2f + (RADIUS * size), position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "end", 10f);
 
         Knot knotA = null;
-        Knot knotB = null;
+//        Knot knotB = null;
 
-        for (int i = 0; i <= size; i += 2){
+        for (int i = 0; i < size; i += 1){
             knotA = new Knot(new Vector2(position.x + (RADIUS * i), position.y));
-            knotB = new Knot(new Vector2(position.x + (RADIUS * (i + 1)), position.y));
+//            knotB = new Knot(new Vector2(position.x + (RADIUS * (i + 1)), position.y));
             bridge.add(knotA);
-            bridge.add(knotB);
+//            bridge.add(knotB);
         }
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < (size - 1); i++) {
             Body bodyA = bridge.get(i).getBody();
             Body bodyB = null;
             if (bridge.lastIndexOf(bridge.get(i+1)) > 0){

@@ -46,8 +46,10 @@ public class Level1 extends Level{
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
         objetos.addAll(monsters1.values());
 
-        objetos.add(new Bridge(new Vector2(1360, 300), 2));
-
+        objetos.add(new Bridge(new Vector2(1400f, 1000f - 720f), 4));
+        objetos.add(new Bridge(new Vector2(1720f, 1000f - 720f), 2));
+        objetos.add(new Bridge(new Vector2(1960f, 1000f - 560f), 3));
+        objetos.add(new Bridge(new Vector2(2240f, 1000f - 640f), 5));
 
 //        objetos.add(new Robot(new Vector2(700, 300), boy));
 //        objetos.add(new Ball(new Vector2(500,750)));
