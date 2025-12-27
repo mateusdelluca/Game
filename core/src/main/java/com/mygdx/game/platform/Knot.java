@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.platform;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
+import com.mygdx.game.entities.Objeto;
 
-public class Knot extends Objeto{
+public class Knot extends Objeto {
 
     public static final float DIVISOR = 1.5f;
 

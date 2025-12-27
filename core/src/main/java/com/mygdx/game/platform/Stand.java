@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.platform;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.screens.levels.Level.world;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Blocks_Sprites;
 import com.mygdx.game.system.BodyData;
 
@@ -19,7 +20,7 @@ import java.util.Random;
 
 
 
-public class Stand extends Objeto{
+public class Stand extends Objeto {
 
     private Body bodyA;
     private Body bodyB;

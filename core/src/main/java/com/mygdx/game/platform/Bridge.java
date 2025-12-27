@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.platform;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -6,22 +6,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
+import com.mygdx.game.entities.Objeto;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
-import static com.mygdx.game.images.Images.staticObjects;
 import static com.mygdx.game.screens.levels.Level.world;
 
-import static com.mygdx.game.entities.Knot.RADIUS;
+import static com.mygdx.game.platform.Knot.RADIUS;
 
-public class Bridge extends Objeto{
+public class Bridge extends Objeto {
 
     @Getter
     private ArrayList<Knot> bridge = new ArrayList<>();
@@ -34,14 +30,10 @@ public class Bridge extends Objeto{
         begin = box(new Vector2(position.x - RADIUS/2f, position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "begin", 10f);
         end = box(new Vector2(position.x - RADIUS/2f + (RADIUS * size), position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "end", 10f);
 
-        Knot knotA = null;
-//        Knot knotB = null;
 
         for (int i = 0; i < size; i += 1){
-            knotA = new Knot(new Vector2(position.x + (RADIUS * i), position.y));
-//            knotB = new Knot(new Vector2(position.x + (RADIUS * (i + 1)), position.y));
+            Knot knotA = new Knot(new Vector2(position.x + (RADIUS * i), position.y));
             bridge.add(knotA);
-//            bridge.add(knotB);
         }
 
         for (int i = 0; i < (size - 1); i++) {
@@ -70,7 +62,7 @@ public class Bridge extends Objeto{
             world.createJoint(ropeJointDef);
 
             RopeJointDef ropeJointDef2 = new RopeJointDef();
-            ropeJointDef2.bodyA = bridge.getLast().body;
+            ropeJointDef2.bodyA = bridge.getLast().getBody();
             ropeJointDef2.bodyB = end;
             ropeJointDef2.collideConnected = true;
             ropeJointDef2.maxLength = 1f;

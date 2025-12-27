@@ -1,19 +1,12 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
-import com.mygdx.game.items.minis.Minis;
-import com.mygdx.game.entities.Bridge;
-
-
-import static com.mygdx.game.entities.Player.minis;
-import static com.mygdx.game.images.Images.tile;
-import static com.mygdx.game.screens.levels.Level_Manager.*;
+import com.mygdx.game.platform.Bridge;
 
 public class Level1 extends Level{
     public Level1(){

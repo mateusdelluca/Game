@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.platform;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Blocks_Sprites;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.Random;
 
 import static com.mygdx.game.screens.levels.Level.world;
 
-public class Block extends Objeto{
+public class Block extends Objeto {
 
     public static final float WIDTH = 200f, HEIGHT = 200f;
 
