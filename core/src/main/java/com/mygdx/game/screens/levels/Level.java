@@ -95,7 +95,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         if (this instanceof Level3) {
             player = new Player(new Vector2(30, 5700), viewport);
         } else
-            player = new Player(new Vector2(30, 400), viewport);
+            player = new Player(new Vector2(30, 1200), viewport);
         rifle = new Rifle(new Vector2(500, 400));
         init();
 
@@ -147,11 +147,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
 
         objetos.add(player);
-
-//        else {
-//            player.getBody().setTransform(30f, 1500f, 0);
-//            player.setViewport(viewport);
-//        }
 
     }
 

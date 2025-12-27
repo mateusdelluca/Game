@@ -16,7 +16,7 @@ import lombok.Setter;
 public class Animator{
     @Getter
     private int numColumns, numRows, numFrames, width, height;  //rows and columns of the sprite sheet
-    private float fps;
+    public float fps;
     private String path;
     @Getter
     private Animation<TextureRegion> animation; // Must declare frame type (TextureRegion)
@@ -143,7 +143,7 @@ public class Animator{
         return null;
     }
 
-    private void createAnimation(){
+    public void createAnimation(){
         // Use the split utility method to create a 2D array of TextureRegions. This is
         // possible because this sprite sheet contains frames of equal size and they are
         // all aligned.
@@ -159,6 +159,47 @@ public class Animator{
 
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet,
                 width, height);
+        frames = new TextureRegion[numFrames];
+
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                if (totalFrames >= numFrames)
+                    break;
+                sprite[totalFrames] = new Sprite(tmp[i][j]);
+                spriteInverse[totalFrames] = new Sprite(tmp[i][j]);
+                spriteInverse[totalFrames].flip(true, false);
+                frames[totalFrames++] = tmp[i][j];
+            }
+        }
+
+        frameDuration = 1f/fps;
+        totalTime = frameDuration * numFrames;
+        // Initialize the Animation with the frame interval and array of frames
+        animation = new Animation<>(frameDuration, sprite);
+//        for (int index = 0; index < numFrames; index++) {
+//            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+//            sprite[index] = new Sprite(animation.getKeyFrame(stateTime * 1.01F));
+//        }
+
+    }
+
+    public void createAnimation(float fps){
+        // Use the split utility method to create a 2D array of TextureRegions. This is
+        // possible because this sprite sheet contains frames of equal size and they are
+        // all aligned.
+        // Vinculando a textura ao shader
+//        ShaderProgram shader = new ShaderProgram(Gdx.files.internal("vertex_shader.glsl"), Gdx.files.internal("fragment_shader.glsl"));
+//        shader.bind();
+//
+//        // Renderize seus objetos aqui
+//        SpriteBatch sp =new SpriteBatch();
+//        sp.setShader(shader);
+//        spriteSheet.bind(0); // Vincule a textura à unidade 0
+//        sp.setShader(null);
+
+        TextureRegion[][] tmp = TextureRegion.split(spriteSheet,
+            width, height);
         frames = new TextureRegion[numFrames];
 
 

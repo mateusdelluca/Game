@@ -479,10 +479,10 @@ public class Player extends Objeto{
 //            body.applyForce(new Vector2(keycode == Input.Keys.D ? velocityX : -velocityX, 0f), getBody().getWorldCenter(), true);
 //            body.setLinearVelocity(new Vector2(15,0));
             isFacingRight = (keycode == Input.Keys.D);
-            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
-                changeAnimation("JUMPING");
-                walking = false;
-            }
+//            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f && !onGround()){
+//                changeAnimation("JUMPING");
+//                walking = false;
+//            }
             if (onGround()){
                 if (sword)
                     changeAnimation("WALKING_SWORD");
@@ -496,7 +496,7 @@ public class Player extends Objeto{
 
         }
         if (keycode == Input.Keys.SPACE) {
-            walking = false;
+//            walking = false;
             JUMP.play();
             body.applyForceToCenter(0, character_features.getJumpingStrength() ,true);
             if (!isMovingXAxis()){
@@ -506,7 +506,7 @@ public class Player extends Objeto{
                     changeAnimation("JUMPING_FRONT");
 //                looping = true;
             }
-            if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f){
+            if (getBody().getLinearVelocity().y != 0 && getBody().getLinearVelocity().x != 0){
                 changeAnimation("JUMPING");
                 walking = false;
             }
@@ -534,17 +534,21 @@ public class Player extends Objeto{
     public void keyUp(int keycode){
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
-            if (!animationName().contains("FIRE")) {
-                if (!onGround()){
-                    if (isMovingXAxis())
-                        changeAnimation("JUMPING_FRONT");
-                    else
-                        changeAnimation("JUMPING");
-                    walking = false;
-                }
+//            if (!animationName().contains("FIRE")) {
+//                if (!onGround()){
+//                    if (isMovingXAxis())
+//                        changeAnimation("JUMPING_FRONT");
+//                    else
+//                        changeAnimation("JUMPING");
+//                    walking = false;
+//                }
+//            }
+            if (animationName().contains("WALKING")){
+                walking = false;
+                if (onGround)
+                    changeAnimation("IDLE");
             }
-//            if (animationName().contains("WALKING"))
-//                walking = false;
+
         }
         if (keycode == Input.Keys.F) {
             if (PowerBar.sp_0 > 0) {

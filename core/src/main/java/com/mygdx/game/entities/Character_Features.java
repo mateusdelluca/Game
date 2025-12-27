@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.util.Arrays;
 
 import static com.mygdx.game.entities.Player.lvlUP;
+import static com.mygdx.game.images.Player_Animations.ATTACKING_SWORD_FIRE_2;
 import static com.mygdx.game.screens.Stats.*;
 import static com.mygdx.game.screens.levels.Level.player;
 
@@ -20,7 +21,7 @@ public class Character_Features {
     @Getter @Setter
     private float hp = 250, sp = 100, power = 120; //TODO: arrumar o hp da classe PowerBar colocando nesta classe e usar para outros personagens
     @Getter @Setter
-    private float attack = 12f, def = 1, jumpingStrength = 15_000f, maxVelocityWalking = 15f;
+    private float attack = 12f, def = 1, jumpingStrength = 10_000f, maxVelocityWalking = 15f;
     @Getter @Setter
     private int[] stats_values = new int[STATS_SIZE];
     public static float velocityX = 1500f, laserDistance = 1000f;
@@ -34,6 +35,8 @@ public class Character_Features {
     private float powerSpent = PowerBar.power;
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
     private float timer;
+    private int agility = 1;
+    public static boolean changed;
 
     public Character_Features(){
         Arrays.fill(stats_values, 1);
@@ -46,13 +49,14 @@ public class Character_Features {
         attack = 12f + (0.5f * stats_values[STR]);
         velocityX = 1500f + (150 * stats_values[AGI]);
         def = 1f + (0.5f * stats_values[VIT]);
-        jumpingStrength = 5_000f + (5_000f * stats_values[STR]);
+        jumpingStrength = 10_000f + (1_000f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = (int) (1 + (0.5f * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD] / 2f;
         powerSpent = 2f / (stats_values[WSD] / 2f);
         recoveryPowerBluePotion = 10f + stats_values[WSD] / 4f;
         recoveryPowerRedPotion = 10f + stats_values[VIT] / 4f;
+        agility();
         if (!lvlUP && exp_Points >= 25) {
             points += 10;
             base_level += 1;
@@ -74,8 +78,9 @@ public class Character_Features {
         }
         attack = 12f + (0.5f * stats_values[STR]);
         velocityX = 1500f + (150 * stats_values[AGI]);
+        agility();
         def = 1f + (0.5f * stats_values[VIT]);
-        jumpingStrength = 5_000f + (5_000f * stats_values[STR]);
+        jumpingStrength = 10_000f + (1_000f * stats_values[STR]);
         laserDistance = 8_000f + (3000f * stats_values[DEX]);
         laserDamage = (int) (1 + (0.5f * stats_values[DEX]));
         recoveryPowerGreenPotion = 10f + stats_values[WSD]/2f;
@@ -107,6 +112,14 @@ public class Character_Features {
                 hp += damage;
                 System.out.println(hp);
             }
+        }
+    }
+
+    public void agility(){
+        if (changed) {
+            agility = 5 + stats_values[AGI]/2;
+            ATTACKING_SWORD_FIRE_2.animator.createAnimation(agility);
+            changed = false;
         }
     }
 }
