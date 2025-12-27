@@ -10,24 +10,25 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.entities.Objeto;
 
-public class Knot extends Objeto {
+public class JointKnot extends Objeto {
 
-    public static final float DIVISOR = 1.0f;
+    public static final float DIVISOR = 1.5f;
 
-    public static final float WIDTH = 10f/DIVISOR, HEIGHT = 10f/DIVISOR;
+    public static final float RADIUS = 60f/DIVISOR;
 
-    private Sprite ropeKnot = new Sprite(new Texture(Gdx.files.internal("block/Rope.png")));
+    private Sprite knot = new Sprite(new Texture(Gdx.files.internal("block/Joint.png")));
 
-    public Knot(Vector2 position){
-        body = BodiesAndShapes.box(position, new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, this.toString());
+    public JointKnot(Vector2 position){
+        body = BodiesAndShapes.circle(position, RADIUS/2f, BodyDef.BodyType.DynamicBody, false, this.toString());
+        body.setFixedRotation(false);
     }
 
     @Override
     public void render(SpriteBatch s) {
-        ropeKnot.setSize(WIDTH, HEIGHT);
-        ropeKnot.setPosition(body.getPosition().x - WIDTH / 2f, body.getPosition().y - HEIGHT / 2f);
-        ropeKnot.setOriginCenter();
-        ropeKnot.draw(s);
+        knot.setSize(RADIUS, RADIUS);
+        knot.setPosition(body.getPosition().x - RADIUS / 2f, body.getPosition().y - RADIUS / 2f);
+        knot.setOriginCenter();
+        knot.draw(s);
     }
 
     @Override

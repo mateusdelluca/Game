@@ -15,28 +15,28 @@ import java.util.ArrayList;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.screens.levels.Level.world;
 
-import static com.mygdx.game.platform.Knot.RADIUS;
+import static com.mygdx.game.platform.JointKnot.RADIUS;
 
 public class Bridge extends Objeto {
 
     @Getter
-    private ArrayList<Knot> bridge = new ArrayList<>();
+    private ArrayList<JointKnot> bridge = new ArrayList<>();
 
     private Body begin, end;
     private boolean collides;
     private boolean joint;
 
-    public Bridge(Vector2 position, int size){
+    public Bridge(Vector2 position, int length){
         begin = box(new Vector2(position.x - RADIUS/2f, position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "begin", 10f);
-        end = box(new Vector2(position.x - RADIUS/2f + (RADIUS * size), position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "end", 10f);
+        end = box(new Vector2(position.x - RADIUS/2f + (RADIUS * length), position.y - RADIUS/2f), new Vector2(RADIUS/2f, RADIUS/2f), BodyDef.BodyType.StaticBody, true, "end", 10f);
 
 
-        for (int i = 0; i < size; i += 1){
-            Knot knotA = new Knot(new Vector2(position.x + (RADIUS * i), position.y));
+        for (int i = 0; i < length; i += 1){
+            JointKnot knotA = new JointKnot(new Vector2(position.x + (RADIUS * i), position.y));
             bridge.add(knotA);
         }
 
-        for (int i = 0; i < (size - 1); i++) {
+        for (int i = 0; i < (length - 1); i++) {
             Body bodyA = bridge.get(i).getBody();
             Body bodyB = null;
             if (bridge.lastIndexOf(bridge.get(i+1)) > 0){
@@ -77,7 +77,7 @@ public class Bridge extends Objeto {
 
     @Override
     public void render(SpriteBatch s){
-        for (Knot knot : bridge){
+        for (JointKnot knot : bridge){
             knot.render(s);
         }
     }
