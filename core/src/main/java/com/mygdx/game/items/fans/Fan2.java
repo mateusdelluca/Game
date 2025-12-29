@@ -44,8 +44,8 @@ public class Fan2 extends Objeto{
         if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Enemy")
             || bodyB.equals(body) && bodyA.getUserData().toString().contains("Enemy"))
             ||
-            (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")
-                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
+            (bodyA.equals(body) && bodyB.getUserData().toString().equals("Player")
+                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Player"))){
 //            world.clearForces();
             bodyA.applyForce(new Vector2(3_000f, 3_000f), bodyA.getWorldCenter(), true);
             bodyB.applyForce(new Vector2(3_000f, 3_000f), bodyA.getWorldCenter(), true);

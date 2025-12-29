@@ -24,7 +24,7 @@ public class Level3 extends Level{
 //        player = new Player(new Vector2(100, 5700), viewport);
         player.getBody().setTransform(100, 5700, 0);
 //        player.setViewport(viewport);
-//        objetos.add(player);
+        objetos.add(player);
         mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(640, 6000 - 2000),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(480, 6000 - 2000),    Monster1.class.getSimpleName() + monsters1.size()));

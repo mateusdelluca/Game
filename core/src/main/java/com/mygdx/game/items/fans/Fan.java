@@ -47,8 +47,8 @@ public class Fan extends Objeto{
         if ((bodyA.equals(body) && bodyB.getUserData().toString().contains("Enemy")
             || bodyB.equals(body) && bodyA.getUserData().toString().contains("Enemy"))
         ||
-            (bodyA.equals(body) && bodyB.getUserData().toString().equals("Boy")
-                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Boy"))){
+            (bodyA.equals(body) && bodyB.getUserData().toString().equals("PLayer")
+                || bodyB.equals(body) && bodyA.getUserData().toString().equals("Player"))){
             bodyA.setLinearVelocity(bodyA.getLinearVelocity().x, bodyA.getLinearVelocity().y + 1500);
             bodyB.setLinearVelocity(bodyA.getLinearVelocity().x, bodyB.getLinearVelocity().y + 1500);
         }
