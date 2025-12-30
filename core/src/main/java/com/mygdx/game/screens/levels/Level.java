@@ -57,7 +57,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Setter @Getter
     protected Girl girl;
 
-    protected Mouse mouse;
+
     protected PowerBar powerBar;
 
     protected ArrayList<Objeto> fans = new ArrayList<>();
@@ -95,7 +95,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         player = new Player(new Vector2(30, 1200), viewport);
         rifle = new Rifle(new Vector2(500, 400));
         init();
-        mouse = new Mouse(player.getBody().getPosition());
+
         powerBar = new PowerBar();
 
 
@@ -586,8 +586,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         player.touchDown(screenX, screenY, pointer, button);
         if (ninjaRope != null)
             ninjaRope.justTouched(button);
-        if (mouse != null)
-         mouse.touchDown(screenX, screenY, button);
+
         return false;
     }
 
@@ -612,7 +611,7 @@ public abstract class Level extends State implements ContactListener, Serializab
         player.mouseMoved(screenX, screenY);
         if (ninjaRope != null)
             ninjaRope.mouseMoved(screenX, screenY);
-//        mouse.mouseMoved(screenX, screenY);
+//
         return false;
     }
 

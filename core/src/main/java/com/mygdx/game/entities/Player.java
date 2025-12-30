@@ -50,7 +50,7 @@ public class Player extends Objeto{
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
     private boolean walking, usingWeapon, laser_attack, shooting, sword, punching, saber, throwing_fire;
-
+    protected Mouse mouse;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
     private Array<Laser> laser_rail = new Array<>();
@@ -78,6 +78,7 @@ public class Player extends Objeto{
         changeAnimation("IDLE");
         rifle = new Rifle(new Vector2(10_000, 20_000));
         isFacingRight = true;
+        mouse = new Mouse(getBody().getPosition());
     }
 
 
@@ -360,11 +361,11 @@ public class Player extends Objeto{
                 if (!isMovingXAxis())
                     Player_Animations.valueOf("LEGS_ONLY").getAnimator().setFrameCounter(0);
                 top.setRotation(degrees);
-                if (Math.abs(degrees) > 90f)
+                if (Math.abs(degrees) > 90f && Math.abs(degrees) < 180f)
                     top.setRotation(-Math.abs(180f - degrees));
                 top.setFlip(Math.abs(degrees) > 90f, false);
                 legs.setFlip(Math.abs(degrees) > 90f, false);
-                isFacingRight = !(Math.abs(degrees) > 90f);
+                isFacingRight = (Math.abs(degrees) < 90f);
                 legs.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
                 legs.draw(spriteBatch);
                 top.draw(spriteBatch);
@@ -407,8 +408,8 @@ public class Player extends Objeto{
         if (laser_attack || shooting) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
-            degrees = (float) Math.atan2(dy, dx) * (180f / (float) Math.PI);
-            radians = (float) Math.atan2(dy, dx);
+            degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
+            radians = (float) Math.toRadians(degrees);
         }
     }
 
@@ -564,6 +565,7 @@ public class Player extends Objeto{
     }
 
     public void mouseMoved(int screenX, int screenY){
+        mouse.mouseMoved(screenX, screenY);
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
         viewport.unproject(worldCoordinates);
         worldX = worldCoordinates.x;
@@ -575,6 +577,8 @@ public class Player extends Objeto{
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
+        if (mouse != null)
+            mouse.touchDown(screenX, screenY, button);
         if (button == Input.Buttons.LEFT) {
             walking = false;
             if (laser_attack) {
@@ -589,16 +593,16 @@ public class Player extends Objeto{
                 }
             } else {
                 if (shooting) {
-//                    if (!rifle.isReloading()) {
-//                        if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
-                            Bullet bullet = new Bullet(
+                    if (!rifle.isReloading()) {
+                        if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                    Bullet bullet = new Bullet(
                                 new Vector2(isFacingRight ? (getBody().getPosition().x +
                                     WIDTH / 2f) : (getBody().getPosition().x),
                                     (getBody().getPosition().y + HEIGHT / 2f)),
-                                !isFacingRight, radians, false, this.toString());
+                                isFacingRight, radians, false, this.toString());
                             rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
-//                        }
-//                    }
+                        }
+                    }
                 } else {
                     if (usingWeapon && sword && !hit){
                         changeAnimation("ATTACKING_SWORD_FIRE_2");

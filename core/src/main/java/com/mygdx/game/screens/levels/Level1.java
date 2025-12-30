@@ -34,6 +34,7 @@ public class Level1 extends Level{
 //        items.get("Rifle").updateItem();
 //        items.get("Laser_Headset").updateItem();
         items.put("Sword", new Sword(new Vector2(1000, 450)));
+        items.put("Laser_Headset", new Laser_Headset(new Vector2(500, 550)));
         objetos.add(new Monster3(new Vector2(600, 700)));
         objetos.add(new Jack(new Vector2(3000, 400)));
         objetos.add(new Portal(new Vector2(6000 - 300, 20)));
