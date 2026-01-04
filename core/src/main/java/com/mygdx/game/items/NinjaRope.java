@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.mygdx.game.entities.Boy;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.screens.levels.Level;
 import com.mygdx.game.system.BodyData;
@@ -198,7 +199,7 @@ public class NinjaRope extends Objeto implements Item{
             deactivate();
             System.out.println("pressionou botão direito do mouse");
         }
-        if (isActive2 && Boy.ropeShoot) {
+        if (isActive2 && Player.ropeShoot) {
             if (button == (Input.Buttons.LEFT)) {
                 deactivate();
                 Vector3 mousePos1 = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

@@ -66,6 +66,7 @@ public class Player extends Objeto{
     private float flickering_time;
     private boolean hit;
     private boolean punch;
+    public static boolean ropeShoot;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -253,7 +254,7 @@ public class Player extends Objeto{
     }
 
     private void resetAnimationWeapon() {
-        if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword)) {
+        if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword || ropeShoot)) {
            if (animationName().contains("SWORD_FIRE") || animationName().contains("SABER")) {
                resetCurrentAnimation();
                hit = false;
@@ -401,11 +402,35 @@ public class Player extends Objeto{
                     headsetlaser.draw(spriteBatch);
                 break;
             }
+             case "NinjaRope":{
+                ropeShoot = true;
+                laser_attack = false;
+                sword = false;
+                shooting = false;
+                saber = false;
+                spriteBatch.draw(shoot, worldX - 13, worldY - 9);
+                legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMovingXAxis(), isMovingXAxis(), !isFacingRight));
+                if (!isMovingXAxis())
+                    Player_Animations.valueOf("LEGS_ONLY").getAnimator().setFrameCounter(0);
+                legs.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+                isFacingRight = (degrees < 90f && degrees > -90f);
+                ninjaRope_shoot.setOriginCenter();
+                ninjaRope_shoot.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+                ninjaRope_shoot.setRotation(degrees);
+                if (Math.abs(degrees) > 90f && Math.abs(degrees) < 180f)
+                    ninjaRope_shoot.setRotation(-Math.abs(180f - degrees));
+                ninjaRope_shoot.setFlip(Math.abs(degrees) > 90f, false);
+                legs.setFlip(!isFacingRight, false);
+//                  jetPackSprite.setFlip(Math.abs(degrees) < 100f, false);
+                legs.draw(spriteBatch);
+                changeAnimation("NONE");
+                ninjaRope_shoot.draw(spriteBatch);
+            }
         }
     }
 
     private void aim(){
-        if (laser_attack || shooting) {
+        if (laser_attack || shooting || ropeShoot) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
@@ -506,10 +531,11 @@ public class Player extends Objeto{
                 else
                     changeAnimation("JUMPING_FRONT");
 //                looping = true;
-            }
-            if (getBody().getLinearVelocity().y != 0 && getBody().getLinearVelocity().x != 0){
-                changeAnimation("JUMPING");
-                walking = false;
+            } else {
+                if (getBody().getLinearVelocity().y != 0 && getBody().getLinearVelocity().x != 0) {
+                    changeAnimation("JUMPING");
+//                walking = false;
+                }
             }
         }
         if (keycode == Input.Keys.R){
@@ -545,7 +571,7 @@ public class Player extends Objeto{
 //                }
 //            }
             if (animationName().contains("WALKING")){
-                walking = false;
+//                walking = false;
                 if (onGround)
                     changeAnimation("IDLE");
             }
@@ -565,7 +591,7 @@ public class Player extends Objeto{
     }
 
     public void mouseMoved(int screenX, int screenY){
-        mouse.mouseMoved(screenX, screenY);
+//        mouse.mouseMoved(screenX, screenY);
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
         viewport.unproject(worldCoordinates);
         worldX = worldCoordinates.x;

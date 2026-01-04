@@ -142,7 +142,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
-
+        ninjaRope = new NinjaRope(player.getBody());
+        objetos.add(ninjaRope);
         objetos.add(player);
 
     }

@@ -61,7 +61,7 @@ public class Level2 extends Level{
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         player.touchDown(screenX, screenY, pointer, button);
-        ninjaRope.justTouched(button);
+//        ninjaRope.justTouched(button);
 
         return false;
     }
