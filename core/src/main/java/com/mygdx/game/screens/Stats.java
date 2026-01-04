@@ -21,7 +21,7 @@ import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
-import static com.mygdx.game.entities.Character_Features.changed;
+
 public class Stats extends State {
 
     private BitmapFont stats_font, level_font, points_font, points2_font;
@@ -42,6 +42,8 @@ public class Stats extends State {
 
     public static final int STATS_SIZE = 6;
     public static final int DEX = 0, VIT = 1, CRIT = 2, STR = 3, AGI = 4, WSD = 5;
+
+    public static boolean changed[] = new boolean[STATS_SIZE];
 
     public static final String[] KEYS = new String[7];
 
@@ -215,7 +217,7 @@ public class Stats extends State {
                     System.out.println(KEYS[index] + " " + player.character_features.getStats_values()[index]);
                     System.out.println(statsCoordinates.get(KEYS[index]));
 
-                    changed = index == AGI;
+                    changed[index] = true;
                 }
             }
         }

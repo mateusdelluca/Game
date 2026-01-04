@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.util.Arrays;
 
 import static com.mygdx.game.entities.Player.lvlUP;
-import static com.mygdx.game.images.Player_Animations.ATTACKING_SWORD_FIRE_2;
+import static com.mygdx.game.images.Player_Animations.*;
 import static com.mygdx.game.screens.Stats.*;
 import static com.mygdx.game.screens.levels.Level.player;
 
@@ -36,7 +36,7 @@ public class Character_Features {
     public static float recoveryPowerGreenPotion = 30f, recoveryPowerBluePotion = 10f, recoveryPowerRedPotion = 10f;
     private float timer;
     private int agility = 1;
-    public static boolean changed;
+
 
     public Character_Features(){
         Arrays.fill(stats_values, 1);
@@ -116,10 +116,13 @@ public class Character_Features {
     }
 
     public void agility(){
-        if (changed) {
-            agility = 5 + stats_values[AGI]/2;
+        if (changed[AGI]) {
+            agility = 5 + stats_values[AGI] / 2;
             ATTACKING_SWORD_FIRE_2.animator.createAnimation(agility);
-            changed = false;
+            WALKING.animator.createAnimation(agility);
+            WALKING_SWORD.animator.createAnimation(agility);
+            PUNCHING_FIRE.animator.createAnimation(agility);
+            changed[AGI] = false;
         }
     }
 }

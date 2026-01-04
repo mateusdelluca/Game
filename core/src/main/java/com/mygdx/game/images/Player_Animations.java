@@ -25,7 +25,7 @@ public enum Player_Animations implements Serializable {
     JUMPING_FRONT(new Animator(1,1, 1, 128, 128, "boy/Jumping.png")),
     PUNCHING(new Animator(3,3, 3, 128, 128, "boy/NewPunching.png")),
     JUMPING_FRONT_LASER((new Animator(3,3,5,128, 128,"boy/Jumping_Headset_Sheet.png"))),
-    PUNCHING_FIRE(new Animator(6,6, 12, 128, 128, "boy/Punching_Fire.png")),
+    PUNCHING_FIRE(new Animator(6,6, 5, 128, 128, "boy/Punching_Fire.png")),
     LEGS_ONLY(new Animator(6,6, 12, 128, 128, "boy/Shooting3.png")),
     LVL_UP(new Animator(3,3,5,1, 128, 128, "boy/LevelUP.png")),
     HEADSET(new Animator(3,3,5,42, 50,"boy/Laser_HeadSet-Sheet3.png")),
