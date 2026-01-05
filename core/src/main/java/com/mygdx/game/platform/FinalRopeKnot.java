@@ -27,21 +27,18 @@ public class FinalRopeKnot extends Objeto {
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
     private boolean joint;
 
-    public static boolean facingRight;
-
     public FinalRopeKnot(Vector2 position, boolean isFacingRight, float radians) {
         super(WIDTH, HEIGHT);
         super.width = WIDTH;
         super.height = HEIGHT;
         Vector2 size = new Vector2(width / 2f, height / 2f);
-        body = createBody(size, BodyDef.BodyType.KinematicBody, false);
+        body = createBody(size, BodyDef.BodyType.DynamicBody, false);
         body.setGravityScale(0f);
         this.isFacingRight = isFacingRight;
-        facingRight = isFacingRight;
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
         this.isFacingRight = radians < Math.PI / 2f || radians > (3f / 2f) * Math.PI;
-        body.setTransform(position, radians);
+        body.setTransform(isFacingRight ? position : new Vector2(position.x - 50f, position.y), (float) radians);
         body.setLinearVelocity((this.isFacingRight ? VELOCITY * (float) Math.cos(this.radians) : -Math.abs(VELOCITY * (float) Math.cos(this.radians))), (float) (VELOCITY * Math.sin(radians))); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
         body.setUserData(this.toString());
@@ -63,16 +60,22 @@ public class FinalRopeKnot extends Objeto {
 
     public void update(){
         if (collides && !joint){
+
+
+            RopeKnot ropeKnot = new RopeKnot(new Vector2(body.getPosition().x - (float) (WIDTH * Math.cos(radians)), body.getPosition().y - (float) (HEIGHT * Math.sin(radians))), radians);
+
             RopeJointDef ropeJointDef = new RopeJointDef();
             ropeJointDef.bodyA = body;
-            ropeJointDef.bodyB = end;
+            ropeJointDef.bodyB = ropeKnot.getBody();
             ropeJointDef.collideConnected = true;
             ropeJointDef.maxLength = 1f;
+
             world.createJoint(ropeJointDef);
             joint = true;
         }
         if (joint) {
             body.setLinearVelocity(0, 0);
+
         }
     }
 

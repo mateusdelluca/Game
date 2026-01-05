@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 
-import static com.mygdx.game.platform.FinalRopeKnot.facingRight;
 
 public class RopeKnot extends Objeto {
 
@@ -46,6 +46,13 @@ public class RopeKnot extends Objeto {
 
     @Override
     public void renderShape(ShapeRenderer s) {
+
+    }
+
+    public void beginContact(Body body1, Body body2){
+
+
+
 
     }
 }

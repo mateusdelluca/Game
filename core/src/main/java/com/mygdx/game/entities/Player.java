@@ -69,6 +69,7 @@ public class Player extends Objeto{
     private boolean punch;
     public static boolean ropeShoot;
 
+    @Getter
     private FinalRopeKnot fragment;
 
     public Player(Vector2 position, Viewport viewport){
@@ -645,7 +646,7 @@ public class Player extends Objeto{
                     if (ropeShoot) {
                         fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
                                 (getBody().getPosition().x),
-                                        (getBody().getPosition().y + HEIGHT / 2f)),
+                                        (getBody().getPosition().y)),
                                 isFacingRight, radians);
                     } else {
                         if (usingWeapon && sword && !hit) {

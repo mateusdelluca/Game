@@ -240,7 +240,10 @@ public abstract class Level extends State implements ContactListener, Serializab
             camera.update();
         }
 
-
+        if (player.getFragment() != null && contains(staticObjects, player.getFragment().getBody().getPosition())) {
+            System.out.println("MAP RENDERER CONTAINS FRAGMENT POSITION");
+            player.getBody().setTransform(player.getFragment().getBody().getPosition(), 0);
+        }
 
         for (Objeto objeto : objetos){
             if (objeto != null)
@@ -548,6 +551,10 @@ public abstract class Level extends State implements ContactListener, Serializab
                 return true;
             }
         } return false;
+    }
+
+    public static boolean contains(Vector2 point){
+        return tile.renderer.getViewBounds().contains(point);
     }
 
     @Override

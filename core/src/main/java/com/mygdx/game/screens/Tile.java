@@ -26,7 +26,8 @@ public class Tile {
 
     TmxMapLoader tmxMapLoader;
     public TiledMap tiledMap;
-    OrthogonalTiledMapRenderer renderer;
+
+    public OrthogonalTiledMapRenderer renderer;
 
     public ArrayList<Body> bodies_of_thorns = new ArrayList<>();
     public ArrayList<Body> bodies_of_rects = new ArrayList<>();
