@@ -301,9 +301,9 @@ public abstract class Objeto implements Serializable{
     }
 
     public void beginContact(Body body1, Body body2){
-        if ((body1.getUserData().toString().contains("Boy") && body2.getUserData().toString().contains("Enemy")))
+        if ((body1.getUserData().toString().contains("Player") && body2.getUserData().toString().contains("Enemy")))
             playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body1, body2);
-        if (body2.getUserData().toString().contains("Enemy") && body1.getUserData().toString().contains("Boy"))
+        if (body2.getUserData().toString().contains("Enemy") && body1.getUserData().toString().contains("Player"))
             playerBodyXPositionHigherThanAnotherBody = playerBodyXPositionHigherThanAnotherBody(body2, body1);
     }
 

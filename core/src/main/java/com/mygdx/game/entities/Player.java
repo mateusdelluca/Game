@@ -19,6 +19,7 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
+import com.mygdx.game.platform.FinalRopeKnot;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
@@ -68,6 +69,8 @@ public class Player extends Objeto{
     private boolean punch;
     public static boolean ropeShoot;
 
+    private FinalRopeKnot fragment;
+
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
         body = BodiesAndShapes.box(position, new Vector2(BOX_WIDTH/2f, BOX_HEIGHT/2f), BodyDef.BodyType.DynamicBody, false, this.toString(), 0.1f);
@@ -96,6 +99,14 @@ public class Player extends Objeto{
         switching(s);
         renderFireBall(s);
         updateWalking();
+        renderFragment(s);
+    }
+
+    public void renderFragment(SpriteBatch s){
+        if (fragment != null) {
+            fragment.update();
+            fragment.render(s);
+        }
     }
 
     private void updateWalking() {
@@ -243,6 +254,7 @@ public class Player extends Objeto{
         respawn();
         whichOneEquip();
         updateFireBalls();
+
     }
 
     private void updateFireBalls() {
@@ -630,11 +642,17 @@ public class Player extends Objeto{
                         }
                     }
                 } else {
-                    if (usingWeapon && sword && !hit){
-                        changeAnimation("ATTACKING_SWORD_FIRE_2");
-                        body.setLinearVelocity(0, getBody().getLinearVelocity().y);
-                        hit = true;
+                    if (ropeShoot) {
+                        fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
+                                (getBody().getPosition().x),
+                                        (getBody().getPosition().y + HEIGHT / 2f)),
+                                isFacingRight, radians);
                     } else {
+                        if (usingWeapon && sword && !hit) {
+                            changeAnimation("ATTACKING_SWORD_FIRE_2");
+                            body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+                            hit = true;
+                        } else {
 //                    if (animationName().contains("SWORD") || sword) {
 //                        if (!isMovingXAxis())
 //
@@ -646,14 +664,11 @@ public class Player extends Objeto{
                             changeAnimation("PUNCHING_FIRE");
                             walking = false;
                             body.setLinearVelocity(0, getBody().getLinearVelocity().y);
-//                            body.applyForceToCenter(new Vector2(isFacingRight ? 10_000 : -10_000, 0), true);
-//                        }
                         }
                     }
                 }
             }
-//            resetCurrentAnimation();
-//        }
+        }
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -715,7 +730,10 @@ public class Player extends Objeto{
     @Override
     public void beginContact(Body body1, Body body2){
         super.beginContact(body1, body2);
+        if (fragment != null) {
+            fragment.beginContact(body1, body2);
 
+        }
         for (Fire fire : fire_objects){
             fire.beginContact(body1, body2);
         }
