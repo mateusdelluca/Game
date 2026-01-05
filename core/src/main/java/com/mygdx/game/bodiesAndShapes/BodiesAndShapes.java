@@ -119,6 +119,25 @@ public class BodiesAndShapes {
         return body;
     }
 
+    public static Body box2(Vector2 position, Vector2 dimensions, BodyDef.BodyType type, boolean sensor, String userData, float radians){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.active = true;
+        bodyDef.type = type;
+        bodyDef.position.set(dimensions);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = sensor;
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(dimensions.x, dimensions.y, new Vector2(dimensions.x/2f, dimensions.y/2f), radians);
+        fixtureDef.shape = box;
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setTransform(position, radians);
+        body.setUserData(userData);
+        body.setActive(true);
+        return body;
+    }
+
+
     public static Body circle(Vector2 position, int radius){
         BodyDef bodyDef = new BodyDef();
         bodyDef.active = true;

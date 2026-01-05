@@ -15,7 +15,7 @@ public class RopeKnot extends Objeto {
 
     public static final float DIVISOR = 1.0f;
 
-    public static final float WIDTH = 50/DIVISOR, HEIGHT = 20/DIVISOR;
+    public static final float WIDTH = 20/DIVISOR, HEIGHT = 20/DIVISOR;
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
 
     public RopeKnot(Vector2 position, float radians){
@@ -23,7 +23,7 @@ public class RopeKnot extends Objeto {
         super.width = WIDTH;
         super.height = HEIGHT;
         Vector2 size = new Vector2(width / 2f, height / 2f);
-        body = createBody(size, BodyDef.BodyType.KinematicBody, false);
+        body = createBody(size, BodyDef.BodyType.KinematicBody, true);
         body.setTransform(position, radians);
     }
 
@@ -31,7 +31,7 @@ public class RopeKnot extends Objeto {
         sprite.setSize(WIDTH, HEIGHT);
 //        sprite.setOriginCenter();
         sprite.setOrigin(0,0);
-        sprite.flip(isFacingRight, false);
+        sprite.flip(!isFacingRight, false);
         sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         if (visible) {
