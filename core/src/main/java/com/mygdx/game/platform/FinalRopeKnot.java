@@ -9,30 +9,39 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.system.BodyData;
+
+import static com.mygdx.game.screens.levels.Level.world;
 
 public class FinalRopeKnot extends Objeto {
 
     public static final float WIDTH = 50, HEIGHT = 20;
-    public static  float VELOCITY = 300f;
+    public static  float VELOCITY = 30f;
     private float degrees, radians;
     private boolean collides;
 
+    private Body end;
+
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
+    private boolean joint;
+
+    public static boolean facingRight;
 
     public FinalRopeKnot(Vector2 position, boolean isFacingRight, float radians) {
         super(WIDTH, HEIGHT);
         super.width = WIDTH;
         super.height = HEIGHT;
         Vector2 size = new Vector2(width / 2f, height / 2f);
-        body = createBody(size, BodyDef.BodyType.DynamicBody, false);
+        body = createBody(size, BodyDef.BodyType.KinematicBody, false);
         body.setGravityScale(0f);
         this.isFacingRight = isFacingRight;
+        facingRight = isFacingRight;
         this.degrees = (float) Math.toDegrees(radians);
         this.radians = radians;
         this.isFacingRight = radians < Math.PI / 2f || radians > (3f / 2f) * Math.PI;
-        body.setTransform(position, (float) radians);
+        body.setTransform(position, radians);
         body.setLinearVelocity((this.isFacingRight ? VELOCITY * (float) Math.cos(this.radians) : -Math.abs(VELOCITY * (float) Math.cos(this.radians))), (float) (VELOCITY * Math.sin(radians))); //TODO calcular velocidade x e y de acordo com o ângulo
         visible = true;
         body.setUserData(this.toString());
@@ -53,38 +62,37 @@ public class FinalRopeKnot extends Objeto {
     }
 
     public void update(){
-        if (collides){
-            body.setLinearVelocity(0,0);
-//            body.setUserData("FinalFragment");
+        if (collides && !joint){
+            RopeJointDef ropeJointDef = new RopeJointDef();
+            ropeJointDef.bodyA = body;
+            ropeJointDef.bodyB = end;
+            ropeJointDef.collideConnected = true;
+            ropeJointDef.maxLength = 1f;
+            world.createJoint(ropeJointDef);
+            joint = true;
+        }
+        if (joint) {
+            body.setLinearVelocity(0, 0);
         }
     }
 
-    public void beginContact(Contact contact){
-        if (contact.getFixtureA() == null || contact.getFixtureB() == null)
-            return;
-        if (contact.getFixtureA().getBody() == null || contact.getFixtureB().getBody() == null)
-            return;
-        if (contact.getFixtureA().getBody().getUserData() == null || contact.getFixtureB().getBody().getUserData() == null)
-            return;
-
-        Body body1 = contact.getFixtureA().getBody();
-        Body body2 = contact.getFixtureB().getBody();
-
+    public void beginContact(Body body1, Body body2){
         if (body1 == null || body2 == null || body == null)
             return;
 
-        if (
-//            (
-                body1.equals(body) && body2.getUserData().toString().contains("Rect")
-                || body2.equals(body) && body1.getUserData().toString().contains("Rect"))
-        {
+        if (body1.equals(body) && !body2.equals(body)) {
+            end = body2;
+            collides = true;
+        }
+        if (body2.equals(body) && !body1.equals(body)) {
+            end = body1;
+            collides = true;
+        }
 
 //            ||
 //            (body1.equals(body) && body2.getUserData().toString().contains("End")
 //                || body2.equals(body) && body1.getUserData().toString().contains("End")))
 //        {
-            collides = true;
-        }
     }
 
 

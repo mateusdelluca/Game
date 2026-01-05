@@ -1,79 +1,51 @@
 package com.mygdx.game.platform;
 
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.game.entities.Objeto;
 
-public class RopeKnot extends Objeto implements InputProcessor {
+import static com.mygdx.game.platform.FinalRopeKnot.facingRight;
 
+public class RopeKnot extends Objeto {
 
+    public static final float DIVISOR = 1.0f;
 
-    public RopeKnot(Vector2 position, int length){
+    public static final float WIDTH = 50/DIVISOR, HEIGHT = 20/DIVISOR;
+    private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
 
-        for (int i = 0; i < length; i++){
+    public RopeKnot(Vector2 position, float radians){
+        super(WIDTH, HEIGHT);
+        super.width = WIDTH;
+        super.height = HEIGHT;
+        Vector2 size = new Vector2(width / 2f, height / 2f);
+        body = createBody(size, BodyDef.BodyType.KinematicBody, false);
+        body.setTransform(position, radians);
+    }
 
+    public void render(SpriteBatch s){
+        sprite.setSize(WIDTH, HEIGHT);
+//        sprite.setOriginCenter();
+        sprite.setOrigin(0,0);
+        sprite.flip(isFacingRight, false);
+        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
+        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+        if (visible) {
+            sprite.draw(s);
+            update();
         }
+    }
+
+    public void update(){
+
     }
 
     @Override
     public void renderShape(ShapeRenderer s) {
-    }
-
-
-    @Override
-    public boolean keyDown(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int i) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char c) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int i, int i1, int i2, int i3) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int i, int i1, int i2) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int i, int i1) {
-
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float v, float v1) {
-        return false;
-    }
-
-    public void beginContact(Body bodyA, Body bodyB) {
-        if (bodyA == null || bodyB == null)
-            return;
-
-
-       //TODO: análise de colisões entre o gatilho da ninjaRope para saber a extensão da Rope
 
     }
 }
