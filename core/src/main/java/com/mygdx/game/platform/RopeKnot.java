@@ -23,18 +23,20 @@ public class RopeKnot extends Objeto {
         super.width = WIDTH;
         super.height = HEIGHT;
         Vector2 size = new Vector2(width / 2f, height / 2f);
-        body = createBody(size, BodyDef.BodyType.KinematicBody, true);
+        body = createBody(size, BodyDef.BodyType.DynamicBody, true);
+        body.setGravityScale(10f);
+        body.getFixtureList().get(0).setRestitution(1f);
         body.setTransform(position, radians);
     }
 
     public void render(SpriteBatch s){
-        sprite.setSize(WIDTH, HEIGHT);
-//        sprite.setOriginCenter();
-        sprite.setOrigin(0,0);
-        sprite.flip(!isFacingRight, false);
-        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
         if (visible) {
+            sprite.setSize(WIDTH, HEIGHT);
+    //        sprite.setOriginCenter();
+            sprite.setOrigin(0,0);
+            sprite.flip(!isFacingRight, false);
+            sprite.setRotation((float) Math.toDegrees(body.getAngle()));
+            sprite.setPosition(body.getPosition().x, body.getPosition().y);
             sprite.draw(s);
             update();
         }
@@ -50,9 +52,5 @@ public class RopeKnot extends Objeto {
     }
 
     public void beginContact(Body body1, Body body2){
-
-
-
-
     }
 }

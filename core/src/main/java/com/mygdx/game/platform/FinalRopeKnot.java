@@ -7,21 +7,24 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.system.BodyData;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box2;
-import static com.mygdx.game.entities.Player.BOX_HEIGHT;
-import static com.mygdx.game.entities.Player.BOX_WIDTH;
+import static com.mygdx.game.entities.Player.*;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.screens.levels.Level.world;
+import static com.mygdx.game.screens.levels.Level_Manager.viewport;
 
 public class FinalRopeKnot extends Objeto {
 
@@ -30,18 +33,20 @@ public class FinalRopeKnot extends Objeto {
     private float degrees, radians;
     private boolean collides;
 
-    private Body end;
+    private Body mouse;
 
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
     private boolean joint;
 
     RopeJointDef ropeJointDef;
 
-    private RopeKnot ropeKnot1, ropeKnot2;
+    private RopeKnot ropeKnot1;
     private ArrayList<RopeKnot> knots = new ArrayList<>();
     private Body playerBody;
 
-    private Joint joint0;
+    private Joint joint0, joint1;
+    int index;
+    private boolean first;
 
     public FinalRopeKnot(Vector2 position, boolean isFacingRight, float radians) {
         super(WIDTH, HEIGHT);
@@ -59,8 +64,7 @@ public class FinalRopeKnot extends Objeto {
         visible = true;
         body.setUserData(this.toString());
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
-        playerBody = box2(new Vector2(player.getBody().getPosition().x + BOX_WIDTH/2f, player.getBody().getPosition().x + BOX_HEIGHT/2f),
-             new Vector2(BOX_WIDTH/10f, BOX_HEIGHT/10f), BodyDef.BodyType.KinematicBody, true, "Player", radians);
+
     }
 
     public void render(SpriteBatch s){
@@ -68,7 +72,7 @@ public class FinalRopeKnot extends Objeto {
         sprite.setOriginCenter();
         sprite.setOrigin(0,0);
         sprite.flip(isFacingRight, false);
-        sprite.setRotation((float) Math.toDegrees(body.getTransform().getRotation()));
+        sprite.setRotation((float) Math.toDegrees(body.getAngle()));
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         if (visible) {
             sprite.draw(s);
@@ -80,44 +84,57 @@ public class FinalRopeKnot extends Objeto {
     }
 
     public void update(){
+        if (collides && !first && mouse != null) {
+//            knots.add(new RopeKnot(mouse.getPosition(), mouse.getAngle()));
+            first = true;
+            playerBody = box2(new Vector2(player.getBody().getPosition().x + BOX_WIDTH/2f, player.getBody().getPosition().x + BOX_HEIGHT/2f),
+                new Vector2(BOX_WIDTH/10f, BOX_HEIGHT/10f), BodyDef.BodyType.KinematicBody, true, "Player", radians);
+            joint(playerBody, player.getBody());
+        }
         if (collides && !joint){
-            for (int index = 0; index < 100; index++) {
+            for (int index = 0; index < 10; index++) {
                 ropeKnot1 = new RopeKnot(new Vector2(body.getPosition().x - (float) (WIDTH * Math.cos(radians) * index), body.getPosition().y - (float) (HEIGHT * Math.sin(radians)) * index), radians);
-                ropeKnot2 = new RopeKnot(new Vector2(body.getPosition().x - (float) (WIDTH * Math.cos(radians) * index), body.getPosition().y - (float) (HEIGHT * Math.sin(radians)) * index), radians);
                 knots.add(ropeKnot1);
-                knots.add(ropeKnot2);
-
-
-                joint(ropeKnot1.getBody(), ropeKnot2.getBody());
-
-                if (Math.abs(ropeKnot2.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 4) {
+                if (index == 0) {
+                    Body mouseBody = box(new Vector2(worldX, worldY), new Vector2(10f,10f), BodyDef.BodyType.StaticBody, true, "mouse");
+                    joint(body, mouseBody);
+                    joint(body, knots.getFirst().getBody());
+                }
+                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 4) {
                     joint = true;
-                    joint(ropeKnot2.getBody(), player.getBody());
+                    this.index = index;
                     break;
                 }
-                if (Math.abs(ropeKnot2.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 4) {
-                    joint(ropeKnot2.getBody(), player.getBody());
+                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 4) {
                     joint = true;
+                    this.index = index;
                     break;
                 }
             }
+            for (int i = 0; i + 1 < knots.size(); i++) {
+                joint(knots.get(i).getBody(), knots.get(i + 1).getBody());
+            }
+            joint(knots.getLast().getBody(), player.getBody());
+        }
+//        if (joint) {
+//            body.setLinearVelocity(0, 0);
+//        }
 
-        }
-        if (joint) {
-            body.setLinearVelocity(0, 0);
-        }
+
+
     }
 
-    private void joint(Body body1, Body body2){
+    private Joint joint(Body body1, Body body2){
         ropeJointDef = new RopeJointDef();
         ropeJointDef.bodyA = body1;
         ropeJointDef.bodyB = body2;
-        ropeJointDef.collideConnected = true;
-        ropeJointDef.maxLength = 10f;
-        if (body1.getUserData().toString().contains("Player") || body2.getUserData().toString().contains("Playe"))
+        ropeJointDef.collideConnected = false;
+        ropeJointDef.maxLength = 20f;
+        if (body1.getUserData().toString().contains("Player") || body2.getUserData().toString().contains("Player")) {
             joint0 = world.createJoint(ropeJointDef);
-        else
-            world.createJoint(ropeJointDef);
+            return joint0;
+        }
+        return world.createJoint(ropeJointDef);
     }
 
     public void beginContact(Body body1, Body body2){
@@ -125,15 +142,11 @@ public class FinalRopeKnot extends Objeto {
             return;
 
         if (body1.equals(body) && !body2.equals(body)) {
-            end = body2;
             collides = true;
         }
         if (body2.equals(body) && !body1.equals(body)) {
-            end = body1;
             collides = true;
         }
-
-
 
 //            ||
 //            (body1.equals(body) && body2.getUserData().toString().contains("End")
@@ -141,8 +154,8 @@ public class FinalRopeKnot extends Objeto {
 //        {
     }
 
-    public void touchDown(int button){
-        if (button == Input.Buttons.RIGHT && joint0 != null) {
+    public void touchDown(int screenX, int screenY, int pointer, int button){
+        if (button == Input.Buttons.RIGHT && joint0 != null && joint) {
             world.destroyJoint(joint0);
             if (knots != null && !knots.isEmpty()) {
                 for (RopeKnot knot : knots) {
@@ -150,10 +163,12 @@ public class FinalRopeKnot extends Objeto {
                     knot.setVisible(false);
                 }
                 knots.clear();
+                joint = false;
+                collides = false;
+                first = false;
             }
         }
     }
-
 
     @Override
     public void renderShape(ShapeRenderer s) {

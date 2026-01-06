@@ -45,8 +45,7 @@ public class Player extends Objeto{
     public static final float BOX_WIDTH = 50f, BOX_HEIGHT = 95f;
     @Getter @Setter
     private Viewport viewport;
-    @Getter @Setter
-    private float worldX, worldY;
+    public static float worldX, worldY;
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
@@ -105,7 +104,6 @@ public class Player extends Objeto{
 
     public void renderFragment(SpriteBatch s){
         if (fragment != null) {
-            fragment.update();
             fragment.render(s);
         }
     }
@@ -605,6 +603,7 @@ public class Player extends Objeto{
 
     public void mouseMoved(int screenX, int screenY){
 //        mouse.mouseMoved(screenX, screenY);
+
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0f);
         viewport.unproject(worldCoordinates);
         worldX = worldCoordinates.x;
@@ -616,6 +615,8 @@ public class Player extends Objeto{
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
+        if (fragment != null)
+            fragment.touchDown(screenX, screenY, pointer, button);
         if (mouse != null)
             mouse.touchDown(screenX, screenY, button);
         if (button == Input.Buttons.LEFT) {
@@ -670,7 +671,6 @@ public class Player extends Objeto{
                 }
             }
         }
-        fragment.touchDown(button);
     }
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
