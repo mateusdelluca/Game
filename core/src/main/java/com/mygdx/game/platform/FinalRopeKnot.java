@@ -33,8 +33,6 @@ public class FinalRopeKnot extends Objeto {
     private float degrees, radians;
     private boolean collides;
 
-    private Body mouse;
-
     private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("block/Fragment.png")));
     private boolean joint;
 
@@ -42,11 +40,12 @@ public class FinalRopeKnot extends Objeto {
 
     private RopeKnot ropeKnot1;
     private ArrayList<RopeKnot> knots = new ArrayList<>();
-    private Body playerBody;
 
-    private Joint joint0, joint1;
+    private Joint joint0, mouseJoint;
     int index;
-    private boolean first;
+    private Joint firstKnotJoint;
+    private Joint playerJoint;
+
 
     public FinalRopeKnot(Vector2 position, boolean isFacingRight, float radians) {
         super(WIDTH, HEIGHT);
@@ -84,21 +83,21 @@ public class FinalRopeKnot extends Objeto {
     }
 
     public void update(){
-        if (collides && !first && mouse != null) {
+//        if (collides && !first && mouse != null) {
 //            knots.add(new RopeKnot(mouse.getPosition(), mouse.getAngle()));
-            first = true;
-            playerBody = box2(new Vector2(player.getBody().getPosition().x + BOX_WIDTH/2f, player.getBody().getPosition().x + BOX_HEIGHT/2f),
-                new Vector2(BOX_WIDTH/10f, BOX_HEIGHT/10f), BodyDef.BodyType.KinematicBody, true, "Player", radians);
-            joint(playerBody, player.getBody());
-        }
+//            first = true;
+//            playerBody = box2(new Vector2(player.getBody().getPosition().x + BOX_WIDTH/2f, player.getBody().getPosition().x + BOX_HEIGHT/2f),
+//                new Vector2(BOX_WIDTH/10f, BOX_HEIGHT/10f), BodyDef.BodyType.KinematicBody, true, "Player", radians);
+//            joint(playerBody, player.getBody());
+//        }
         if (collides && !joint){
             for (int index = 0; index < 10; index++) {
                 ropeKnot1 = new RopeKnot(new Vector2(body.getPosition().x - (float) (WIDTH * Math.cos(radians) * index), body.getPosition().y - (float) (HEIGHT * Math.sin(radians)) * index), radians);
                 knots.add(ropeKnot1);
                 if (index == 0) {
                     Body mouseBody = box(new Vector2(worldX, worldY), new Vector2(10f,10f), BodyDef.BodyType.StaticBody, true, "mouse");
-                    joint(body, mouseBody);
-                    joint(body, knots.getFirst().getBody());
+                    mouseJoint = joint(body, mouseBody);
+                    firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
                 if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 4) {
                     joint = true;
@@ -114,7 +113,8 @@ public class FinalRopeKnot extends Objeto {
             for (int i = 0; i + 1 < knots.size(); i++) {
                 joint(knots.get(i).getBody(), knots.get(i + 1).getBody());
             }
-            joint(knots.getLast().getBody(), player.getBody());
+            playerJoint = joint(knots.getLast().getBody(), player.getBody());
+            collides = false;
         }
 //        if (joint) {
 //            body.setLinearVelocity(0, 0);
@@ -156,17 +156,24 @@ public class FinalRopeKnot extends Objeto {
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
         if (button == Input.Buttons.RIGHT && joint0 != null && joint) {
-            world.destroyJoint(joint0);
-            if (knots != null && !knots.isEmpty()) {
-                for (RopeKnot knot : knots) {
-                    world.destroyBody(knot.getBody());
-                    knot.setVisible(false);
-                }
-                knots.clear();
-                joint = false;
-                collides = false;
-                first = false;
+            destroyJoints();
+            joint = false;
+            collides = false;
+//                world.destroyJoint(playerJoint);
+//                world.destroyJoint(firstKnotJoint);
+//                world.destroyJoint(mouseJoint);
+//                first = false;
+        }
+    }
+
+    private void destroyJoints(){
+        world.destroyJoint(joint0);
+        if (knots != null && !knots.isEmpty()) {
+            for (RopeKnot knot : knots) {
+                world.destroyBody(knot.getBody());
+                knot.setVisible(false);
             }
+            knots.clear();
         }
     }
 
