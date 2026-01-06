@@ -155,18 +155,28 @@ public class FinalRopeKnot extends Objeto {
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
-        if (button == Input.Buttons.RIGHT && joint0 != null && joint) {
+        if (button == Input.Buttons.LEFT && joint){
             destroyJoints();
-            joint = false;
-            collides = false;
+        }
+        if (button == Input.Buttons.RIGHT && joint0 != null && joint) {
+            if (this.body.getUserData().toString().contains(getClass().getSimpleName())) {
+                destroyJoints();
+                joint = false;
+                collides = false;
+                body.setUserData("null");
+                body.setActive(false);
+                world.destroyBody(body);
+            }
 //                world.destroyJoint(playerJoint);
 //                world.destroyJoint(firstKnotJoint);
 //                world.destroyJoint(mouseJoint);
-//                first = false;
+
         }
     }
 
     private void destroyJoints(){
+
+
         world.destroyJoint(joint0);
         if (knots != null && !knots.isEmpty()) {
             for (RopeKnot knot : knots) {

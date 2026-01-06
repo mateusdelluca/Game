@@ -33,6 +33,7 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.screens.levels.Level.world;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.sfx.Sounds.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
@@ -615,8 +616,9 @@ public class Player extends Objeto{
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
-        if (fragment != null)
+        if (fragment != null) {
             fragment.touchDown(screenX, screenY, pointer, button);
+        }
         if (mouse != null)
             mouse.touchDown(screenX, screenY, button);
         if (button == Input.Buttons.LEFT) {
@@ -645,6 +647,8 @@ public class Player extends Objeto{
                     }
                 } else {
                     if (ropeShoot) {
+                        if (fragment != null && !fragment.body.isActive())
+                                world.destroyBody(fragment.body);
                         fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
                                 (getBody().getPosition().x),
                                         (getBody().getPosition().y)),
