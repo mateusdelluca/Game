@@ -170,7 +170,7 @@ public class FinalRopeKnot extends Objeto {
 //                world.destroyJoint(playerJoint);
 //                world.destroyJoint(firstKnotJoint);
 //                world.destroyJoint(mouseJoint);
-
+//                first = false;
         }
     }
 
