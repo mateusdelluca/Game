@@ -21,7 +21,7 @@ public class Fan extends Objeto{
     }
 
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Images.fan.currentSpriteFrame(false,true,false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
+        spriteBatch.draw(Images.fan.currentSpriteFrameUpdateStateTime(false,true,false), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     public boolean bodyCloseToFan(Body b){

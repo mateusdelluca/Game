@@ -21,7 +21,7 @@ public class Fan2 extends Objeto{
     }
 
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(Images.fan2.currentSpriteFrame(false,true,true), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
+        spriteBatch.draw(Images.fan2.currentSpriteFrameUpdateStateTime(false,true,true), body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
 
     @Override
