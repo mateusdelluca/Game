@@ -99,12 +99,12 @@ public class FinalRopeKnot extends Objeto {
                     mouseJoint = joint(body, mouseBody);
                     firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 4) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 8) {
                     joint = true;
                     this.index = index;
                     break;
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 4) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 8) {
                     joint = true;
                     this.index = index;
                     break;
@@ -155,17 +155,16 @@ public class FinalRopeKnot extends Objeto {
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
-        if (button == Input.Buttons.LEFT && joint){
-            destroyJoints();
+        if (button == Input.Buttons.LEFT){
+            if (joint)
+                destroyJoints();
         }
         if (button == Input.Buttons.RIGHT && joint0 != null && joint) {
             if (this.body.getUserData().toString().contains(getClass().getSimpleName())) {
                 destroyJoints();
                 joint = false;
                 collides = false;
-                body.setUserData("null");
-                body.setActive(false);
-                world.destroyBody(body);
+
             }
 //                world.destroyJoint(playerJoint);
 //                world.destroyJoint(firstKnotJoint);
@@ -176,7 +175,9 @@ public class FinalRopeKnot extends Objeto {
 
     private void destroyJoints(){
 
-
+        body.setUserData("null");
+        body.setActive(false);
+        world.destroyBody(body);
         world.destroyJoint(joint0);
         if (knots != null && !knots.isEmpty()) {
             for (RopeKnot knot : knots) {
