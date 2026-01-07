@@ -93,18 +93,19 @@ public class FinalRopeKnot extends Objeto {
         if (collides && !joint){
             for (int index = 0; index < 10; index++) {
                 ropeKnot1 = new RopeKnot(new Vector2(body.getPosition().x - (float) (WIDTH * Math.cos(radians) * index), body.getPosition().y - (float) (HEIGHT * Math.sin(radians)) * index), radians);
+                ropeKnot1.getBody().setLinearVelocity(player.getBody().getLinearVelocity());
                 knots.add(ropeKnot1);
                 if (index == 0) {
                     Body mouseBody = box(new Vector2(worldX, worldY), new Vector2(10f,10f), BodyDef.BodyType.StaticBody, true, "mouse");
                     mouseJoint = joint(body, mouseBody);
                     firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 8) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 16) {
                     joint = true;
                     this.index = index;
                     break;
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 8) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 16) {
                     joint = true;
                     this.index = index;
                     break;
