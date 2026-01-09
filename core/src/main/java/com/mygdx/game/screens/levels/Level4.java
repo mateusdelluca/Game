@@ -41,7 +41,7 @@ public class Level4 extends Level{
                 posX = 520 + (100 * (index - 10));
                 posY = 6000 - 2300;
             }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
         }
         items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
         items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));

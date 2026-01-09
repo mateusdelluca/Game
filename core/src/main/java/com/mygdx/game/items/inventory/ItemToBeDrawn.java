@@ -45,8 +45,7 @@ public class ItemToBeDrawn implements Item {
     @Getter
     private int index;
     private Item item;
-
-    public static String equip = "";
+    
     public static HashMap<Item, Boolean> items = new HashMap<>();
     public ItemToBeDrawn(Item item){
 //        name = getClass().getSimpleName();

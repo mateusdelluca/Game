@@ -1,6 +1,8 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -174,7 +176,9 @@ public abstract class Objeto implements Serializable{
         }
     }
 
-    public abstract void renderShape(ShapeRenderer s);
+    public void renderShape(ShapeRenderer sr) {
+        renderHP(sr);
+    }
 
     public boolean intersectsRectangle(Rectangle another){
         return getRect().overlaps(another);
@@ -269,6 +273,8 @@ public abstract class Objeto implements Serializable{
 //                    ||
 //                    (body1.getUserData().toString().contains("Laser") || body2.getUserData().toString().contains("Laser"))
 //                    ||
+                    (body1.getUserData().toString().contains("Player") || body2.getUserData().toString().contains("Player"))
+                    ||
                     (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))
 //                    ||
 //                    (body1.getUserData().toString().contains("Punch") || body2.getUserData().toString().contains("Punch"))
@@ -351,5 +357,9 @@ public abstract class Objeto implements Serializable{
         return onGround;
     }
 
-
+    public void renderHP(ShapeRenderer sr){
+        sr.setColor(new Color(1,0,0,235f/255f));
+        if (visible)
+            sr.rect(body.getPosition().x + 40f, body.getPosition().y + 128f, character_features.getHp(), 5f);
+    }
 }

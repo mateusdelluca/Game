@@ -1,5 +1,8 @@
 package com.mygdx.game.screens.levels;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -7,6 +10,9 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.sfx.Sounds;
+
+import java.util.Collection;
+import java.util.Random;
 
 import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.entities.Player.minis;
@@ -32,6 +38,10 @@ public class Level3 extends Level{
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(4800, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(2680, 6000 - 2720),   Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(240, 6000 - 5880),    Monster1.class.getSimpleName() + monsters1.size()));
+        Random rand = new Random();
+        CrystalRed cRed = null;
+        Crystal c = null;
+
         for (int index = 1, posX = 320, posY = (6000 - 240); index < 16; index++) {
             if (index < 5) {
                 posX = 320 + (100 * index);
@@ -48,11 +58,20 @@ public class Level3 extends Level{
                 posX = 520 + (100 * (index - 10));
                 posY = 6000 - 2300;
             }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY), items.size()));
+            if (rand.nextInt(2) > 0){
+                cRed = new CrystalRed(new Vector2(posX, posY));
+                redCrystals.add(cRed);
+            }
+            else {
+                c = new Crystal(new Vector2(posX, posY));
+                crystals.add(c);
+            }
         }
-//            items2.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
-//
-            items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
+
+        objetos.addAll(crystals);
+        objetos.addAll(redCrystals);
+
+        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
 //
 //
 //            items2 = new HashMap<>();
@@ -111,12 +130,14 @@ public class Level3 extends Level{
 //            objetos.addAll(stands);
             objetos.add(ninjaRope);
             objetos.addAll(monsters1.values());
+            objetos.addAll(items2.values());
 //        }
 
 
         for (Item item : items.values()) {
             if (item != null) {
                 item.updateItem();
+                item.update();
             }
         }
 
@@ -125,6 +146,7 @@ public class Level3 extends Level{
 
     @Override
     public void render(){
+//        super.render();
         spriteBatch.setProjectionMatrix(camera.combined);
 //        if (!StateManager.oldState.equals("PAUSE"))
 
@@ -168,6 +190,17 @@ public class Level3 extends Level{
         spriteBatch.end();
 //
         box2DDebugRenderer.render(world, camera.combined);
+
+
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        for (Objeto o : objetos)
+            if (o instanceof Monster1)
+                o.renderHP(sr);
+        sr.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override
@@ -230,7 +263,6 @@ public class Level3 extends Level{
             m.beginContact(body1,body2);
         }
     }
-
 
     @Override
     public String toString() {

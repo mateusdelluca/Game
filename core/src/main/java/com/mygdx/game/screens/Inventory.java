@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.mygdx.game.Application.level_manager;
 import static com.mygdx.game.images.Images.inventory;
 import static com.mygdx.game.images.Images.printScreen;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.*;
@@ -123,7 +122,7 @@ public class Inventory extends State {
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
         for (Vector2 vec2 : positionsToFill)
-            spriteBatch.draw(Images.spaceItem, vec2.x, vec2.y);
+            spriteBatch.draw(Images.slot, vec2.x, vec2.y);
         for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.values()) {
             itemToBeDrawn.render(spriteBatch);
         }

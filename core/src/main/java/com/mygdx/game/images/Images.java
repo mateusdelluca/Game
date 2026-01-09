@@ -3,7 +3,6 @@ package com.mygdx.game.images;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapObjects;
 import com.mygdx.game.screens.Tile;
@@ -14,7 +13,6 @@ import java.io.Serializable;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.files.FileHandle;
-import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 
 import java.util.TreeMap;
 
@@ -64,10 +62,10 @@ public class Images implements Serializable {
     public static Sprite headset_laser, laser_front;
     public static TreeMap<String, Sprite> itemsDraw = new TreeMap<>();
     public static TreeMap<String, Sprite> itemsDraw_minis = new TreeMap<>();
-    public static Sprite spaceItem;
+    public static Sprite slot;
     public static Sprite stats, atributes;
     public static Sprite power;
-    public static Sprite sword_inventory;
+    public static Sprite sword_inventory, crystal_inventory, crystal3_inventory;
     public static Sprite ball;
     public static Animator explosions;
 
@@ -112,7 +110,7 @@ public class Images implements Serializable {
         laser_inventory = new Sprite(new Texture(Gdx.files.internal("items/Laser_Headset_75x85.png")));
         headset_laser = laser_inventory;
         ninjaRope = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85(2).png")));
-        spaceItem = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
+        slot = new Sprite(new Texture(Gdx.files.internal("items/SpaceItem.png")));
         power = new Sprite(new Texture(Gdx.files.internal("boy/FUEL.png")));
         jack = new Texture(Gdx.files.internal("Jack/Jack.png"));
         girl = new Texture(Gdx.files.internal("Girl/Girl.png"));
@@ -139,6 +137,8 @@ public class Images implements Serializable {
         equipped_inventory = new Sprite(new Texture(Gdx.files.internal("items/Equipped_75x85.png")));
         ninjaRope_inventory = new Sprite(new Texture(Gdx.files.internal("items/NinjaRope_75x85.png")));
         sword_inventory = new Sprite(new Texture(Gdx.files.internal("items/Sword_75x85.png")));
+        crystal_inventory = new Sprite(new Texture(Gdx.files.internal("items/Crystal_75x85.png")));
+        crystal3_inventory = new Sprite(new Texture(Gdx.files.internal("items/Crystal3_75x85.png")));
         equipped_inventory.setSize(67, 74);
         itemsDraw.put("NinjaStar", ninjaStar_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
@@ -147,8 +147,9 @@ public class Images implements Serializable {
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
         itemsDraw.put("Laser_Headset", laser_inventory);
         itemsDraw.put("Sword", sword_inventory);
+        itemsDraw.put("Crystal", crystal_inventory);
+        itemsDraw.put("CrystalRed", crystal3_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
-
         itemsDraw_minis.put("Blue Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/SP_Potion_mini.png"))));
         itemsDraw_minis.put("Red Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/HP_Potion_mini.png"))));
         itemsDraw_minis.put("Green Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/Green_Potion_mini.png"))));

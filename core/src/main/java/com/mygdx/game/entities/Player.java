@@ -27,6 +27,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.images.Images.legs;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
@@ -37,6 +38,7 @@ import static com.mygdx.game.screens.levels.Level.world;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.sfx.Sounds.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
+import static com.mygdx.game.platform.FinalRopeKnot.mouseBody;
 
 public class Player extends Objeto{
 
@@ -71,6 +73,7 @@ public class Player extends Objeto{
 
     @Getter
     private FinalRopeKnot fragment;
+    private boolean jetPackBoolean;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -89,6 +92,7 @@ public class Player extends Objeto{
 
     @Override
     public void render(SpriteBatch s) {
+        renderJetPack(s);
         super.render(s);
         if (beenHit)
             character_features.drawDamage(s, font, body);
@@ -106,6 +110,20 @@ public class Player extends Objeto{
     public void renderFragment(SpriteBatch s){
         if (fragment != null) {
             fragment.render(s);
+        }
+    }
+
+    private void renderJetPack(SpriteBatch s){
+        for (Item item : items.keySet()) {
+            if (equipped[item.getIndex()]) {
+                if (item.toString().contains("Jet")){
+                   jetPackBoolean = true;
+                }
+            }
+        }
+        if (jetPackBoolean) {
+            Sprite jet = new Sprite(Player_Animations.JETPACK.animator.currentSpriteFrameUpdateStateTime(false, true, !isFacingRight));
+            jet.draw(s);
         }
     }
 
@@ -640,7 +658,7 @@ public class Player extends Objeto{
                     Bullet bullet = new Bullet(
                                 new Vector2(isFacingRight ? (getBody().getPosition().x +
                                     WIDTH / 2f) : (getBody().getPosition().x),
-                                    (getBody().getPosition().y + HEIGHT / 2f)),
+                                    (getBody().getPosition().y + HEIGHT / 4f)),
                                 isFacingRight, radians, false, this.toString());
                             rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
                         }
@@ -649,6 +667,7 @@ public class Player extends Objeto{
                     if (ropeShoot) {
                         if (fragment != null && !fragment.body.isActive())
                                 world.destroyBody(fragment.body);
+                        mouseBody = box(new Vector2(worldX, worldY), new Vector2(2f,2f), BodyDef.BodyType.StaticBody, true, "mouse");
                         fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
                                 (getBody().getPosition().x),
                                         (getBody().getPosition().y)),

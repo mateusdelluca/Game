@@ -46,7 +46,7 @@ public class FinalRopeKnot extends Objeto {
     private Joint firstKnotJoint;
     private Joint playerJoint;
 
-
+    public static Body mouseBody = box(new Vector2(worldX, worldY), new Vector2(10f,10f), BodyDef.BodyType.StaticBody, true, "mouse");;
     public FinalRopeKnot(Vector2 position, boolean isFacingRight, float radians) {
         super(WIDTH, HEIGHT);
         super.width = WIDTH;
@@ -96,7 +96,7 @@ public class FinalRopeKnot extends Objeto {
                 ropeKnot1.getBody().setLinearVelocity(player.getBody().getLinearVelocity());
                 knots.add(ropeKnot1);
                 if (index == 0) {
-                    Body mouseBody = box(new Vector2(worldX, worldY), new Vector2(10f,10f), BodyDef.BodyType.StaticBody, true, "mouse");
+
                     mouseJoint = joint(body, mouseBody);
                     firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
@@ -176,8 +176,8 @@ public class FinalRopeKnot extends Objeto {
 
     private void destroyJoints(){
 
-        body.setUserData("null");
-        body.setActive(false);
+//        body.setUserData("null");
+//        body.setActive(false);
         world.destroyBody(body);
         world.destroyJoint(joint0);
         if (knots != null && !knots.isEmpty()) {

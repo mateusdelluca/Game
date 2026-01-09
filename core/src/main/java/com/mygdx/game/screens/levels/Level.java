@@ -83,6 +83,11 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public static Rifle rifle;
 
+    public static ShapeRenderer sr = new ShapeRenderer();
+
+    protected ArrayList<Crystal> crystals = new ArrayList<>();
+    protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
+
 //    public String polygons_String = "";
 
     public Level() {
@@ -176,6 +181,13 @@ public abstract class Level extends State implements ContactListener, Serializab
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
         box2DDebugRenderer.render(world, camera.combined);
+
+
+        sr.begin();
+        for (Objeto o : objetos)
+            if (o instanceof Monster1)
+                o.renderShape(sr);
+        sr.end();
 
     }
 
@@ -289,7 +301,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Player")
             ){
                 player.takeItem(item);
-//                item.setVisible(false);
+                item.setVisible(false);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
 //                    item.setUserData(body1);

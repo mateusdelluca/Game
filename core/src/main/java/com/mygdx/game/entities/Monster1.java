@@ -178,8 +178,9 @@ public class Monster1 extends Objeto implements Serializable {
     }
 
     @Override
-    public void renderShape(ShapeRenderer s) {
-        s.rect(getBodyBounds().x, getBodyBounds().y, getBodyBounds().width, getBodyBounds().height);
+    public void renderShape(ShapeRenderer sr) {
+        super.renderShape(sr);
+        sr.rect(getBodyBounds().x, getBodyBounds().y, getBodyBounds().width, getBodyBounds().height);
     }
 
     @Override
