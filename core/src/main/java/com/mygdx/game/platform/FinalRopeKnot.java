@@ -178,8 +178,10 @@ public class FinalRopeKnot extends Objeto {
 
 //        body.setUserData("null");
 //        body.setActive(false);
-        world.destroyBody(body);
-        world.destroyJoint(joint0);
+        if (body != null && body.isActive())
+            world.destroyBody(body);
+        if (joint0 != null && joint0.isActive())
+             world.destroyJoint(joint0);
         if (knots != null && !knots.isEmpty()) {
             for (RopeKnot knot : knots) {
                 world.destroyBody(knot.getBody());

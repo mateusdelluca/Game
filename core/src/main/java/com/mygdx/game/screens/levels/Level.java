@@ -301,7 +301,10 @@ public abstract class Level extends State implements ContactListener, Serializab
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Player")
             ){
                 player.takeItem(item);
-                item.setVisible(false);
+//                item.setVisible(false);
+                for (Objeto o : objetos)
+                    if (o != null && o.toString().contains(item.toString()))
+                        player.takeItem((Item) o);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
 //                    item.setUserData(body1);
