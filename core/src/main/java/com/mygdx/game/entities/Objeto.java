@@ -35,7 +35,7 @@ public abstract class Objeto implements Serializable{
     protected Vector2 dimensions;
     @Getter
     @Setter
-    protected boolean visible, dead;
+    public boolean visible, dead;
     protected Rectangle rect;
     private float alpha = 1.0f;
     @Getter @Setter

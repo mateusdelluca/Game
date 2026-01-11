@@ -3,14 +3,16 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
+import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.images.Images.spriteJetPack;
 import static com.mygdx.game.screens.levels.Level.world;
 
-public class JetPack extends Objeto implements Item{
+public class JetPack extends Item{
 
     public static final float WIDTH = 128f, HEIGHT = 128f;
 
@@ -56,6 +58,20 @@ public class JetPack extends Objeto implements Item{
     }
 
     @Override
+    public void setUserData(Body body) {
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+    @Override
     public void renderShape(ShapeRenderer s) {
 
     }
@@ -64,4 +80,5 @@ public class JetPack extends Objeto implements Item{
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }

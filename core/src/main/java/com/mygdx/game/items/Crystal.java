@@ -9,14 +9,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.clink2;
 
-public class Crystal extends Objeto implements Item{
+public class Crystal extends Item{
 
     public static final float WIDTH = 40, HEIGHT = 80;
 
@@ -31,6 +33,7 @@ public class Crystal extends Objeto implements Item{
 
     @Override
     public void render(SpriteBatch s) {
+        super.render(s);
         if (visible) {
             s.draw(sprite, body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
         } else{
@@ -63,6 +66,21 @@ public class Crystal extends Objeto implements Item{
         super.update();
     }
 
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
 
     public void beginContact(Body body1, Body body2){
         if ((body1.equals(body) && body2.getUserData().toString().contains("Player"))
@@ -70,6 +88,7 @@ public class Crystal extends Objeto implements Item{
             body2.equals(body) && body1.getUserData().toString().contains("Player")){
             visible = false;
             clink2.play();
+            player.takeItem(this);
         }
     }
 }

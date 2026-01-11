@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 import static com.mygdx.game.screens.Inventory.*;
 
-public class ItemToBeDrawn implements Item {
+public class ItemToBeDrawn extends Item {
 
     public static Integer index_x = 0, index_y = 0;
     public static final int ITEMS_LIMIT = 20;
@@ -42,10 +42,10 @@ public class ItemToBeDrawn implements Item {
     private String name;
 
     public static boolean[] equipped = new boolean[ITEMS_LIMIT];
-    @Getter
+    @Getter @Setter
     private int index;
     private Item item;
-    
+
     public static HashMap<Item, Boolean> items = new HashMap<>();
     public ItemToBeDrawn(Item item){
 //        name = getClass().getSimpleName();
@@ -151,11 +151,6 @@ public class ItemToBeDrawn implements Item {
     @Override
     public String toString(){
         return name;
-    }
-
-    @Override
-    public void setIndex(int index) {
-
     }
 
     public void equip(){

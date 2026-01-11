@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +21,7 @@ import static com.mygdx.game.entities.Mouse.mouseBody;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.*;
 import static com.mygdx.game.screens.levels.Level.world;
 
-public class Rope extends Objeto {
+public class Rope extends Item {
 
 
     @Getter @Setter
@@ -60,6 +62,32 @@ public class Rope extends Objeto {
     }
 
     @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public void setIndex(int index) {
+
+    }
+
+    @Override
     public void render(SpriteBatch s) {
         spriteA.setSize(width, height);
         spriteA.setOriginCenter();
@@ -71,6 +99,16 @@ public class Rope extends Objeto {
             spriteA.draw(s);
 //            spriteB.draw(s);
         }
+    }
+
+    @Override
+    public void updateItem() {
+
+    }
+
+    @Override
+    public void updateItem(World world) {
+
     }
 
     @Override

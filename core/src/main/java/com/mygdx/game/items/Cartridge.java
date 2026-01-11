@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static com.mygdx.game.sfx.Sounds.GUNSHOT;
 
-public class Cartridge implements Item{
+public class Cartridge extends Item{
 
     @Getter @Setter
     private ArrayList<Bullet> bulletsLeft = new ArrayList<>(); //just to count
@@ -90,27 +90,8 @@ public class Cartridge implements Item{
     }
 
     @Override
-    public void setVisible(boolean b) {
-
-    }
-
-    @Override
-    public boolean isVisible() {
-        return false;
-    }
-
-    @Override
     public String toString(){
         return "" + (bulletsLeft.size());
     }
 
-    @Override
-    public int getIndex() {
-        return 0;
-    }
-
-    @Override
-    public void setIndex(int index) {
-
-    }
 }

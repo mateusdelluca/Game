@@ -3,11 +3,13 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.screens.PausePage;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import static com.mygdx.game.images.Images.rifle;
 import static com.mygdx.game.items.Cartridge.MAX_ROUNDS;
 
-public class Rifle extends Objeto implements Item, Serializable {
+public class Rifle extends Item implements Serializable {
 
     public static final float MULTIPLY = 1/3f;
     public static final float WIDTH = rifle.getWidth() * MULTIPLY;
@@ -134,6 +136,22 @@ public class Rifle extends Objeto implements Item, Serializable {
     }
 
     @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+
+    @Override
     public void renderShape(ShapeRenderer s) {
     }
 
@@ -141,6 +159,7 @@ public class Rifle extends Objeto implements Item, Serializable {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 
     private ArrayList<Bullet> init(int max_rounds){
         ArrayList<Bullet> bullets = new ArrayList<>();

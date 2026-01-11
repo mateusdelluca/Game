@@ -34,6 +34,7 @@ import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
 import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Stats.exp_Points;
+import static com.mygdx.game.screens.levels.Level.ninjaStars;
 import static com.mygdx.game.screens.levels.Level.world;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.sfx.Sounds.*;
@@ -52,7 +53,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
-    private boolean walking, usingWeapon, laser_attack, shooting, sword, punching, saber, throwing_fire;
+    private boolean walking, usingWeapon, laser_attack, shooting, sword, punching, saber, throwing_fire, thrown_ninjaStar;
     protected Mouse mouse;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
 
@@ -284,7 +285,7 @@ public class Player extends Objeto{
     }
 
     private void resetAnimationWeapon() {
-        if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword || ropeShoot)) {
+        if (isFinishedCurrentAnimation() && (shooting || laser_attack || sword || ropeShoot || thrown_ninjaStar)) {
            if (animationName().contains("SWORD_FIRE") || animationName().contains("SABER")) {
                resetCurrentAnimation();
                hit = false;
@@ -349,6 +350,7 @@ public class Player extends Objeto{
                 shooting = false;
                 laser_attack = false;
                 saber = false;
+                thrown_ninjaStar = false;
                 if (animationName().contains("ATTACKING_SWORD")){
 //                    for (Body body1 : attacking_box_bodies) {
 //                        body1.setTransform(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) - 20f :
@@ -384,6 +386,7 @@ public class Player extends Objeto{
                 sword = false;
                 laser_attack = false;
                 saber = false;
+                thrown_ninjaStar = false;
                 Rifle.showingNumbBullets = true;
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
@@ -408,6 +411,7 @@ public class Player extends Objeto{
                 sword = false;
                 shooting = false;
                 laser_attack = false;
+                thrown_ninjaStar = false;
                 saber = true;
                 changeAnimation("SABER");
                 break;
@@ -418,6 +422,7 @@ public class Player extends Objeto{
                 sword = false;
                 shooting = false;
                 saber = false;
+                thrown_ninjaStar = false;
                 headsetlaser = new Sprite(Player_Animations.HEADSET.getAnimator().currentSpriteFrameUpdateStateTime(false,
                     true, !isFacingRight));
                 headsetlaser.setPosition(isFacingRight ? body.getPosition().x - 5f : body.getPosition().x - 10f, body.getPosition().y + 12f);
@@ -430,6 +435,8 @@ public class Player extends Objeto{
                 isFacingRight = !(Math.abs(degrees) > 90f);
                 if (!animationName().equals("JUMPING_FRONT_LASER"))
                     headsetlaser.draw(spriteBatch);
+                if (!onGround && !isMovingXAxis() && !hit)
+                    changeAnimation("JUMPING_FRONT_LASER");
                 break;
             }
              case "NinjaRope":{
@@ -438,6 +445,7 @@ public class Player extends Objeto{
                 sword = false;
                 shooting = false;
                 saber = false;
+                thrown_ninjaStar = false;
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMovingXAxis(), isMovingXAxis(), !isFacingRight));
                 if (!isMovingXAxis())
@@ -456,11 +464,20 @@ public class Player extends Objeto{
                 changeAnimation("NONE");
                 ninjaRope_shoot.draw(spriteBatch);
             }
+             case "NinjaStar":{
+                 ropeShoot = false;
+                 laser_attack = false;
+                 sword = false;
+                 shooting = false;
+                 saber = false;
+                 thrown_ninjaStar = true;
+                 break;
+             }
         }
     }
 
     private void aim(){
-        if (laser_attack || shooting || ropeShoot) {
+        if (laser_attack || shooting || ropeShoot || thrown_ninjaStar) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
             degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
@@ -486,7 +503,7 @@ public class Player extends Objeto{
 
     private void idle(){
 //        System.out.println(onGround);
-        if (!usingWeapon && !beenHit) {
+        if (!beenHit) {
             if (!onGround()) {
                 if (!isMovingXAxis()) {
                     if (laser_attack) {
@@ -641,43 +658,48 @@ public class Player extends Objeto{
             mouse.touchDown(screenX, screenY, button);
         if (button == Input.Buttons.LEFT) {
             walking = false;
-            if (laser_attack) {
-                if (PowerBar.power >= character_features.getPowerSpent()) {
+            if (thrown_ninjaStar) {
+                ninjaStars.add(new NinjaStar(new Vector2(isFacingRight ? ((getBody().getPosition().x +
+                    WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
+                    getBody().getPosition().y + HEIGHT / 2f),
+                    radians, false));
+            } else {
+                if (laser_attack) {
                     laser_rail.add(new Laser(
                         new Vector2(isFacingRight ? (getBody().getPosition().x +
                             WIDTH / 2f) : (getBody().getPosition().x - WIDTH / 4f),
-                            isFacingRight ? (getBody().getPosition().y + (HEIGHT / 4f) - 20f) : (getBody().getPosition().y + (HEIGHT/2f))),
-                        radians > (Math.PI / 2f), radians, this.toString()));
+                            isFacingRight ? (getBody().getPosition().y + (HEIGHT / 4f) - 20f) : (getBody().getPosition().y + (HEIGHT / 2f))),
+                        radians >= (Math.PI / 2f), radians, this.toString()));
                     LASER_HEADSET.play();
-                    PowerBar.power -= character_features.getPowerSpent();
-                }
-            } else {
-                if (shooting) {
-                    if (!rifle.isReloading()) {
-                        if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
-                    Bullet bullet = new Bullet(
-                                new Vector2(isFacingRight ? (getBody().getPosition().x +
-                                    WIDTH / 2f) : (getBody().getPosition().x),
-                                    (getBody().getPosition().y + HEIGHT / 4f)),
-                                isFacingRight, radians, false, this.toString());
-                            rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
-                        }
-                    }
+                    character_features.setPower(character_features.getPower() - 5f);
+                    hit = true;
                 } else {
-                    if (ropeShoot) {
-                        if (fragment != null && !fragment.body.isActive())
-                                world.destroyBody(fragment.body);
-                        mouseBody = box(new Vector2(worldX, worldY), new Vector2(2f,2f), BodyDef.BodyType.StaticBody, true, "mouse");
-                        fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
-                                (getBody().getPosition().x),
-                                        (getBody().getPosition().y)),
-                                isFacingRight, radians);
+                    if (shooting) {
+                        if (!rifle.isReloading()) {
+                            if (!rifle.getLeftSideBullets().getBulletsLeft().isEmpty()) {
+                                Bullet bullet = new Bullet(
+                                    new Vector2(isFacingRight ? (getBody().getPosition().x +
+                                        WIDTH / 2f) : (getBody().getPosition().x),
+                                        (getBody().getPosition().y + HEIGHT / 4f)),
+                                    isFacingRight, radians, false, this.toString());
+                                rifle.getLeftSideBullets().addAndRemove(bullet, rifle);
+                            }
+                        }
                     } else {
-                        if (usingWeapon && sword && !hit) {
-                            changeAnimation("ATTACKING_SWORD_FIRE_2");
-                            body.setLinearVelocity(0, getBody().getLinearVelocity().y);
-                            hit = true;
+                        if (ropeShoot) {
+                            if (fragment != null && !fragment.body.isActive())
+                                world.destroyBody(fragment.body);
+                            mouseBody = box(new Vector2(worldX, worldY), new Vector2(2f, 2f), BodyDef.BodyType.StaticBody, true, "mouse");
+                            fragment = new FinalRopeKnot(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) :
+                                (getBody().getPosition().x),
+                                (getBody().getPosition().y)),
+                                isFacingRight, radians);
                         } else {
+                            if (usingWeapon && sword && !hit) {
+                                changeAnimation("ATTACKING_SWORD_FIRE_2");
+                                body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+                                hit = true;
+                            } else {
 //                    if (animationName().contains("SWORD") || sword) {
 //                        if (!isMovingXAxis())
 //
@@ -685,10 +707,11 @@ public class Player extends Objeto{
 
 //                    else {
 //                        if (!punching) {
-                            punching = true;
-                            changeAnimation("PUNCHING_FIRE");
-                            walking = false;
-                            body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+                                punching = true;
+                                changeAnimation("PUNCHING_FIRE");
+                                walking = false;
+                                body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+                            }
                         }
                     }
                 }

@@ -20,7 +20,7 @@ import static com.mygdx.game.images.Images.headset_laser;
 import static com.mygdx.game.images.Images.rifle;
 import static com.mygdx.game.sfx.Sounds.LASER_HEADSET;
 
-public class Laser_Headset extends Objeto implements Item{
+public class Laser_Headset extends Item{
 
     public static final float WIDTH = 75f, HEIGHT = 85f;
 
@@ -82,13 +82,10 @@ public class Laser_Headset extends Objeto implements Item{
         return null;
     }
 
-    @Override
-    public void setVisible(boolean b) {
-       visible = b;
-    }
 
     @Override
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }

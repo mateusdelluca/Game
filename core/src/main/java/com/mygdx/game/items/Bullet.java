@@ -10,7 +10,7 @@ import com.mygdx.game.system.BodyData;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 
-public class Bullet extends Objeto implements Item {
+public class Bullet extends Item {
 
     public static final float WIDTH = 27, HEIGHT = 9;
     private boolean isFacingRight;
@@ -92,6 +92,31 @@ public class Bullet extends Objeto implements Item {
         }
     }
 
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
+
     public void render(SpriteBatch spriteBatch){
 
 //        if (body == null || body.getFixtureList().size == 0)
@@ -136,5 +161,6 @@ public class Bullet extends Objeto implements Item {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 
 }

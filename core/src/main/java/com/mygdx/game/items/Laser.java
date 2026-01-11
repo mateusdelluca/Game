@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.images.PowerBar;
@@ -13,7 +15,7 @@ import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.entities.Character_Features.*;
 
-public class Laser extends Objeto {
+public class Laser extends Item {
 
 
     public static final float WIDTH = Images.laser_rail.getWidth()/5f, HEIGHT = Images.laser_rail.getHeight()/2f;
@@ -56,7 +58,7 @@ public class Laser extends Objeto {
     public void update(){
         super.update();
         distance += getBody().getPosition().x;
-        if (distance - initialDistance >= laserDistance && body != null && body.getUserData().toString().contains("Boy")) {
+        if (distance - initialDistance >= laserDistance && body != null && body.getUserData().toString().contains("Player")) {
             visible = false;
             body.setTransform(-10_000, -10_000, 0);
             body.setUserData("null");
@@ -64,6 +66,21 @@ public class Laser extends Objeto {
         if (body == null || body.getFixtureList().size == 0)
             return;
         timer += Gdx.graphics.getDeltaTime();
+    }
+
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
     }
 
     public void render(SpriteBatch spriteBatch){
@@ -86,6 +103,16 @@ public class Laser extends Objeto {
     }
 
     @Override
+    public void updateItem() {
+
+    }
+
+    @Override
+    public void updateItem(World world) {
+
+    }
+
+    @Override
     public void renderShape(ShapeRenderer s) {
         s.rect(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
@@ -94,4 +121,5 @@ public class Laser extends Objeto {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }

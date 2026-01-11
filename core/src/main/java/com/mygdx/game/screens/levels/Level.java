@@ -83,7 +83,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public static Rifle rifle;
 
-    public static ShapeRenderer sr = new ShapeRenderer();
+    public static ArrayList<NinjaStar> ninjaStars = new ArrayList<>();
 
     protected ArrayList<Crystal> crystals = new ArrayList<>();
     protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
@@ -150,7 +150,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         ninjaRope = new NinjaRope(player.getBody());
         objetos.add(ninjaRope);
         objetos.add(player);
-
     }
 
     @Override
@@ -178,16 +177,11 @@ public abstract class Level extends State implements ContactListener, Serializab
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
+        for (NinjaStar ninjaStar : ninjaStars)
+            ninjaStar.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
         box2DDebugRenderer.render(world, camera.combined);
-
-
-        sr.begin();
-        for (Objeto o : objetos)
-            if (o instanceof Monster1)
-                o.renderShape(sr);
-        sr.end();
 
     }
 
@@ -257,6 +251,9 @@ public abstract class Level extends State implements ContactListener, Serializab
             player.getBody().setTransform(player.getFragment().getBody().getPosition(), 0);
         }
 
+        for (NinjaStar ninjaStar : ninjaStars)
+            ninjaStar.update();
+
         for (Objeto objeto : objetos){
             if (objeto != null)
                 objeto.update();
@@ -302,9 +299,6 @@ public abstract class Level extends State implements ContactListener, Serializab
             ){
                 player.takeItem(item);
 //                item.setVisible(false);
-                for (Objeto o : objetos)
-                    if (o != null && o.toString().contains(item.toString()))
-                        player.takeItem((Item) o);
 //                if (!item.toString().equals("Portal") && body1.getUserData().equals(item.toString())) {
 //                    body1.setUserData("null");
 //                    item.setUserData(body1);

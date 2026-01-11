@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ import java.util.Random;
 
 import static com.mygdx.game.sfx.Sounds.clink2;
 
-public class CrystalRed extends Objeto implements Item{
+public class CrystalRed extends Item{
 
     public static final float WIDTH = 40, HEIGHT = 80;
     private Sprite sprite = new Sprite(Images.crystal_red);
@@ -60,6 +61,21 @@ public class CrystalRed extends Objeto implements Item{
     @Override
     public void update() {
         super.update();
+    }
+
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
     }
 
     public void beginContact(Body body1, Body body2){

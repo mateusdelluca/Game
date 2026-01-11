@@ -10,11 +10,12 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
+import com.mygdx.game.system.BodyData;
 
 import static com.mygdx.game.screens.levels.Level_Manager.currentLevelName;
 import static com.mygdx.game.screens.levels.Level_Manager.lvl;
 
-public class Portal extends Objeto implements Item{
+public class Portal extends Item{
 
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
 
@@ -50,6 +51,31 @@ public class Portal extends Objeto implements Item{
     }
 
     @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
     public void renderShape(ShapeRenderer s) {
         s.rect(body.getPosition().x, body.getPosition().y, WIDTH, HEIGHT);
     }
@@ -57,6 +83,16 @@ public class Portal extends Objeto implements Item{
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
+    @Override
+    public void setIndex(int index) {
+
     }
 
     public Rectangle getRectangle(){

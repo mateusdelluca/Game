@@ -11,6 +11,7 @@ import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.screens.Inventory;
+import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ import java.io.Serializable;
 
 import static com.mygdx.game.screens.levels.Level.items;
 
-public class NinjaStar extends Objeto implements Item, Serializable {
+public class NinjaStar extends Item implements Serializable {
 
     private float degrees;
     public static final float VELOCITY = 60f;
@@ -100,6 +101,21 @@ public class NinjaStar extends Objeto implements Item, Serializable {
     @Override
     public void updateItem(World world) {
 
+    }
+
+    @Override
+    public void setUserData(Body body) {
+
+    }
+
+    @Override
+    public void setUserData(String name) {
+
+    }
+
+    @Override
+    public BodyData getBodyData() {
+        return null;
     }
 
     @Override

@@ -3,33 +3,49 @@ package com.mygdx.game.items;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.system.BodyData;
 
 import java.io.Serializable;
 
-public interface Item extends Serializable {
+import static com.mygdx.game.screens.Inventory.treeMap_Items;
 
-    void render(SpriteBatch s);
+public abstract class Item extends Objeto implements Serializable {
 
-    void updateItem();
+    public Item(){
+    }
 
-    void updateItem(World world);
+    public Item(float width, float height){
+        super(width, height);
+    }
 
-    void update();
+    public abstract void updateItem();
 
-    void setUserData(Body body);
+    public abstract void updateItem(World world);
 
-    void setUserData(String name);
+    @Override
+    public void update() {
+        super.update();
+    }
 
-    BodyData getBodyData();
+    public abstract void setUserData(Body body);
 
-    void setVisible(boolean b);
+    public abstract void setUserData(String name);
 
-    boolean isVisible();
+    public abstract BodyData getBodyData();
 
-    String toString();
+    public int getIndex(){
+        if (!treeMap_Items.isEmpty())
+            return treeMap_Items.get(this.toString()).getIndex();
+        return 0;
+    }
 
-    int getIndex();
+    public void setIndex(int index){
+        treeMap_Items.get(this.toString()).setIndex(index);
+    }
 
-    void setIndex(int index);
+    @Override
+    public String toString(){
+        return getClass().getSimpleName();
+    }
 }

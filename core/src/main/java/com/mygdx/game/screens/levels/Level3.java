@@ -93,7 +93,8 @@ public class Level3 extends Level{
 //            items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
 //            items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //
-//            ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
+            ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
+            objetos.add(ninjaStar);
 //            for (int i = 0; i < 5; i++)
 //                blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 //
@@ -130,7 +131,6 @@ public class Level3 extends Level{
 //            objetos.addAll(stands);
             objetos.add(ninjaRope);
             objetos.addAll(monsters1.values());
-            objetos.addAll(items2.values());
 //        }
 
 
@@ -191,16 +191,6 @@ public class Level3 extends Level{
 //
         box2DDebugRenderer.render(world, camera.combined);
 
-
-//        Gdx.gl.glEnable(GL20.GL_BLEND);
-//        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-        for (Objeto o : objetos)
-            if (o instanceof Monster1)
-                o.renderHP(sr);
-        sr.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     @Override

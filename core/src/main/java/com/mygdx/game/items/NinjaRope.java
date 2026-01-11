@@ -24,7 +24,7 @@ import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level.world;
 
-public class NinjaRope extends Objeto implements Item{
+public class NinjaRope extends Item{
 
     private Body anchorBody, anchorBody2;
     private float worldX, worldY;
@@ -144,6 +144,11 @@ public class NinjaRope extends Objeto implements Item{
     @Override
     public void setVisible(boolean b) {
         visible = b;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return visible;
     }
 
     public void mouseMoved(int screenX, int screenY){
@@ -269,6 +274,16 @@ public class NinjaRope extends Objeto implements Item{
         return getClass().getSimpleName();
     }
 
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
+    @Override
+    public void setIndex(int index) {
+
+    }
+
     public void beginContact(Contact contact) {
 
         Body body1 = contact.getFixtureA().getBody();
@@ -279,8 +294,8 @@ public class NinjaRope extends Objeto implements Item{
 
         for (int index = 0; index < LIMIT; index++) {
             if (bodyA[index] != null && playerBody != null) {
-                if ((body1.getUserData().equals(bodyA[index].getUserData()) && body2.getUserData().equals("Boy"))
-                    || (body2.getUserData().equals(bodyA[index].getUserData()) && body1.getUserData().equals("Boy"))) {
+                if ((body1.getUserData().equals(bodyA[index].getUserData()) && body2.getUserData().equals("Player"))
+                    || (body2.getUserData().equals(bodyA[index].getUserData()) && body1.getUserData().equals("Player"))) {
                     if (!jointHasBeenCreated) {
                         this.index = index;
                         touched[this.index] = true;
