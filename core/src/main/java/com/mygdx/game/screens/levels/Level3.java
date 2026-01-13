@@ -81,7 +81,7 @@ public class Level3 extends Level{
             items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
             items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
             items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
+//            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
 ////            items.get("Portal").updateItem();
 //
 //            items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
@@ -110,7 +110,7 @@ public class Level3 extends Level{
 //
 ////        objetos.addAll(blocks);
 //
-            rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
+//            rope = new Rope(new Vector2(300, 26000 - 400 + (NUM_ROPES * Rope.HEIGHT)), true);
 //            for (int i = 0; i < NUM_ROPES; i++){
 //                ropes.add(new Rope(new Vector2(300f, 6000 - 400 + (i * Rope.HEIGHT)), false));
 //                if (i == 0) {
@@ -120,7 +120,7 @@ public class Level3 extends Level{
 //                ropes.get(i).joint(ropes.get(i-1).getBodyA());
 //            }
 //            objetos.addAll(items2.values());
-            ninjaRope = new NinjaRope(player.getBody());
+//            ninjaRope = new NinjaRope(player.getBody());
 //            objetos.add(player);
             objetos.add(jack);
 //            objetos.add(girl);

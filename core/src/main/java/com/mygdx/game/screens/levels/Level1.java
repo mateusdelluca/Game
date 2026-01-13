@@ -13,7 +13,7 @@ public class Level1 extends Level{
         super();
 //        monsters1.clear();
 //        player.setViewport(viewport);
-        ninjaRope = new NinjaRope(player.getBody());
+//        ninjaRope = new NinjaRope(player.getBody());
 //        mouse = new Mouse(player.getBody().getPosition());
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 400),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 400),    Monster1.class.getSimpleName() + monsters1.size()));

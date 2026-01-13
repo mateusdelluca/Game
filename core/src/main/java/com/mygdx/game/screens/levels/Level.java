@@ -57,7 +57,6 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Setter @Getter
     protected Girl girl;
 
-
     protected PowerBar powerBar;
 
     protected ArrayList<Objeto> fans = new ArrayList<>();
@@ -65,8 +64,6 @@ public abstract class Level extends State implements ContactListener, Serializab
     public HashMap<String, Monster1> monsters1 = new HashMap<>();
 
     protected ArrayList<Block> blocks = new ArrayList<>();
-
-    protected NinjaRope ninjaRope;
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -87,6 +84,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     protected ArrayList<Crystal> crystals = new ArrayList<>();
     protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
+    protected static NinjaRope ninjaRope;
 
 //    public String polygons_String = "";
 
@@ -146,10 +144,11 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+        ninjaRope = new NinjaRope(new Vector2(400f, 5650f));
 
-        ninjaRope = new NinjaRope(player.getBody());
-        objetos.add(ninjaRope);
         objetos.add(player);
+
+        objetos.add(ninjaRope);
     }
 
     @Override
@@ -601,8 +600,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         player.touchDown(screenX, screenY, pointer, button);
-        if (ninjaRope != null)
-            ninjaRope.justTouched(button);
+//        if (ninjaRope != null)
+//            ninjaRope.justTouched(button);
 
         return false;
     }
@@ -626,8 +625,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         player.mouseMoved(screenX, screenY);
-        if (ninjaRope != null)
-            ninjaRope.mouseMoved(screenX, screenY);
+//        if (ninjaRope != null)
+//            ninjaRope.mouseMoved(screenX, screenY);
 //
         return false;
     }

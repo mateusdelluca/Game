@@ -1,19 +1,12 @@
 package com.mygdx.game.screens.levels;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.items.Item;
-import com.mygdx.game.items.NinjaRope;
 import com.mygdx.game.items.Portal;
-import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.sfx.Sounds;
 
 
-import static com.mygdx.game.entities.Player.minis;
-import static com.mygdx.game.images.Images.tile;
-import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 
 public class Level2 extends Level{
@@ -22,7 +15,7 @@ public class Level2 extends Level{
     public Level2() {
         super();
         camera.update();
-        ninjaRope = new NinjaRope(player.getBody());
+//        ninjaRope = new NinjaRope(player.getBody());
         jack = new Jack(new Vector2(2300f, 300f));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(500, 40),     Monster1.class.getSimpleName() + monsters1.size()));
         monsters1.put(Monster1.class.getSimpleName() + monsters1.size(), new Monster1(new Vector2(800, 40),    Monster1.class.getSimpleName() + monsters1.size()));

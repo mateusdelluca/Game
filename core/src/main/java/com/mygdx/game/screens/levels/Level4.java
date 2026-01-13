@@ -47,7 +47,7 @@ public class Level4 extends Level{
         items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
         items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
         items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
-        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
+//        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
         items.put(Star.class.getSimpleName(), new Star(new Vector2(200, 300)));
 ////            items.get("Portal").updateItem();
 //
@@ -85,12 +85,12 @@ public class Level4 extends Level{
 //                ropes.get(i).joint(ropes.get(i-1).getBodyA());
 //            }
 //            objetos.addAll(items2.values());
-        ninjaRope = new NinjaRope(player.getBody());
+//        ninjaRope = new NinjaRope(player.getBody());
         objetos.add(player);
         objetos.add(jack);
 //            objetos.add(girl);
 //            objetos.addAll(stands);
-        objetos.add(ninjaRope);
+//        objetos.add(ninjaRope);
         objetos.add(ninjaStar);
         objetos.addAll(monsters1.values());
 //        }

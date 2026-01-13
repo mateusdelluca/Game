@@ -506,10 +506,13 @@ public class Player extends Objeto{
         if (laser_attack || shooting || ropeShoot || thrown_ninjaStar) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
-            degrees = (float) Math.abs(Math.toDegrees(Math.atan2(dy, dx)));
+            degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
             radians = (float) Math.toRadians(degrees);
         }
         if (thrown_ninjaStar){
+            float dx = worldX - Math.abs(body.getPosition().x + 64);
+            float dy = worldY - Math.abs(Math.abs(body.getPosition().y));
+            float degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
             isFacingRight = (degrees < 90 || degrees > 270);
         }
     }

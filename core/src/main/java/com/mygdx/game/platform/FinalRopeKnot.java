@@ -63,7 +63,6 @@ public class FinalRopeKnot extends Objeto {
         visible = true;
         body.setUserData(this.toString());
         bodyData = new BodyData(body, size, WIDTH, HEIGHT, 1f);
-
     }
 
     public void render(SpriteBatch s){
@@ -100,12 +99,12 @@ public class FinalRopeKnot extends Objeto {
                     mouseJoint = joint(body, mouseBody);
                     firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < WIDTH * 16) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < (WIDTH * 4)) {
                     joint = true;
                     this.index = index;
                     break;
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < HEIGHT * 16) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < (HEIGHT * 4)) {
                     joint = true;
                     this.index = index;
                     break;
@@ -178,8 +177,10 @@ public class FinalRopeKnot extends Objeto {
 
 //        body.setUserData("null");
 //        body.setActive(false);
-        if (body != null && body.isActive())
+        if (body != null && body.isActive()) {
+            body.setActive(false);
             world.destroyBody(body);
+        }
         if (joint0 != null && joint0.isActive())
              world.destroyJoint(joint0);
         if (knots != null && !knots.isEmpty()) {
