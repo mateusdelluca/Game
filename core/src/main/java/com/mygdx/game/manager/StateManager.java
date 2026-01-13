@@ -121,17 +121,17 @@ public class StateManager extends Game {
     public static States currentState;
     public static String oldState, currentStateName;
 
-    public static Images images;
-
-    public static Sounds sounds;
+//    public static Images images;
+//
+//    public static Sounds sounds;
 
     public StateManager(){
         init();
     }
 
     public static void init(){
-        images = new Images();
-        sounds = new Sounds();
+        new Images();
+        new Sounds();
 
     }
 

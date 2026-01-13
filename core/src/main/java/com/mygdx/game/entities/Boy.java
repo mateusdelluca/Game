@@ -17,7 +17,6 @@ import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
-import com.mygdx.game.screens.Stats;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
@@ -689,7 +688,7 @@ public class Boy extends Objeto {
             else {
                 if (throwing && !shooting && !beenHit && !saber_taken && !laser) {
                     thrown = true;
-                    items.put(NinjaStar.class.getSimpleName() + indexNinja++, new NinjaStar(new Vector2(!facingLeft ? ((getBody().getPosition().x +
+                    items.put(Star.class.getSimpleName() + indexNinja++, new Star(new Vector2(!facingLeft ? ((getBody().getPosition().x +
                         WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
@@ -818,7 +817,7 @@ public class Boy extends Objeto {
 //            use_jetPack = true;
             ((JetPack) item).setVisible(false);
         }
-        if (item instanceof NinjaStar){
+        if (item instanceof Star){
             item.setVisible(false);
         }
         if (item instanceof NinjaRope){
@@ -829,8 +828,8 @@ public class Boy extends Objeto {
         }
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item);
         if (item.toString().contains("NinjaStar")) {
-            if (item instanceof NinjaStar) {
-                ((NinjaStar) item).setItemToBeDrawn(itemToBeDrawn);
+            if (item instanceof Star) {
+                ((Star) item).setItemToBeDrawn(itemToBeDrawn);
             }
         }
         item.setVisible(false);

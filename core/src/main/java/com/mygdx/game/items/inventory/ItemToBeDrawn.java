@@ -155,7 +155,6 @@ public class ItemToBeDrawn extends Item {
 
     public void equip(){
         if (contains[index] && click >= 2) {
-
             for (Item item1 : items.keySet()) {
                 if (item1.equals(item)){
                     equipped[index] = !equipped[index];

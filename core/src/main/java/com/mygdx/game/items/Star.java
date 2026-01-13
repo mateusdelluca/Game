@@ -7,19 +7,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
 import com.mygdx.game.items.inventory.ItemToBeDrawn;
-import com.mygdx.game.screens.Inventory;
 import com.mygdx.game.system.BodyData;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 
+import static com.mygdx.game.entities.Player.thrownStar;
 import static com.mygdx.game.screens.levels.Level.items;
 
-public class NinjaStar extends Item implements Serializable {
+public class Star extends Item implements Serializable {
 
     private float degrees;
     public static final float VELOCITY = 60f;
@@ -28,8 +27,7 @@ public class NinjaStar extends Item implements Serializable {
 
     private float multiply = 2f;
     private boolean multiply2;
-    public static int index;
-    private Body body2;
+    private Body bodyThrown;
 
     @Setter
     @Getter
@@ -37,22 +35,23 @@ public class NinjaStar extends Item implements Serializable {
 
     Sprite sprite = new Sprite((Images.ninjaStar));
 
-    public NinjaStar(Vector2 position){
+    public Star(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, true);
-        body2 = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
+        bodyThrown = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         visible = true;
     }
 
-    public NinjaStar(Vector2 position, float radians, boolean isSensor){
+    public Star(Vector2 position, float radians, boolean isSensor){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, isSensor);
-        body2 = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
+        bodyThrown = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setLinearVelocity(VELOCITY * (float) Math.cos(radians), VELOCITY * (float) Math.sin(radians));
         body.setGravityScale(0.2f);
         visible = true;
+        thrownStar = false;
     }
 
     public void render(SpriteBatch s, Sprite sprite){
@@ -66,26 +65,22 @@ public class NinjaStar extends Item implements Serializable {
     @Override
     public void render(SpriteBatch s) {
         if (!visible && body.getLinearVelocity().x == 0f)
-            body2.setTransform(10_000,1_000, 0f);
+            bodyThrown.setTransform(10_000,1_000, 0f);
         if (visible && Math.abs(body.getLinearVelocity().x) > 0.5f) {
             render(s, sprite);
-            items.put(this.toString(), this);
-            index++;
-            if (itemToBeDrawn != null)
-                Inventory.removeFromInventory(itemToBeDrawn);
         }
         if (visible && Math.abs(body.getLinearVelocity().x) < 0.5f) {
             if (!multiply2) {
                 width *= multiply;
                 height *= multiply;
                 multiply2 = true;
-                body2.setTransform(body.getPosition().x, body.getPosition().y, body.getAngle());
+                bodyThrown.setTransform(body.getPosition().x, body.getPosition().y, body.getAngle());
                 body.setTransform(10000,10000, 0);
                 body.setGravityScale(0f);
-                body2.setGravityScale(0f);
+                bodyThrown.setGravityScale(0f);
             }
             Sprite sprite = new Sprite(Images.ninjaStar);
-            sprite.setPosition(body2.getPosition().x, body2.getPosition().y);
+            sprite.setPosition(bodyThrown.getPosition().x, bodyThrown.getPosition().y);
             sprite.setSize(width, height);
             sprite.setOriginCenter();
             sprite.setRotation(0f);
@@ -126,5 +121,13 @@ public class NinjaStar extends Item implements Serializable {
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public void beginContact(Body bodyA, Body bodyB){
+        if (body != null && bodyA != null && bodyB != null){
+            if ((bodyA.equals(body) || bodyB.equals(body)) && (bodyA.getUserData().toString().contains("Player") || bodyB.getUserData().toString().contains("Player"))){
+                items.put(this.toString(), this);
+            }
+        }
     }
 }

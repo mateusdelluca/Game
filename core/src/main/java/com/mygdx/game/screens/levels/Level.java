@@ -71,7 +71,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     protected ArrayList<Stand> stands = new ArrayList<>();
-    protected NinjaStar ninjaStar;
+    protected Star ninjaStar;
 
     protected Array<Rope> ropes = new Array();
     public Rope rope;
@@ -83,7 +83,7 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public static Rifle rifle;
 
-    public static ArrayList<NinjaStar> ninjaStars = new ArrayList<>();
+    public static ArrayList<Star> ninjaStars = new ArrayList<>();
 
     protected ArrayList<Crystal> crystals = new ArrayList<>();
     protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
@@ -177,7 +177,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
-        for (NinjaStar ninjaStar : ninjaStars)
+        for (Star ninjaStar : ninjaStars)
             ninjaStar.render(spriteBatch);
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
@@ -251,8 +251,8 @@ public abstract class Level extends State implements ContactListener, Serializab
             player.getBody().setTransform(player.getFragment().getBody().getPosition(), 0);
         }
 
-        for (NinjaStar ninjaStar : ninjaStars)
-            ninjaStar.update();
+//        for (NinjaStar ninjaStar : ninjaStars)
+//            ninjaStar.update();
 
         for (Objeto objeto : objetos){
             if (objeto != null)

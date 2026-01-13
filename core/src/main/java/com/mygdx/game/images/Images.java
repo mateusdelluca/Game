@@ -140,7 +140,7 @@ public class Images implements Serializable {
         crystal_inventory = new Sprite(new Texture(Gdx.files.internal("items/Crystal_75x85.png")));
         crystal3_inventory = new Sprite(new Texture(Gdx.files.internal("items/Crystal3_75x85.png")));
         equipped_inventory.setSize(67, 74);
-        itemsDraw.put("NinjaStar", ninjaStar_inventory);
+        itemsDraw.put("Star", ninjaStar_inventory);
         itemsDraw.put("Rifle", rifle_inventory);
         itemsDraw.put("Saber", saber_inventory);
         itemsDraw.put("JetPack", jetPack_inventory);

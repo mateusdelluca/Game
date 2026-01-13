@@ -75,6 +75,7 @@ public class Player extends Objeto{
     @Getter
     private FinalRopeKnot fragment;
     private boolean jetPackBoolean;
+    public static boolean thrownStar;
 
     public Player(Vector2 position, Viewport viewport){
         super(WIDTH, HEIGHT);
@@ -415,7 +416,39 @@ public class Player extends Objeto{
                 saber = true;
                 changeAnimation("SABER");
                 break;
-            }
+            } case "Star":{
+                 ropeShoot = false;
+                 laser_attack = false;
+                 sword = false;
+                 shooting = false;
+                 saber = false;
+                 thrown_ninjaStar = true;
+
+                 if (!thrownStar) {
+                     throwNinjaStar1.setOriginCenter();
+                     throwNinjaStar1.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+//                     throwNinjaStar1.setRotation(degrees);
+                     throwNinjaStar1.setFlip(!isFacingRight, false);
+                     throwNinjaStar1.draw(spriteBatch);
+                 } else{
+                     throwNinjaStar2.setOriginCenter();
+                     throwNinjaStar2.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+                     throwNinjaStar2.setFlip(!isFacingRight, false);
+                     throwNinjaStar2.draw(spriteBatch);
+                 }
+                 for (Star star : ninjaStars)
+                     star.render(spriteBatch);
+                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
+                 changeAnimation("NONE");
+                 legs = new Sprite(Player_Animations.valueOf("LEGS_ONLY").getAnimator().currentSpriteFrameUpdateStateTime(!isMovingXAxis(), isMovingXAxis(), !isFacingRight));
+                 legs.setFlip(!isFacingRight, false);
+                 if (!isMovingXAxis())
+                     Player_Animations.valueOf("LEGS_ONLY").getAnimator().setFrameCounter(0);
+                 legs.setPosition(body.getPosition().x - BOX_WIDTH, body.getPosition().y - BOX_HEIGHT/2f);
+                 legs.draw(spriteBatch);
+                 thrownStar = false;
+                 break;
+             }
             case "Laser_Headset":{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 laser_attack = true;
@@ -463,16 +496,9 @@ public class Player extends Objeto{
                 legs.draw(spriteBatch);
                 changeAnimation("NONE");
                 ninjaRope_shoot.draw(spriteBatch);
+                break;
             }
-             case "NinjaStar":{
-                 ropeShoot = false;
-                 laser_attack = false;
-                 sword = false;
-                 shooting = false;
-                 saber = false;
-                 thrown_ninjaStar = true;
-                 break;
-             }
+
         }
     }
 
@@ -480,8 +506,11 @@ public class Player extends Objeto{
         if (laser_attack || shooting || ropeShoot || thrown_ninjaStar) {
             float dx = worldX - Math.abs(body.getPosition().x + 64);
             float dy = worldY - Math.abs(body.getPosition().y + 64);
-            degrees = (float) Math.toDegrees(Math.atan2(dy, dx));
+            degrees = (float) Math.abs(Math.toDegrees(Math.atan2(dy, dx)));
             radians = (float) Math.toRadians(degrees);
+        }
+        if (thrown_ninjaStar){
+            isFacingRight = (degrees < 90 || degrees > 270);
         }
     }
 
@@ -659,10 +688,11 @@ public class Player extends Objeto{
         if (button == Input.Buttons.LEFT) {
             walking = false;
             if (thrown_ninjaStar) {
-                ninjaStars.add(new NinjaStar(new Vector2(isFacingRight ? ((getBody().getPosition().x +
+                ninjaStars.add(new Star(new Vector2(isFacingRight ? ((getBody().getPosition().x +
                     WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                     getBody().getPosition().y + HEIGHT / 2f),
                     radians, false));
+                thrownStar = true;
             } else {
                 if (laser_attack) {
                     laser_rail.add(new Laser(

@@ -278,7 +278,8 @@ public abstract class Objeto implements Serializable{
                     (body1.getUserData().toString().contains("Boy") || body2.getUserData().toString().contains("Boy"))
 //                    ||
 //                    (body1.getUserData().toString().contains("Punch") || body2.getUserData().toString().contains("Punch"))
-                    ) {
+                        ||
+                        (body1.getUserData().toString().contains("Star") || body2.getUserData().toString().contains("Star"))) {
                     if (this instanceof Monster1 || this instanceof Jack || this instanceof Girl || this instanceof Robot) {
                         beenHit();
                     }
@@ -286,9 +287,8 @@ public abstract class Objeto implements Serializable{
                 if (
                     (body1.getUserData().toString().contains(" Enemy") || body2.getUserData().toString().contains(" Enemy"))
                     ||
-                    (body1.getUserData().toString().contains(" Colliders") || body2.getUserData().toString().contains(" Colliders"))
-                    ||
-                    (body1.getUserData().toString().contains("NinjaStar") || body2.getUserData().toString().contains("NinjaStar"))) {
+                    (body1.getUserData().toString().contains(" Colliders") || body2.getUserData().toString().contains(" Colliders")))
+                     {
                     if (this instanceof Player)
                         beenHit();
                 }

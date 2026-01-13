@@ -1,8 +1,5 @@
 package com.mygdx.game.screens.levels;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -11,10 +8,8 @@ import com.mygdx.game.items.*;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.sfx.Sounds;
 
-import java.util.Collection;
 import java.util.Random;
 
-import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.images.Images.tile;
 import static com.mygdx.game.items.Rope.NUM_ROPES;
@@ -93,8 +88,9 @@ public class Level3 extends Level{
 //            items2.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
 //            items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //
-            ninjaStar = new NinjaStar(new Vector2(200, 6000 - 400));
+            ninjaStar = new Star(new Vector2(200, 6000 - 400));
             objetos.add(ninjaStar);
+            items.put(ninjaStar.toString(), ninjaStar);
 //            for (int i = 0; i < 5; i++)
 //                blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 //
@@ -131,6 +127,7 @@ public class Level3 extends Level{
 //            objetos.addAll(stands);
             objetos.add(ninjaRope);
             objetos.addAll(monsters1.values());
+
 //        }
 
 
