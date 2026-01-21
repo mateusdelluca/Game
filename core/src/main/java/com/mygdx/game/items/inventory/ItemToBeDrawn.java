@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import static com.mygdx.game.images.Images.itemsDraw;
 import static com.mygdx.game.screens.Inventory.*;
+import static com.mygdx.game.screens.Stats.level_font;
 
 public class ItemToBeDrawn extends Item {
 
@@ -78,6 +79,7 @@ public class ItemToBeDrawn extends Item {
             itemsDraw.get(name).setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
             itemsDraw.get(name).draw(spriteBatch);
         }
+        level_font.draw(spriteBatch, "" + treeMap_Items.get(name).getQuantity(), positionsToFill.get(index).x + 75f, positionsToFill.get(index).y);
         update();
     }
 

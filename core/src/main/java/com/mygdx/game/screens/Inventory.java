@@ -68,6 +68,7 @@ public class Inventory extends State {
 
     public static void addItemToInventory(ItemToBeDrawn i1){
        ItemToBeDrawn itemFirst = null;
+       Integer length = 0;
        if (itemsToBeDrawn.isEmpty()) {
            itemFirst = i1;
             itemsToBeDrawn.add(itemFirst);
@@ -75,8 +76,12 @@ public class Inventory extends State {
         }
         if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
             for (ItemToBeDrawn i2 : itemsToBeDrawn) {
-                if(i2 == null | i1 == null | i2.getName().equals((i1.getName()))) {
-                    continue;
+                if (i2 == null | i1 == null) {
+                    break;
+                }
+                if (i2.getName().equals((i1.getName()))){
+                    i1.setQuantity(i1.getQuantity() + 1);
+                    break;
                 }
                 itemsToBeDrawn.add(i1);
                 treeMap_Items.put(i1.getName(), i1);

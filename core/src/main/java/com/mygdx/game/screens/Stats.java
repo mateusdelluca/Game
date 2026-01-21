@@ -24,7 +24,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.spriteBatch;
 
 public class Stats extends State {
 
-    private BitmapFont stats_font, level_font, points_font, points2_font;
+    public static BitmapFont stats_font, level_font, points_font, points2_font;
 
     private final float WIDTH_RECT = 20f, HEIGHT_RECT = 20f;
 

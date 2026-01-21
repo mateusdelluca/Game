@@ -25,6 +25,10 @@ public abstract class Item extends Objeto implements Serializable {
     @Setter
     protected int index;
 
+    @Getter
+    @Setter
+    protected int quantity = 1;
+
     protected Sprite itemSprite;
 
     public Item(){
