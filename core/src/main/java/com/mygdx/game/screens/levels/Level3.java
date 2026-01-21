@@ -133,7 +133,9 @@ public class Level3 extends Level{
 
         for (Item item : items.values()) {
             if (item != null) {
-                item.updateItem();
+//                item.updateItem(); //TODO:    resolver problema de updateItem com objetos
+//                 //TODO:                      que a usam separadamente da classe item, pois o método updateItem
+//                  //TODO:                     está em algumas classes mas não na classe abstrata Item
                 item.update();
             }
         }
@@ -199,7 +201,7 @@ public class Level3 extends Level{
         for (Item item : items.values()) {
             if (item != null) {
                 item.update();
-                item.updateItem();
+//                item.updateItem(); //TODO: verificar o uso de update item em classes filhas de Item
             }
         }
         for (Objeto fan : fans){
@@ -233,7 +235,9 @@ public class Level3 extends Level{
 
         if (body1 == null || body2 == null)
             return;
-
+//        for (Crystal c : crystals){
+//            c.beginContact(body1, body2);
+//        }
 
         for (Objeto fan : fans){
             fan.beginContact(body1, body2);

@@ -51,35 +51,13 @@ public class Laser_Headset extends Item{
         }
     }
 
-    @Override
-    public void renderShape(ShapeRenderer s) {
-    }
-
-    @Override
     public void updateItem() {
         visible = true;
     }
 
     @Override
-    public void updateItem(World world) {
-    }
-
-    @Override
     public void update() {
         super.update();
-    }
-
-    @Override
-    public void setUserData(Body body) {
-    }
-
-    @Override
-    public void setUserData(String name) {
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
     }
 
 

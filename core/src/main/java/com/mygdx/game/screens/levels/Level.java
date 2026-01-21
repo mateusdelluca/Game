@@ -35,6 +35,7 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
@@ -85,6 +86,8 @@ public abstract class Level extends State implements ContactListener, Serializab
     protected ArrayList<Crystal> crystals = new ArrayList<>();
     protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
     protected static NinjaRope ninjaRope;
+
+    protected ArrayList<Item> itemsOnMap = new ArrayList<>();
 
 //    public String polygons_String = "";
 
@@ -149,6 +152,11 @@ public abstract class Level extends State implements ContactListener, Serializab
         objetos.add(player);
 
         objetos.add(ninjaRope);
+
+//        if (this instanceof Level3) {
+//            itemsOnMap.addAll(crystals);
+//            itemsOnMap.addAll(redCrystals);
+//        }
     }
 
     @Override
@@ -289,6 +297,14 @@ public abstract class Level extends State implements ContactListener, Serializab
         }
         for (Minis m : minis){
             m.beginContact(body1,body2);
+        }
+
+        for (Crystal c : crystals){
+            c.beginContact(body1, body2);
+        }
+
+        for (CrystalRed c : redCrystals){
+            c.beginContact(body1, body2);
         }
 
         for (Item item : items.values()) {

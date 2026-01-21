@@ -15,6 +15,7 @@ import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.clink2;
 
@@ -23,11 +24,16 @@ public class Crystal extends Item{
     public static final float WIDTH = 40, HEIGHT = 80;
 
     private Sprite sprite = new Sprite(Images.crystal);
+
+    public static int i;
+    private int id;
     public Crystal(Vector2 position){
         super(WIDTH, HEIGHT);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
-        body.setUserData(getClass().getSimpleName());
+        body.setUserData(this.toString());
+        i++;
+        id = i;
         visible = true;
     }
 
@@ -52,42 +58,16 @@ public class Crystal extends Item{
     }
 
     @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
     public void update() {
         super.update();
     }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
 
     public void beginContact(Body body1, Body body2){
         if ((body1.equals(body) && body2.getUserData().toString().contains("Player"))
             ||
             body2.equals(body) && body1.getUserData().toString().contains("Player")){
-            visible = false;
             clink2.play();
+//            items.put(this.toString(), this);
             player.takeItem(this);
         }
     }

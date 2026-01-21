@@ -39,41 +39,6 @@ public class Saber extends Item implements Serializable {
     }
 
     @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-
-    }
-
-    @Override
-    public boolean isVisible() {
-        return false;
-    }
-
-    @Override
     public void renderShape(ShapeRenderer s) {
 
     }

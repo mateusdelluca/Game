@@ -36,38 +36,7 @@ public class Portal extends Item{
     }
 
     @Override
-    public void updateItem() {
-        open_portal = true;
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
     public void update() {
-
-    }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-
     }
 
     @Override

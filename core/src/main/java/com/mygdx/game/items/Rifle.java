@@ -111,13 +111,9 @@ public class Rifle extends Item implements Serializable {
         }, 1f);
     }
 
-    @Override
-    public void updateItem() {
-       reloading();
-    }
 
-    @Override
-    public void updateItem(World world) {
+    public void updateItem() {
+        reloading();
         if (leftSideBullets.getBulletsLeft().isEmpty()){
             reloading = true;
             reloading();
@@ -134,22 +130,6 @@ public class Rifle extends Item implements Serializable {
             total += numCartridges.get(numCartridges.size() - 1).getBulletsLeft().size();
         }
     }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
 
     @Override
     public void renderShape(ShapeRenderer s) {

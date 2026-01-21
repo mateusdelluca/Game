@@ -130,8 +130,8 @@ public class StateManager extends Game {
     }
 
     public static void init(){
-        new Images();
-        new Sounds();
+//        new Images();
+//        new Sounds();
 
     }
 

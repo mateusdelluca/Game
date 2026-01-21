@@ -40,31 +40,6 @@ public class Sword extends Item{
         }
     }
 
-    @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
 
     @Override
     public void renderShape(ShapeRenderer s) {

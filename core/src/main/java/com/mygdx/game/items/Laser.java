@@ -69,16 +69,6 @@ public class Laser extends Item {
     }
 
     @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
     public BodyData getBodyData() {
         return null;
     }
@@ -99,16 +89,6 @@ public class Laser extends Item {
         if (visible) {
             sprite.draw(spriteBatch);
         }
-
-    }
-
-    @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
 
     }
 

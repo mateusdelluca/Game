@@ -98,7 +98,7 @@ public class Level4 extends Level{
 
         for (Item item : items.values()) {
             if (item != null) {
-                item.updateItem();
+                //item.updateItem();//TODO: verificar o uso de update item em classes filhas de Item
             }
         }
     }

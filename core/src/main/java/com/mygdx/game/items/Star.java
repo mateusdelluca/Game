@@ -29,10 +29,6 @@ public class Star extends Item implements Serializable {
     private boolean multiply2;
     private Body bodyThrown;
 
-    @Setter
-    @Getter
-    private ItemToBeDrawn itemToBeDrawn;
-
     Sprite sprite = new Sprite((Images.ninjaStar));
 
     public Star(Vector2 position){
@@ -88,30 +84,6 @@ public class Star extends Item implements Serializable {
         }
     }
 
-    @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
 
     @Override
     public void renderShape(ShapeRenderer s) {

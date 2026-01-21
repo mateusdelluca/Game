@@ -59,39 +59,16 @@ public class Cartridge extends Item{
     }
 
     @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
     public void update() {
         for (Bullet b : bulletsLeft)
             b.update();
     }
 
     @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
-    @Override
     public String toString(){
-        return "" + (bulletsLeft.size());
+        if (bulletsLeft != null)
+            return "" + (bulletsLeft.size());
+        return "";
     }
 
 }

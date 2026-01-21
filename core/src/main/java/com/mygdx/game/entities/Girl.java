@@ -70,7 +70,7 @@ public class Girl extends Objeto{
                     rifle.setReloading(false);
                 }
             }
-            rifle.updateItem(world);
+            rifle.updateItem();
         }
     if (HP <= 0)
         visible = false;

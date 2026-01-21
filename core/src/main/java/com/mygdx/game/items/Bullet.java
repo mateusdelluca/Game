@@ -92,31 +92,6 @@ public class Bullet extends Item {
         }
     }
 
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-
-    }
-
-    @Override
-    public boolean isVisible() {
-        return false;
-    }
-
     public void render(SpriteBatch spriteBatch){
 
 //        if (body == null || body.getFixtureList().size == 0)
@@ -140,16 +115,6 @@ public class Bullet extends Item {
         } else{
             body.setTransform(-10_000, -10_000, 0);
         }
-    }
-
-    @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
     }
 
     @Override

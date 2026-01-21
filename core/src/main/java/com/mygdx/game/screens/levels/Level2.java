@@ -24,8 +24,8 @@ public class Level2 extends Level{
 
         objetos.add(jack);
         objetos.addAll(monsters1.values());
-        items.put("Rifle", rifle);
-        items.get("Rifle").updateItem();
+//        items.put("Rifle", rifle); //TODO: RESOLVER PROBLEMA DE RIFLE QUE ATUALIZA COM ESTE MÉTODO UPDATEITEM QUE NÃO HÁ MAIS EM ITEM NEM ABSTRATO NEM EXISTENTE
+//        items.get("Rifle").updateItem();
     }
 
 

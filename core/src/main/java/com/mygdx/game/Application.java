@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.mygdx.game.images.Images;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.screens.PausePage;
 import com.mygdx.game.screens.levels.Level_Manager;
@@ -19,8 +20,8 @@ public class Application extends Game {
     @Override
     public void create() {
 //        stateManager.create();
-//        images = new Images();
-//        sounds = new Sounds();
+        new Images();
+        new Sounds();
         stateManager = new StateManager();
         level_manager = new Level_Manager();
         currentState = States.MAIN_MENU;

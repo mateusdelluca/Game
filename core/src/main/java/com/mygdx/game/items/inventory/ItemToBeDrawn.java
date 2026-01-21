@@ -17,6 +17,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.mygdx.game.images.Images.itemsDraw;
 import static com.mygdx.game.screens.Inventory.*;
 
 public class ItemToBeDrawn extends Item {
@@ -35,25 +36,22 @@ public class ItemToBeDrawn extends Item {
 
     public static boolean[] contains = new boolean[ITEMS_LIMIT];
 
-    @Getter @Setter
-    private String name;
-
     public static boolean[] equipped = new boolean[ITEMS_LIMIT];
-    @Getter @Setter
-    private int index;
     private Item item;
 
     public static HashMap<Item, Boolean> items = new HashMap<>();
     public ItemToBeDrawn(Item item){
-//        name = getClass().getSimpleName();
+        super();
         this.item = item;
-        this.name = item.toString();
+        super.name = item.getName();
         addItemToInventory(this);
         System.out.println(name);
-        treeMap_Items.put(name, this);
-//        if (!treeMap_Items.isEmpty())
-        this.index = treeMap_Items.size() - 1;
-        item.setIndex(index);
+        if (treeMap_Items != null && name != null)
+            treeMap_Items.put(name, this);
+        assert treeMap_Items != null;
+        if (!treeMap_Items.isEmpty())
+            this.index = treeMap_Items.size() - 1;
+        this.item.setIndex(index);
         if (!items.containsKey(item))
            items.put(item, equipped[index]);
 //        if (name.equals(equip))
@@ -75,74 +73,24 @@ public class ItemToBeDrawn extends Item {
     }
 
     @Override
-    public void render(SpriteBatch spriteBatch) {
-        Sprite item = Images.getItemDraw(name);
-//        if (equipped[index]) {
-//            Sprite equip = new Sprite(Images.getItemDraw("Equipped"));
-//            equip.setSize(67, 74);
-//            equip.setPosition(positionsToFill.get(index).x + 2f, positionsToFill.get(index).y + 12f);
-//            equip.draw(spriteBatch);
-//        }
+    public void render(SpriteBatch spriteBatch) { //TODO: arrumar name para que apareça o Crystal no inventório
         for (int i = 0; i < treeMap_Items.sequencedValues().size(); i++) {
-            if (item != null) {
-                item.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
-                item.draw(spriteBatch);
-            }
+            itemsDraw.get(name).setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
+            itemsDraw.get(name).draw(spriteBatch);
         }
-//        if ((Images.getItemDraw(name).getBoundingRectangle().contains(positionsToFill.get(index))
-//            || rectangles2.isEmpty()) && index < 20){
-//            Rectangle rectangle = Images.getItemDraw(name).getBoundingRectangle();
-//        if (!rectangles2.contains(rectangle))
-//            rectangles2.add(rectangle);
-//    }
         update();
     }
 
-    @Override
-    public void updateItem() {
 
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
 
     @Override
     public void update() {
-//        for (int index = 0; index < Math.min(rectangles2.size(), ITEMS_LIMIT); index++) {
         contains[index] = contains();
-//        System.out.println(contains[index]);
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             click++;
             equip();
             System.out.println(click);
         }
-    }
-
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-
-    }
-
-    @Override
-    public boolean isVisible() {
-        return false;
     }
 
     @Override

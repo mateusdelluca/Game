@@ -829,7 +829,7 @@ public class Boy extends Objeto {
         ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item);
         if (item.toString().contains("NinjaStar")) {
             if (item instanceof Star) {
-                ((Star) item).setItemToBeDrawn(itemToBeDrawn);
+//                ((Star) item).setItemToBeDrawn(itemToBeDrawn);
             }
         }
         item.setVisible(false);

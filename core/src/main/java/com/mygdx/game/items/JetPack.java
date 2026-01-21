@@ -38,16 +38,6 @@ public class JetPack extends Item{
     }
 
     @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
-    }
-
-    @Override
     public void update() {
         if (!visible && body != null) {
             body.setTransform(10_000, 10_000, 0);
@@ -55,20 +45,6 @@ public class JetPack extends Item{
             world.destroyBody(body);
             body = null;
         }
-    }
-
-    @Override
-    public void setUserData(Body body) {
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
     }
 
     @Override

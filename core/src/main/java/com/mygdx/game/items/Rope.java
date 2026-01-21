@@ -61,21 +61,6 @@ public class Rope extends Item {
         }
     }
 
-    @Override
-    public void setUserData(Body body) {
-
-    }
-
-    @Override
-    public void setUserData(String name) {
-
-    }
-
-    @Override
-    public BodyData getBodyData() {
-        return null;
-    }
-
 
     @Override
     public String toString() {
@@ -99,16 +84,6 @@ public class Rope extends Item {
             spriteA.draw(s);
 //            spriteB.draw(s);
         }
-    }
-
-    @Override
-    public void updateItem() {
-
-    }
-
-    @Override
-    public void updateItem(World world) {
-
     }
 
     @Override
