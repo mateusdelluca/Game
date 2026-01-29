@@ -23,11 +23,11 @@ public class CrystalRed extends Item{
     public static final float WIDTH = 40, HEIGHT = 80;
     private Sprite sprite = new Sprite(Images.crystal_red);
     public static int i;
-    public CrystalRed(Vector2 position){
-        super(WIDTH, HEIGHT);
+    public CrystalRed(Vector2 transformPosition){
+        super(WIDTH, HEIGHT, CrystalRed.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
-        body.setTransform(position, 0);
-        body.setUserData(getClass().getSimpleName() + i++);
+        body.setTransform(transformPosition, 0);
+        body.setUserData(this);
         visible = true;
     }
 
@@ -47,7 +47,7 @@ public class CrystalRed extends Item{
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + i;
+        return getClass().getSimpleName();
     }
 
     public void beginContact(Body body1, Body body2){
@@ -56,6 +56,7 @@ public class CrystalRed extends Item{
             body2.equals(body) && body1.getUserData().toString().contains("Player")){
             clink2.play();
             player.takeItem(this);
+            visible = false;
         }
     }
 }

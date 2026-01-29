@@ -19,7 +19,7 @@ public class JetPack extends Item{
     private float angle = 0;
 
     public JetPack(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, JetPack.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
         body.setUserData(getClass().getSimpleName());
@@ -40,7 +40,7 @@ public class JetPack extends Item{
     @Override
     public void update() {
         if (!visible && body != null) {
-            body.setTransform(10_000, 10_000, 0);
+            body.setTransform(100_000, 100_000, 0);
             body.setUserData("null");
             world.destroyBody(body);
             body = null;

@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.items.inventory.ItemToBeDrawn;
+import com.mygdx.game.items.Item;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
 
@@ -19,16 +19,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.mygdx.game.images.Images.inventory;
 import static com.mygdx.game.images.Images.printScreen;
-import static com.mygdx.game.items.inventory.ItemToBeDrawn.*;
+import static com.mygdx.game.items.Item.ITEMS_LIMIT;
+import static com.mygdx.game.items.Item.positions;
 
 
 public class Inventory extends State {
 
-    public static CopyOnWriteArrayList<ItemToBeDrawn> itemsToBeDrawn = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Item> itemsToBeDrawn = new CopyOnWriteArrayList<>();
 
-    public static TreeMap<String, ItemToBeDrawn> treeMap_Items = new TreeMap<>();
-
-
+    public static TreeMap<String, Item> treeMap_Items = new TreeMap<>();
     public static float mouseX, mouseY;
     private Rectangle close_button = new Rectangle(1435f,720f,50,50);
 
@@ -43,11 +42,7 @@ public class Inventory extends State {
     private final SpriteBatch spriteBatch = new SpriteBatch();
     private final ShapeRenderer shapeRenderer;
     public Inventory(){
-//        for (int i = 0; i < 20; i++) {
-//            addItemToInventory(new ItemToBeDrawn());
-//        }
-//        addItemToInventory(new ItemToBeDrawn("NinjaStar"));
-        fillRects();
+        drawSlots();
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -55,6 +50,8 @@ public class Inventory extends State {
 
     @Override
     public void update() {
+        for (Item item : treeMap_Items.sequencedValues())
+            item.update2();
 //        for (int i = 0; i < itemsToBeDrawn.size(); i++){
 //            for (int j = itemsToBeDrawn.size() - 1; j >= 0; j--){
 //                if (i == j)
@@ -66,48 +63,18 @@ public class Inventory extends State {
 //        }
     }
 
-    public static void addItemToInventory(ItemToBeDrawn i1){
-       ItemToBeDrawn itemFirst = null;
-       Integer length = 0;
-       if (itemsToBeDrawn.isEmpty()) {
-           itemFirst = i1;
-            itemsToBeDrawn.add(itemFirst);
-            return;
-        }
-        if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
-            for (ItemToBeDrawn i2 : itemsToBeDrawn) {
-                if (i2 == null | i1 == null) {
-                    break;
-                }
-                if (i2.getName().equals((i1.getName()))){
-                    i1.setQuantity(i1.getQuantity() + 1);
-                    break;
-                }
-                itemsToBeDrawn.add(i1);
-                treeMap_Items.put(i1.getName(), i1);
-                System.out.println(treeMap_Items.get(i1.getName()));
-            }
-        }
-    }
 
-    public static void removeFromInventory(ItemToBeDrawn i1){
-        ItemToBeDrawn itemFirst = null;
-        if (!itemsToBeDrawn.isEmpty()) {
-            itemFirst = i1;
-            itemsToBeDrawn.remove(itemFirst);
-            return;
-        }
-        if (itemsToBeDrawn.size() < ITEMS_LIMIT) {
-            for (ItemToBeDrawn i2 : itemsToBeDrawn) {
-                if(i2 == i1) {
-                    continue;
-                }
-                itemsToBeDrawn.remove(i1);
-                treeMap_Items.remove(i1.getName(), i1);
-//                System.out.println(treeMap_Items.get(i1.getName()));
-            }
-        }
-    }
+
+//    public static void removeFromInventory(Item i1){
+//        Item itemFirst = null;
+//        if (!itemsToBeDrawn.isEmpty()) {
+//            itemFirst = i1;
+//            itemsToBeDrawn.remove(itemFirst);
+//            return;
+//        }
+//        treeMap_Items.remove(i1.getName(), i1);
+////         System.out.println(treeMap_Items.get(i1.getName()));
+//    }
 
     @Override
     public void create() {
@@ -126,10 +93,12 @@ public class Inventory extends State {
         printScreen.draw(spriteBatch);
         inventory.setPosition(350, 200);
         inventory.draw(spriteBatch);
-        for (Vector2 vec2 : positionsToFill)
+        for (Vector2 vec2 : positionsToFill) {
             spriteBatch.draw(Images.slot, vec2.x, vec2.y);
-        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.values()) {
-            itemToBeDrawn.render(spriteBatch);
+            for (int index = 0; index < itemsToBeDrawn.size(); index++) {
+                if (index == itemsToBeDrawn.get(index).getIndex())
+                    itemsToBeDrawn.get(index).drawItemInSlot(spriteBatch, positionsToFill.get(index).x, positionsToFill.get(index).y);
+            }
         }
         spriteBatch.end();
 
@@ -216,7 +185,7 @@ public class Inventory extends State {
         return false;
     }
 
-    private void fillRects() {
+    private void drawSlots() {
         int index_X = 0;
         int index_Y = 0;
 
@@ -237,9 +206,9 @@ public class Inventory extends State {
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(new Color(0,0,1,100/255f));
-        for (ItemToBeDrawn itemToBeDrawn : treeMap_Items.sequencedValues()) {
+        for (Item itemToBeDrawn : treeMap_Items.sequencedValues()) {
             int i = itemToBeDrawn.getIndex();
-            if (ItemToBeDrawn.equipped[i])
+            if (Item.equipped[i])
                sr.rect(rectangles.get(i).x + 5f, rectangles.get(i).y + 5f, WIDTH2 - 5f, HEIGHT2);
         }
         sr.end();

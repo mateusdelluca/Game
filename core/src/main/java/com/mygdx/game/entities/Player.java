@@ -16,7 +16,6 @@ import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
-import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.platform.FinalRopeKnot;
@@ -30,9 +29,9 @@ import java.util.ArrayList;
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.images.Images.legs;
-import static com.mygdx.game.items.inventory.ItemToBeDrawn.equipped;
-import static com.mygdx.game.items.inventory.ItemToBeDrawn.items;
+import static com.mygdx.game.items.Item.equipped;
 import static com.mygdx.game.manager.StateManager.setStates;
+import static com.mygdx.game.screens.Inventory.treeMap_Items;
 import static com.mygdx.game.screens.Stats.exp_Points;
 import static com.mygdx.game.screens.levels.Level.ninjaStars;
 import static com.mygdx.game.screens.levels.Level.world;
@@ -116,7 +115,7 @@ public class Player extends Objeto{
     }
 
     private void renderJetPack(SpriteBatch s){
-        for (Item item : items.keySet()) {
+        for (Item item : treeMap_Items.sequencedValues()) {
             if (equipped[item.getIndex()]) {
                 if (item.toString().contains("Jet")){
                    jetPackBoolean = true;
@@ -332,7 +331,7 @@ public class Player extends Objeto{
     }
 
     private String whichOneEquip(){
-        for (Item item : items.keySet()) {
+        for (Item item : treeMap_Items.sequencedValues()) {
             if (equipped[item.getIndex()]) {
                 System.out.println("using weapon: " + item.toString());
                 usingWeapon = true;
@@ -360,7 +359,7 @@ public class Player extends Objeto{
                     if ((frameCounter() >= 5)){
                         Body body1 = BodiesAndShapes.box(new Vector2(isFacingRight ? getBody().getPosition().x + (WIDTH/2f):
                                 getBody().getPosition().x - (WIDTH / 2f) - 5, getBody().getPosition().y + (HEIGHT / 2f) - 50),
-                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, " Boy", 1f);
+                            new Vector2(20, 40f), BodyDef.BodyType.KinematicBody, false, "Player", 1f);
 //                        body.applyForceToCenter(new Vector2(isFacingRight ? 500 : - 500, 0f), true);
                         attacking_box_bodies.add(body1);
 
@@ -518,7 +517,7 @@ public class Player extends Objeto{
     }
 
     private boolean isMovingXAxis(){
-        return Math.abs(body.getLinearVelocity().x) > 0f;
+        return Math.abs(body.getLinearVelocity().x) >= 1;
     }
 
     private boolean isFinishedCurrentAnimation(){
@@ -769,9 +768,10 @@ public class Player extends Objeto{
 
 
     public void takeItem(Item item){
-        if (item.isVisible()) {
+        if (!item.isBeenTaken()) {
+            item.setBeenTaken(true);
+            item.addItemToInventory();
             item.setVisible(false);
-            new ItemToBeDrawn(item);
             TRIGGER.play();
         }
     }
@@ -793,7 +793,7 @@ public class Player extends Objeto{
         if (!animationName().contains("PUNCHING")){
             punch = false;
             for (Body attackingBoxBody : attacking_box_bodies) {
-                if (attackingBoxBody != null && attackingBoxBody.getUserData().toString().contains("Boy")) {
+                if (attackingBoxBody != null && attackingBoxBody.getUserData().toString().contains("Player")) {
 //                    attackingBoxBody.setTransform(new Vector2(10_000, 10_000), 0);
                     attackingBoxBody.setUserData("");
                 }

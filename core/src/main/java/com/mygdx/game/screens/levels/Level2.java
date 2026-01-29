@@ -3,7 +3,7 @@ package com.mygdx.game.screens.levels;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.items.Portal;
+import com.mygdx.game.entities.Portal;
 import com.mygdx.game.sfx.Sounds;
 
 

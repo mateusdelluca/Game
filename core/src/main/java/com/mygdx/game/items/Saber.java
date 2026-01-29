@@ -18,7 +18,7 @@ public class Saber extends Item implements Serializable {
     public static final float WIDTH = Images.saber.getWidth()/3f, HEIGHT = Images.saber.getHeight()/3f;
 
     public Saber(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, Saber.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
     }

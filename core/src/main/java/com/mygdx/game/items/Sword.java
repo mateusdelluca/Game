@@ -23,7 +23,7 @@ public class Sword extends Item{
     private float angle;
 
     public Sword(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, Sword.class.getSimpleName());
         body = BodiesAndShapes.circle(position, WIDTH/2f, BodyDef.BodyType.StaticBody, true, this.toString() + " Boy", 1f);
         body.setTransform(position, 0);
         visible = true;

@@ -148,7 +148,7 @@ public class Images implements Serializable {
         itemsDraw.put("NinjaRope", ninjaRope_inventory);
         itemsDraw.put("Laser_Headset", laser_inventory);
         itemsDraw.put("Sword", sword_inventory);
-        itemsDraw.put(Crystal.class.getSimpleName(), crystal_inventory);
+        itemsDraw.put("Crystal", crystal_inventory);
         itemsDraw.put("CrystalRed", crystal3_inventory);
         itemsDraw.put("Equipped", equipped_inventory);
         itemsDraw_minis.put("Blue Potion", new Sprite(new Texture(Gdx.files.internal("items/Minis/SP_Potion_mini.png"))));

@@ -18,8 +18,8 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.images.Background;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
-import com.mygdx.game.items.fans.Fan;
-import com.mygdx.game.items.fans.Fan2;
+import com.mygdx.game.entities.fans.Fan;
+import com.mygdx.game.entities.fans.Fan2;
 import com.mygdx.game.items.minis.Minis;
 import com.mygdx.game.manager.State;
 import com.mygdx.game.manager.StateManager;
@@ -35,7 +35,6 @@ import static com.mygdx.game.screens.levels.Level_Manager.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.system.ScreenshotHelper.takeScreenshot;
@@ -48,10 +47,6 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     protected transient Background background;
     protected transient Box2DDebugRenderer box2DDebugRenderer;
-
-    public static HashMap<String, Objeto> items2 = new HashMap<>();
-
-    public static HashMap<String, Item> items = new HashMap<>();
 
     @Getter @Setter
     protected Jack jack;
@@ -87,7 +82,7 @@ public abstract class Level extends State implements ContactListener, Serializab
     protected ArrayList<CrystalRed> redCrystals = new ArrayList<>();
     protected static NinjaRope ninjaRope;
 
-    protected ArrayList<Item> itemsOnMap = new ArrayList<>();
+    public static ArrayList<Item> items = new ArrayList<>();
 
 //    public String polygons_String = "";
 
@@ -147,11 +142,9 @@ public abstract class Level extends State implements ContactListener, Serializab
         fans.add(new Fan2(new Vector2(350, 6000 - 2100)));
 
         box2DDebugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-        ninjaRope = new NinjaRope(new Vector2(400f, 5650f));
+//        ninjaRope = new NinjaRope(new Vector2(400f, 5650f));
 
         objetos.add(player);
-
-        objetos.add(ninjaRope);
 
 //        if (this instanceof Level3) {
 //            itemsOnMap.addAll(crystals);
@@ -180,8 +173,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         spriteBatch.begin();
         background.render();
         tile.render(camera);
-        for (Item item : items.values())
-            item.render(spriteBatch);
         for (Objeto objeto : objetos)
             objeto.render(spriteBatch);
         for (Star ninjaStar : ninjaStars)
@@ -307,7 +298,7 @@ public abstract class Level extends State implements ContactListener, Serializab
             c.beginContact(body1, body2);
         }
 
-        for (Item item : items.values()) {
+        for (Item item : items) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");
             if ((body1.getUserData().toString().contains(item.toString()) && body2.getUserData().toString().equals("Player"))
             || body2.getUserData().toString().contains(item.toString()) && body1.getUserData().toString().equals("Player")
@@ -455,8 +446,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 
         Body body1 = contact.getFixtureA().getBody();
         Body body2 = contact.getFixtureB().getBody();
-        if (ninjaRope != null)
-            ninjaRope.beginContact(contact);
+//        if (ninjaRope != null)
+//            ninjaRope.beginContact(contact);
 
 
 

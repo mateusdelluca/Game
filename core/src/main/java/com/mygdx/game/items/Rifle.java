@@ -30,7 +30,7 @@ public class Rifle extends Item implements Serializable {
     private ArrayList<Cartridge> numCartridges = new ArrayList<>();
     @Getter
     private Cartridge leftSideBullets;
-    private Vector2 position;
+    private Vector2 transformPosition;
 
     @Getter @Setter
     private boolean buttonReloadingPressed;
@@ -44,15 +44,15 @@ public class Rifle extends Item implements Serializable {
     private boolean reloading;
     public static int TOTAL_CARTRIDGES = 2;
     public static boolean addCartridge;
-    public Rifle(Vector2 position){
+    public Rifle(Vector2 transformPosition){
 
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, Rifle.class.getSimpleName());
         super.width = WIDTH * MULTIPLY;
         super.height = HEIGHT * MULTIPLY;
-        this.position = position;
+        this.transformPosition = transformPosition;
         super.visible = true;
         body = createBody(new Vector2(width/2f, height/2f), BodyDef.BodyType.StaticBody, true);
-        body.setTransform(position, body.getAngle());
+        body.setTransform(transformPosition, body.getAngle());
         body.setUserData(this.toString());
 
         for (int index = 0; index < TOTAL_CARTRIDGES; index++){
@@ -71,16 +71,16 @@ public class Rifle extends Item implements Serializable {
     public void render(SpriteBatch s) {
         if (body == null) {
             loadBody(BodyDef.BodyType.StaticBody, true);
-            position = bodyData.position;
+            transformPosition = bodyData.position;
 //            rifle = new Sprite(new Texture(Gdx.files.internal("boy/rifle.png")));
         }
         else
-            position = body.getPosition();
+            transformPosition = body.getPosition();
         if (!PausePage.pause) {
             rifle.setSize(width, height);
             rifle.setOriginCenter();
             rifle.rotate(1f);
-            rifle.setPosition(position.x, position.y);
+            rifle.setPosition(transformPosition.x, transformPosition.y);
         }
         if (body.getUserData().toString().equals(this.toString())) {
             rifle.draw(s);

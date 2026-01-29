@@ -12,7 +12,6 @@ import java.util.Random;
 
 import static com.mygdx.game.entities.Player.minis;
 import static com.mygdx.game.images.Images.tile;
-import static com.mygdx.game.items.Rope.NUM_ROPES;
 import static com.mygdx.game.screens.levels.Level_Manager.*;
 import static com.mygdx.game.screens.levels.Level_Manager.camera;
 
@@ -63,10 +62,10 @@ public class Level3 extends Level{
             }
         }
 
-        objetos.addAll(crystals);
-        objetos.addAll(redCrystals);
-
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
+//        objetos.addAll(crystals);
+        items.addAll(crystals);
+        items.addAll(redCrystals);
+        items.add(new Rifle(new Vector2(850, 6000 - 450)));
 //
 //
 //            items2 = new HashMap<>();
@@ -78,9 +77,9 @@ public class Level3 extends Level{
 //
 //            girl = new Girl(new Vector2(4000, 6000 - 700f));
 //
-            items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
-            items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
-            items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+            items.add(new JetPack(new Vector2(400, 6000 - 2400)));
+            items.add(new Saber(new Vector2(500, 6000 - 2400)));
+            items.add(new Portal(new Vector2(2450,6000 - 5600)));
 //            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
 ////            items.get("Portal").updateItem();
 //
@@ -89,8 +88,7 @@ public class Level3 extends Level{
 //            items2.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
 //
             ninjaStar = new Star(new Vector2(200, 6000 - 400));
-            objetos.add(ninjaStar);
-            items.put(ninjaStar.toString(), ninjaStar);
+            items.add(ninjaStar);
 //            for (int i = 0; i < 5; i++)
 //                blocks.add(new Block(new Vector2(850 + i * 50, 6000 - 530)));
 //
@@ -125,21 +123,9 @@ public class Level3 extends Level{
             objetos.add(jack);
 //            objetos.add(girl);
 //            objetos.addAll(stands);
-            objetos.add(ninjaRope);
             objetos.addAll(monsters1.values());
-
+            objetos.addAll(items);
 //        }
-
-
-        for (Item item : items.values()) {
-            if (item != null) {
-//                item.updateItem(); //TODO:    resolver problema de updateItem com objetos
-//                 //TODO:                      que a usam separadamente da classe item, pois o método updateItem
-//                  //TODO:                     está em algumas classes mas não na classe abstrata Item
-                item.update();
-            }
-        }
-
 
     }
 
@@ -174,8 +160,6 @@ public class Level3 extends Level{
         tile.render(camera);
 //        jack.render(spriteBatch);
 //        boy.render(spriteBatch);
-        for (Item item : items.values())
-            item.render(spriteBatch);
         for (Objeto objeto : objetos) {
             if (objeto != null)
                 objeto.render(spriteBatch);
@@ -195,28 +179,14 @@ public class Level3 extends Level{
     @Override
     public void update(){
         super.update();
-//        for (Objeto objeto : objetos)
-//            if (objeto != null)
-//                objeto.update();
-        for (Item item : items.values()) {
-            if (item != null) {
-                item.update();
-//                item.updateItem(); //TODO: verificar o uso de update item em classes filhas de Item
-            }
-        }
+        for (Objeto objeto : objetos)
+            if (objeto != null)
+                objeto.update();
         for (Objeto fan : fans){
             if (fan != null && fan.getBody() != null){
                 fan.update();
             }
         }
-//        ninjaRope.update();
-//        for (Rope rope : ropes)
-//            rope.update();
-//        rope.update();
-//        items.get("Rifle").update();
-//        ninjaRope.update(0f);
-//        for (Fans fan : fans)
-//            fan.update2(boy.getBody(), Boy.BOX_WIDTH);
     }
 
     @Override

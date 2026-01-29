@@ -15,7 +15,6 @@ import lombok.Setter;
 
 import java.util.Random;
 
-import static com.mygdx.game.screens.levels.Level.items;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.clink2;
 
@@ -27,10 +26,10 @@ public class Crystal extends Item{
 
     public static int i;
     private int id;
-    public Crystal(Vector2 position){
-        super(WIDTH, HEIGHT);
+    public Crystal(Vector2 transformPosition){
+        super(WIDTH, HEIGHT, Crystal.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
-        body.setTransform(position, 0);
+        body.setTransform(transformPosition, 0);
         body.setUserData(this.toString());
         i++;
         id = i;
@@ -68,7 +67,9 @@ public class Crystal extends Item{
             body2.equals(body) && body1.getUserData().toString().contains("Player")){
             clink2.play();
 //            items.put(this.toString(), this);
-            player.takeItem(this);
+//            player.takeItem(this);
+            visible = false;
+            this.beenTaken = true;
         }
     }
 }

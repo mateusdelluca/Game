@@ -18,10 +18,10 @@ public class NinjaRope extends Item{
     private final Sprite ninjaRopeSprite = new Sprite(ninjaRope);
 
     public NinjaRope(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, NinjaRope.class.getSimpleName());
         body = BodiesAndShapes.box(position, new Vector2(WIDTH/2, HEIGHT/2), BodyDef.BodyType.StaticBody, true, this.toString());
         body.setTransform(position, 0);
-        Level.items.put(this.toString(), this);
+//        Level.items.put(this.toString(), this);
     }
 
 

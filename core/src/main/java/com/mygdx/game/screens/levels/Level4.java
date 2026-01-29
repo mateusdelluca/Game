@@ -41,14 +41,14 @@ public class Level4 extends Level{
                 posX = 520 + (100 * (index - 10));
                 posY = 6000 - 2300;
             }
-            items.put(Crystal.class.getSimpleName() + items.size(), new Crystal(new Vector2(posX, posY)));
+            items.add(new Crystal(new Vector2(posX, posY)));
         }
-        items.put(Rifle.class.getSimpleName(), new Rifle(new Vector2(850, 6000 - 450)));
-        items.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
-        items.put(Saber.class.getSimpleName(), new Saber(new Vector2(500, 6000 - 2400)));
-        items.put(Portal.class.getSimpleName(), new Portal(new Vector2(2450,6000 - 5600)));
+        items.add(new Rifle(new Vector2(850, 6000 - 450)));
+        items.add(new JetPack(new Vector2(400, 6000 - 2400)));
+        items.add(new Saber(new Vector2(500, 6000 - 2400)));
+        objetos.add(new Portal(new Vector2(2450,6000 - 5600)));
 //        items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
-        items.put(Star.class.getSimpleName(), new Star(new Vector2(200, 300)));
+        items.add(new Star(new Vector2(200, 300)));
 ////            items.get("Portal").updateItem();
 //
 //            items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
@@ -94,13 +94,6 @@ public class Level4 extends Level{
         objetos.add(ninjaStar);
         objetos.addAll(monsters1.values());
 //        }
-
-
-        for (Item item : items.values()) {
-            if (item != null) {
-                //item.updateItem();//TODO: verificar o uso de update item em classes filhas de Item
-            }
-        }
     }
 
     @Override
@@ -123,11 +116,6 @@ public class Level4 extends Level{
         spriteBatch.begin();
         background.render();
         tile.render(camera);
-        for (Item item : items.values()) {
-            if (item != null) {
-                item.render(spriteBatch);
-            }
-        }
         for (Objeto objeto : objetos) {
             if (objeto != null)
                 objeto.render(spriteBatch);

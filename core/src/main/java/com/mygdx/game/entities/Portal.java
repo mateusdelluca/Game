@@ -1,4 +1,4 @@
-package com.mygdx.game.items;
+package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -6,23 +6,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.entities.Objeto;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.system.BodyData;
+import com.mygdx.game.items.Item;
 
 import static com.mygdx.game.screens.levels.Level_Manager.currentLevelName;
 import static com.mygdx.game.screens.levels.Level_Manager.lvl;
 
-public class Portal extends Item{
+public class Portal extends Item {
 
     public static final float WIDTH = 857/3f, HEIGHT = 873/3f;
 
     public boolean open_portal = true;
 
     public Portal(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, new Vector2());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setUserData(getClass().getSimpleName());
         body.setTransform(position, 0);

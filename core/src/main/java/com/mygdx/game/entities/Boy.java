@@ -15,7 +15,6 @@ import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
 import com.mygdx.game.items.*;
-import com.mygdx.game.items.inventory.ItemToBeDrawn;
 import com.mygdx.game.manager.StateManager;
 import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
@@ -688,7 +687,7 @@ public class Boy extends Objeto {
             else {
                 if (throwing && !shooting && !beenHit && !saber_taken && !laser) {
                     thrown = true;
-                    items.put(Star.class.getSimpleName() + indexNinja++, new Star(new Vector2(!facingLeft ? ((getBody().getPosition().x +
+                    items.add(new Star(new Vector2(!facingLeft ? ((getBody().getPosition().x +
                         WIDTH / 2f) + 50) : (getBody().getPosition().x - 50),
                         getBody().getPosition().y + HEIGHT / 2f),
                         radians, false));
@@ -796,44 +795,6 @@ public class Boy extends Objeto {
     }
 
     public void takeItem(Item item){
-        if (item instanceof Portal)
-            return;
-        if (item instanceof Rifle) {
-            rifle = (Rifle) items.get(item.toString());
-            ((Rifle) item).setVisible(false);
-//            body.applyForce(new Vector2(1_000_000_000f, 1_000_000_000f), body.getPosition(), true);
-        }
-        if (item instanceof Crystal) {
-//            if (((Crystal) item).getRand() > 0)
-//                PowerBar.sp_0 += 10;
-//            else
-//                PowerBar.hp_0 += 10;
-            clink2.play();
-//            System.out.println(item);
-            item.setVisible(false);
-            return;
-        }
-        if (item instanceof JetPack) {
-//            use_jetPack = true;
-            ((JetPack) item).setVisible(false);
-        }
-        if (item instanceof Star){
-            item.setVisible(false);
-        }
-        if (item instanceof NinjaRope){
-            item.setVisible(false);
-        }
-        if (item instanceof Laser_Headset) {
-            item.setVisible(false);
-        }
-        ItemToBeDrawn itemToBeDrawn = new ItemToBeDrawn(item);
-        if (item.toString().contains("NinjaStar")) {
-            if (item instanceof Star) {
-//                ((Star) item).setItemToBeDrawn(itemToBeDrawn);
-            }
-        }
-        item.setVisible(false);
-        TRIGGER.play();
     }
 
     @Override

@@ -42,7 +42,7 @@ public class Rope extends Item {
     private boolean collide;
 
     public Rope(Vector2 positionA, boolean firstRope){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, new Vector2());
         this.dimensions = new Vector2(WIDTH/2f, HEIGHT/2f);
         this.positionA = positionA;
         bodyA = box(positionA, dimensions, firstRope ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody, false, this.toString());

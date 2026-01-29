@@ -24,11 +24,11 @@ public class Laser_Headset extends Item{
 
     public static final float WIDTH = 75f, HEIGHT = 85f;
 
-    private Vector2 position;
+    private Vector2 transformPosition;
     private Sprite sprite = new Sprite(headset_laser);
     public Laser_Headset(Vector2 position){
-        super(WIDTH,HEIGHT);
-        this.position = position;
+        super(WIDTH,HEIGHT, Laser_Headset.class.getSimpleName());
+        this.transformPosition = position;
         super.dimensions = new Vector2(WIDTH,HEIGHT);
         body = box(position, dimensions, BodyDef.BodyType.StaticBody, true);
         body.setUserData(this.toString());
@@ -43,7 +43,7 @@ public class Laser_Headset extends Item{
                 sprite.setSize(width, height);
                 sprite.setOriginCenter();
                 sprite.rotate(1f);
-                sprite.setPosition(position.x, position.y);
+                sprite.setPosition(transformPosition.x, transformPosition.y);
             }
             if (body.getUserData().toString().equals(this.toString())) {
                 sprite.draw(s);

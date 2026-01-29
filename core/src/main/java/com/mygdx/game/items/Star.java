@@ -6,17 +6,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.images.Images;
-import com.mygdx.game.items.inventory.ItemToBeDrawn;
-import com.mygdx.game.system.BodyData;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 
 import static com.mygdx.game.entities.Player.thrownStar;
-import static com.mygdx.game.screens.levels.Level.items;
+import static com.mygdx.game.screens.levels.Level.player;
 
 public class Star extends Item implements Serializable {
 
@@ -32,15 +27,14 @@ public class Star extends Item implements Serializable {
     Sprite sprite = new Sprite((Images.ninjaStar));
 
     public Star(Vector2 position){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, Star.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, true);
         bodyThrown = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
-        visible = true;
     }
 
     public Star(Vector2 position, float radians, boolean isSensor){
-        super(WIDTH, HEIGHT);
+        super(WIDTH, HEIGHT, position);
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.DynamicBody, isSensor);
         bodyThrown = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(position, 0);
@@ -98,7 +92,7 @@ public class Star extends Item implements Serializable {
     public void beginContact(Body bodyA, Body bodyB){
         if (body != null && bodyA != null && bodyB != null){
             if ((bodyA.equals(body) || bodyB.equals(body)) && (bodyA.getUserData().toString().contains("Player") || bodyB.getUserData().toString().contains("Player"))){
-                items.put(this.toString(), this);
+                player.takeItem(this);
             }
         }
     }

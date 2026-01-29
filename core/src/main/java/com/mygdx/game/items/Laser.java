@@ -29,11 +29,10 @@ public class Laser extends Item {
     private float initialDistance, distance;
 
 
-    public Laser(){
-    }
+
 
     public Laser(Vector2 position, boolean isFacingLeft, float radians, String user){
-        super(WIDTH/2, HEIGHT/2);
+        super(WIDTH/2, HEIGHT/2, position);
         super.width = WIDTH/2;
         super.height = HEIGHT/2;
         Vector2 size = new Vector2(width/2f, height/2f);
