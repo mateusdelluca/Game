@@ -294,9 +294,9 @@ public abstract class Level extends State implements ContactListener, Serializab
 //            c.beginContact(body1, body2);
 //        }
 
-        for (CrystalRed c : redCrystals){
-            c.beginContact(body1, body2);
-        }
+//        for (CrystalRed c : redCrystals){
+//            c.beginContact(body1, body2);
+//        }
 
         for (Item item : items) {
 //            boolean notCrystalOrPortal = !item.toString().contains("Crystal") && !item.toString().contains("Portal");

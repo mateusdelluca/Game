@@ -15,6 +15,8 @@ import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.Inventory.positionsToFill;
+import static com.mygdx.game.screens.Stats.level_font;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.clink2;
 
@@ -22,7 +24,9 @@ public class CrystalRed extends Item{
 
     public static final float WIDTH = 40, HEIGHT = 80;
     private Sprite sprite = new Sprite(Images.crystal_red);
-    public static int i;
+    public static int quantity;
+
+    public static boolean took;
     public CrystalRed(Vector2 transformPosition){
         super(WIDTH, HEIGHT, CrystalRed.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
@@ -46,6 +50,11 @@ public class CrystalRed extends Item{
     }
 
     @Override
+    protected void drawQuantity(SpriteBatch spriteBatch){
+        level_font.draw(spriteBatch, "" + quantity, positionsToFill.get(index).x + WIDTH, positionsToFill.get(index).y);
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName();
     }
@@ -53,12 +62,16 @@ public class CrystalRed extends Item{
     public void beginContact(Body body1, Body body2){
         if ((body1.getUserData().toString().equals("" + this.hashCode()) && body2.getUserData().toString().contains("Player"))
             ||
-            body2.getUserData().toString().equals("" + this.hashCode()) && body1.getUserData().toString().contains("Player")) {
+            body2.getUserData().toString().equals("" + this.hashCode()) && body1.getUserData().toString().contains("Player")){
             clink2.play();
 //            items.put(this.toString(), this);
-            player.takeItem(this);
+            if (!took) {
+                player.takeItem(this);
+                took = true;
+            }
             visible = false;
             this.beenTaken = true;
+            quantity++;
         }
     }
 }
