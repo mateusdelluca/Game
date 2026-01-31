@@ -27,7 +27,7 @@ public class CrystalRed extends Item{
         super(WIDTH, HEIGHT, CrystalRed.class.getSimpleName());
         body = createBody(new Vector2(WIDTH/2f, HEIGHT/2f), BodyDef.BodyType.StaticBody, true);
         body.setTransform(transformPosition, 0);
-        body.setUserData(this);
+        body.setUserData(this.hashCode());
         visible = true;
     }
 
@@ -51,12 +51,14 @@ public class CrystalRed extends Item{
     }
 
     public void beginContact(Body body1, Body body2){
-        if ((body1.equals(body) && body2.getUserData().toString().contains("Player"))
+        if ((body1.getUserData().toString().equals("" + this.hashCode()) && body2.getUserData().toString().contains("Player"))
             ||
-            body2.equals(body) && body1.getUserData().toString().contains("Player")){
+            body2.getUserData().toString().equals("" + this.hashCode()) && body1.getUserData().toString().contains("Player")) {
             clink2.play();
+//            items.put(this.toString(), this);
             player.takeItem(this);
             visible = false;
+            this.beenTaken = true;
         }
     }
 }

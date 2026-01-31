@@ -25,7 +25,7 @@ import static com.mygdx.game.items.Item.positions;
 
 public class Inventory extends State {
 
-    public static CopyOnWriteArrayList<Item> itemsToBeDrawn = new CopyOnWriteArrayList<>();
+    public static ArrayList<Item> itemsToBeDrawn = new ArrayList<>();
 
     public static TreeMap<String, Item> treeMap_Items = new TreeMap<>();
     public static float mouseX, mouseY;

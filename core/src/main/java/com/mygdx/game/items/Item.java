@@ -90,7 +90,7 @@ public class Item extends Objeto {
 
     public void addItemToInventory(){
         if (beenTaken){
-            if (((treeMap_Items.size() + 2) < ITEMS_LIMIT) && ((itemsToBeDrawn.size() + 2) < ITEMS_LIMIT) && !treeMap_Items.isEmpty()
+            if (((treeMap_Items.size() + 1) < ITEMS_LIMIT) && ((itemsToBeDrawn.size() + 1) < ITEMS_LIMIT) && !treeMap_Items.isEmpty()
                 && !itemsToBeDrawn.isEmpty()) {
                 itemsToBeDrawn.add(this);
                 treeMap_Items.put(name, this);
