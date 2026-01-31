@@ -15,12 +15,17 @@ import lombok.Setter;
 
 import java.util.Random;
 
+import static com.mygdx.game.screens.Inventory.positionsToFill;
+import static com.mygdx.game.screens.Stats.level_font;
 import static com.mygdx.game.screens.levels.Level.player;
 import static com.mygdx.game.sfx.Sounds.clink2;
 
 public class Crystal extends Item{
 
     public static final float WIDTH = 40, HEIGHT = 80;
+    public static int quantity;
+
+    public static boolean took;
 
     private Sprite sprite = new Sprite(Images.crystal);
 
@@ -48,6 +53,19 @@ public class Crystal extends Item{
     public void renderShape(ShapeRenderer s) {
 
     }
+    @Override
+    public void drawItemInSlot(SpriteBatch spriteBatch, float x, float y, String name){
+        itemSprite = Images.getItemDraw(name);
+        itemSprite.setOrigin(0,0);
+        itemSprite.setPosition(positionsToFill.get(index).x, positionsToFill.get(index).y);
+        itemSprite.draw(spriteBatch);
+        drawQuantity(spriteBatch);
+    }
+
+    @Override
+    protected void drawQuantity(SpriteBatch spriteBatch){
+        level_font.draw(spriteBatch, "" + quantity, positionsToFill.get(index).x + WIDTH, positionsToFill.get(index).y);
+    }
 
     @Override
     public String toString() {
@@ -65,9 +83,13 @@ public class Crystal extends Item{
             body2.getUserData().toString().equals("" + this.hashCode()) && body1.getUserData().toString().contains("Player")){
             clink2.play();
 //            items.put(this.toString(), this);
-            player.takeItem(this);
+            if (!took) {
+                player.takeItem(this);
+                took = true;
+            }
             visible = false;
             this.beenTaken = true;
+            quantity++;
         }
     }
 }

@@ -95,7 +95,7 @@ public class Inventory extends State {
         inventory.draw(spriteBatch);
         for (Vector2 vec2 : positionsToFill) {
             spriteBatch.draw(Images.slot, vec2.x, vec2.y);
-            for (int index = 0; index < itemsToBeDrawn.size(); index++) {
+            for (int index = 0; index < treeMap_Items.sequencedValues().size(); index++) {
                 if (index == itemsToBeDrawn.get(index).getIndex())
                     itemsToBeDrawn.get(index).drawItemInSlot(spriteBatch, positionsToFill.get(index).x, positionsToFill.get(index).y);
             }

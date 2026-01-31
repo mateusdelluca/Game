@@ -290,9 +290,9 @@ public abstract class Level extends State implements ContactListener, Serializab
             m.beginContact(body1,body2);
         }
 
-        for (Crystal c : crystals){
-            c.beginContact(body1, body2);
-        }
+//        for (Crystal c : crystals){
+//            c.beginContact(body1, body2);
+//        }
 
         for (CrystalRed c : redCrystals){
             c.beginContact(body1, body2);

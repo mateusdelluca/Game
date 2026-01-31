@@ -29,7 +29,7 @@ public class Item extends Objeto {
 
     @Getter
     @Setter
-    protected int quantity;
+    private int quantity;
 
     @Getter
     @Setter
@@ -79,13 +79,13 @@ public class Item extends Objeto {
     public void init(){
         quantity++;
 
-        if (index_x % 4 == 0 && index_x != 0) {
-            index_x = 0;
-            index_y++;
-        }
-        position = new Vector2(INITIAL_X + ((WIDTH) * (index_x)), INITIAL_Y - ((HEIGHT) * index_y));
-        positions.add(position);
-        index_x++;
+//        if (index_x % 4 == 0 && index_x != 0) {
+//            index_x = 0;
+//            index_y++;
+//        }
+//        position = new Vector2(INITIAL_X + ((WIDTH) * (index_x)), INITIAL_Y - ((HEIGHT) * index_y));
+//        positions.add(position);
+//        index_x++;
     }
 
     public void addItemToInventory(){
@@ -124,6 +124,13 @@ public class Item extends Objeto {
 //    }
 
     public void drawItemInSlot(SpriteBatch spriteBatch, float x, float y) {
+        itemSprite.setOrigin(0,0);
+        itemSprite.setPosition(x, y);
+        itemSprite.draw(spriteBatch);
+        drawQuantity(spriteBatch);
+    }
+    public void drawItemInSlot(SpriteBatch spriteBatch, float x, float y, String name) {
+        itemSprite = Images.getItemDraw(name);
         itemSprite.setOrigin(0,0);
         itemSprite.setPosition(x, y);
         itemSprite.draw(spriteBatch);
