@@ -25,8 +25,9 @@ public class RopeKnot extends Objeto {
         Vector2 size = new Vector2(width / 2f, height / 2f);
         body = createBody(size, BodyDef.BodyType.DynamicBody, true);
         body.setGravityScale(10f);
-        body.getFixtureList().get(0).setRestitution(1f);
+        body.getFixtureList().get(0).setRestitution(0f);
         body.setTransform(position, radians);
+        body.setUserData(this.toString());
     }
 
     public void render(SpriteBatch s){
@@ -52,5 +53,10 @@ public class RopeKnot extends Objeto {
     }
 
     public void beginContact(Body body1, Body body2){
+    }
+
+    @Override
+    public String toString(){
+        return getClass().getSimpleName();
     }
 }

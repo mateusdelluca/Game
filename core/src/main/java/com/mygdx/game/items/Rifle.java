@@ -82,7 +82,7 @@ public class Rifle extends Item implements Serializable {
             rifle.rotate(1f);
             rifle.setPosition(transformPosition.x, transformPosition.y);
         }
-        if (body.getUserData().toString().equals(this.toString())) {
+        if (visible) {
             rifle.draw(s);
         }
         if (showingNumbBullets) {

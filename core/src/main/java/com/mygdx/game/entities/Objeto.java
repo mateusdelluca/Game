@@ -338,6 +338,26 @@ public abstract class Objeto implements Serializable{
                         || (body2.getUserData().toString().contains("Colliders") && body1.equals(body)))
 
                     ||
+
+                    ((body1.getUserData().toString().contains("Rope") && body2.equals(body))
+                        || (body2.getUserData().toString().contains("Rope") && body1.equals(body)))
+
+                    ||
+                    ((body1.getUserData().toString().contains("begin") && body2.equals(body))
+                        || (body2.getUserData().toString().contains("begin") && body1.equals(body)))
+
+                    ||
+
+
+                    ((body1.getUserData().toString().contains("end") && body2.equals(body))
+                        || (body2.getUserData().toString().contains("end") && body1.equals(body)))
+
+                    ||
+
+                    ((body1.getUserData().toString().contains("Knot") && body2.equals(body))
+                        || (body2.getUserData().toString().contains("Knot") && body1.equals(body)))
+
+                    ||
                     ((body1.getUserData().toString().contains("Rect") && body2.equals(body))
                         || body2.getUserData().toString().contains("Rect") && body1.equals(body))
 

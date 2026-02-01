@@ -158,7 +158,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 
-
         camera.position.set(player.getBody().getPosition().x, player.getBody().getPosition().y + 200f, 0);
         if (camera.position.y > 5400f)
             camera.position.y = 5400f;
@@ -168,7 +167,6 @@ public abstract class Level extends State implements ContactListener, Serializab
             camera.position.y = 1080f/2f;
         camera.update();
         viewport.update(Level.WIDTH, Level.HEIGHT);
-
 
         spriteBatch.begin();
         background.render();
@@ -180,7 +178,6 @@ public abstract class Level extends State implements ContactListener, Serializab
         powerBar.render(spriteBatch, camera);
         spriteBatch.end();
         box2DDebugRenderer.render(world, camera.combined);
-
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Bridge extends Objeto {
             ropeJointDef.bodyA = bodyA;
             ropeJointDef.bodyB = bodyB;
             ropeJointDef.collideConnected = true;
-            ropeJointDef.maxLength = 1f;
+            ropeJointDef.maxLength = 40f;
             world.createJoint(ropeJointDef);
         }
     }
@@ -58,7 +58,7 @@ public class Bridge extends Objeto {
             ropeJointDef.bodyA = begin;
             ropeJointDef.bodyB = bridge.getFirst().getBody();
             ropeJointDef.collideConnected = true;
-            ropeJointDef.maxLength = 1f;
+            ropeJointDef.maxLength = 10f;
             world.createJoint(ropeJointDef);
 
             RopeJointDef ropeJointDef2 = new RopeJointDef();
