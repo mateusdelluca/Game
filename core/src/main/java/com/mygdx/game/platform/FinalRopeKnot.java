@@ -99,12 +99,12 @@ public class FinalRopeKnot extends Objeto {
                     mouseJoint = joint(body, mouseBody);
                     firstKnotJoint = joint(body, knots.getFirst().getBody());
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < (WIDTH * 4)) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().x - player.getBody().getPosition().x) < (WIDTH * 16)) {
                     joint = true;
                     this.index = index;
                     break;
                 }
-                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < (HEIGHT * 4)) {
+                if (Math.abs(ropeKnot1.getBody().getPosition().y - player.getBody().getPosition().y) < (HEIGHT * 16)) {
                     joint = true;
                     this.index = index;
                     break;

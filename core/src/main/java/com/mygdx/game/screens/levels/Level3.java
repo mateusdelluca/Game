@@ -80,7 +80,7 @@ public class Level3 extends Level{
             items.add(new JetPack(new Vector2(400, 6000 - 2400)));
             items.add(new Saber(new Vector2(500, 6000 - 2400)));
             items.add(new Portal(new Vector2(2450,6000 - 5600)));
-//            items.put(NinjaRope.class.getSimpleName(), new NinjaRope(new Vector2(450, 6000 - 400)));
+            items.add(new NinjaRope(new Vector2(450, 6000 - 400)));
 ////            items.get("Portal").updateItem();
 //
 //            items2.put(JetPack.class.getSimpleName(), new JetPack(new Vector2(400, 6000 - 2400)));
