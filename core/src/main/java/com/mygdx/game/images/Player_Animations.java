@@ -16,7 +16,7 @@ public enum Player_Animations implements Serializable {
     WALKING_SWORD(new Animator(6,6,5,128,128,"boy/Walking_Sword.png")),
     SWORD(new Animator(1,1,1,128,128,"boy/Sword.png")),
     RELOADING(new Animator(3,3,1,128,128, "boy/Reloading.png")),
-    JETPACK(new Animator(4,4,14,128,128, "boy/JetPack.png")),
+    JETPACK(new Animator(3,3,12,128,128, "boy/JetPack.png")),
     WALKING(new Animator(6,6, 5, 128, 128, "boy/Walking.png")),
     IDLE(new Animator(1,1, 1, 128, 128, "boy/Idle.png")),
     SABER(new Animator(4,4, 15, 128, 128, "boy/saber_Sheet.png")),

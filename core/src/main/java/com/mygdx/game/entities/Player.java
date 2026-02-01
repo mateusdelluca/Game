@@ -118,12 +118,21 @@ public class Player extends Objeto{
         for (Item item : treeMap_Items.sequencedValues()) {
             if (equipped[item.getIndex()]) {
                 if (item.toString().contains("Jet")){
-                   jetPackBoolean = true;
+                    if (!jetPackBoolean) {
+                        body.setGravityScale(0f);
+                        jetPackBoolean = true;
+                    }
                 }
+            }
+            if (!equipped[item.getIndex()] && item.toString().contains("Jet")){
+                jetPackBoolean = false;
+                body.setGravityScale(1f);
             }
         }
         if (jetPackBoolean) {
             Sprite jet = new Sprite(Player_Animations.JETPACK.animator.currentSpriteFrameUpdateStateTime(false, true, !isFacingRight));
+            jet.setOriginCenter();
+            jet.setPosition(body.getPosition().x - (Player.BOX_WIDTH/2f) - 25f, body.getPosition().y - Player.BOX_HEIGHT/2f + 10f);
             jet.draw(s);
         }
     }
@@ -497,7 +506,6 @@ public class Player extends Objeto{
                 ninjaRope_shoot.draw(spriteBatch);
                 break;
             }
-
         }
     }
 
@@ -543,13 +551,13 @@ public class Player extends Objeto{
                         changeAnimation("JUMPING_FRONT");
                     }
                 }
-                if (getBody().getLinearVelocity().y != 0f && getBody().getLinearVelocity().x != 0f) {
+                if (Math.abs(getBody().getLinearVelocity().y) > 0.5f) {
                     changeAnimation("JUMPING");
                     walking = false;
                 }
             }
             if (onGround()) {
-                if (isntMovingAxisXnorY() && isFinishedCurrentAnimation())
+                if (!isMovingXAxis() && !hit)
                     changeAnimation("IDLE");
             }
         }
@@ -615,6 +623,8 @@ public class Player extends Objeto{
 //                walking = false;
                 }
             }
+            if (jetPackBoolean)
+                body.setGravityScale(0f);
         }
         if (keycode == Input.Keys.R){
             if (rifle != null) {
@@ -637,8 +647,13 @@ public class Player extends Objeto{
     }
 
     public void keyUp(int keycode){
+        if (keycode == Input.Keys.SPACE)
+            if (jetPackBoolean)
+                body.setGravityScale(0.4f);
+
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
             body.setLinearVelocity(0f, body.getLinearVelocity().y);
+
 //            if (!animationName().contains("FIRE")) {
 //                if (!onGround()){
 //                    if (isMovingXAxis())
