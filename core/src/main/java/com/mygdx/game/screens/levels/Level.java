@@ -249,6 +249,8 @@ public abstract class Level extends State implements ContactListener, Serializab
 //        for (NinjaStar ninjaStar : ninjaStars)
 //            ninjaStar.update();
 
+        split();
+
         for (Objeto objeto : objetos){
             if (objeto != null)
                 objeto.update();
@@ -642,5 +644,13 @@ public abstract class Level extends State implements ContactListener, Serializab
 
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public void split(){
+       for (Monster1 monster1 : monsters1.values()) {
+           if (player.getBodyBounds().overlaps(monster1.getBodyBounds()) && player.isSaber()){
+               monster1.setSplit2(true);
+           }
+       }
     }
 }

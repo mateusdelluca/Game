@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.dongbat.jbump.CollisionFilter;
 import com.mygdx.game.bodiesAndShapes.BodiesAndShapes;
 import com.mygdx.game.images.Player_Animations;
 import com.mygdx.game.images.PowerBar;
@@ -23,12 +24,16 @@ import com.mygdx.game.sfx.Sounds;
 import com.mygdx.game.system.ScreenshotHelper;
 import lombok.Getter;
 import lombok.Setter;
+import squidpony.squidgrid.iterator.SquidIterators;
+import squidpony.squidmath.Coord;
 
 import java.util.ArrayList;
 
 import static com.mygdx.game.bodiesAndShapes.BodiesAndShapes.box;
 import static com.mygdx.game.images.Images.*;
 import static com.mygdx.game.images.Images.legs;
+import static com.mygdx.game.images.Player_Animations.changeAnimation;
+import static com.mygdx.game.images.Player_Animations.currentAnimation;
 import static com.mygdx.game.items.Item.equipped;
 import static com.mygdx.game.manager.StateManager.setStates;
 import static com.mygdx.game.screens.Inventory.treeMap_Items;
@@ -52,6 +57,7 @@ public class Player extends Objeto{
     @Getter @Setter
     private boolean looping, useOnlyLastFrame;
     public static float velocityX = 5_000f, timerLvlUP;
+    @Getter
     private boolean walking, usingWeapon, laser_attack, shooting, sword, punching, saber, throwing_fire, thrown_ninjaStar;
     protected Mouse mouse;
     private ArrayList<Body> attacking_box_bodies = new ArrayList<>();
@@ -252,7 +258,7 @@ public class Player extends Objeto{
 
     private void renderAnimation(SpriteBatch s){
         Sprite sprite = new Sprite(animation().getAnimator().currentSpriteFrame(useOnlyLastFrame,
-            looping || walking || animationName().equals("STRICKEN"), !isFacingRight));
+            looping && !animationName().equals("SABER") || walking && !animationName().equals("SABER") || animationName().equals("STRICKEN"), !isFacingRight));
         sprite.setOriginCenter();
         setBodyPosition(sprite);
         sprite.draw(s);
@@ -367,6 +373,7 @@ public class Player extends Objeto{
                 laser_attack = false;
                 saber = false;
                 thrown_ninjaStar = false;
+                ropeShoot = false;
                 if (animationName().contains("ATTACKING_SWORD")){
 //                    for (Body body1 : attacking_box_bodies) {
 //                        body1.setTransform(new Vector2(isFacingRight ? (getBody().getPosition().x + WIDTH / 2f) - 20f :
@@ -403,6 +410,7 @@ public class Player extends Objeto{
                 laser_attack = false;
                 saber = false;
                 thrown_ninjaStar = false;
+                ropeShoot = false;
                 Rifle.showingNumbBullets = true;
                 top = new Sprite(Player_Animations.valueOf("RELOADING").getAnimator().currentSpriteFrameUpdateStateTime(!rifle.isReloading(), rifle.isReloading(), !isFacingRight));
                 top.setOriginCenter();
@@ -424,12 +432,14 @@ public class Player extends Objeto{
                 break;
             }
             case "Saber":{
+                ropeShoot = false;
                 sword = false;
                 shooting = false;
                 laser_attack = false;
                 thrown_ninjaStar = false;
                 saber = true;
-                changeAnimation("SABER");
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))
+                    changeAnimation("SABER");
                 break;
             } case "Star":{
                  ropeShoot = false;
@@ -468,6 +478,7 @@ public class Player extends Objeto{
                 spriteBatch.draw(shoot, worldX - 13, worldY - 9);
                 laser_attack = true;
                 sword = false;
+                ropeShoot = false;
                 shooting = false;
                 saber = false;
                 thrown_ninjaStar = false;
@@ -661,7 +672,8 @@ public class Player extends Objeto{
                 body.setGravityScale(0.4f);
 
         if (keycode == Input.Keys.A || keycode == Input.Keys.D){
-            body.setLinearVelocity(0f, body.getLinearVelocity().y);
+            if (!saber)
+                body.setLinearVelocity(0f, body.getLinearVelocity().y);
 
 //            if (!animationName().contains("FIRE")) {
 //                if (!onGround()){
@@ -714,11 +726,9 @@ public class Player extends Objeto{
             mouse.touchDown(screenX, screenY, button);
         if (button == Input.Buttons.LEFT) {
             walking = false;
-            if (!punching) {
-                punching = true;
-                changeAnimation("PUNCHING_FIRE");
-                walking = false;
-                body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+            if (saber){
+                body.applyForceToCenter(isFacingRight ? 1_000_000f : -1_000_000, 0f, true);
+
             } else {
                 if (thrown_ninjaStar) {
                     ninjaStars.add(new Star(new Vector2(isFacingRight ? ((getBody().getPosition().x +
@@ -762,6 +772,13 @@ public class Player extends Objeto{
                                     changeAnimation("ATTACKING_SWORD_FIRE_2");
                                     body.setLinearVelocity(0, getBody().getLinearVelocity().y);
                                     hit = true;
+                                } else{
+                                    if (!punching) {
+                                        punching = true;
+                                        changeAnimation("PUNCHING_FIRE");
+                                        walking = false;
+                                        body.setLinearVelocity(0, getBody().getLinearVelocity().y);
+                                    }
                                 }
                             }
                         }
@@ -810,11 +827,11 @@ public class Player extends Objeto{
     }
 
     public void changeAnimation(String name) {
-        if (!animationName().contains("PUNCHING")){
+        if (animationName().contains("PUNCHING")){
             punch = false;
             for (Body attackingBoxBody : attacking_box_bodies) {
                 if (attackingBoxBody != null && attackingBoxBody.getUserData().toString().contains("Player")) {
-//                    attackingBoxBody.setTransform(new Vector2(10_000, 10_000), 0);
+                    attackingBoxBody.setTransform(new Vector2(100_000, 100_000), 0);
                     attackingBoxBody.setUserData("");
                 }
             }

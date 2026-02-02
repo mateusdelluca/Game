@@ -29,7 +29,7 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Setter
     @Getter
-    private boolean split;
+    private boolean split, split2;
     private int id;
     private boolean soundRunning;
     private String nameAnimation;
@@ -83,6 +83,11 @@ public class Monster1 extends Objeto implements Serializable {
 
     @Override
     public void update(){
+        if (split2){
+            body.getFixtureList().get(0).setSensor(true);
+            animations.changeAnimation("MONSTER1_SPLIT");
+            return;
+        }
         super.update();
         nameAnimation = animations.nameOfAnimation;
         animations.currentAnimation.update();
@@ -191,7 +196,7 @@ public class Monster1 extends Objeto implements Serializable {
     public Rectangle getBodyBounds() {
         if (split)
             return new Rectangle();
-        return new Rectangle(bodyData.position.x - 2.5f, bodyData.position.y + 5f, bodyData.dimensions.x + 20f, bodyData.dimensions.y + 5f);
+        return new Rectangle(body.getPosition().x - 2.5f, body.getPosition().y + 5f, dimensions.x + 20f, dimensions.y + 5f);
     }
 
     public void setStateTime(float time){
@@ -222,8 +227,8 @@ public class Monster1 extends Objeto implements Serializable {
 
 
     public void beginContact(Body bodyA, Body bodyB){
-        if (bodyB.equals(body) && bodyA.getUserData().toString().contains("Boy")||
-            bodyB.equals(body) && bodyA.getUserData().toString().contains("Boy")){
+        if (bodyB.equals(body) && bodyA.getUserData().toString().contains("Player")||
+            bodyB.equals(body) && bodyA.getUserData().toString().contains("Player")){
             beenHit();
         }
     }

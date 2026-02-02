@@ -56,7 +56,7 @@ public class Level_Manager extends State implements ContactListener {
 
         switch (currentLevelName) {
             case "Level1": {
-                return new Level1();
+                return new Level3();
             }
             case "Level2": {
 //                if (currentLevel.objetos != null) {

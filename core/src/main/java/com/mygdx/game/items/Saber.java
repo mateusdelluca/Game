@@ -48,13 +48,4 @@ public class Saber extends Item implements Serializable {
         return getClass().getSimpleName();
     }
 
-    @Override
-    public int getIndex() {
-        return 0;
-    }
-
-    @Override
-    public void setIndex(int index) {
-
-    }
 }
